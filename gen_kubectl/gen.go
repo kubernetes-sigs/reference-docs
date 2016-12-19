@@ -24,7 +24,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/pwittrock/kubedocs/lib"
+	"github.com/kubernetes-incubator/reference-docs/lib"
 	"gopkg.in/yaml.v2"
 )
 

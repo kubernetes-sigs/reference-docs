@@ -23,8 +23,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pwittrock/kubedocs/gen_kubectl"
-	"github.com/pwittrock/kubedocs/gen_open_api"
+	"github.com/kubernetes-incubator/reference-docs/gen_kubectl"
+	"github.com/kubernetes-incubator/reference-docs/gen_open_api"
 )
 
 var docType = flag.String("doc-type", "open-api", "Type of docs to generate.")

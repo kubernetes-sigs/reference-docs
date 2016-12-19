@@ -18,8 +18,8 @@ package gen_open_api
 
 import (
 	"flag"
-	"github.com/pwittrock/kubedocs/lib"
-	"github.com/pwittrock/kubedocs/gen_open_api/api"
+	"github.com/kubernetes-incubator/reference-docs/lib"
+	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
 )
 
 var openApiDir = flag.String("open-api-dir", "", "Directory containing open-api specs.")

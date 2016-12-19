@@ -28,7 +28,7 @@ import (
 
 	"github.com/go-openapi/loads"
 
-	"github.com/pwittrock/kubedocs/lib"
+	"github.com/kubernetes-incubator/reference-docs/lib"
 )
 
 func NewConfig(yamlFile, openApiFile string) *Config {
