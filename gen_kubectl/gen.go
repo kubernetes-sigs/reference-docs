@@ -28,7 +28,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func GenerateSlateFiles() {
+func GenerateFiles() {
 	spec := KubectlSpec{}
 
 	if len(*lib.YamlFile) < 1 {

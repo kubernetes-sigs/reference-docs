@@ -1,4 +1,4 @@
-# Hosts static slate documentation files
+# Hosts static html documentation files
 
 FROM nginx
 MAINTAINER Phillip Wittrock <pwittroc@google.com>

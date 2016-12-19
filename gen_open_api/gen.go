@@ -24,7 +24,7 @@ import (
 
 var openApiDir = flag.String("open-api-dir", "", "Directory containing open-api specs.")
 
-func GenerateSlateFiles() {
+func GenerateFiles() {
 	// Load the yaml config
 	config := api.NewConfig(*lib.YamlFile, *openApiDir)
 
