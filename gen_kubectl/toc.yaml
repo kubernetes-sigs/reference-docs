@@ -1,0 +1,48 @@
+categories:
+- name: GETTING STARTED
+  commands:
+  - run
+  - expose
+- name: APP MANAGEMENT
+  commands:
+  - annotate
+  - autoscale
+  - convert
+  - create
+  - delete
+  - edit
+  - get
+  - label
+  - patch
+  - replace
+  - rolling-update
+  - rollout
+  - scale
+  - set
+- name: DECLARATIVE APP MANAGEMENT
+  commands:
+  - apply
+- name: TROUBLESHOOTING AND DEBUGGING
+  commands:
+  - attach
+  - describe
+  - exec
+  - logs
+  - port-forward
+  - proxy
+  - top
+- name: CLUSTER MANAGEMENT
+  commands:
+  - api-versions
+  - cluster-info
+  - cordon
+  - drain
+  - taint
+  - uncordon
+- name: KUBECTL SETTINGS AND USAGE
+  commands:
+  - completion
+  - config
+  - explain
+  - options
+  - version

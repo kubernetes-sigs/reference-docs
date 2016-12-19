@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: apidocs
+  name: apidocs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apidocs
+  template:
+    metadata:
+      labels:
+        app: apidocs
+      annotations:
+        imagedate: "Sat Nov 26 19:00:00 PST 2016"
+    spec:
+      containers:
+      - image: pwittrock/api-docs:v1.15.10
+        name: api-docs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apidocs
+  name: apidocs
+spec:
+  ports:
+  - name: 80-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: apidocs
+  type: LoadBalancer

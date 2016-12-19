@@ -1,0 +1,18 @@
+{{define "definition.template"}}## {{.Name}} {{.Version}}
+
+Group        | Version     | Kind
+------------ | ---------- | -----------
+{{.GroupDisplayName}} | {{.Version}} | {{.Name}}
+
+{{if .OtherVersions}}<aside class="notice">Other api versions of this object exist: {{range $v := .OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
+
+{{.Description}}
+
+{{if .AppearsIn}}<aside class="notice">
+Appears In {{range $appearsin := .AppearsIn}} {{$appearsin.HrefLink}} {{end}}</aside>{{end}}
+
+Field        | Description
+------------ | -----------
+{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} | {{$field.Description}}
+{{end}}
+{{end}}
