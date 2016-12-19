@@ -35,8 +35,6 @@ func main() {
 		gen_open_api.GenerateFiles()
 	case "kubectl":
 		gen_kubectl.GenerateFiles()
-	//case "open-api-old":
-	//	gen_open_api_old.GenerateFiles()
 	default:
 		fmt.Printf("Must provide type as either open-api or kubectl, was %s\n", *docType)
 		os.Exit(2)
