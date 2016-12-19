@@ -25,8 +25,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/pwittrock/kubedocs/lib"
-	"github.com/pwittrock/kubedocs/gen_open_api/api"
+	"github.com/kubernetes-incubator/reference-docs/lib"
+	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
 )
 
 func WriteTemplates(config *api.Config) {

@@ -18,7 +18,7 @@ package gen_open_api
 
 import (
 	"fmt"
-	"github.com/pwittrock/kubedocs/gen_open_api/api"
+	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
 )
 
 func PrintInfo(config *api.Config) {
