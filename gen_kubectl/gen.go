@@ -81,7 +81,7 @@ func GenerateFiles() {
 func NormalizeSpec(spec *KubectlSpec) {
 	for _, g  := range spec.TopLevelCommandGroups {
 		for _, c := range g.Commands {
-			FormatCommand(c.Command)
+			FormatCommand(c.MainCommand)
 			for _, s := range c.SubCommands {
 				FormatCommand(s)
 			}
@@ -176,7 +176,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC,  params KubectlSpec) {
 	m := map[string]TopLevelCommand{}
 	for _, g := range params.TopLevelCommandGroups {
 		for _, tlc := range g.Commands {
-			m[tlc.Command.Name] = tlc
+			m[tlc.MainCommand.Name] = tlc
 		}
 	}
 	for _, c := range toc.Categories {
@@ -219,8 +219,8 @@ func WriteCategoryFile(c Category) {
 }
 
 func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) {
-	params.Command.Description = strings.Replace(params.Command.Description, "|", "&#124;", -1)
-	for _, o := range params.Command.Options {
+	params.MainCommand.Description = strings.Replace(params.MainCommand.Description, "|", "&#124;", -1)
+	for _, o := range params.MainCommand.Options {
 		o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
 	}
 	for _, sc := range params.SubCommands {
@@ -228,7 +228,7 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 			o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
 		}
 	}
-	f, err := os.Create(*lib.BuildDir + "/includes/_generated_" + strings.ToLower(params.Command.Name) + ".md")
+	f, err := os.Create(*lib.BuildDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")
 	if err != nil {
 		fmt.Printf("Failed to open index: %v", err)
 		os.Exit(1)
@@ -240,5 +240,5 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 		fmt.Printf("Failed to execute template: %v", err)
 		os.Exit(1)
 	}
-	manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.Command.Name) + ".md"})
+	manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.MainCommand.Name) + ".md"})
 }

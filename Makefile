@@ -18,7 +18,7 @@ brodocs:
 	docker push pwittrock/brodocs
 
 cli: cleancli
-	go run main.go --yaml-file gen_kubectl/kubectl.yaml --doc-type kubectl --template-dir gen_kubectl/ --toc-file gen_kubectl/toc.yaml --build-dir gen_kubectl/
+	go run main.go --yaml-file gen_kubectl/v1_5/kubectl.yaml --doc-type kubectl --template-dir gen_kubectl/ --toc-file gen_kubectl/v1_5/toc.yaml --build-dir gen_kubectl/
 	docker run -v $(shell pwd)/gen_kubectl/includes:/source -v $(shell pwd)/gen_kubectl/build:/build -v $(shell pwd)/gen_kubectl/:/manifest pwittrock/brodocs
 
 // Usage: TAG="vN" make pushcli

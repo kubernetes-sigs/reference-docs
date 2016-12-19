@@ -1,21 +1,21 @@
 ------------
 
-# {{.Command.Name}}
+# {{.MainCommand.Name}}
 
-{{.Command.Example}}
+{{.MainCommand.Example}}
 
-{{.Command.Description}}
+{{.MainCommand.Description}}
 
 ### Usage
 
-`$ {{.Command.Usage}}`
+`$ {{.MainCommand.Usage}}`
 
-{{if .Command.Options}}
+{{if .MainCommand.Options}}
 
 ### Flags
 
 Name | Shorthand | Default | Usage
----- | --------- | ------- | ----- {{range $option := .Command.Options}}
+---- | --------- | ------- | ----- {{range $option := .MainCommand.Options}}
 {{$option.Name}} | {{$option.Shorthand}} | {{$option.DefaultValue}} | {{$option.Usage}} {{end}}
 {{end}}
 {{range $sub := .SubCommands}}

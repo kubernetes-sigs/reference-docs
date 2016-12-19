@@ -25,7 +25,7 @@ type TopLevelCommands struct {
 	Commands []TopLevelCommand `yaml:",omitempty"`
 }
 type TopLevelCommand struct {
-	Command     *Command `yaml:",omitempty"`
+	MainCommand *Command `yaml:",omitempty"`
 	SubCommands Commands `yaml:",omitempty"`
 }
 
