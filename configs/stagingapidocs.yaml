@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: stagingapidocs
+  name: stagingapidocs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stagingapidocs
+  template:
+    metadata:
+      labels:
+        app: stagingapidocs
+      annotations:
+        imagedate: "Sat Nov 26 19:00:00 PST 2016"
+    spec:
+      containers:
+      - image: pwittrock/api-docs:v1.15.10
+        name: api-docs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: stagingapidocs
+  name: stagingapidocs
+spec:
+  ports:
+  - name: 80-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: stagingapidocs
+  type: LoadBalancer

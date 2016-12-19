@@ -1,0 +1,11 @@
+note: Pod Config to print "Hello World".
+sample: |
+  apiVersion: v1
+  kind: Pob
+  metadata:
+    name: pod-example
+  spec:
+    containers:
+    - image: ubuntu:trusty
+      command: ["echo"]
+      args: ["Hello World"]
