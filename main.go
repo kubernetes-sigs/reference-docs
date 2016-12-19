@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-//$ go run main.go
-//$ docker run -v $(pwd)/source:/slate/source -v $(pwd)/build:/slate/build pwittrock/slate
 package main
 
 import (
@@ -34,11 +32,11 @@ func main() {
 
 	switch *docType {
 	case "open-api":
-		gen_open_api.GenerateSlateFiles()
+		gen_open_api.GenerateFiles()
 	case "kubectl":
-		gen_kubectl.GenerateSlateFiles()
+		gen_kubectl.GenerateFiles()
 	//case "open-api-old":
-	//	gen_open_api_old.GenerateSlateFiles()
+	//	gen_open_api_old.GenerateFiles()
 	default:
 		fmt.Printf("Must provide type as either open-api or kubectl, was %s\n", *docType)
 		os.Exit(2)

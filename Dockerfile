@@ -1,6 +1,4 @@
-# Builds slate md source into static html files
-# For example source files see the "source" directory in the slate github repo
-# docker run -v /absolute/path/to/source:/source -v /absolute/path/to/build:/build -v /absolute/path/to/manifest:/manifest pwittrock/brodocs 
+# Builds Docker image to run brodocs
 
 FROM node:7.2
 MAINTAINER Phillip Wittrock <pwittroc@google.com>
