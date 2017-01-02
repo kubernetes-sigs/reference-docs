@@ -22,7 +22,7 @@ categories:
 - name: DECLARATIVE APP MANAGEMENT
   commands:
   - apply
-- name: TROUBLESHOOTING AND DEBUGGING
+- name: INSPECTING APPS
   commands:
   - attach
   - describe
