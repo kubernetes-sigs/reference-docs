@@ -192,8 +192,15 @@ func WriteCommandFiles(manifest *Manifest, toc ToC,  params KubectlSpec) {
 				os.Exit(1)
 			} else {
 				WriteCommandFile(manifest, t, tlc)
+				delete(m, cm)
 			}
 		}
+	}
+	if len(m) > 0 {
+		for k := range m {
+			fmt.Printf("Kubectl command %s missing from table of contents\n", k)
+		}
+		os.Exit(1)
 	}
 }
 
