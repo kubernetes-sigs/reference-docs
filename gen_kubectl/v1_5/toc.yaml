@@ -19,13 +19,15 @@ categories:
   - rollout
   - scale
   - set
+  - stop
 - name: DECLARATIVE APP MANAGEMENT
   commands:
   - apply
-- name: INSPECTING APPS
+- name: WORKING WITH APPS
   commands:
   - attach
   - describe
+  - cp
   - exec
   - logs
   - port-forward
@@ -34,6 +36,7 @@ categories:
 - name: CLUSTER MANAGEMENT
   commands:
   - api-versions
+  - certificate
   - cluster-info
   - cordon
   - drain
