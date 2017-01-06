@@ -45,7 +45,7 @@ func getTemplateFile(name string) string {
 }
 
 func getStaticIncludesDir() string {
-	return filepath.Join(*GenKubectlDir, "static_includes")
+	return filepath.Join(*GenKubectlDir, *lib.KubernetesVersion, "static_includes")
 }
 
 func GenerateFiles() {
@@ -200,15 +200,28 @@ func WriteCommandFiles(manifest *Manifest, toc ToC,  params KubectlSpec) {
 		}
 	}
 
-	for _, c := range toc.Categories {
-		// Write the category include
-		if len(c.Include) > 0 {
-
+	err = filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			to := filepath.Join(*GenKubectlDir, "includes", filepath.Base(path))
+			return os.Link(path, to)
 		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("Failed to copy includes %v.\n", err)
+		return
+	}
 
-		fn := strings.Replace(c.Name, " ", "_", -1)
-		manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(fmt.Sprintf("_generated_category_%s.md", fn))})
-		WriteCategoryFile(c)
+	for _, c := range toc.Categories {
+		if len(c.Include) > 0 {
+			// Use the static category include
+			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(c.Include)})
+		} else {
+			// Write a general category include
+			fn := strings.Replace(c.Name, " ", "_", -1)
+			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(fmt.Sprintf("_generated_category_%s.md", fn))})
+			WriteCategoryFile(c)
+		}
 
 		// Write each of the commands in this category
 		for _, cm := range c.Commands {

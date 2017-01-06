@@ -5,6 +5,7 @@ categories:
   - run
   - expose
 - name: APP MANAGEMENT
+  include: _app_management.md
   commands:
   - annotate
   - autoscale
@@ -24,6 +25,7 @@ categories:
   commands:
   - apply
 - name: WORKING WITH APPS
+  include: _working_with_apps.md
   commands:
   - attach
   - cp
