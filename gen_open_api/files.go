@@ -30,8 +30,8 @@ import (
 )
 
 func WriteTemplates(config *api.Config) {
-	if _, err := os.Stat(*lib.BuildDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*lib.BuildDir + "/includes", os.FileMode(0700))
+	if _, err := os.Stat(*api.GenOpenApiDir + "/includes"); os.IsNotExist(err) {
+		os.Mkdir(*api.GenOpenApiDir + "/includes", os.FileMode(0700))
 	}
 
 	// Write the index file importing each of the top level concept files
@@ -43,6 +43,15 @@ func WriteTemplates(config *api.Config) {
 	//// Write each definition file imported by the index file
 	WriteDefinitionFiles(config)
 }
+
+func getTemplateFile(name string) string {
+	return filepath.Join(*api.GenOpenApiDir, name)
+}
+
+func getStaticIncludesDir() string {
+	return filepath.Join(*api.GenOpenApiDir, "static_includes")
+}
+
 
 func WriteIndexFile(config *api.Config) {
 	includes := []string{}
@@ -59,9 +68,9 @@ func WriteIndexFile(config *api.Config) {
 	}
 
 	// Copy over the includes
-	err := filepath.Walk(*lib.TemplateDir+"/static_includes", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
-			to := filepath.Join(*lib.BuildDir, "includes", filepath.Base(path))
+			to := filepath.Join(*api.GenOpenApiDir, "includes", filepath.Base(path))
 			return os.Link(path, to)
 		}
 		return nil
@@ -124,14 +133,14 @@ func WriteIndexFile(config *api.Config) {
 	if err != nil {
 		fmt.Printf("Could not Marshal manfiest %+v due to error: %v.\n", manifest, err)
 	} else {
-		jsonfile, err := os.Create(*lib.BuildDir + "/" + *lib.JsonOutputFile)
+		jsonfile, err := os.Create(*api.GenOpenApiDir + "/" + lib.JsonOutputFile)
 		if err != nil {
-			fmt.Printf("Could not create file %s due to error: %v.\n", *lib.JsonOutputFile, err)
+			fmt.Printf("Could not create file %s due to error: %v.\n", lib.JsonOutputFile, err)
 		} else {
 			defer jsonfile.Close()
 			_, err := jsonfile.Write(jsonbytes)
 			if err != nil {
-				fmt.Printf("Failed to write bytes %s to file %s: %v.\n", jsonbytes, *lib.JsonOutputFile, err)
+				fmt.Printf("Failed to write bytes %s to file %s: %v.\n", jsonbytes, lib.JsonOutputFile, err)
 			}
 		}
 	}
@@ -139,7 +148,7 @@ func WriteIndexFile(config *api.Config) {
 
 func WriteConceptFiles(config *api.Config) {
 	// Setup the template to be instantiated
-	t, err := template.New("concept.template").ParseFiles(*lib.TemplateDir + "/concept.template")
+	t, err := template.New("concept.template").ParseFiles(getTemplateFile("/concept.template"))
 	if err != nil {
 		fmt.Printf("Failed to parse template: %v", err)
 		os.Exit(1)
@@ -160,7 +169,7 @@ func WriteConceptFiles(config *api.Config) {
 
 func WriteDefinitionFiles(config *api.Config) {
 	// Setup the template to be instantiated
-	t, err := template.New("definition.template").ParseFiles(*lib.TemplateDir + "/definition.template")
+	t, err := template.New("definition.template").ParseFiles(getTemplateFile("definition.template"))
 	if err != nil {
 		fmt.Printf("Failed to parse template: %v", err)
 		os.Exit(1)
@@ -194,7 +203,7 @@ func getImport(s string) string {
 }
 
 func toFileName(s string) string {
-	return fmt.Sprintf("%s/includes/_%s.md", *lib.BuildDir, s)
+	return fmt.Sprintf("%s/includes/_%s.md", *api.GenOpenApiDir, s)
 }
 
 func GetDefinitionImport(d *api.Definition) string {

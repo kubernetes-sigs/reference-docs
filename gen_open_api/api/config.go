@@ -17,6 +17,7 @@ limitations under the License.
 package api
 
 import (
+	"flag"
 	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -28,12 +29,13 @@ import (
 
 	"github.com/go-openapi/loads"
 
-	"github.com/kubernetes-incubator/reference-docs/lib"
 )
 
-func NewConfig(yamlFile, openApiFile string) *Config {
-	config := loadYamlConfig(yamlFile)
-	specs := LoadOpenApiSpec(openApiFile)
+var GenOpenApiDir = flag.String("gen-open-api-dir", "gen_open_api/", "Directory containing open api files")
+
+func NewConfig() *Config {
+	config := loadYamlConfig()
+	specs := LoadOpenApiSpec()
 
 	// Initialize all of the operations
 	config.Definitions = GetDefinitions(specs)
@@ -93,16 +95,13 @@ func (c *Config) CleanUp() {
 }
 
 // loadYamlConfig reads the config yaml file into a struct
-func loadYamlConfig(yamlFile string) *Config {
-	config := &Config{}
-	if len(*lib.YamlFile) < 1 {
-		fmt.Printf("Must specify --yaml-file.\n")
-		os.Exit(2)
-	}
+func loadYamlConfig() *Config {
+	f := filepath.Join(*GenOpenApiDir, "config.yaml")
 
-	contents, err := ioutil.ReadFile(*lib.YamlFile)
+	config := &Config{}
+	contents, err := ioutil.ReadFile(f)
 	if err != nil {
-		fmt.Printf("Failed to read yaml file %s: %v", yamlFile, err)
+		fmt.Printf("Failed to read yaml file %s: %v", f, err)
 		os.Exit(2)
 	}
 

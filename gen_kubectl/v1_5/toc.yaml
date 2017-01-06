@@ -1,5 +1,6 @@
 categories:
 - name: GETTING STARTED
+  include: _getting_started.md
   commands:
   - run
   - expose
