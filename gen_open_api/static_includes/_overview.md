@@ -15,7 +15,7 @@ This is a high-level overview of the basic types of resources provide by the Kub
 
 **Cluster** resources objects define how the cluster itself is configured; these are typically used only by cluster operators.
 
-**Metadata** resources are objects you use to configure the behavior of other resources within the cluster, such as... (Fill in "such as" here)
+**Metadata** resources are objects you use to configure the behavior of other resources within the cluster, such as HorizontalPodAutoscaler for scaling workloads.
 
 ------------
 

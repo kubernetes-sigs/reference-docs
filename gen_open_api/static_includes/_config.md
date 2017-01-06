@@ -1,6 +1,6 @@
 # <strong>CONFIG & STORAGE</strong>
 
-Config and Storage Resources are responsible for injecting data into your applications and persisting data externally to your container.
+Config and Storage resources are responsible for injecting data into your applications and persisting data externally to your container.
 
 Common resource types:
 

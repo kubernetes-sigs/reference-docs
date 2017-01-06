@@ -1,3 +1,3 @@
 # <strong>OLD API VERSIONS</strong>
 
-This section contains older versions of Resources shown above.
+This section contains older versions of resources shown above.
