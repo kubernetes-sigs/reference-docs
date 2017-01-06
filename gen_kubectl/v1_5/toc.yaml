@@ -19,7 +19,6 @@ categories:
   - rollout
   - scale
   - set
-  - stop
 - name: DECLARATIVE APP MANAGEMENT
   commands:
   - apply
@@ -49,3 +48,6 @@ categories:
   - explain
   - options
   - version
+- name: DEPRECATED COMMANDS
+  commands:
+  - stop
