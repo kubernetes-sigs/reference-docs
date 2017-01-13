@@ -32,6 +32,11 @@ var INLINE_DEFINITIONS = []InlineDefinition{
 	{Name: "EventSource", Match: "${resource}EventSource"},
 }
 
+const (
+	path = "path"
+	query = "query"
+	body = "body"
+)
 
 // Inline definitions for "Spec", "Status", "List", etc for definitions
 func (definitions Definitions) initInlinedDefinitions() Definitions {
@@ -92,12 +97,30 @@ func (definitions *Definitions) initializeOperationParameters(operations Operati
 
 		// Path parameters
 		for _, p := range pathItem.Parameters {
-			operation.PathParams = append(operation.PathParams, definitions.parameterToField(p))
+			switch p.In {
+			case path:
+				operation.PathParams = append(operation.PathParams, definitions.parameterToField(p))
+			case query:
+				operation.QueryParams = append(operation.QueryParams, definitions.parameterToField(p))
+			case body:
+				operation.BodyParams = append(operation.BodyParams, definitions.parameterToField(p))
+			default:
+				panic("")
+			}
 		}
 
 		// Query parameters
 		for _, p := range operation.op.Parameters {
-			operation.QueryParams = append(operation.QueryParams, definitions.parameterToField(p))
+			switch p.In {
+			case path:
+				operation.PathParams = append(operation.PathParams, definitions.parameterToField(p))
+			case query:
+				operation.QueryParams = append(operation.QueryParams, definitions.parameterToField(p))
+			case body:
+				operation.BodyParams = append(operation.BodyParams, definitions.parameterToField(p))
+			default:
+				panic("")
+			}
 		}
 
 		for code, response := range operation.op.Responses.StatusCodeResponses {

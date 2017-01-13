@@ -62,6 +62,7 @@ type Operation struct {
 	Path          string
 	HttpMethod    string
 	Definition    *Definition
+	BodyParams    Fields
 	QueryParams   Fields
 	PathParams    Fields
 	HttpResponses HttpResponses

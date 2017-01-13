@@ -12,6 +12,13 @@ Parameter    | Description
 {{range $param := .QueryParams}}{{$param.Name}} {{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
 {{end}}{{end}}{{end}}
 
+{{define "bodyparams"}}{{if .BodyParams }}### Body Parameters
+
+Parameter    | Description
+------------ | -----------
+{{range $param := .BodyParams}}{{$param.Name}} {{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
+{{end}}{{end}}{{end}}
+
 {{define "responsebody"}}{{if .HttpResponses}}### Response
 
 Code         | Description
@@ -97,6 +104,7 @@ See supported operations below...
 
 {{template "pathparams" $operation}}
 {{template "queryparams" $operation}}
+{{template "bodyparams" $operation}}
 {{template "responsebody" $operation}}
 
 {{end}}{{end}}{{end}}{{end}}
