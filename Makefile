@@ -26,6 +26,9 @@ pushcli: cli
 	cd gen_kubectl && docker build . -t pwittrock/cli-docs:$(TAG)
 	docker push pwittrock/cli-docs:$(TAG)
 
+copycli: cli
+	cp -r gen_kubectl/build/* ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.5/
+
 pushcliconfig:
 	cd configs && kubectl apply -f kubectldocs.yaml
 
@@ -38,6 +41,12 @@ pushapi: api
 	cd gen_open_api && docker build . -t pwittrock/api-docs:$(TAG)
 	docker push pwittrock/api-docs:$(TAG)
 
+updateapispec: api
+	cp ../../../k8s.io/kubernetes/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
+
+copyapi: api
+	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.5/
+
 pushapiconfig:
 	cd configs && kubectl apply -f apidocs.yaml
 
@@ -49,6 +58,9 @@ resource: cleanapi
 pushresource: resource
 	cd gen_open_api && docker build . -t pwittrock/resource-docs:$(TAG)
 	docker push pwittrock/resource-docs:$(TAG)
+
+copyresource: resource
+	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.5/
 
 pushresourceconfig:
 	cd configs && kubectl apply -f resourcedocs.yaml
