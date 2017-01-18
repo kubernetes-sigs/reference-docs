@@ -1,7 +1,7 @@
 note: Pod Config to print "Hello World".
 sample: |
   apiVersion: v1
-  kind: Pob
+  kind: Pod
   metadata:
     name: pod-example
   spec:
