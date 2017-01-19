@@ -154,12 +154,15 @@ func WriteConceptFiles(config *api.Config) {
 		os.Exit(1)
 	}
 
+	// Write concepts for old versions
 	for _, d := range config.Definitions.GetAllDefinitions() {
-		if !d.InToc {
-			r := &api.Resource{Definition: d, Name: d.Name}
-			WriteTemplate(t, r, GetConceptFilePath(d))
+		if !d.IsOldVersion {
+			continue
 		}
+		r := &api.Resource{Definition: d, Name: d.Name}
+		WriteTemplate(t, r, GetConceptFilePath(d))
 	}
+	// Write concepts for items in the Toc
 	for _, rc := range config.ResourceCategories {
 		for _, r := range rc.Resources {
 			WriteTemplate(t, r, GetConceptFilePath(r.Definition))
@@ -176,6 +179,10 @@ func WriteDefinitionFiles(config *api.Config) {
 	}
 
 	for _, definition := range config.Definitions.GetAllDefinitions() {
+		// Skip things already present in concept docs
+		if definition.InToc || definition.IsInlined || definition.IsOldVersion {
+			continue
+		}
 		WriteTemplate(t, definition, GetDefinitionFilePath(definition))
 	}
 }
