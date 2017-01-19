@@ -57,9 +57,6 @@ func NewConfig() *Config {
 
 // GetOperations returns all Operations found in the Documents
 func (config *Config) InitOperations(specs []*loads.Document) {
-	if !*BuildOps {
-		return
-	}
 	o := Operations{}
 	VisitOperations(specs, func(operation Operation) {
 		//fmt.Printf("Operation: %s\n", operation.ID)
@@ -74,6 +71,16 @@ func (config *Config) InitOperations(specs []*loads.Document) {
 		}
 	})
 	config.Definitions.initializeOperationParameters(config.Operations)
+
+	// Clear the operations.  We still have to calculate the operations because that is how we determine
+	// the API Group for each definition.
+	if !*BuildOps {
+		config.Operations = Operations{}
+		config.OperationCategories = []OperationCategory{}
+		for _, d := range config.Definitions.GetAllDefinitions() {
+			d.OperationCategories = []*OperationCategory{}
+		}
+	}
 }
 
 // CleanUp sorts and dedups fields
