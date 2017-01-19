@@ -12,6 +12,7 @@ cleanapi:
 	rm -rf $(shell pwd)/gen_open_api/build
 	rm -rf $(shell pwd)/gen_open_api/includes
 	rm -rf $(shell pwd)/gen_open_api/manifest.json
+	rm -rf $(shell pwd)/gen_open_api/includes/_generated_*
 
 brodocs:
 	docker build . -t pwittrock/brodocs
@@ -27,6 +28,9 @@ pushcli: cli
 	docker push pwittrock/cli-docs:$(TAG)
 
 copycli: cli
+	rm -rf gen_kubectl/build/documents/
+	rm -rf gen_kubectl/build/runbrodocs.sh
+	rm -rf gen_kubectl/build/manifest.json
 	cp -r gen_kubectl/build/* ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.5/
 
 pushcliconfig:
@@ -45,6 +49,9 @@ updateapispec: api
 	cp ../../../k8s.io/kubernetes/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
 
 copyapi: api
+	rm -rf gen_open_api/build/documents/
+	rm -rf gen_open_api/build/runbrodocs.sh
+	rm -rf gen_open_api/build/manifest.json
 	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.5/
 
 pushapiconfig:
@@ -60,6 +67,9 @@ pushresource: resource
 	docker push pwittrock/resource-docs:$(TAG)
 
 copyresource: resource
+	rm -rf gen_open_api/build/documents/
+	rm -rf gen_open_api/build/runbrodocs.sh
+	rm -rf gen_open_api/build/manifest.json
 	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.5/
 
 pushresourceconfig:
