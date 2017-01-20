@@ -31,6 +31,7 @@ copycli: cli
 	rm -rf gen_kubectl/build/documents/
 	rm -rf gen_kubectl/build/runbrodocs.sh
 	rm -rf gen_kubectl/build/manifest.json
+	rm -rf ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.6/*
 	cp -r gen_kubectl/build/* ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.6/
 
 pushcliconfig:
@@ -52,6 +53,7 @@ copyapi: api
 	rm -rf gen_open_api/build/documents/
 	rm -rf gen_open_api/build/runbrodocs.sh
 	rm -rf gen_open_api/build/manifest.json
+	rm -rf ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.6/*
 	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.6/
 
 pushapiconfig:
@@ -70,6 +72,7 @@ copyresource: resource
 	rm -rf gen_open_api/build/documents/
 	rm -rf gen_open_api/build/runbrodocs.sh
 	rm -rf gen_open_api/build/manifest.json
+	rm -rf ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.6/*
 	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.6/
 
 pushresourceconfig:
