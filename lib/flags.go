@@ -20,8 +20,8 @@ import (
 	"flag"
 )
 
-var JsonOutputFile = flag.String("json-output-file", "manifest.json", "File to write json manifest to.")
-var BuildDir = flag.String("build-dir", "", "Destination for generated files.")
-var TemplateDir = flag.String("template-dir", "", "Location of templates.")
-var YamlFile = flag.String("yaml-file", "", "")
-var TocFile = flag.String("toc-file", "", "")
+var (
+	KubernetesVersion = flag.String("kubernetes-version", "", "Version of Kubernetes to generate docs for.")
+)
+
+const JsonOutputFile = "manifest.json"

@@ -8,8 +8,8 @@ sample: |
   spec:
     # 3 Pods should exist at all times.
     replicas: 3
-    # Keep record of 10 revisions for rollback
-    revisionHistoryLimit: 10
+    # Keep record of 2 revisions for rollback
+    revisionHistoryLimit: 2
     template:
       metadata:
         labels:

@@ -1,9 +1,11 @@
 categories:
 - name: GETTING STARTED
+  include: _getting_started.md
   commands:
   - run
   - expose
 - name: APP MANAGEMENT
+  include: _app_management.md
   commands:
   - annotate
   - autoscale
@@ -22,9 +24,11 @@ categories:
 - name: DECLARATIVE APP MANAGEMENT
   commands:
   - apply
-- name: TROUBLESHOOTING AND DEBUGGING
+- name: WORKING WITH APPS
+  include: _working_with_apps.md
   commands:
   - attach
+  - cp
   - describe
   - exec
   - logs
@@ -34,6 +38,7 @@ categories:
 - name: CLUSTER MANAGEMENT
   commands:
   - api-versions
+  - certificate
   - cluster-info
   - cordon
   - drain
@@ -46,3 +51,6 @@ categories:
   - explain
   - options
   - version
+- name: DEPRECATED COMMANDS
+  commands:
+  - stop

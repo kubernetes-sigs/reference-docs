@@ -12,13 +12,14 @@ cleanapi:
 	rm -rf $(shell pwd)/gen_open_api/build
 	rm -rf $(shell pwd)/gen_open_api/includes
 	rm -rf $(shell pwd)/gen_open_api/manifest.json
+	rm -rf $(shell pwd)/gen_open_api/includes/_generated_*
 
 brodocs:
 	docker build . -t pwittrock/brodocs
 	docker push pwittrock/brodocs
 
 cli: cleancli
-	go run main.go --yaml-file gen_kubectl/v1_5/kubectl.yaml --doc-type kubectl --template-dir gen_kubectl/ --toc-file gen_kubectl/v1_5/toc.yaml --build-dir gen_kubectl/
+	go run main.go --doc-type kubectl --kubernetes-version v1_5
 	docker run -v $(shell pwd)/gen_kubectl/includes:/source -v $(shell pwd)/gen_kubectl/build:/build -v $(shell pwd)/gen_kubectl/:/manifest pwittrock/brodocs
 
 // Usage: TAG="vN" make pushcli
@@ -26,11 +27,17 @@ pushcli: cli
 	cd gen_kubectl && docker build . -t pwittrock/cli-docs:$(TAG)
 	docker push pwittrock/cli-docs:$(TAG)
 
+copycli: cli
+	rm -rf gen_kubectl/build/documents/
+	rm -rf gen_kubectl/build/runbrodocs.sh
+	rm -rf gen_kubectl/build/manifest.json
+	cp -r gen_kubectl/build/* ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.5/
+
 pushcliconfig:
 	cd configs && kubectl apply -f kubectldocs.yaml
 
 api: cleanapi
-	go run main.go --yaml-file gen_open_api/config.yaml --doc-type open-api --template-dir gen_open_api/ --build-dir gen_open_api/ --open-api-dir gen_open_api/openapi-spec/
+	go run main.go --doc-type open-api
 	docker run -v $(shell pwd)/gen_open_api/includes:/source -v $(shell pwd)/gen_open_api/build:/build -v $(shell pwd)/gen_open_api/:/manifest pwittrock/brodocs
 
 // Usage: TAG="vN" make pushapi
@@ -38,17 +45,32 @@ pushapi: api
 	cd gen_open_api && docker build . -t pwittrock/api-docs:$(TAG)
 	docker push pwittrock/api-docs:$(TAG)
 
+updateapispec: api
+	cp ../../../k8s.io/kubernetes/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
+
+copyapi: api
+	rm -rf gen_open_api/build/documents/
+	rm -rf gen_open_api/build/runbrodocs.sh
+	rm -rf gen_open_api/build/manifest.json
+	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.5/
+
 pushapiconfig:
 	cd configs && kubectl apply -f apidocs.yaml
 
 resource: cleanapi
-	go run main.go --build-operations=false --yaml-file=gen_open_api/config.yaml --doc-type open-api --template-dir gen_open_api/ --build-dir gen_open_api/ --open-api-dir gen_open_api/openapi-spec/
+	go run main.go --doc-type open-api  --build-operations=false
 	docker run -v $(shell pwd)/gen_open_api/includes:/source -v $(shell pwd)/gen_open_api/build:/build -v $(shell pwd)/gen_open_api/:/manifest pwittrock/brodocs
 
 // Usage: TAG="vN" make pushresource
 pushresource: resource
 	cd gen_open_api && docker build . -t pwittrock/resource-docs:$(TAG)
 	docker push pwittrock/resource-docs:$(TAG)
+
+copyresource: resource
+	rm -rf gen_open_api/build/documents/
+	rm -rf gen_open_api/build/runbrodocs.sh
+	rm -rf gen_open_api/build/manifest.json
+	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.5/
 
 pushresourceconfig:
 	cd configs && kubectl apply -f resourcedocs.yaml

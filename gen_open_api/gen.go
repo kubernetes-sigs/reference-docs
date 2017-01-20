@@ -17,16 +17,12 @@ limitations under the License.
 package gen_open_api
 
 import (
-	"flag"
-	"github.com/kubernetes-incubator/reference-docs/lib"
 	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
 )
 
-var openApiDir = flag.String("open-api-dir", "", "Directory containing open-api specs.")
-
 func GenerateFiles() {
 	// Load the yaml config
-	config := api.NewConfig(*lib.YamlFile, *openApiDir)
+	config := api.NewConfig()
 
 	PrintInfo(config)
 	WriteTemplates(config)

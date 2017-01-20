@@ -67,4 +67,6 @@ type ToC struct {
 type Category struct {
 	Name     string `yaml:",omitempty"`
 	Commands []string `yaml:",omitempty"`
+	Include string `yaml:",omitempty"`
 }
+
