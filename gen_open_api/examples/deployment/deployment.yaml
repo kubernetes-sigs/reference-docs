@@ -1,6 +1,6 @@
 note: Deployment Config to run 3 nginx instances (max rollback set to 10 revisions).
 sample: |
-  apiVersion: extensions/v1beta1
+  apiVersion: apps/v1beta1
   kind: Deployment
   metadata:
     # Unique key of the Deployment instance
@@ -8,8 +8,6 @@ sample: |
   spec:
     # 3 Pods should exist at all times.
     replicas: 3
-    # Keep record of 2 revisions for rollback
-    revisionHistoryLimit: 2
     template:
       metadata:
         labels:

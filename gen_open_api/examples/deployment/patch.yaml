@@ -4,11 +4,11 @@ request: '{"spec":{"template":{"spec":{"containers":[{"name":"nginx","image":"ng
 response: |
   {
     "kind": "Deployment",
-    "apiVersion": "extensions/v1beta1",
+    "apiVersion": "apps/v1beta1",
     "metadata": {
       "name": "deployment-example",
       "namespace": "default",
-      "selfLink": "/apis/extensions/v1beta1/namespaces/default/deployments/deployment-example",
+      "selfLink": "/apis/apps/v1beta1/namespaces/default/deployments/deployment-example",
       "uid": "5dc3a8e6-b0ee-11e6-aef0-42010af00229",
       "resourceVersion": "164489",
       "generation": 11,
