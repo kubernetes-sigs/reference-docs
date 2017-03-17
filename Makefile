@@ -1,3 +1,6 @@
+K8SIOROOT=../../../../../go/src/k8s.io/kubernetes.github.io
+K8SROOT=../../../../../go/src/k8s.io/kubernetes
+
 all: main.go
 	go build main.go
 
@@ -31,8 +34,8 @@ copycli: cli
 	rm -rf gen_kubectl/build/documents/
 	rm -rf gen_kubectl/build/runbrodocs.sh
 	rm -rf gen_kubectl/build/manifest.json
-	rm -rf ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.6/*
-	cp -r gen_kubectl/build/* ../../../k8s.io/kubernetes.github.io/docs/user-guide/kubectl/v1.6/
+	rm -rf $(K8SIOROOT)/docs/user-guide/kubectl/v1.6/*
+	cp -r gen_kubectl/build/* $(K8SIOROOT)/docs/user-guide/kubectl/v1.6/
 
 pushcliconfig:
 	cd configs && kubectl apply -f kubectldocs.yaml
@@ -47,14 +50,17 @@ pushapi: api
 	docker push pwittrock/api-docs:$(TAG)
 
 updateapispec: api
-	cp ../../../k8s.io/kubernetes/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
+	cp $(K8SROOT)/api/openapi-spec/swagger.json gen_open_api/openapi-spec/swagger.json
+
+ca:
+	ls $(K8SIOROOT) /docs/api-reference/v1.6/
 
 copyapi: api
 	rm -rf gen_open_api/build/documents/
 	rm -rf gen_open_api/build/runbrodocs.sh
 	rm -rf gen_open_api/build/manifest.json
-	rm -rf ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.6/*
-	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/api-reference/v1.6/
+	rm -rf $(K8SIOROOT)/docs/api-reference/v1.6/*
+	cp -r gen_open_api/build/* $(K8SIOROOT)/docs/api-reference/v1.6/
 
 pushapiconfig:
 	cd configs && kubectl apply -f apidocs.yaml
@@ -72,8 +78,8 @@ copyresource: resource
 	rm -rf gen_open_api/build/documents/
 	rm -rf gen_open_api/build/runbrodocs.sh
 	rm -rf gen_open_api/build/manifest.json
-	rm -rf ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.6/*
-	cp -r gen_open_api/build/* ../../../k8s.io/kubernetes.github.io/docs/resources-reference/v1.6/
+	rm -rf $(K8SIOROOT)/docs/resources-reference/v1.6/*
+	cp -r gen_open_api/build/* $(K8SIOROOT)/docs/resources-reference/v1.6/
 
 pushresourceconfig:
 	cd configs && kubectl apply -f resourcedocs.yaml

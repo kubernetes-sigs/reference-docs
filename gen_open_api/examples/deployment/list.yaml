@@ -1,6 +1,6 @@
 namespace: default
 request: |
-  apiVersion: extensions/v1beta1
+  apiVersion: app/v1beta1
   kind: Deployment
   metadata:
     name: deployment-example
@@ -12,11 +12,11 @@ response: |
     "items": [
       {
         "kind": "Deployment",
-        "apiVersion": "extensions/v1beta1",
+        "apiVersion": "app/v1beta1",
         "metadata": {
           "name": "docs",
           "namespace": "default",
-          "selfLink": "/apis/extensions/v1beta1/namespaces/default/deployments/docs",
+          "selfLink": "/apis/app/v1beta1/namespaces/default/deployments/docs",
           "uid": "ef49e1d2-915e-11e6-be81-42010a80003f",
           "resourceVersion": "1924126",
           "generation": 21,
@@ -77,11 +77,11 @@ response: |
       },
       {
         "kind": "Deployment",
-        "apiVersion": "extensions/v1beta1",
+        "apiVersion": "app/v1beta1",
         "metadata": {
           "name": "deployment-example",
           "namespace": "default",
-          "selfLink": "/apis/extensions/v1beta1/namespaces/default/deployments/deployment-example",
+          "selfLink": "/apis/app/v1beta1/namespaces/default/deployments/deployment-example",
           "uid": "1b33145a-9c63-11e6-9c54-42010a800148",
           "resourceVersion": "2064726",
           "generation": 4,
