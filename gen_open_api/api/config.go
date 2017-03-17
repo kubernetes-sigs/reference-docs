@@ -164,7 +164,13 @@ func (config *Config) setOperation(match, namespaceRep string,
 	ot *OperationType, oc *OperationCategory, definition *Definition) {
 
 	key := strings.Replace(match, "(Namespaced)?", namespaceRep, -1)
-	if o, found := config.Operations[key]; found && o.Definition == nil {
+	if o, found := config.Operations[key]; found {
+		// Each operation should have exactly 1 definition
+		if o.Definition != nil {
+			panic(fmt.Sprintf(
+				"Found multiple matching defintions [%s/%s, %s/%s] for operation key: %s",
+				definition.Version, definition.Name, o.Definition.Version, o.Definition.Name, key))
+		}
 		o.Type = *ot
 		o.Definition = definition
 		oc.Operations = append(oc.Operations, o)
@@ -177,9 +183,15 @@ func (config *Config) setOperation(match, namespaceRep string,
 func (config *Config) mapOperationsToDefinitions() {
 	// Look for matching operations for each definition
 	for _, definition := range config.Definitions.GetAllDefinitions() {
+		// Inlined definitions don't have operations
+		if definition.IsInlined {
+			continue
+		}
+
 		// Iterate through categories
 		for i := range config.OperationCategories {
 			oc := config.OperationCategories[i]
+
 			// Iterate through possible operation matches
 			for j := range oc.OperationTypes {
 				// Iterate through possible api groups since we don't know the api group of the definition
