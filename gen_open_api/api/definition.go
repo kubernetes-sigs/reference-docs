@@ -242,9 +242,6 @@ func GetDefinitions(specs []*loads.Document) Definitions {
 		ByKind:             map[string]SortDefinitionsByVersion{},
 	}
 	VisitDefinitions(specs, func(definition *Definition) {
-		if definition.Name == "Deployment" {
-			fmt.Printf("pwittroc %s %s %s\n", definition.Kind, definition.Version, definition.Group)
-		}
 		d.Put(definition)
 	})
 	d.InitializeFieldsForAll()

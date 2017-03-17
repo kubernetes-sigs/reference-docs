@@ -19,46 +19,67 @@ package gen_open_api
 import (
 	"fmt"
 	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
+	"strings"
 )
 
 func PrintInfo(config *api.Config) {
 	definitions := config.Definitions
 
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("Orphaned Definitions:\n")
+	hasOrphaned := false
 	for name, d := range definitions.GetAllDefinitions() {
 		if !d.FoundInField && !d.FoundInOperation {
-			fmt.Printf("[%s]\n", name)
+			if !strings.Contains(name, "meta.v1.APIVersions") && !strings.Contains(name, "meta.v1.Patch") {
+				hasOrphaned = true
+			}
 		}
 	}
+	if hasOrphaned {
+		fmt.Printf("----------------------------------\n")
+		fmt.Printf("Orphaned Definitions:\n")
+		for name, d := range definitions.GetAllDefinitions() {
+			if !d.FoundInField && !d.FoundInOperation {
+				if !strings.Contains(name, "meta.v1.APIVersions") && !strings.Contains(name, "meta.v1.Patch") {
+					fmt.Printf("[%s]\n", name)
+				}
+			}
+		}
+		panic("Orphaned definitions found.")
+	}
 
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("Definitions with Operations Missing from Toc (Excluding old version):\n")
-	for name, d := range definitions.GetAllDefinitions() {
+	missingFromToc := false
+	for _, d := range definitions.GetAllDefinitions() {
 		if !d.InToc && len(d.OperationCategories) > 0 && !d.IsOldVersion && !d.IsInlined {
-			fmt.Printf("[%s]\n", name)
-			for _, oc := range d.OperationCategories {
-				for _, o := range oc.Operations {
-					fmt.Printf("\t [%s]\n", o.ID)
-				}
-			}
-		}
-	}
-	fmt.Printf("----------------------------------\n")
-
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("Old definitions:\n")
-	for name, d := range definitions.GetAllDefinitions() {
-		if !d.InToc && len(d.OperationCategories) > 0 && d.IsOldVersion && !d.IsInlined {
-			fmt.Printf("[%s]\n", name)
-			for _, oc := range d.OperationCategories {
-				for _, o := range oc.Operations {
-					fmt.Printf("\t [%s]\n", o.ID)
-				}
-			}
+			missingFromToc = true
 		}
 	}
 
+	if missingFromToc {
+		fmt.Printf("----------------------------------\n")
+		fmt.Printf("Definitions with Operations Missing from Toc (Excluding old version):\n")
+		for name, d := range definitions.GetAllDefinitions() {
+			if !d.InToc && len(d.OperationCategories) > 0 && !d.IsOldVersion && !d.IsInlined {
+				fmt.Printf("[%s]\n", name)
+				for _, oc := range d.OperationCategories {
+					for _, o := range oc.Operations {
+						fmt.Printf("\t [%s]\n", o.ID)
+					}
+				}
+			}
+		}
+		panic("Definitions with operations missing from the ToC")
+	}
+
+	//fmt.Printf("Old definitions:\n")
+	//for name, d := range definitions.GetAllDefinitions() {
+	//	if !d.InToc && len(d.OperationCategories) > 0 && d.IsOldVersion && !d.IsInlined {
+	//		fmt.Printf("[%s]\n", name)
+	//		for _, oc := range d.OperationCategories {
+	//			for _, o := range oc.Operations {
+	//				fmt.Printf("\t [%s]\n", o.ID)
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 func PrintDebug(config *api.Config) {

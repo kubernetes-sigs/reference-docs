@@ -54,6 +54,29 @@ func NewConfig() *Config {
 	return config
 }
 
+func verifyBlacklisted(operation Operation) {
+	switch {
+	case strings.Contains(operation.ID, "NamespacedScheduledJob"):
+	case strings.Contains(operation.ID, "ScheduledJobForAllNamespaces"):
+	case strings.Contains(operation.ID, "ScheduledJobListForAllNamespaces"):
+	case strings.Contains(operation.ID, "V1beta1NamespacedReplicationcontrollersScale"):
+	case strings.Contains(operation.ID, "NamespacedPodAttach"):
+	case strings.Contains(operation.ID, "NamespacedPodWithPath"):
+	case strings.Contains(operation.ID, "proxyCoreV1"):
+	case strings.Contains(operation.ID, "NamespacedScaleScale"):
+	case strings.Contains(operation.ID, "NamespacedBindingBinding"):
+	case strings.Contains(operation.ID, "NamespacedPodExe"):
+	case strings.Contains(operation.ID, "logFileHandler"):
+	case strings.Contains(operation.ID, "logFileListHandler"):
+	case strings.Contains(operation.ID, "replaceCoreV1NamespaceFinalize"):
+	case strings.Contains(operation.ID, "NamespacedEvictionEviction"):
+	case strings.Contains(operation.ID, "getCodeVersion"):
+	case strings.Contains(operation.ID, "V1beta1CertificateSigningRequestApproval"):
+	default:
+		panic(fmt.Sprintf("No Definition found for %s [%s].  \n", operation.ID, operation.Path))
+	}
+}
+
 // GetOperations returns all Operations found in the Documents
 func (config *Config) InitOperations(specs []*loads.Document) {
 	o := Operations{}
@@ -66,7 +89,7 @@ func (config *Config) InitOperations(specs []*loads.Document) {
 	config.mapOperationsToDefinitions()
 	VisitOperations(specs, func(operation Operation) {
 		if o, found := config.Operations[operation.ID]; !found || o.Definition == nil {
-			fmt.Printf("No Definition found for %s [%s].\n", operation.ID, operation.Path)
+			verifyBlacklisted(operation)
 		}
 	})
 	config.Definitions.initializeOperationParameters(config.Operations)

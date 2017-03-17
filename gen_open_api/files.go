@@ -97,9 +97,6 @@ func WriteIndexFile(config *api.Config) {
 	// Add other definition imports
 	definitions := api.SortDefinitionsByName{}
 	for _, definition := range config.Definitions.GetAllDefinitions() {
-		if definition.Name == "Deployment" {
-			fmt.Printf("pwittroc Files %s %s %s %v\n", definition.Kind, definition.Version, definition.Group, definition.IsOldVersion)
-		}
 
 		// Don't add definitions for top level resources in the toc or inlined resources
 		if definition.InToc || definition.IsInlined || definition.IsOldVersion {
