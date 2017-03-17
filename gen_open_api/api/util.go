@@ -20,23 +20,47 @@ import (
 	"fmt"
 	"strings"
 
+	"errors"
 	"github.com/go-openapi/spec"
 )
 
+func GetGroupVersionKind() {
+
+}
+
 // GetDefinitionVersionKind returns the api version and kind for the spec.  This is the primary key of a Definition.
-func GetDefinitionVersionKind(s spec.Schema) (string, string) {
+func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 	// Get the reference for complex types
 	if IsDefinition(s) {
 		s := fmt.Sprintf("%s", s.SchemaProps.Ref.GetPointer())
 		s = strings.Replace(s, "/definitions/", "", -1)
 		name := strings.Split(s, ".")
-		return name[0], name[1]
+
+		var group, version, kind string
+		if name[len(name)-3] == "api" {
+			// e.g. "io.k8s.kubernetes.pkg.api.v1.Pod"
+			group = "core"
+			version = name[len(name)-2]
+			kind = name[len(name)-1]
+		} else if name[len(name)-4] == "apis" {
+			// e.g. "io.k8s.kubernetes.pkg.apis.extensions.v1beta1.Deployment"
+			group = name[len(name)-3]
+			version = name[len(name)-2]
+			kind = name[len(name)-1]
+		} else if name[len(name)-3] == "util" || name[len(name)-3] == "pkg" {
+			// e.g. io.k8s.apimachinery.pkg.util.intstr.IntOrString
+			// e.g. io.k8s.apimachinery.pkg.runtime.RawExtension
+			return "", "", ""
+		} else {
+			panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
+		}
+		return group, version, kind
 	}
 	// Recurse if type is array
 	if IsArray(s) {
 		return GetDefinitionVersionKind(*s.Items.Schema)
 	}
-	return "", ""
+	return "", "", ""
 }
 
 // GetTypeName returns the display name of a Schema.  This is the api kind for definitions and the type for
@@ -44,7 +68,7 @@ func GetDefinitionVersionKind(s spec.Schema) (string, string) {
 func GetTypeName(s spec.Schema) string {
 	// Get the reference for complex types
 	if IsDefinition(s) {
-		_, name := GetDefinitionVersionKind(s)
+		_, _, name := GetDefinitionVersionKind(s)
 		return name
 	}
 	// Recurse if type is array
@@ -70,4 +94,3 @@ func IsArray(s spec.Schema) bool {
 func IsDefinition(s spec.Schema) bool {
 	return len(s.SchemaProps.Ref.GetPointer().String()) > 0
 }
-

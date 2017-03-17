@@ -16,10 +16,20 @@ limitations under the License.
 
 package api
 
+import "strings"
+
 type ApiGroup string
+
+type ApiGroups []ApiGroup
 
 func (a ApiGroup) String() string {
 	return string(a)
+}
+
+func (a ApiGroups) Len() int      { return len(a) }
+func (a ApiGroups) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ApiGroups) Less(i, j int) bool {
+	return strings.Compare(a[i].String(), a[j].String()) < 0
 }
 
 type ApiVersions []ApiVersion

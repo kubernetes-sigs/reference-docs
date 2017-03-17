@@ -29,7 +29,7 @@ Code         | Description
 {{define "concept.template"}}
 
 -----------
-# {{.Name}} {{.Definition.Version}}
+# {{.Name}} {{.Definition.Version}} {{.Definition.Group}}
 
 {{if .Definition.Sample.Sample}}{{$n := .Definition.Sample.Note}}{{range $e := .Definition.GetSamples}}>{{$e.Tab}} {{$n}}
 
