@@ -28,7 +28,6 @@ import (
 	"unicode"
 
 	"github.com/go-openapi/loads"
-
 )
 
 var GenOpenApiDir = flag.String("gen-open-api-dir", "gen_open_api/", "Directory containing open api files")
@@ -152,7 +151,7 @@ func (config *Config) initDefExample(d *Definition) {
 	}
 }
 
-func getOperationId(match string, group ApiGroup, version ApiVersion, kind string) string {
+func getOperationId(match string, group string, version ApiVersion, kind string) string {
 	// Substitute the api definition group-version-kind into the operation template and look for a match
 	v, k := doScaleIdHack(string(version), kind, match)
 	match = strings.Replace(match, "${group}", string(group), -1)
@@ -161,17 +160,11 @@ func getOperationId(match string, group ApiGroup, version ApiVersion, kind strin
 	return match
 }
 
-func (config *Config) setOperation(match string, group ApiGroup, namespaceRep string,
-	ot *OperationType, oc *OperationCategory,  definition *Definition) {
+func (config *Config) setOperation(match, namespaceRep string,
+	ot *OperationType, oc *OperationCategory, definition *Definition) {
+
 	key := strings.Replace(match, "(Namespaced)?", namespaceRep, -1)
 	if o, found := config.Operations[key]; found && o.Definition == nil {
-		// Each definition should be in exactly 1 group
-		if len(definition.Group) > 0 && group != definition.Group {
-			panic(fmt.Sprintf(
-				"Multiple Groups found for Resource %v %v %v\n",
-				definition.Name, definition.Group, group))
-		}
-		definition.Group = group
 		o.Type = *ot
 		o.Definition = definition
 		oc.Operations = append(oc.Operations, o)
@@ -190,13 +183,12 @@ func (config *Config) mapOperationsToDefinitions() {
 			// Iterate through possible operation matches
 			for j := range oc.OperationTypes {
 				// Iterate through possible api groups since we don't know the api group of the definition
-				for _, group := range config.ApiGroups {
-					ot := oc.OperationTypes[j]
-					operationId := getOperationId(ot.Match, group, definition.Version, definition.Name)
-					// Look for a matching operation and set on the definition if found
-					config.setOperation(operationId, group, "Namespaced", &ot, &oc, definition)
-					config.setOperation(operationId, group, "", &ot, &oc, definition)
-				}
+				ot := oc.OperationTypes[j]
+
+				operationId := getOperationId(ot.Match, definition.GetOperationGroupName(), definition.Version, definition.Name)
+				// Look for a matching operation and set on the definition if found
+				config.setOperation(operationId, "Namespaced", &ot, &oc, definition)
+				config.setOperation(operationId, "", &ot, &oc, definition)
 			}
 
 			// If we found operations for this category, add the category to the definition

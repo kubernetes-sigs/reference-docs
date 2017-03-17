@@ -25,13 +25,13 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/kubernetes-incubator/reference-docs/lib"
 	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
+	"github.com/kubernetes-incubator/reference-docs/lib"
 )
 
 func WriteTemplates(config *api.Config) {
 	if _, err := os.Stat(*api.GenOpenApiDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*api.GenOpenApiDir + "/includes", os.FileMode(0700))
+		os.Mkdir(*api.GenOpenApiDir+"/includes", os.FileMode(0700))
 	}
 
 	// Write the index file importing each of the top level concept files
@@ -51,7 +51,6 @@ func getTemplateFile(name string) string {
 func getStaticIncludesDir() string {
 	return filepath.Join(*api.GenOpenApiDir, "static_includes")
 }
-
 
 func WriteIndexFile(config *api.Config) {
 	includes := []string{}
@@ -85,6 +84,11 @@ func WriteIndexFile(config *api.Config) {
 		includes = append(includes, c.Include)
 		manifest.Docs = append(manifest.Docs, Doc{"_" + c.Include + ".md"})
 		for _, r := range c.Resources {
+			if r.Definition == nil {
+				fmt.Printf("Warning: Missing definition for item in ToC %s\n", r.Name)
+				continue
+			}
+
 			includes = append(includes, GetConceptImport(r.Definition))
 			manifest.Docs = append(manifest.Docs, Doc{"_" + GetConceptImport(r.Definition) + ".md"})
 		}
@@ -93,6 +97,10 @@ func WriteIndexFile(config *api.Config) {
 	// Add other definition imports
 	definitions := api.SortDefinitionsByName{}
 	for _, definition := range config.Definitions.GetAllDefinitions() {
+		if definition.Name == "Deployment" {
+			fmt.Printf("pwittroc Files %s %s %s %v\n", definition.Kind, definition.Version, definition.Group, definition.IsOldVersion)
+		}
+
 		// Don't add definitions for top level resources in the toc or inlined resources
 		if definition.InToc || definition.IsInlined || definition.IsOldVersion {
 			continue
@@ -214,17 +222,16 @@ func toFileName(s string) string {
 }
 
 func GetDefinitionImport(d *api.Definition) string {
-	return fmt.Sprintf("%s_%s_definition", getImport(d.Name), d.Version)
+	return fmt.Sprintf("%s_%s_%s_definition", getImport(d.Name), d.Version, d.Group)
 }
 
 func GetDefinitionFilePath(d *api.Definition) string {
 	return toFileName(GetDefinitionImport(d))
 }
 
-
 // GetConceptImport returns the name to import in the index.html.md file
 func GetConceptImport(d *api.Definition) string {
-	return fmt.Sprintf("%s_%s_concept", getImport(d.Name), d.Version)
+	return fmt.Sprintf("%s_%s_%s_concept", getImport(d.Name), d.Version, d.Group)
 }
 
 // GetConceptFilePath returns the filepath to write when instantiating a concept template
@@ -235,9 +242,9 @@ func GetConceptFilePath(d *api.Definition) string {
 type Manifest struct {
 	ExampleTabs     []ExampleTab    `json:"example_tabs,omitempty"`
 	TableOfContents TableOfContents `json:"table_of_contents,omitempty"`
-	Docs     []Doc    `json:"docs,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Copyright string `json:"copyright,omitempty"`
+	Docs            []Doc           `json:"docs,omitempty"`
+	Title           string          `json:"title,omitempty"`
+	Copyright       string          `json:"copyright,omitempty"`
 }
 
 type TableOfContents struct {

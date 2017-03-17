@@ -21,23 +21,23 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-openapi/spec"
+	"errors"
 	"github.com/go-openapi/loads"
+	"github.com/go-openapi/spec"
 )
-
 
 // Definitions indexes open-api definitions
 type Definitions struct {
-	ByVersionKind map[string]*Definition
-	ByKind map[string]SortDefinitionsByVersion
+	ByGroupVersionKind map[string]*Definition
+	ByKind             map[string]SortDefinitionsByVersion
 }
 
 func (d *Definitions) GetAllDefinitions() map[string]*Definition {
-	return d.ByVersionKind
+	return d.ByGroupVersionKind
 }
 
 func (d *Definition) GroupDisplayName() string {
-	if len(d.Group) <= 0 {
+	if len(d.Group) <= 0 || d.Group == "core" {
 		return "Core"
 	}
 	return string(d.Group)
@@ -55,35 +55,34 @@ func (d *Definitions) GetOtherVersions(this *Definition) []*Definition {
 }
 
 // GetByVersionKind looks up a definition using its primary key (version,kind)
-func (d *Definitions) GetByVersionKind(version, kind string) (*Definition, bool) {
-	key := &Definition{Version: ApiVersion(version), Kind: ApiKind(kind)}
-	r, f := d.ByVersionKind[key.Key()]
+func (d *Definitions) GetByVersionKind(group, version, kind string) (*Definition, bool) {
+	key := &Definition{Group: ApiGroup(group), Version: ApiVersion(version), Kind: ApiKind(kind)}
+	r, f := d.ByGroupVersionKind[key.Key()]
 	return r, f
 }
 
 // GetByKey looks up a definition from its key (version.kind)
 func (d *Definitions) GetByKey(key string) (*Definition, bool) {
-	r, f := d.ByVersionKind[key]
+	r, f := d.ByGroupVersionKind[key]
 	return r, f
 }
 
 // IsComplex returns true if the schema is for a complex (non-primitive) defintions
 func (d *Definitions) IsComplex(s spec.Schema) bool {
-	_, k := GetDefinitionVersionKind(s)
+	_, _, k := GetDefinitionVersionKind(s)
 	return len(k) > 0
 }
 
-
 func (d *Definitions) GetForSchema(s spec.Schema) (*Definition, bool) {
-	v, k := GetDefinitionVersionKind(s)
+	g, v, k := GetDefinitionVersionKind(s)
 	if len(k) <= 0 {
 		return nil, false
 	}
-	return d.GetByVersionKind(v, k)
+	return d.GetByVersionKind(g, v, k)
 }
 
 func (d *Definitions) Put(defintion *Definition) {
-	d.ByVersionKind[defintion.Key()] = defintion
+	d.ByGroupVersionKind[defintion.Key()] = defintion
 }
 
 // Initializes the fields for all definitions
@@ -117,41 +116,50 @@ func (d *Definitions) InitializeOtherVersions() {
 
 type Definition struct {
 	// open-api schema for the definition
-	schema              spec.Schema
+	schema spec.Schema
 	// Display name of the definition (e.g. Deployment)
-	Name                string
-	Group               ApiGroup
+	Name  string
+	Group ApiGroup
 	// Api version of the definition (e.g. v1beta1)
-	Version             ApiVersion
-	Kind                ApiKind
+	Version ApiVersion
+	Kind    ApiKind
 
 	// InToc is true if this definition should appear in the table of contents
-	InToc               bool
-	IsInlined           bool
-	IsOldVersion        bool
+	InToc        bool
+	IsInlined    bool
+	IsOldVersion bool
 
-	FoundInField        bool
-	FoundInOperation    bool
+	FoundInField     bool
+	FoundInOperation bool
 
 	// Inline is a list of definitions that should appear inlined with this one in the documentations
-	Inline              SortDefinitionsByName
+	Inline SortDefinitionsByName
 
 	// AppearsIn is a list of definition that this one appears in - e.g. PodSpec in Pod
-	AppearsIn           SortDefinitionsByName
+	AppearsIn SortDefinitionsByName
 
 	OperationCategories []*OperationCategory
 
 	// Fields is a list of fields in this definition
-	Fields              Fields
+	Fields Fields
 
-	OtherVersions       SortDefinitionsByName
-	NewerVersions       SortDefinitionsByName
+	OtherVersions SortDefinitionsByName
+	NewerVersions SortDefinitionsByName
 
-	Sample              SampleConfig
+	Sample SampleConfig
+
+	FullName string
+}
+
+func (d *Definition) GetOperationGroupName() string {
+	if strings.ToLower(d.Group.String()) == "rbac" {
+		return "RbacAuthorization"
+	}
+	return strings.Title(d.Group.String())
 }
 
 func (d *Definition) Key() string {
-	return fmt.Sprintf("%s.%s", d.Version, d.Kind)
+	return fmt.Sprintf("%s.%s.%s", d.Group, d.Version, d.Kind)
 }
 
 func (d *Definition) MdLink() string {
@@ -171,28 +179,56 @@ func (d Definition) Description() string {
 }
 
 func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) {
+	groups := map[string]string{}
 	for _, spec := range specs {
 		for name, spec := range spec.Spec().Definitions {
 			parts := strings.Split(name, ".")
-			if len(parts) < 2 {
+			if len(parts) < 4 {
 				fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
 				continue
 			}
+			var group, version, kind string
+			if parts[len(parts)-3] == "api" {
+				// e.g. "io.k8s.kubernetes.pkg.api.v1.Pod"
+				group = "core"
+				version = parts[len(parts)-2]
+				kind = parts[len(parts)-1]
+				groups[group] = ""
+			} else if parts[len(parts)-4] == "apis" {
+				// e.g. "io.k8s.kubernetes.pkg.apis.extensions.v1beta1.Deployment"
+				group = parts[len(parts)-3]
+				version = parts[len(parts)-2]
+				kind = parts[len(parts)-1]
+				groups[group] = ""
+			} else if parts[len(parts)-3] == "util" || parts[len(parts)-3] == "pkg" {
+				// e.g. io.k8s.apimachinery.pkg.util.intstr.IntOrString
+				// e.g. io.k8s.apimachinery.pkg.runtime.RawExtension
+				continue
+			} else {
+				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
+			}
+
 			fn(&Definition{
 				schema:  spec,
-				Name:    parts[1],
-				Version: ApiVersion(parts[0]),
-				Kind:    ApiKind(parts[1]),
+				Name:    kind,
+				Version: ApiVersion(version),
+				Kind:    ApiKind(kind),
+				Group:   ApiGroup(group),
 			})
 		}
 	}
+	gs := ApiGroups{}
+	for k, _ := range groups {
+		gs = append(gs, ApiGroup(k))
+	}
+	sort.Sort(gs)
 }
 
 func (d *Definition) GetSamples() []ExampleText {
 	r := []ExampleText{}
 	for _, p := range GetExampleProviders() {
 		r = append(r, ExampleText{
-			Tab: p.GetTab(),
+			Tab:  p.GetTab(),
 			Type: p.GetSampleType(),
 			Text: p.GetSample(d),
 		})
@@ -202,10 +238,13 @@ func (d *Definition) GetSamples() []ExampleText {
 
 func GetDefinitions(specs []*loads.Document) Definitions {
 	d := Definitions{
-		ByVersionKind: map[string]*Definition{},
-		ByKind: map[string]SortDefinitionsByVersion{},
+		ByGroupVersionKind: map[string]*Definition{},
+		ByKind:             map[string]SortDefinitionsByVersion{},
 	}
 	VisitDefinitions(specs, func(definition *Definition) {
+		if definition.Name == "Deployment" {
+			fmt.Printf("pwittroc %s %s %s\n", definition.Kind, definition.Version, definition.Group)
+		}
 		d.Put(definition)
 	})
 	d.InitializeFieldsForAll()

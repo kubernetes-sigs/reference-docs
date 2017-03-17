@@ -18,8 +18,8 @@ package api
 
 import (
 	"fmt"
-	"strings"
 	"github.com/go-openapi/spec"
+	"strings"
 )
 
 var INLINE_DEFINITIONS = []InlineDefinition{
@@ -33,16 +33,16 @@ var INLINE_DEFINITIONS = []InlineDefinition{
 }
 
 const (
-	path = "path"
+	path  = "path"
 	query = "query"
-	body = "body"
+	body  = "body"
 )
 
 // Inline definitions for "Spec", "Status", "List", etc for definitions
 func (definitions Definitions) initInlinedDefinitions() Definitions {
 	for _, d := range definitions.GetAllDefinitions() {
 		for _, name := range definitions.GetInlinedDefinitionNames(d.Name) {
-			if cr, found := definitions.GetByVersionKind(string(d.Version), name); found {
+			if cr, found := definitions.GetByVersionKind(string(d.Group), string(d.Version), name); found {
 				d.Inline = append(d.Inline, cr)
 				cr.IsInlined = true
 				cr.FoundInField = true
@@ -75,8 +75,8 @@ func getDefinitionFieldDefinitions(definition *Definition, definitions Definitio
 		if child, found := definitions.GetForSchema(p); found {
 			children = append(children, child)
 		} else {
-			v, k := GetDefinitionVersionKind(p)
-			fmt.Printf("Could not locate referenced property of %s: %s (version %s).\n", definition.Name, k, v)
+			g, v, k := GetDefinitionVersionKind(p)
+			fmt.Printf("Could not locate referenced property of %s: %s (%s/%s).\n", definition.Name, g, k, v)
 		}
 	}
 	return children
@@ -139,7 +139,9 @@ func (definitions *Definitions) initializeOperationParameters(operations Operati
 			if definitions.IsComplex(*response.Schema) {
 				//var f bool
 				r.Definition, _ = definitions.GetForSchema(*response.Schema)
-				r.Definition.FoundInOperation = true
+				if r.Definition != nil {
+					r.Definition.FoundInOperation = true
+				}
 			}
 			operation.HttpResponses = append(operation.HttpResponses, r)
 		}

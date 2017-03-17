@@ -26,8 +26,8 @@ type Config struct {
 	OperationCategories []OperationCategory `yaml:"operation_categories,omitempty"`
 	ResourceCategories  []ResourceCategory  `yaml:"resource_categories,omitempty"`
 
-	Definitions         Definitions
-	Operations          Operations
+	Definitions Definitions
+	Operations  Operations
 }
 
 // InlineDefinition defines a definition that should be inlined when displaying a Concept instead of appearing the in "Definitions"
@@ -38,7 +38,6 @@ type InlineDefinition struct {
 	// e.g. if Match == "${resource}Spec" then DeploymentSpec would be inlined into the "Deployment" Concept
 	Match string `yaml:",omitempty"`
 }
-
 
 func (c Config) GetTopLevelConcepts() []string {
 	s := []string{}
@@ -71,6 +70,7 @@ type Resource struct {
 	// Name is the display name of this Resource
 	Name    string `yaml:",omitempty"`
 	Version string `yaml:",omitempty"`
+	Group   string `yaml:",omitempty"`
 	// InlineDefinition is a list of definitions to show along side this resource when displaying it
 	InlineDefinition []string `yaml:inline_definition",omitempty"`
 	// DescriptionWarning is a warning message to show along side this resource when displaying it
@@ -91,31 +91,35 @@ type Resource struct {
 }
 
 type ExampleConfig struct {
-	Name      string `yaml:",omitempty"`
-	Namespace string `yaml:",omitempty"`
-	Request   string `yaml:",omitempty"`
-	Response  string `yaml:",omitempty"`
+	Name         string `yaml:",omitempty"`
+	Namespace    string `yaml:",omitempty"`
+	Request      string `yaml:",omitempty"`
+	Response     string `yaml:",omitempty"`
 	RequestNote  string `yaml:",omitempty"`
-	ResponseNote  string `yaml:",omitempty"`
+	ResponseNote string `yaml:",omitempty"`
 }
 
 type SampleConfig struct {
-	Note  string `yaml:",omitempty"`
-	Sample  string `yaml:",omitempty"`
+	Note   string `yaml:",omitempty"`
+	Sample string `yaml:",omitempty"`
 }
-
 
 type ResourceVisitor func(resource *Resource, d *Definition)
 
 // For each resource in the ToC, look up its definition and visit it.
 func (c *Config) VisitResourcesInToc(definitions Definitions, fn ResourceVisitor) {
+	missing := false
 	for _, cat := range c.ResourceCategories {
 		for _, resource := range cat.Resources {
-			if definition, found := definitions.GetByVersionKind(resource.Version, resource.Name); found {
+			if definition, found := definitions.GetByVersionKind(resource.Group, resource.Version, resource.Name); found {
 				fn(resource, definition)
 			} else {
-				fmt.Printf("Could not find definition for resource appearing in TOC: %s.\n", resource.Name)
+				fmt.Printf("Could not find definition for resource appearing in TOC: %s %s %s.\n", resource.Group, resource.Version, resource.Name)
+				missing = true
 			}
 		}
+	}
+	if missing {
+		fmt.Printf("All known definitions: %v\n", definitions.GetAllDefinitions())
 	}
 }

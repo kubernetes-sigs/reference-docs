@@ -16,9 +16,12 @@ limitations under the License.
 
 package api
 
+import "strings"
+
 type SortDefinitionsByName []*Definition
-func (a SortDefinitionsByName) Len() int           { return len(a) }
-func (a SortDefinitionsByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+func (a SortDefinitionsByName) Len() int      { return len(a) }
+func (a SortDefinitionsByName) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a SortDefinitionsByName) Less(i, j int) bool {
 	if a[i].Name == a[j].Name {
 		return a[i].Version.LessThan(a[j].Version)
@@ -27,8 +30,14 @@ func (a SortDefinitionsByName) Less(i, j int) bool {
 }
 
 type SortDefinitionsByVersion []*Definition
-func (a SortDefinitionsByVersion) Len() int           { return len(a) }
-func (a SortDefinitionsByVersion) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a SortDefinitionsByVersion) Less(i, j int) bool { return a[i].Version.LessThan(a[j].Version) }
 
-
+func (a SortDefinitionsByVersion) Len() int      { return len(a) }
+func (a SortDefinitionsByVersion) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a SortDefinitionsByVersion) Less(i, j int) bool {
+	switch {
+	case a[i].Version == a[j].Version:
+		return strings.Compare(a[i].Group.String(), a[j].Group.String()) < 0
+	default:
+		return a[i].Version.LessThan(a[j].Version)
+	}
+}

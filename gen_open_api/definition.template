@@ -1,4 +1,4 @@
-{{define "definition.template"}}## {{.Name}} {{.Version}}
+{{define "definition.template"}}## {{.Name}} {{.Version}} {{.Group}}
 
 Group        | Version     | Kind
 ------------ | ---------- | -----------
