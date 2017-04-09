@@ -4,8 +4,8 @@ Config and Storage resources are responsible for injecting data into your applic
 
 Common resource types:
 
-- [ConfigMaps](#configmap-v1) for providing text key value pairs injected into the application through environment variables, command line arguments, or files
-- [Secrets](#secret-v1) for providing binary data injected into the application through files
-- [Volumes](#volume-v1) for providing a filesystem external to the Container.  Maybe shared across Containers within the same Pod and have a lifetime persisting beyond a Container or Pod.
+- [ConfigMaps](#configmap-v1-core) for providing text key value pairs injected into the application through environment variables, command line arguments, or files
+- [Secrets](#secret-v1-core) for providing binary data injected into the application through files
+- [Volumes](#volume-v1-core) for providing a filesystem external to the Container.  Maybe shared across Containers within the same Pod and have a lifetime persisting beyond a Container or Pod.
 
 ------------

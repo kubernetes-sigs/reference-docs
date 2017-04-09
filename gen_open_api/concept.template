@@ -60,7 +60,7 @@ Field        | Description
 {{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} | {{$field.Description}}
 {{end}}
 
-{{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}}
+{{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}} {{$inline.Group}}
 
 {{if $inline.AppearsIn}}<aside class="notice">
 Appears In {{range $appearsin := $inline.AppearsIn}}{{$appearsin.HrefLink}} {{end}}</aside>{{end}}

@@ -167,11 +167,11 @@ func (d *Definition) MdLink() string {
 }
 
 func (d *Definition) HrefLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Name, d.Group)
+	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Name)
 }
 
 func (d *Definition) VersionLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Version, d.Group)
+	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Version)
 }
 
 func (d Definition) Description() string {
