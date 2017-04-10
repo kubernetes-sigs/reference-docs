@@ -23,12 +23,16 @@ import (
 
 	"github.com/kubernetes-incubator/reference-docs/gen_kubectl"
 	"github.com/kubernetes-incubator/reference-docs/gen_open_api"
+	"github.com/kubernetes-incubator/reference-docs/gen_open_api/api"
 )
 
 var docType = flag.String("doc-type", "open-api", "Type of docs to generate.")
 
 func main() {
 	flag.Parse()
+	if *api.ConfigDir == "" {
+		*api.ConfigDir = *api.GenOpenApiDir
+	}
 
 	switch *docType {
 	case "open-api":

@@ -30,8 +30,8 @@ import (
 )
 
 func WriteTemplates(config *api.Config) {
-	if _, err := os.Stat(*api.GenOpenApiDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*api.GenOpenApiDir+"/includes", os.FileMode(0700))
+	if _, err := os.Stat(*api.ConfigDir + "/includes"); os.IsNotExist(err) {
+		os.Mkdir(*api.ConfigDir+"/includes", os.FileMode(0700))
 	}
 
 	// Write the index file importing each of the top level concept files
@@ -49,7 +49,41 @@ func getTemplateFile(name string) string {
 }
 
 func getStaticIncludesDir() string {
-	return filepath.Join(*api.GenOpenApiDir, "static_includes")
+	return filepath.Join(*api.ConfigDir, "static_includes")
+}
+
+func WriteStaticFile(title, location string) {
+	staticFileTemplate, err := template.New("static-file-template").Parse(DefaultHeader)
+	if err != nil {
+		panic(fmt.Errorf("Could not parse %v %s", err, DefaultHeader))
+	}
+
+	f := filepath.Join(getStaticIncludesDir(), location)
+	_, err = os.Stat(f)
+	if err == nil {
+		// Don't create the file if it exists
+		return
+	}
+
+	if !os.IsNotExist(err) {
+		panic(fmt.Sprintf("Could not stat file %s %v", f, err))
+	}
+	fmt.Printf("Creating %s file\n", f)
+	file, err := os.Create(f)
+	if err != nil {
+		panic(err)
+	}
+	file.Close()
+
+	file, err = os.OpenFile(f, os.O_WRONLY, 0)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = staticFileTemplate.Execute(file, title)
+	if err != nil {
+		fmt.Println(err)
+	}
+	file.Close()
 }
 
 func WriteIndexFile(config *api.Config) {
@@ -58,6 +92,14 @@ func WriteIndexFile(config *api.Config) {
 	manifest := Manifest{}
 
 	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016 The Kubernetes Authors.</a>"
+
+	WriteStaticFile("Overview", "_overview.md")
+	WriteStaticFile("Old Versions", "_oldversions.md")
+	WriteStaticFile("Definitions", "_definitions.md")
+	for _, c := range config.ResourceCategories {
+		name := "_" + c.Include + ".md"
+		WriteStaticFile(c.Include, name)
+	}
 
 	if !*api.BuildOps {
 		manifest.Title = "Kubernetes Resource Reference Docs"
@@ -69,7 +111,7 @@ func WriteIndexFile(config *api.Config) {
 	// Copy over the includes
 	err := filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
-			to := filepath.Join(*api.GenOpenApiDir, "includes", filepath.Base(path))
+			to := filepath.Join(*api.ConfigDir, "includes", filepath.Base(path))
 			return os.Link(path, to)
 		}
 		return nil
@@ -82,7 +124,10 @@ func WriteIndexFile(config *api.Config) {
 	// Add Toc Imports
 	for _, c := range config.ResourceCategories {
 		includes = append(includes, c.Include)
-		manifest.Docs = append(manifest.Docs, Doc{"_" + c.Include + ".md"})
+		name := "_" + c.Include + ".md"
+		manifest.Docs = append(manifest.Docs, Doc{name})
+		WriteStaticFile(c.Include, name)
+
 		for _, r := range c.Resources {
 			if r.Definition == nil {
 				fmt.Printf("Warning: Missing definition for item in ToC %s\n", r.Name)
@@ -138,7 +183,7 @@ func WriteIndexFile(config *api.Config) {
 	if err != nil {
 		fmt.Printf("Could not Marshal manfiest %+v due to error: %v.\n", manifest, err)
 	} else {
-		jsonfile, err := os.Create(*api.GenOpenApiDir + "/" + lib.JsonOutputFile)
+		jsonfile, err := os.Create(*api.ConfigDir + "/" + lib.JsonOutputFile)
 		if err != nil {
 			fmt.Printf("Could not create file %s due to error: %v.\n", lib.JsonOutputFile, err)
 		} else {
@@ -150,6 +195,13 @@ func WriteIndexFile(config *api.Config) {
 		}
 	}
 }
+
+const DefaultHeader = `
+# <strong>{{.}}</strong>
+
+------------
+
+`
 
 func WriteConceptFiles(config *api.Config) {
 	// Setup the template to be instantiated
@@ -215,7 +267,7 @@ func getImport(s string) string {
 }
 
 func toFileName(s string) string {
-	return fmt.Sprintf("%s/includes/_%s.md", *api.GenOpenApiDir, s)
+	return fmt.Sprintf("%s/includes/_%s.md", *api.ConfigDir, s)
 }
 
 func GetDefinitionImport(d *api.Definition) string {

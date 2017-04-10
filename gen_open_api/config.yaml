@@ -180,40 +180,6 @@ resource_categories:
       version: v1beta1
       group: extensions
 operation_categories:
-  - name: "Write Operations"
-    operation_types:
-    - name: Create
-      match: create${group}${version}(Namespaced)?${resource}
-    - name: Replace
-      match: replace${group}${version}(Namespaced)?${resource}
-    - name: Patch
-      match: patch${group}${version}(Namespaced)?${resource}
-    - name: Delete
-      match: delete${group}${version}(Namespaced)?${resource}
-    - name: Delete Collection
-      match: delete${group}${version}Collection(Namespaced)?${resource}
-  - name: "Read Operations"
-    operation_types:
-    - name: Read
-      match: read${group}${version}(Namespaced)?${resource}
-    - name: List
-      match: list${group}${version}(Namespaced)?${resource}
-    - name: List All Namespaces
-      match: list${group}${version}(Namespaced)?${resource}ForAllNamespaces
-    - name: Watch
-      match: watch${group}${version}(Namespaced)?${resource}
-    - name: Watch List
-      match: watch${group}${version}(Namespaced)?${resource}List
-    - name: Watch List All Namespaces
-      match: watch${group}${version}(Namespaced)?${resource}ListForAllNamespaces
-  - name: "Status Operations"
-    operation_types:
-    - name: Patch Status
-      match: patch${group}${version}(Namespaced)?${resource}Status
-    - name: Read Status
-      match: read${group}${version}(Namespaced)?${resource}Status
-    - name: Replace Status
-      match: replace${group}${version}(Namespaced)?${resource}Status
   - name: "Proxy Operations"
     operation_types:
     - name: Create Connect Portforward
