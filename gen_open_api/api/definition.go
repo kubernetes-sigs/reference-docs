@@ -118,8 +118,9 @@ type Definition struct {
 	// open-api schema for the definition
 	schema spec.Schema
 	// Display name of the definition (e.g. Deployment)
-	Name  string
-	Group ApiGroup
+	Name      string
+	Group     ApiGroup
+	ShowGroup bool
 	// Api version of the definition (e.g. v1beta1)
 	Version ApiVersion
 	Kind    ApiKind
@@ -163,14 +164,24 @@ func (d *Definition) Key() string {
 }
 
 func (d *Definition) MdLink() string {
+	if *UseTags {
+		return fmt.Sprintf("[%s](#%s-%s)", d.Name, strings.ToLower(d.Name), d.Version)
+	}
 	return fmt.Sprintf("[%s](#%s-%s-%s)", d.Name, strings.ToLower(d.Name), d.Version, d.Group)
+
 }
 
 func (d *Definition) HrefLink() string {
+	if *UseTags {
+		return fmt.Sprintf("<a href=\"#%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Name)
+	}
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Name)
 }
 
 func (d *Definition) VersionLink() string {
+	if *UseTags {
+		return fmt.Sprintf("<a href=\"#%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Version)
+	}
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Version)
 }
 
@@ -209,19 +220,15 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 			}
 
 			fn(&Definition{
-				schema:  spec,
-				Name:    kind,
-				Version: ApiVersion(version),
-				Kind:    ApiKind(kind),
-				Group:   ApiGroup(group),
+				schema:    spec,
+				Name:      kind,
+				Version:   ApiVersion(version),
+				Kind:      ApiKind(kind),
+				Group:     ApiGroup(group),
+				ShowGroup: !*UseTags,
 			})
 		}
 	}
-	gs := ApiGroups{}
-	for k, _ := range groups {
-		gs = append(gs, ApiGroup(k))
-	}
-	sort.Sort(gs)
 }
 
 func (d *Definition) GetSamples() []ExampleText {

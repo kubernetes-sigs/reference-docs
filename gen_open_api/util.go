@@ -43,7 +43,9 @@ func PrintInfo(config *api.Config) {
 				}
 			}
 		}
-		panic("Orphaned definitions found.")
+		if !*api.AllowErrors {
+			panic("Orphaned definitions found.")
+		}
 	}
 
 	missingFromToc := false
