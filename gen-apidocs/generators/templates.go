@@ -32,7 +32,7 @@ Appears In {{range $appearsin := .AppearsIn}} {{$appearsin.HrefLink}} {{end}}</a
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} | {{$field.Description}}
+{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
 {{end}}
 {{end}}
 `
@@ -97,7 +97,7 @@ Appears In {{range $appearsin := .Definition.AppearsIn}}{{$appearsin.HrefLink}} 
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} | {{$field.Description}}
+{{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
 {{end}}
 
 {{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}} {{$inline.Group}}
@@ -107,7 +107,7 @@ Appears In {{range $appearsin := $inline.AppearsIn}}{{$appearsin.HrefLink}} {{en
 
 Field        | Description
 ------------ | -----------
-{{range $field := $inline.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} | {{$field.Description}}
+{{range $field := $inline.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
 {{end}}
 {{end}}{{end}}
 

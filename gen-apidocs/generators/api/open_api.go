@@ -36,7 +36,7 @@ func LoadOpenApiSpec() []*loads.Document {
 		var d *loads.Document
 		d, err = loads.JSONSpec(path)
 		if err != nil {
-			return fmt.Errorf("Could not load json file %s as api-sec: %v", path, err)
+			return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
 		}
 		docs = append(docs, d)
 		return nil
