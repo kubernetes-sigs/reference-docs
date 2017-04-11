@@ -87,7 +87,7 @@ func IsArray(s spec.Schema) bool {
 	//if s == nil {
 	//	return false
 	//}
-	return s.Type[0] == "array"
+	return len(s.Type) > 0 && s.Type[0] == "array"
 }
 
 // IsDefinition returns true if Schema is a complex type that should have a Definition.

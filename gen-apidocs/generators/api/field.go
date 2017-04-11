@@ -30,6 +30,10 @@ type Field struct {
 	Description string
 	// Optional Definition for complex types
 	Definition *Definition
+
+	// Patch semantics
+	PatchStrategy string
+	PatchMergeKey string
 }
 
 func (f Field) Link() string {

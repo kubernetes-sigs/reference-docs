@@ -1,11 +1,14 @@
 K8SIOROOT=../../../../../go/src/k8s.io/kubernetes.github.io
 K8SROOT=../../../../../go/src/k8s.io/kubernetes
 
+default:
+	echo "Support commands:\ncli api copycli copyapi updateapispec"
+
 brodocs:
 	docker build . -t pwittrock/brodocs
 	docker push pwittrock/brodocs
 
-updateapispec: api
+updateapispec:
 	cp $(K8SROOT)/api/openapi-spec/swagger.json gen-apidocs/generators/openapi-spec/swagger.json
 
 # Build kubectl docs

@@ -92,6 +92,9 @@ func (d *Definitions) InitializeFieldsForAll() {
 	}
 }
 
+const patchStrategyKey = "x-kubernetes-patch-strategy"
+const patchMergeKeyKey = "x-kubernetes-patch-merge-key"
+
 // Initializes the fields for a definition
 func (d *Definitions) InitializeFields(definition *Definition) {
 	for fieldName, property := range definition.schema.Properties {
@@ -101,6 +104,24 @@ func (d *Definitions) InitializeFields(definition *Definition) {
 			Type:        GetTypeName(property),
 			Description: def,
 		}
+		if len(property.Extensions) > 0 {
+			var ok bool
+			if ps, f := property.Extensions[patchStrategyKey]; f {
+				field.PatchStrategy, ok = ps.(string)
+				if !ok {
+					panic(fmt.Errorf(
+						"Could not cast %s extension to string %v", patchStrategyKey, property.Extensions))
+				}
+			}
+			if pmk, f := property.Extensions[patchMergeKeyKey]; f {
+				field.PatchMergeKey, ok = pmk.(string)
+				if !ok {
+					panic(fmt.Errorf(
+						"Could not cast %s extension to string %v", patchMergeKeyKey, property.Extensions))
+				}
+			}
+		}
+
 		if fieldDefinition, found := d.GetForSchema(property); found {
 			field.Definition = fieldDefinition
 		}
