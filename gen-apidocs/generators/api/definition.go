@@ -94,6 +94,7 @@ func (d *Definitions) InitializeFieldsForAll() {
 
 const patchStrategyKey = "x-kubernetes-patch-strategy"
 const patchMergeKeyKey = "x-kubernetes-patch-merge-key"
+const resourceNameKey = "x-kubernetes-resource"
 
 // Initializes the fields for a definition
 func (d *Definitions) InitializeFields(definition *Definition) {
@@ -105,20 +106,11 @@ func (d *Definitions) InitializeFields(definition *Definition) {
 			Description: def,
 		}
 		if len(property.Extensions) > 0 {
-			var ok bool
-			if ps, f := property.Extensions[patchStrategyKey]; f {
-				field.PatchStrategy, ok = ps.(string)
-				if !ok {
-					panic(fmt.Errorf(
-						"Could not cast %s extension to string %v", patchStrategyKey, property.Extensions))
-				}
+			if ps, f := property.Extensions.GetString(patchStrategyKey); f {
+				field.PatchStrategy = ps
 			}
-			if pmk, f := property.Extensions[patchMergeKeyKey]; f {
-				field.PatchMergeKey, ok = pmk.(string)
-				if !ok {
-					panic(fmt.Errorf(
-						"Could not cast %s extension to string %v", patchMergeKeyKey, property.Extensions))
-				}
+			if pmk, f := property.Extensions.GetString(patchMergeKeyKey); f {
+				field.PatchMergeKey = pmk
 			}
 		}
 
@@ -171,6 +163,7 @@ type Definition struct {
 	Sample SampleConfig
 
 	FullName string
+	Resource string
 }
 
 func (d *Definition) GetOperationGroupName() string {
@@ -214,6 +207,11 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 	groups := map[string]string{}
 	for _, spec := range specs {
 		for name, spec := range spec.Spec().Definitions {
+			resource := ""
+			if r, found := spec.Extensions.GetString(resourceNameKey); found {
+				resource = r
+			}
+
 			parts := strings.Split(name, ".")
 			if len(parts) < 4 {
 				fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
@@ -247,6 +245,7 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 				Kind:      ApiKind(kind),
 				Group:     ApiGroup(group),
 				ShowGroup: !*UseTags,
+				Resource:  resource,
 			})
 		}
 	}
