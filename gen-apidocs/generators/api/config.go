@@ -185,8 +185,18 @@ func GetGroupVersionKindSub(o *Operation) (string, string, string, string) {
 		subresource := m[4]
 		return group, version, resource, subresource
 	}
-	//fmt.Printf("No Match %s\n", o.Path)
 	return "", "", "", ""
+}
+
+func GetResourceName(d *Definition) string {
+	if len(d.Resource) > 0 {
+		return d.Resource
+	}
+	resource := strings.ToLower(d.Name)
+	if strings.HasSuffix(resource, "y") {
+		return strings.TrimSuffix(resource, "y") + "ies"
+	}
+	return resource + "s"
 }
 
 func (config *Config) initOperationsFromTags(specs []*loads.Document) {
@@ -194,7 +204,7 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) {
 		ops := map[string]map[string][]*Operation{}
 		defs := map[string]*Definition{}
 		for _, c := range config.Definitions.ByGroupVersionKind {
-			defs[fmt.Sprintf("%s.%s.%s", c.Group, c.Version, strings.ToLower(c.Name)+"s")] = c
+			defs[fmt.Sprintf("%s.%s.%s", c.Group, c.Version, GetResourceName(c))] = c
 		}
 
 		VisitOperations(specs, func(operation Operation) {
@@ -223,6 +233,9 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) {
 
 		for key, subMap := range ops {
 			def := defs[key]
+			if def == nil {
+				panic(fmt.Errorf("Unable to locate resource %s in resource map\n%v\n", key, defs))
+			}
 			subs := []string{}
 			for s := range subMap {
 				subs = append(subs, s)
