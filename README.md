@@ -19,11 +19,27 @@ Tools to build reference documentation for Kubernetes APIs and CLIs.
 
 ## Generate new kubectl docs
 
-1. Update `gen_kubectl/kubectl.yaml` by running `k8s.io/kubernetes/cmd/genkubedocs/gen_kube_docs.go` from the kubernetes/kuberentes repo and copying the file
+1. Regenerate the `kubectl.yaml` file with the command metadata
+  - Update `gen_kubectl/kubectl.yaml` by running `k8s.io/kubernetes/cmd/genslateyaml/gen_slate_yaml.go` from the kubernetes/kuberentes repo
+  - Make sure you are on the kubuernetes branch that you want to generate docs for
+  - Copy the file to the [correct directory](https://github.com/kubernetes-incubator/reference-docs/blob/master/gen-kubectldocs/generators/v1_6/kubectl.yaml) for the kubernetes version
 
-2. Run `make cli`
+2. Update the Makefile for your environment
+  - Set `K8SIOROOT` to the kubernetes/kubernetes.io root directory
+  - Set `K8SROOT` to the kubernetes/kubernetes root directory
+  - Update the kubernetes version to match the kubernetes branch
+    - `v1_6`
+    - `v1.6`
 
-3. Html files will be written to `gen_kubectl/build`.  Copy these to where they will be hosted.
+3. Build the cli docs
+  - Run `make cli`
+  - Files will be copied under `gen-kubectldocs/generators/build/`
+  - Open up `index.html` in a browser and make sure it looks good
+
+4. Copy the cli docs to kubernetes/kubernetes.io
+  - Run `make copycli`
+  - Files will be copied to the appropriate directory under `K8SIOROOT`
+  - You may need to create a new directory for new kubernetes versions
 
 # Updating brodocs version
 
