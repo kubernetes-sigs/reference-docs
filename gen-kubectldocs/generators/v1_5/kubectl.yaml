@@ -241,12 +241,12 @@ toplevelcommandgroups:
   - maincommand:
       name: apply
       synopsis: Apply a configuration to a resource by filename or stdin
-      description: "Apply a configuration to a resource by filename or stdin. This
-        resource will be created if it doesn't exist yet. To use 'apply', always create
-        the resource initially with either 'apply' or 'create --save-config'. \n\nJSON
-        and YAML formats are accepted. \n\nAlpha Disclaimer: the --prune functionality
-        is not yet complete. Do not use unless you are aware of what the current state
-        is. See https://issues.k8s.io/34274."
+      description: "Apply a configuration to a resource by filename or stdin. The
+        resource name must be specified. This resource will be created if it doesn't
+        exist yet. To use 'apply', always create the resource initially with either
+        'apply' or 'create --save-config'. \n\nJSON and YAML formats are accepted.
+        \n\nAlpha Disclaimer: the --prune functionality is not yet complete. Do not
+        use unless you are aware of what the current state is. See https://issues.k8s.io/34274."
       options:
       - name: all
         default_value: "false"
