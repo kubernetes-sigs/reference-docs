@@ -117,6 +117,9 @@ resource_categories:
     - name: ThirdPartyResource
       version: v1beta1
       group: extensions
+    - name: ControllerRevision
+      version: v1beta1
+      group: apps
     - name: PodPreset
       version: v1alpha1
       group: settings
