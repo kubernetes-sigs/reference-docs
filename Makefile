@@ -50,7 +50,7 @@ copyapi: api
 
 # Build resource docs
 resource: cleanapi
-	go run gen-apidocs/main.go --build-operations=false --munge-groups=false
+	go run gen-apidocs/main.go --build-operations=false --munge-groups=false --config-dir=gen-apidocs/generators
 	docker run -v $(shell pwd)/gen-apidocs/generators/includes:/source -v $(shell pwd)/gen-apidocs/generators/build:/build -v $(shell pwd)/gen-apidocs/generators/:/manifest pwittrock/brodocs
 
 copyresource: resource
