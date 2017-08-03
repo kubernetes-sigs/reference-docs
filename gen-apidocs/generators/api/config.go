@@ -323,12 +323,15 @@ func (c *Config) CleanUp() {
 		sort.Sort(d.AppearsIn)
 		sort.Sort(d.Fields)
 		dedup := SortDefinitionsByName{}
-		last := ""
+		var last *Definition
 		for _, i := range d.AppearsIn {
-			if i.Name == last {
+			if last != nil &&
+				i.Name == last.Name &&
+				i.Group.String() == last.Group.String() &&
+				i.Version.String() == last.Version.String() {
 				continue
 			}
-			last = i.Name
+			last = i
 			dedup = append(dedup, i)
 		}
 		d.AppearsIn = dedup

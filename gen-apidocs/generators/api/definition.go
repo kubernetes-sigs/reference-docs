@@ -195,6 +195,11 @@ func (d *Definition) HrefLink() string {
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Name)
 }
 
+func (d *Definition) FullHrefLink() string {
+	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s %s/%s</a>", strings.ToLower(d.Name),
+		d.Version, d.Group, d.Name, d.Group, d.Version)
+}
+
 func (d *Definition) VersionLink() string {
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Version)
 }
