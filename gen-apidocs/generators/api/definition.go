@@ -222,15 +222,28 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 				fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
 				continue
 			}
+			if strings.HasPrefix(spec.Description, "Deprecated. Please use") {
+				// old 1.7 definitions
+				continue
+			}
+			if strings.Contains(name, "JSONSchemaPropsOrStringArray") {
+				continue
+			}
 			var group, version, kind string
 			if parts[len(parts)-3] == "api" {
-				// e.g. "io.k8s.kubernetes.pkg.api.v1.Pod"
+				// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
 				group = "core"
 				version = parts[len(parts)-2]
 				kind = parts[len(parts)-1]
 				groups[group] = ""
+			} else if parts[len(parts)-4] == "api" {
+				// e.g. "io.k8s.api.core.v1.Pod"
+				group = parts[len(parts)-3]
+				version = parts[len(parts)-2]
+				kind = parts[len(parts)-1]
+				groups[group] = ""
 			} else if parts[len(parts)-4] == "apis" {
-				// e.g. "io.k8s.kubernetes.pkg.apis.extensions.v1beta1.Deployment"
+				// e.g. "io.k8s.apimachinery.pkg.apis.meta.v1.Status"
 				group = parts[len(parts)-3]
 				version = parts[len(parts)-2]
 				kind = parts[len(parts)-1]
