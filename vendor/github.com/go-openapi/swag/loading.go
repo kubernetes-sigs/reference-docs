@@ -19,21 +19,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 )
-
-// LoadHTTPTimeout the default timeout for load requests
-var LoadHTTPTimeout = 30 * time.Second
 
 // LoadFromFileOrHTTP loads the bytes from a file or a remote http server based on the path passed in
 func LoadFromFileOrHTTP(path string) ([]byte, error) {
-	return LoadStrategy(path, ioutil.ReadFile, loadHTTPBytes(LoadHTTPTimeout))(path)
-}
-
-// LoadFromFileOrHTTPWithTimeout loads the bytes from a file or a remote http server based on the path passed in
-// timeout arg allows for per request overriding of the request timeout
-func LoadFromFileOrHTTPWithTimeout(path string, timeout time.Duration) ([]byte, error) {
-	return LoadStrategy(path, ioutil.ReadFile, loadHTTPBytes(timeout))(path)
+	return LoadStrategy(path, ioutil.ReadFile, loadHTTPBytes)(path)
 }
 
 // LoadStrategy returns a loader function for a given path or uri
@@ -44,27 +34,16 @@ func LoadStrategy(path string, local, remote func(string) ([]byte, error)) func(
 	return local
 }
 
-func loadHTTPBytes(timeout time.Duration) func(path string) ([]byte, error) {
-	return func(path string) ([]byte, error) {
-		client := &http.Client{Timeout: timeout}
-		req, err := http.NewRequest("GET", path, nil)
-		if err != nil {
-			return nil, err
-		}
-		resp, err := client.Do(req)
-		defer func() {
-			if resp != nil {
-				resp.Body.Close()
-			}
-		}()
-		if err != nil {
-			return nil, err
-		}
-
-		if resp.StatusCode != http.StatusOK {
-			return nil, fmt.Errorf("could not access document at %q [%s] ", path, resp.Status)
-		}
-
-		return ioutil.ReadAll(resp.Body)
+func loadHTTPBytes(path string) ([]byte, error) {
+	resp, err := http.Get(path)
+	if err != nil {
+		return nil, err
 	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("could not access document at %q [%s] ", path, resp.Status)
+	}
+
+	return ioutil.ReadAll(resp.Body)
 }
