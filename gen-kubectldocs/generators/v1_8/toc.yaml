@@ -47,6 +47,7 @@ categories:
   - uncordon
 - name: KUBECTL SETTINGS AND USAGE
   commands:
+  - alpha
   - completion
   - config
   - explain
@@ -55,10 +56,4 @@ categories:
   - plugin
 - name: DEPRECATED COMMANDS
   commands:
-  - apiversions
-  - clusterinfo
-  - update
-  - resize
-  - rollingupdate
   - run-container
-  - stop
