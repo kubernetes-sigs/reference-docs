@@ -21,8 +21,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	yaml "gopkg.in/yaml.v2"
-
 	"github.com/go-openapi/swag"
 	"github.com/stretchr/testify/assert"
 )
@@ -59,35 +57,34 @@ func TestLoadHTTPBytes(t *testing.T) {
 
 func TestYAMLToJSON(t *testing.T) {
 
-	sd := `---
-1: the int key value
-name: a string value
-'y': some value
-`
-	var data yaml.MapSlice
-	yaml.Unmarshal([]byte(sd), &data)
+	data := make(map[interface{}]interface{})
+	data[1] = "the int key value"
+	data["name"] = "a string value"
+	data["y"] = "some value"
 
 	d, err := YAMLToJSON(data)
 	if assert.NoError(t, err) {
 		assert.Equal(t, `{"1":"the int key value","name":"a string value","y":"some value"}`, string(d))
 	}
 
-	data = append(data, yaml.MapItem{Key: true, Value: "the bool value"})
+	data[true] = "the bool value"
 	d, err = YAMLToJSON(data)
 	assert.Error(t, err)
 	assert.Nil(t, d)
 
-	data = data[:len(data)-1]
+	delete(data, true)
 
-	tag := yaml.MapSlice{{Key: "name", Value: "tag name"}}
-	data = append(data, yaml.MapItem{Key: "tag", Value: tag})
+	tag := make(map[interface{}]interface{})
+	tag["name"] = "tag name"
+	data["tag"] = tag
 
 	d, err = YAMLToJSON(data)
 	assert.NoError(t, err)
-	assert.Equal(t, `{"1":"the int key value","name":"a string value","y":"some value","tag":{"name":"tag name"}}`, string(d))
+	assert.Equal(t, `{"1":"the int key value","name":"a string value","tag":{"name":"tag name"},"y":"some value"}`, string(d))
 
-	tag = yaml.MapSlice{{Key: true, Value: "bool tag name"}}
-	data = append(data[:len(data)-1], yaml.MapItem{Key: "tag", Value: tag})
+	tag = make(map[interface{}]interface{})
+	tag[true] = "bool tag name"
+	data["tag"] = tag
 
 	d, err = YAMLToJSON(data)
 	assert.Error(t, err)
@@ -109,10 +106,10 @@ name: a string value
 	// _, err := yamlToJSON(failJSONMarhal{})
 	// assert.Error(t, err)
 
-	_, err = BytesToYAMLDoc([]byte("- name: hello\n"))
+	_, err = bytesToYAMLDoc([]byte("- name: hello\n"))
 	assert.Error(t, err)
 
-	dd, err := BytesToYAMLDoc([]byte("description: 'object created'\n"))
+	dd, err := bytesToYAMLDoc([]byte("description: 'object created'\n"))
 	assert.NoError(t, err)
 
 	d, err = YAMLToJSON(dd)
@@ -155,11 +152,11 @@ var yamlPestoreServer = func(rw http.ResponseWriter, r *http.Request) {
 }
 
 func TestWithYKey(t *testing.T) {
-	doc, err := BytesToYAMLDoc([]byte(withYKey))
+	doc, err := bytesToYAMLDoc([]byte(withYKey))
 	if assert.NoError(t, err) {
 		_, err := YAMLToJSON(doc)
 		if assert.Error(t, err) {
-			doc, err := BytesToYAMLDoc([]byte(withQuotedYKey))
+			doc, err := bytesToYAMLDoc([]byte(withQuotedYKey))
 			if assert.NoError(t, err) {
 				jsond, err := YAMLToJSON(doc)
 				if assert.NoError(t, err) {
