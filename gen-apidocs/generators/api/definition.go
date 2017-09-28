@@ -296,16 +296,32 @@ func GetDefinitions(specs []*loads.Document) Definitions {
 
 	// If there are multiple versions for an object.  Mark all by the newest as old
 	// Sort the ByKind index in by version with newer versions coming before older versions.
-	for _, l := range d.ByKind {
+	for k, l := range d.ByKind {
 		if len(l) <= 1 {
 			continue
 		}
 		sort.Sort(l)
 		// Mark all version as old
 		for i, d := range l {
+			if len(l) > 1 {
+				if i > 0 {
+					fmt.Printf("%s.%s.%s", d.Group, d.Version, k)
+					if len(l) > i-1 {
+						fmt.Printf(",")
+					}
+				} else {
+					fmt.Printf("Current Version: %s.%s.%s", d.Group, d.Version, k)
+					if len(l) > i-1 {
+						fmt.Printf(" Old Versions: [")
+					}
+				}
+			}
 			if i > 0 {
 				d.IsOldVersion = true
 			}
+		}
+		if len(l) > 1 {
+			fmt.Printf("]\n")
 		}
 	}
 	d.InitializeOtherVersions()

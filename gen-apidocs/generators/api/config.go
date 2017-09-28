@@ -50,6 +50,10 @@ func (config *Config) genConfigFromTags(specs []*loads.Document) {
 		if strings.HasSuffix(definition.Name, "Status") {
 			continue
 		}
+		if strings.HasPrefix(definition.Description(), "Deprecated. Please use") {
+			// Don't look at deprecated types
+			continue
+		}
 		config.initDefExample(definition) // Init the example yaml
 		g := definition.Group
 		groupsMap[g] = append(groupsMap[g], definition)

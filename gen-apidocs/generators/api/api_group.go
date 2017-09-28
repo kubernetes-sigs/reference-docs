@@ -29,6 +29,7 @@ func (a ApiGroup) String() string {
 func (a ApiGroups) Len() int      { return len(a) }
 func (a ApiGroups) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a ApiGroups) Less(i, j int) bool {
+	// "apps" group APIs are newer than "extensions" group APIs
 	if a[i].String() == "apps" && a[j].String() == "extensions" {
 		return false
 	}
