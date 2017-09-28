@@ -64,7 +64,7 @@ resource_categories:
       group: core
       description_warning: "In many cases it is recommended to create a <a href=\"#deployment-v1beta1-apps\">Deployment</a> instead of a ReplicationController."
     - name: StatefulSet
-      version: v1beta1
+      version: v1beta2
       group: apps
   - name: "Service Apis"
     include: "servicediscovery"
@@ -101,7 +101,7 @@ resource_categories:
     include: "meta"
     resources:
     - name: ControllerRevision
-      version: v1beta1
+      version: v1beta2
       group: apps
     - name: CustomResourceDefinition
       version: v1beta1
