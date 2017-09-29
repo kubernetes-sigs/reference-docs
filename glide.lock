@@ -1,13 +1,11 @@
-hash: f88af70195dab24de97eb26df00d20ae7eafc926c60c11eaf1a024c89f605be5
-updated: 2017-09-26T07:12:29.697504942-07:00
+hash: e04c7f871aa1ec35e0cef5438c6aeabfda0697e29e192d3649bd419c649d5bbe
+updated: 2017-09-27T14:32:34.456251923-07:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
   subpackages:
   - compute/metadata
   - internal
-- name: github.com/asaskevich/govalidator
-  version: 593d64559f7600f29581a3ee42177f5dbded27a9
 - name: github.com/Azure/go-ansiterm
   version: 19f72df4d05d31cbe1c56bfc8045c96babff6c7e
   subpackages:
@@ -103,21 +101,17 @@ imports:
 - name: github.com/ghodss/yaml
   version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
 - name: github.com/go-openapi/analysis
-  version: 8ed83f2ea9f00f945516462951a288eaa68bf0d6
-- name: github.com/go-openapi/errors
-  version: d24ebc2075bad502fac3a8ae27aa6dd58e1952dc
+  version: 7222828b8ce19afee3c595aef6643b9e42150120
 - name: github.com/go-openapi/jsonpointer
   version: 46af16f9f7b149af66e5d1bd010e3574dc06de98
 - name: github.com/go-openapi/jsonreference
-  version: 36d33bfe519efae5632669801b180bf1a245da3b
+  version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
 - name: github.com/go-openapi/loads
-  version: a80dea3052f00e5f032e860dd7355cd0cc67e24d
+  version: 18441dfa706d924a39a030ee2c3b1d8d81917b38
 - name: github.com/go-openapi/spec
-  version: 6aced65f8501fe1217321abf0749d354824ba2ff
-- name: github.com/go-openapi/strfmt
-  version: d65c7fdb29eca313476e529628176fe17e58c488
+  version: 8f2b3d0e3aa15100eea0ab61dc6fa02f00f5e713
 - name: github.com/go-openapi/swag
-  version: 1d0bd113de87027671077d3c71eb3ac5d7dbba72
+  version: c98c5a1cc708d9860aeeceea6391da6f223d479c
 - name: github.com/gogo/protobuf
   version: c0656edd0d9eab7c66d1eb0c568f9039345796f7
   subpackages:
@@ -285,9 +279,9 @@ imports:
 - name: github.com/sirupsen/logrus
   version: 89742aefa4b206dcf400792f3bd35b542998eb3b
 - name: github.com/spf13/cobra
-  version: f62e98d28ab7ad31d707ba837a966378465c7b57
+  version: b78744579491c1ceeaaa3b40205e56b0591b93a3
 - name: github.com/spf13/pflag
-  version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
+  version: 7aff26db30c1be810f9de5038ec5ef96ac41fd7c
 - name: golang.org/x/crypto
   version: 81e90905daefcd6fd217b62423c0908922eadb30
   subpackages:
@@ -364,7 +358,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
 - name: k8s.io/api
   version: cadaf100c0a3dd6b254f320d6d651df079ec8e0a
   subpackages:
@@ -545,7 +539,7 @@ imports:
   - pkg/handler
   - pkg/util
 - name: k8s.io/kubernetes
-  version: a3ab97b7f395e1abd2d954cd9ada0386629d0411
+  version: 71e0d3bb83d8bdea812ab5b496e9a3357cf31676
   subpackages:
   - federation/apis/federation
   - federation/apis/federation/install

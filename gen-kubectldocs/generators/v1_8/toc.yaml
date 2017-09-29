@@ -56,4 +56,3 @@ categories:
   - plugin
 - name: DEPRECATED COMMANDS
   commands:
-  - run-container
