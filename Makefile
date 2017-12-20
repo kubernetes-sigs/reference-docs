@@ -1,6 +1,6 @@
-K8SIOROOT=../../../../../go/src/k8s.io/kubernetes.github.io
-K8SROOT=../../../../../go/src/k8s.io/kubernetes
-MINOR_VERSION=8
+WEBROOT=.../kubernetes/website
+K8SROOT=.../kubernetes/kubernetes
+MINOR_VERSION=9
 
 default:
 	echo "Support commands:\ncli api copycli copyapi updateapispec"
@@ -27,8 +27,8 @@ copycli: cli
 	rm -rf gen-kubectldocs/generators//build/documents/
 	rm -rf gen-kubectldocs/generators//build/runbrodocs.sh
 	rm -rf gen-kubectldocs/generators//build/manifest.json
-	rm -rf $(K8SIOROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/*
-	cp -r gen-kubectldocs/generators//build/* $(K8SIOROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/
+	rm -rf $(WEBROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/*
+	cp -r gen-kubectldocs/generators//build/* $(WEBROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/
 
 api: cleanapi
 	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
@@ -46,8 +46,8 @@ copyapi: api
 	rm -rf gen-apidocs/generators/build/documents/
 	rm -rf gen-apidocs/generators/build/runbrodocs.sh
 	rm -rf gen-apidocs/generators/build/manifest.json
-	rm -rf $(K8SIOROOT)/docs/api-reference/v1.$(MINOR_VERSION)/*
-	cp -r gen-apidocs/generators/build/* $(K8SIOROOT)/docs/api-reference/v1.$(MINOR_VERSION)/
+	rm -rf $(WEBROOT)/docs/api-reference/v1.$(MINOR_VERSION)/*
+	cp -r gen-apidocs/generators/build/* $(WEBROOT)/docs/api-reference/v1.$(MINOR_VERSION)/
 
 # Build resource docs
 resource: cleanapi
@@ -58,5 +58,5 @@ copyresource: resource
 	rm -rf gen-apidocs/generators/build/documents/
 	rm -rf gen-apidocs/generators/build/runbrodocs.sh
 	rm -rf gen-apidocs/generators/build/manifest.json
-	rm -rf $(K8SIOROOT)/docs/resources-reference/v1.$(MINOR_VERSION)/*
-	cp -r gen-apidocs/generators/build/* $(K8SIOROOT)/docs/resources-reference/v1.$(MINOR_VERSION)/
+	rm -rf $(WEBROOT)/docs/resources-reference/v1.$(MINOR_VERSION)/*
+	cp -r gen-apidocs/generators/build/* $(WEBROOT)/docs/resources-reference/v1.$(MINOR_VERSION)/
