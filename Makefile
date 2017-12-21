@@ -4,8 +4,8 @@ MINOR_VERSION=9
 
 APISRC=gen-apidocs/generators/build
 APIDST=$(WEBROOT)/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
-APISRCFONT=$(APISRC)/node_modules/node_modules/font-awesome
-APIDSTFONT=$(APIDST)/node_modules/node_modules/font-awesome
+APISRCFONT=$(APISRC)/node_modules/font-awesome
+APIDSTFONT=$(APIDST)/node_modules/font-awesome
 
 default:
 	echo "Support commands:\ncli api copycli copyapi updateapispec"
@@ -52,10 +52,10 @@ copyapi:
 	cp $(APISRC)/navData.js $(APIDST)/navData.js
 	cp $(APISRC)/scroll.js $(APIDST)/scroll.js
 	cp $(APISRC)/stylesheet.css $(APIDST)/stylesheet.css
-	cp $(APISRC)/tab visibility.css $(APIDST)/tabvisibility.css
-	cp $(APISRC)/node_modules/bootstrap/dist/css/bootstramp.min.css $(APIDST)/node_modules/bootstrap/dist/css/bootstramp.min.css
+	cp $(APISRC)/tabvisibility.js $(APIDST)/tabvisibility.js
+	cp $(APISRC)/node_modules/bootstrap/dist/css/bootstrap.min.css $(APIDST)/node_modules/bootstrap/dist/css/bootstrap.min.css
 	cp $(APISRC)/node_modules/highlight.js/styles/default.css $(APIDST)/node_modules/highlight.js/styles/default.css
-	cp $(APISRC)/node_modules/jquery.scrollto/jqueryscrollTo.min.js $(APIDST)/node_modules/jquery.scrollto/jqueryscrollTo.min.js
+	cp $(APISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(APIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
 	cp $(APISRC)/node_modules/jquery/dist/jquery.min.js $(APIDST)/node_modules/jquery/dist/jquery.min.js
 	cp $(APISRCFONT)/css/font-awesome.css $(APIDSTFONT)/css/font-awesome.css
 	cp $(APISRCFONT)/css/font-awesome.css.map $(APIDSTFONT)/css/font-awesome.css.map
