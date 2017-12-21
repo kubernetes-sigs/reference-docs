@@ -1,6 +1,11 @@
-WEBROOT=.../kubernetes/website
-K8SROOT=.../kubernetes/kubernetes
+WEBROOT=~/src/github.com/kubernetes/website
+K8SROOT=~/src/github.com/kubernetes/kubernetes
 MINOR_VERSION=9
+
+APISRC=gen-apidocs/generators/build
+APIDST=$(WEBROOT)/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
+APISRCFONT=$(APISRC)/node_modules/node_modules/font-awesome
+APIDSTFONT=$(APIDST)/node_modules/node_modules/font-awesome
 
 default:
 	echo "Support commands:\ncli api copycli copyapi updateapispec"
@@ -42,12 +47,25 @@ cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/generators/manifest.json
 	rm -rf $(shell pwd)/gen-apidocs/generators/includes/_generated_*
 
-copyapi: api
-	rm -rf gen-apidocs/generators/build/documents/
-	rm -rf gen-apidocs/generators/build/runbrodocs.sh
-	rm -rf gen-apidocs/generators/build/manifest.json
-	rm -rf $(WEBROOT)/docs/api-reference/v1.$(MINOR_VERSION)/*
-	cp -r gen-apidocs/generators/build/* $(WEBROOT)/docs/api-reference/v1.$(MINOR_VERSION)/
+copyapi:
+	cp $(APISRC)/index.html $(APIDST)/index.html
+	cp $(APISRC)/navData.js $(APIDST)/navData.js
+	cp $(APISRC)/scroll.js $(APIDST)/scroll.js
+	cp $(APISRC)/stylesheet.css $(APIDST)/stylesheet.css
+	cp $(APISRC)/tab visibility.css $(APIDST)/tabvisibility.css
+	cp $(APISRC)/node_modules/bootstrap/dist/css/bootstramp.min.css $(APIDST)/node_modules/bootstrap/dist/css/bootstramp.min.css
+	cp $(APISRC)/node_modules/highlight.js/styles/default.css $(APIDST)/node_modules/highlight.js/styles/default.css
+	cp $(APISRC)/node_modules/jquery.scrollto/jqueryscrollTo.min.js $(APIDST)/node_modules/jquery.scrollto/jqueryscrollTo.min.js
+	cp $(APISRC)/node_modules/jquery/dist/jquery.min.js $(APIDST)/node_modules/jquery/dist/jquery.min.js
+	cp $(APISRCFONT)/css/font-awesome.css $(APIDSTFONT)/css/font-awesome.css
+	cp $(APISRCFONT)/css/font-awesome.css.map $(APIDSTFONT)/css/font-awesome.css.map
+	cp $(APISRCFONT)/css/font-awesome.min.css $(APIDSTFONT)/css/font-awesome.min.css
+	cp $(APISRCFONT)/fonts/FontAwesome.otf $(APIDSTFONT)/fonts/FontAwesome.otf	
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.eot $(APIDSTFONT)/fonts/fontawesome-webfont.eot
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.svg $(APIDSTFONT)/fonts/fontawesome-webfont.svg
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.ttf $(APIDSTFONT)/fonts/fontawesome-webfont.ttf
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.woff $(APIDSTFONT)/fonts/fontawesome-webfont.woff
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.woff2 $(APIDSTFONT)/fonts/fontawesome-webfont.woff2
 
 # Build resource docs
 resource: cleanapi
