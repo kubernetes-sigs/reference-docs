@@ -43,15 +43,7 @@ copycli: cli
 	cp $(CLISRC)/node_modules/highlight.js/styles/default.css $(CLIDST)/node_modules/highlight.js/styles/default.css
 	cp $(CLISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(CLIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
 	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
-	cp $(CLISRCFONT)/css/font-awesome.css $(CLIDSTFONT)/css/font-awesome.css
-	cp $(CLISRCFONT)/css/font-awesome.css.map $(CLIDSTFONT)/css/font-awesome.css.map
 	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
-	cp $(CLISRCFONT)/fonts/FontAwesome.otf $(CLIDSTFONT)/fonts/FontAwesome.otf	
-	cp $(CLISRCFONT)/fonts/fontawesome-webfont.eot $(CLIDSTFONT)/fonts/fontawesome-webfont.eot
-	cp $(APISRCFONT)/fonts/fontawesome-webfont.svg $(CLIDSTFONT)/fonts/fontawesome-webfont.svg
-	cp $(CLISRCFONT)/fonts/fontawesome-webfont.ttf $(CLIDSTFONT)/fonts/fontawesome-webfont.ttf
-	cp $(CLISRCFONT)/fonts/fontawesome-webfont.woff $(CLIDSTFONT)/fonts/fontawesome-webfont.woff
-	cp $(CLISRCFONT)/fonts/fontawesome-webfont.woff2 $(CLIDSTFONT)/fonts/fontawesome-webfont.woff2
 
 api: cleanapi
 	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
