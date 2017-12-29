@@ -7,6 +7,11 @@ APIDST=$(WEBROOT)/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
 APISRCFONT=$(APISRC)/node_modules/font-awesome
 APIDSTFONT=$(APIDST)/node_modules/font-awesome
 
+CLISRC=gen-kubectldocs/generators/build
+CLIDST=$(WEBROOT)/docs/reference/generated/kubectl
+CLISRCFONT=$(CLISRC)/node_modules/font-awesome
+CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
+
 default:
 	echo "Support commands:\ncli api copycli copyapi updateapispec"
 
@@ -29,11 +34,24 @@ cli: cleancli
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
-	rm -rf gen-kubectldocs/generators//build/documents/
-	rm -rf gen-kubectldocs/generators//build/runbrodocs.sh
-	rm -rf gen-kubectldocs/generators//build/manifest.json
-	rm -rf $(WEBROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/*
-	cp -r gen-kubectldocs/generators//build/* $(WEBROOT)/docs/user-guide/kubectl/v1.$(MINOR_VERSION)/
+	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/docs/reference/generated/kubectl/kubectl-commands.html
+	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/docs/reference/generated/kubectl/navData.js
+	cp $(CLISRC)/scroll.js $(CLEDST)/scroll.js
+	cp $(CLISRC)/stylesheet.css $(CLIDST)/stylesheet.css
+	cp $(CLISRC)/tabvisibility.js $(CLIDST)/tabvisibility.js
+	cp $(CLISRC)/node_modules/bootstrap/dist/css/bootstrap.min.css $(CLIDST)/node_modules/bootstrap/dist/css/bootstrap.min.css
+	cp $(CLISRC)/node_modules/highlight.js/styles/default.css $(CLIDST)/node_modules/highlight.js/styles/default.css
+	cp $(CLISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(CLIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
+	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
+	cp $(CLISRCFONT)/css/font-awesome.css $(CLIDSTFONT)/css/font-awesome.css
+	cp $(CLISRCFONT)/css/font-awesome.css.map $(CLIDSTFONT)/css/font-awesome.css.map
+	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
+	cp $(CLISRCFONT)/fonts/FontAwesome.otf $(CLIDSTFONT)/fonts/FontAwesome.otf	
+	cp $(CLISRCFONT)/fonts/fontawesome-webfont.eot $(CLIDSTFONT)/fonts/fontawesome-webfont.eot
+	cp $(APISRCFONT)/fonts/fontawesome-webfont.svg $(CLIDSTFONT)/fonts/fontawesome-webfont.svg
+	cp $(CLISRCFONT)/fonts/fontawesome-webfont.ttf $(CLIDSTFONT)/fonts/fontawesome-webfont.ttf
+	cp $(CLISRCFONT)/fonts/fontawesome-webfont.woff $(CLIDSTFONT)/fonts/fontawesome-webfont.woff
+	cp $(CLISRCFONT)/fonts/fontawesome-webfont.woff2 $(CLIDSTFONT)/fonts/fontawesome-webfont.woff2
 
 api: cleanapi
 	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
