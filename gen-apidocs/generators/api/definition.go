@@ -146,6 +146,7 @@ type Definition struct {
 	// Api version of the definition (e.g. v1beta1)
 	Version ApiVersion
 	Kind    ApiKind
+	DescriptionWithEntities string
 
 	// InToc is true if this definition should appear in the table of contents
 	InToc        bool

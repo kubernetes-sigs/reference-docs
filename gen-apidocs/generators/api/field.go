@@ -28,6 +28,7 @@ type Field struct {
 	Name        string
 	Type        string
 	Description string
+	DescriptionWithEntities string
 	// Optional Definition for complex types
 	Definition *Definition
 

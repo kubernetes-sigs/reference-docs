@@ -28,6 +28,7 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+	"html"
 
 	"github.com/go-openapi/loads"
 )
@@ -89,7 +90,7 @@ func NewConfig() *Config {
 
 	// Initialize all of the operations
 	config.Definitions = GetDefinitions(specs)
-
+	
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
 		config.genConfigFromTags(specs)
@@ -105,6 +106,11 @@ func NewConfig() *Config {
 
 	// Get the map of operations appearing in the open-api spec keyed by id
 	config.InitOperations(specs)
+
+
+	// In the descriptions, replace unicode escape sequences with HTML entities.
+	config.createDescriptionsWithEntities()
+
 	config.CleanUp()
 
 	// Prune anything that shouldn't be in the ToC
@@ -556,4 +562,52 @@ func doScaleIdHack(version, name, match string) (string, string) {
 	version = string(out)
 
 	return version, name
+}
+
+func (config *Config) createDescriptionsWithEntities () {
+
+	// The OpenAPI spec has escape sequences like \u003c. When the spec is unmarshaled,
+	// the escape sequences get converted to ordinary characters. For example,
+	// \u003c gets converted to a regular < character. But we can't use  regular <
+	// and > characters in our HTML document. This function replaces these regular
+	// characters with HTML entities: <, >, &, ', and ".
+
+	for _, definition := range config.Definitions.GetAllDefinitions() {
+		d := definition.Description()
+		d = html.EscapeString(d)
+		definition.DescriptionWithEntities = d
+
+		for _,field := range definition.Fields {
+			d := field.Description
+			d = html.EscapeString(d)
+			field.DescriptionWithEntities = d
+		}
+	}
+
+	for _, operation := range config.Operations {
+
+		for _, field := range operation.BodyParams {
+			d := field.Description
+			d = html.EscapeString(d)
+			field.DescriptionWithEntities = d
+		}
+
+		for _, field := range operation.QueryParams {
+			d := field.Description
+			d = html.EscapeString(d)
+			field.DescriptionWithEntities = d
+		}
+
+		for _, field := range operation.PathParams {
+			d := field.Description
+			d = html.EscapeString(d)
+			field.DescriptionWithEntities = d
+		}
+
+		for _, resp := range operation.HttpResponses {
+			d := resp.Description
+			d = html.EscapeString(d)
+			resp.DescriptionWithEntities = d
+		}
+	}
 }
