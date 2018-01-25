@@ -25,7 +25,7 @@ Group        | Version     | Kind
 
 {{if .OtherVersions}}<aside class="notice">Other api versions of this object exist: {{range $v := .OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
 
-{{.Description}}
+{{.DescriptionWithEntities}}
 
 {{if .AppearsIn}}<aside class="notice">
 Appears In:
@@ -36,7 +36,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
+{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 {{end}}
 `
@@ -94,7 +94,7 @@ Group        | Version     | Kind
 {{if .Definition.OtherVersions}}<aside class="notice">Other api versions of this object exist: {{range $v := .Definition.OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
 
 
-{{.Definition.Description}}
+{{.Definition.DescriptionWithEntities}}
 
 {{if .Definition.AppearsIn}}<aside class="notice">
 Appears In:
@@ -105,7 +105,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
+{{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 
 {{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}} {{$inline.Group}}
@@ -119,7 +119,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := $inline.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.Description}}
+{{range $field := $inline.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 {{end}}{{end}}
 
