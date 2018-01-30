@@ -258,6 +258,6 @@ operation_categories:
     - name: Patch Scale
       match: patch${group}${version}(Namespaced)?${resource}Scale
     - name: Rollback
-      match: create${group}${version}(Namespaced)?${resource}RollbackRollback
+      match: create${group}${version}(Namespaced)?${resource}Rollback
     - name: Read Log
       match: read${group}${version}(Namespaced)?${resource}Log
