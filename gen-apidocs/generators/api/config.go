@@ -90,7 +90,7 @@ func NewConfig() *Config {
 
 	// Initialize all of the operations
 	config.Definitions = GetDefinitions(specs)
-	
+
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
 		config.genConfigFromTags(specs)
@@ -139,20 +139,20 @@ func NewConfig() *Config {
 func verifyBlacklisted(operation Operation) {
 	switch {
 	case strings.Contains(operation.ID, "connectCoreV1Patch"):
-	case strings.Contains(operation.ID, "NamespacedScheduledJob"):
-	case strings.Contains(operation.ID, "ScheduledJobForAllNamespaces"):
-	case strings.Contains(operation.ID, "ScheduledJobListForAllNamespaces"):
-	case strings.Contains(operation.ID, "V1beta1NamespacedReplicationcontrollersScale"):
+	//case strings.Contains(operation.ID, "NamespacedScheduledJob"):
+	//case strings.Contains(operation.ID, "ScheduledJobForAllNamespaces"):
+	//case strings.Contains(operation.ID, "ScheduledJobListForAllNamespaces"):
+	case strings.Contains(operation.ID, "V1beta1NamespacedReplicationControllerDummyScale"):
 	case strings.Contains(operation.ID, "NamespacedPodAttach"):
 	case strings.Contains(operation.ID, "NamespacedPodWithPath"):
 	case strings.Contains(operation.ID, "proxyCoreV1"):
-	case strings.Contains(operation.ID, "NamespacedScaleScale"):
-	case strings.Contains(operation.ID, "NamespacedBindingBinding"):
+	//case strings.Contains(operation.ID, "NamespacedScaleScale"):
+	//case strings.Contains(operation.ID, "NamespacedBindingBinding"):
 	case strings.Contains(operation.ID, "NamespacedPodExe"):
 	case strings.Contains(operation.ID, "logFileHandler"):
 	case strings.Contains(operation.ID, "logFileListHandler"):
 	case strings.Contains(operation.ID, "replaceCoreV1NamespaceFinalize"):
-	case strings.Contains(operation.ID, "NamespacedEvictionEviction"):
+	//case strings.Contains(operation.ID, "NamespacedEvictionEviction"):
 	case strings.Contains(operation.ID, "getCodeVersion"):
 	case strings.Contains(operation.ID, "V1beta1CertificateSigningRequestApproval"):
 	default:
@@ -375,6 +375,10 @@ func loadYamlConfig() *Config {
 				Match: "create${group}${version}(Namespaced)?${resource}",
 			},
 			{
+				Name:  "Create Eviction",
+				Match: "create${group}${version}(Namespaced)?${resource}Eviction",
+			},
+			{
 				Name:  "Patch",
 				Match: "patch${group}${version}(Namespaced)?${resource}",
 			},
@@ -550,13 +554,17 @@ func (config *Config) mapOperationsToDefinitions() {
 
 func doScaleIdHack(version, name, match string) (string, string) {
 	// Hack to get around ids
-	if strings.HasSuffix(match, "${resource}Scale") && name != "Scale" {
+	// if strings.HasSuffix(match, "${resource}Scale") && name != "Scale" {
+	//
+	//	fmt.Println()
+	//	fmt.Println("doScaleIdHack: ", version, name,  match)
+
 		// Scale names don't generate properly
-		name = strings.ToLower(name) + "s"
-		out := []rune(name)
-		out[0] = unicode.ToUpper(out[0])
-		name = string(out)
-	}
+	//	name = strings.ToLower(name) + "s"
+	//	out := []rune(name)
+	//	out[0] = unicode.ToUpper(out[0])
+	//	name = string(out)
+	// }
 	out := []rune(version)
 	out[0] = unicode.ToUpper(out[0])
 	version = string(out)
