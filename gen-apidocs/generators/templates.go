@@ -17,11 +17,11 @@ limitations under the License.
 package generators
 
 var DefinitionTemplate = `
-{{define "definition.template"}}## {{.Name}} {{.Version}} {{.Group}}
+{{define "definition.template"}}##` + "`{{.Name}}` [`{{.GroupDisplayName}}`/`{{.Version}}`]" + `
 
 Group        | Version     | Kind
 ------------ | ---------- | -----------
-{{.GroupDisplayName}} | {{.Version}} | {{.Name}}
+` + "`{{.GroupDisplayName}}` | `{{.Version}}` | `{{.Name}}`" + `
 
 {{if .OtherVersions}}<aside class="notice">Other api versions of this object exist: {{range $v := .OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
 
@@ -36,7 +36,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
+{{range $field := .Fields}}` + "`{{$field.Name}}`" + `{{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 {{end}}
 `
@@ -46,21 +46,21 @@ var ConceptTemplate = `
 
 Parameter    | Description
 ------------ | -----------
-{{range $param := .PathParams}}{{$param.Name}} {{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
+{{range $param := .PathParams}}` + "`{{$param.Name}}`" + `{{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
 {{end}}{{end}}{{end}}
 
 {{define "queryparams"}}{{if .QueryParams }}### Query Parameters
 
 Parameter    | Description
 ------------ | -----------
-{{range $param := .QueryParams}}{{$param.Name}} {{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
+{{range $param := .QueryParams}}` + "`{{$param.Name}}`" + `{{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
 {{end}}{{end}}{{end}}
 
 {{define "bodyparams"}}{{if .BodyParams }}### Body Parameters
 
 Parameter    | Description
 ------------ | -----------
-{{range $param := .BodyParams}}{{$param.Name}} {{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
+{{range $param := .BodyParams}}` + "`{{$param.Name}}`" + `{{if $param.Link}}<br /> *{{$param.Link}}* {{end}} | {{$param.Description}}
 {{end}}{{end}}{{end}}
 
 {{define "responsebody"}}{{if .HttpResponses}}### Response
@@ -73,7 +73,7 @@ Code         | Description
 {{define "concept.template"}}
 
 -----------
-# {{.Name}} {{.Definition.Version}} {{if .Definition.ShowGroup}}{{.Definition.Group}}{{end}}
+# {{.Name}} [{{if .Definition.ShowGroup}}{{.Definition.GroupDisplayName}}/{{end}}{{.Definition.Version}}] 
 
 {{if .Definition.Sample.Sample}}{{$n := .Definition.Sample.Note}}{{range $e := .Definition.GetSamples}}>{{$e.Tab}} {{$n}}
 
@@ -86,7 +86,7 @@ Code         | Description
 
 Group        | Version     | Kind
 ------------ | ---------- | -----------
-{{.Definition.GroupDisplayName}} | {{.Definition.Version}} | {{.Name}}
+` + "`{{.Definition.GroupDisplayName}}` | `{{.Definition.Version}}` | `{{.Name}}`" + `
 
 {{if .DescriptionWarning}}<aside class="warning">{{.DescriptionWarning}}</aside>{{end}}
 {{if .DescriptionNote}}<aside class="notice">{{.DescriptionNote}}</aside>{{end}}
@@ -105,7 +105,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := .Definition.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
+{{range $field := .Definition.Fields}}` + "`{{$field.Name}}`" + `{{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 
 {{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}} {{$inline.Group}}
@@ -119,7 +119,7 @@ Appears In:
 
 Field        | Description
 ------------ | -----------
-{{range $field := $inline.Fields}}{{$field.Name}} {{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
+{{range $field := $inline.Fields}}` + "`{{$field.Name}}`" + `{{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 {{end}}{{end}}
 

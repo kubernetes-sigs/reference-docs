@@ -1,6 +1,6 @@
 WEBROOT=~/src/github.com/kubernetes/website
 K8SROOT=~/src/github.com/kubernetes/kubernetes
-MINOR_VERSION=9
+MINOR_VERSION=10
 
 APISRC=gen-apidocs/generators/build
 APIDST=$(WEBROOT)/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
@@ -51,11 +51,10 @@ api: cleanapi
 
 # Build api docs
 cleanapi:
-	rm -f main
-	rm -rf $(shell pwd)/gen-apidocs/generators/build
-	rm -rf $(shell pwd)/gen-apidocs/generators/includes
-	rm -rf $(shell pwd)/gen-apidocs/generators/manifest.json
-	rm -rf $(shell pwd)/gen-apidocs/generators/includes/_generated_*
+	sudo rm -f main
+	sudo rm -rf $(shell pwd)/gen-apidocs/generators/build
+	sudo rm -rf $(shell pwd)/gen-apidocs/generators/includes
+	sudo rm -rf $(shell pwd)/gen-apidocs/generators/manifest.json
 
 copyapi:
 	cp $(APISRC)/index.html $(APIDST)/index.html
