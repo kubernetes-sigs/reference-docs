@@ -37,6 +37,9 @@ func (d *Definitions) GetAllDefinitions() map[string]*Definition {
 }
 
 func (d *Definition) GroupDisplayName() string {
+	if len(d.GroupFullName) > 0 {
+		return d.GroupFullName
+	}
 	if len(d.Group) <= 0 || d.Group == "core" {
 		return "Core"
 	}
@@ -147,6 +150,7 @@ type Definition struct {
 	Version ApiVersion
 	Kind    ApiKind
 	DescriptionWithEntities string
+	GroupFullName string
 
 	// InToc is true if this definition should appear in the table of contents
 	InToc        bool
@@ -209,8 +213,85 @@ func (d Definition) Description() string {
 	return d.schema.Description
 }
 
+// TODO: Rework this function because it is ugly
+func guessGVK(name string) (group, version, kind string) {
+	parts := strings.Split(name, ".")
+	if len(parts) < 4 {
+		fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
+		return "", "", ""
+	}
+
+	if parts[len(parts)-3] == "api" {
+		// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
+		group = "core"
+		version = parts[len(parts)-2]
+		kind = parts[len(parts)-1]
+	} else if parts[len(parts)-4] == "api" {
+		// e.g. "io.k8s.api.core.v1.Pod"
+		group = parts[len(parts)-3]
+		version = parts[len(parts)-2]
+		kind = parts[len(parts)-1]
+	} else if parts[len(parts)-4] == "apis" {
+		// e.g. "io.k8s.apimachinery.pkg.apis.meta.v1.Status"
+		group = parts[len(parts)-3]
+		version = parts[len(parts)-2]
+		kind = parts[len(parts)-1]
+	} else if parts[len(parts)-3] == "util" || parts[len(parts)-3] == "pkg" {
+		// e.g. io.k8s.apimachinery.pkg.util.intstr.IntOrString
+		// e.g. io.k8s.apimachinery.pkg.runtime.RawExtension
+		return "", "", ""
+	} else {
+		// To report error
+		return "error", "", ""
+	}
+	return group, version, kind
+}
+
+// return the map from short group name to full group name
+func buildGroupMapFromExtension(specs []*loads.Document) map[string]string {
+	mapping := map[string]string{}
+	mapping["apiregistration"] = "apiregistration.k8s.io"
+	mapping["apiextensions"] = "apiextensions.k8s.io"
+	mapping["meta"] = "meta"
+	mapping["core"] = "core"
+
+	for _, spec := range specs {
+		for name, spec := range spec.Spec().Definitions {
+			group, _, _ := guessGVK(name)
+			if _, found := mapping[group]; found {
+				continue
+			}
+			// special groups where group name from extension is empty!
+			if group == "meta" || group == "core" {
+				continue
+			}
+
+			// full group not exposed as x-kubernetes- openapi extensions
+			// from kube-aggregator project or apiextensions-apiserver project
+			if group == "apiregistration" || group == "apiextensions" {
+				continue
+			}
+
+			if extension, found := spec.Extensions[typeKey]; found {
+				gvks, ok := extension.([]interface{})
+				if ok {
+					for _, item := range gvks {
+						gvk, ok := item.(map[string]interface{})
+						if ok {
+							mapping[group] = gvk["group"].(string)
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+	return mapping
+}
+
 func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) {
 	groups := map[string]string{}
+	groupMapping := buildGroupMapFromExtension(specs)
 	for _, spec := range specs {
 		for name, spec := range spec.Spec().Definitions {
 			resource := ""
@@ -218,11 +299,9 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 				resource = r
 			}
 
-			parts := strings.Split(name, ".")
-			if len(parts) < 4 {
-				fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
-				continue
-			}
+			// This actually skips the following groups
+			//  'io.k8s.kubernetes.pkg.api.*'
+			//  'io.k8s.kubernetes.pkg.apis.*'
 			if strings.HasPrefix(spec.Description, "Deprecated. Please use") {
 				// old 1.7 definitions
 				continue
@@ -230,31 +309,19 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 			if strings.Contains(name, "JSONSchemaPropsOrStringArray") {
 				continue
 			}
-			var group, version, kind string
-			if parts[len(parts)-3] == "api" {
-				// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
-				group = "core"
-				version = parts[len(parts)-2]
-				kind = parts[len(parts)-1]
-				groups[group] = ""
-			} else if parts[len(parts)-4] == "api" {
-				// e.g. "io.k8s.api.core.v1.Pod"
-				group = parts[len(parts)-3]
-				version = parts[len(parts)-2]
-				kind = parts[len(parts)-1]
-				groups[group] = ""
-			} else if parts[len(parts)-4] == "apis" {
-				// e.g. "io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-				group = parts[len(parts)-3]
-				version = parts[len(parts)-2]
-				kind = parts[len(parts)-1]
-				groups[group] = ""
-			} else if parts[len(parts)-3] == "util" || parts[len(parts)-3] == "pkg" {
-				// e.g. io.k8s.apimachinery.pkg.util.intstr.IntOrString
-				// e.g. io.k8s.apimachinery.pkg.runtime.RawExtension
+
+			group, version, kind := guessGVK(name)
+			if group == "" {
 				continue
-			} else {
+			} else if group == "error" {
 				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
+			}
+			groups[group] = ""
+
+			full_group, found := groupMapping[group]
+			if !found {
+				// fall back to group name if no mapping found
+				full_group = group
 			}
 
 			fn(&Definition{
@@ -263,6 +330,7 @@ func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) 
 				Version:   ApiVersion(version),
 				Kind:      ApiKind(kind),
 				Group:     ApiGroup(group),
+				GroupFullName: full_group,
 				ShowGroup: true,
 				Resource:  resource,
 			})
