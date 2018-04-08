@@ -13,7 +13,7 @@ CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 default:
-	echo "Support commands:\ncli api copycli copyapi updateapispec"
+	@echo "Support commands:\ncli api comp copycli copyapi copycomp updateapispec"
 
 brodocs:
 	docker build . -t pwittrock/brodocs
@@ -24,10 +24,10 @@ updateapispec:
 
 # Build kubectl docs
 cleancli:
-	rm -f main
-	rm -rf $(shell pwd)/gen-kubectldocs/generators/includes
-	rm -rf $(shell pwd)/gen-kubectldocs/generators/build
-	rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
+	sudo rm -f main
+	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/includes
+	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/build
+	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
 cli: cleancli
 	go run gen-kubectldocs/main.go --kubernetes-version v1_$(MINOR_VERSION)
@@ -48,6 +48,23 @@ copycli: cli
 api: cleanapi
 	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
 	docker run -v $(shell pwd)/gen-apidocs/generators/includes:/source -v $(shell pwd)/gen-apidocs/generators/build:/build -v $(shell pwd)/gen-apidocs/generators/:/manifest pwittrock/brodocs
+
+# Build kube component docs
+cleancomp:
+	rm -rf $(shell pwd)/gen-compdocs/build
+
+comp: cleancomp
+	mkdir -p gen-compdocs/build
+	go run gen-compdocs/main.go gen-compdocs/build kube-apiserver
+	go run gen-compdocs/main.go gen-compdocs/build kube-controller-manager
+	go run gen-compdocs/main.go gen-compdocs/build cloud-controller-manager
+	go run gen-compdocs/main.go gen-compdocs/build kube-scheduler
+	go run gen-compdocs/main.go gen-compdocs/build kubelet
+	go run gen-compdocs/main.go gen-compdocs/build kube-proxy
+	go run gen-compdocs/main.go gen-compdocs/build kubeadm
+
+copycomp:
+	cp $(shell pwd)/gen-compdocs/build/* $(WEBROOT)/docs/reference/generated/
 
 # Build api docs
 cleanapi:
