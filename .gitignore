@@ -2,9 +2,8 @@
 .idea/
 _generated_*.md
 gen-kubectldocs/generators/build/
-gen-kubectldocs/generators/v1_10/
 gen-kubectldocs/generators/includes/
-gen-kubectldocs/manifest.json
+gen-kubectldocs/generators/v1_10/
 gen-apidocs/generators/build/
 gen-apidocs/generators/includes/
 gen-apidocs/generators/manifest.json

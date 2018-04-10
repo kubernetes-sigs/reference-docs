@@ -98,7 +98,7 @@ resource_categories:
       version: v1
       group: core
     - name: VolumeAttachment
-      version: v1alpha1
+      version: v1beta1
       group: storage
   - name: "Metadata Apis"
     include: "meta"
@@ -148,7 +148,7 @@ resource_categories:
     include: "cluster"
     resources:
     - name: APIService
-      version: v1beta1
+      version: v1
       group: apiregistration
     - name: Binding
       version: v1
