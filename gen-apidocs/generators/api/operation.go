@@ -17,15 +17,12 @@ limitations under the License.
 package api
 
 import (
-	"flag"
 	"fmt"
 	"strings"
 
 	"github.com/go-openapi/spec"
 	"github.com/go-openapi/loads"
 )
-
-var BuildOps = flag.Bool("build-operations", true, "If true build operations in the docs.")
 
 // OperationCategory defines a group of related operations
 type OperationCategory struct {

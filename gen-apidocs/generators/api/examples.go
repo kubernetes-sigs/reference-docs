@@ -45,11 +45,7 @@ var EmptyExampleProviders = []ExampleProvider {
 }
 
 func GetExampleProviders() []ExampleProvider {
-	if *BuildOps {
-		return ExampleProviders
-	} else {
-		return EmptyExampleProviders
-	}
+	return EmptyExampleProviders
 }
 
 type EmptyExample struct {

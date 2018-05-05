@@ -23,7 +23,6 @@ import (
 type Config struct {
 	ApiGroups           []ApiGroup          `yaml:"api_groups,omitempty"`
 	ExampleLocation     string              `yaml:"example_location,omitempty"`
-	OperationCategories []OperationCategory `yaml:"operation_categories,omitempty"`
 	ResourceCategories  []ResourceCategory  `yaml:"resource_categories,omitempty"`
 
 	// Used to map the group as the resource sees it to the group

@@ -17,7 +17,7 @@ limitations under the License.
 package generators
 
 var DefinitionTemplate = `
-{{define "definition.template"}}##` + "`{{.Name}}` [`{{.GroupDisplayName}}`/`{{.Version}}`]" + `
+{{define "definition.template"}}## {{.Name}} {{.Version}}
 
 Group        | Version     | Kind
 ------------ | ---------- | -----------
@@ -73,7 +73,7 @@ Code         | Description
 {{define "concept.template"}}
 
 -----------
-# {{.Name}} [{{if .Definition.ShowGroup}}{{.Definition.GroupDisplayName}}/{{end}}{{.Definition.Version}}] 
+# {{.Name}} {{.Version}}
 
 {{if .Definition.Sample.Sample}}{{$n := .Definition.Sample.Note}}{{range $e := .Definition.GetSamples}}>{{$e.Tab}} {{$n}}
 
@@ -108,7 +108,7 @@ Field        | Description
 {{range $field := .Definition.Fields}}` + "`{{$field.Name}}`" + `{{if $field.Link}}<br /> *{{$field.Link}}* {{end}} {{if $field.PatchStrategy}}<br /> **patch type**: *{{$field.PatchStrategy}}* {{end}} {{if $field.PatchMergeKey}}<br /> **patch merge key**: *{{$field.PatchMergeKey}}* {{end}} | {{$field.DescriptionWithEntities}}
 {{end}}
 
-{{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}} {{$inline.Group}}
+{{if .Definition.Inline}}{{range $inline := .Definition.Inline}}### {{$inline.Name}} {{$inline.Version}}
 
 {{if $inline.AppearsIn}}<aside class="notice">
 Appears In:

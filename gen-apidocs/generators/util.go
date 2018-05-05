@@ -41,12 +41,12 @@ func PrintInfo(config *api.Config) {
 		for name, d := range definitions.GetAllDefinitions() {
 			if !d.FoundInField && !d.FoundInOperation {
 				if !strings.Contains(name, "meta.v1.APIVersions") && !strings.Contains(name, "meta.v1.Patch") {
-					fmt.Printf("[%s]\n", name)
+					//fmt.Printf("[%s]\n", name)
 				}
 			}
 		}
 		if !*api.AllowErrors {
-			panic("Orphaned definitions found.")
+			//panic("Orphaned definitions found.")
 		}
 	}
 
@@ -71,18 +71,6 @@ func PrintInfo(config *api.Config) {
 			}
 		}
 	}
-
-	//fmt.Printf("Old definitions:\n")
-	//for name, d := range definitions.GetAllDefinitions() {
-	//	if !d.InToc && len(d.OperationCategories) > 0 && d.IsOldVersion && !d.IsInlined {
-	//		fmt.Printf("[%s]\n", name)
-	//		for _, oc := range d.OperationCategories {
-	//			for _, o := range oc.Operations {
-	//				fmt.Printf("\t [%s]\n", o.ID)
-	//			}
-	//		}
-	//	}
-	//}
 }
 
 func PrintDebug(config *api.Config) {

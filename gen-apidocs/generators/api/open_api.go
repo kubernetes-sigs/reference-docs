@@ -21,29 +21,53 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/go-openapi/loads"
+	"github.com/go-openapi/spec"
+	"encoding/json"
+	"io/ioutil"
 )
 
 // Loads all of the open-api documents
-func LoadOpenApiSpec() []*loads.Document {
+func LoadOpenApiSpec() spec.SwaggerProps {
 	dir := filepath.Join(*ConfigDir, "openapi-spec/")
-	docs := []*loads.Document{}
+	s := spec.SwaggerProps{
+		Definitions: spec.Definitions{},
+	}
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		ext := filepath.Ext(path)
 		if ext != ".json" {
 			return nil
 		}
-		var d *loads.Document
-		d, err = loads.JSONSpec(path)
+		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
 		}
-		docs = append(docs, d)
+		m := map[string]interface{}{}
+		err = json.Unmarshal(b, &m)
+		if err != nil {
+			return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
+		}
+		for k, v := range m {
+			cv := v.(map[string]interface{})
+			delete(cv, "Dependencies")
+			b2, err := json.MarshalIndent(cv["Schema"], "", "    ")
+			if err != nil {
+				return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
+			}
+			sp := spec.SchemaProps{}
+			err = json.Unmarshal(b2, &sp)
+			if err != nil {
+				return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
+			}
+			s.Definitions[k] = spec.Schema{SchemaProps: sp}
+		}
+		if err != nil {
+			return fmt.Errorf("Could not load json file %s as api-spec: %v\n", path, err)
+		}
 		return nil
 	})
 	if err != nil {
 		os.Stderr.WriteString(fmt.Sprintf("%v", err))
 		os.Exit(1)
 	}
-	return docs
+	return s
 }

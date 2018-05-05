@@ -25,12 +25,32 @@ import (
 	"strings"
 	"text/template"
 
+	"flag"
 	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators/api"
 )
+
+var copyright = flag.String("copyright",
+	"<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016 The Kubernetes Authors.</a>",
+	"copyright footer to use")
+var title = flag.String("title",
+	"Kubernetes Resource Reference Docs",
+	"title of docs")
 
 func WriteTemplates(config *api.Config) {
 	if _, err := os.Stat(*api.ConfigDir + "/includes"); os.IsNotExist(err) {
 		os.Mkdir(*api.ConfigDir+"/includes", os.FileMode(0700))
+	}
+
+	for _, d := range config.Definitions.GetAllDefinitions() {
+		if !d.IsOldVersion {
+			continue
+		}
+		for _, o := range d.OtherVersions {
+			if o.InToc == true {
+				d.IsOldToc = true
+				break
+			}
+		}
 	}
 
 	// Write the index file importing each of the top level concept files
@@ -74,7 +94,7 @@ func WriteStaticFile(title, location string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	err = staticFileTemplate.Execute(file, title)
+	err = staticFileTemplate.Execute(file, strings.Title(title))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -86,22 +106,17 @@ func WriteIndexFile(config *api.Config) {
 
 	manifest := Manifest{}
 
-	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016 The Kubernetes Authors.</a>"
+	manifest.Copyright = *copyright
 
 	WriteStaticFile("Overview", "_overview.md")
-	WriteStaticFile("Old Versions", "_oldversions.md")
-	WriteStaticFile("Definitions", "_definitions.md")
+	WriteStaticFile("Old API Versions", "_oldversions.md")
+	WriteStaticFile("Field Definitions", "_definitions.md")
 	for _, c := range config.ResourceCategories {
 		name := "_" + c.Include + ".md"
 		WriteStaticFile(c.Include, name)
 	}
 
-	if !*api.BuildOps {
-		manifest.Title = "Kubernetes Resource Reference Docs"
-	} else {
-		manifest.Title = "Kubernetes API Reference Docs"
-		manifest.Docs = append(manifest.Docs, Doc{"_overview.md"})
-	}
+	manifest.Title = *title
 
 	// Copy over the includes
 	err := filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
@@ -134,30 +149,11 @@ func WriteIndexFile(config *api.Config) {
 		}
 	}
 
-	// Add other definition imports
+	// Add definitions for older version of objects
 	definitions := api.SortDefinitionsByName{}
 	for _, definition := range config.Definitions.GetAllDefinitions() {
-
 		// Don't add definitions for top level resources in the toc or inlined resources
-		if definition.InToc || definition.IsInlined || definition.IsOldVersion {
-			continue
-		}
-		definitions = append(definitions, definition)
-	}
-	sort.Sort(definitions)
-	manifest.Docs = append(manifest.Docs, Doc{"_definitions.md"})
-	includes = append(includes, "definitions")
-	for _, d := range definitions {
-		//definitions[i] = GetDefinitionImport(name)
-		manifest.Docs = append(manifest.Docs, Doc{"_" + GetDefinitionImport(d) + ".md"})
-		includes = append(includes, GetDefinitionImport(d))
-	}
-
-	// Add definitions for older version of objects
-	definitions = api.SortDefinitionsByName{}
-	for _, definition := range config.Definitions.GetAllDefinitions() {
-		// Don't add definitions for top level resources in the toc or inlined resources
-		if definition.IsOldVersion {
+		if definition.IsOldVersion && definition.IsOldToc {
 			definitions = append(definitions, definition)
 		}
 	}
@@ -171,6 +167,25 @@ func WriteIndexFile(config *api.Config) {
 		}
 		manifest.Docs = append(manifest.Docs, Doc{"_" + GetConceptImport(d) + ".md"})
 		includes = append(includes, GetConceptImport(d))
+	}
+
+	// Add other definition imports
+	definitions = api.SortDefinitionsByName{}
+	for _, definition := range config.Definitions.GetAllDefinitions() {
+
+		// Don't add definitions for top level resources in the toc or inlined resources
+		if definition.InToc || definition.IsInlined || definition.IsOldToc {
+			continue
+		}
+		definitions = append(definitions, definition)
+	}
+	sort.Sort(definitions)
+	manifest.Docs = append(manifest.Docs, Doc{"_definitions.md"})
+	includes = append(includes, "definitions")
+	for _, d := range definitions {
+		//definitions[i] = GetDefinitionImport(name)
+		manifest.Docs = append(manifest.Docs, Doc{"_" + GetDefinitionImport(d) + ".md"})
+		includes = append(includes, GetDefinitionImport(d))
 	}
 
 	// Write out the json manifest
@@ -208,10 +223,10 @@ func WriteConceptFiles(config *api.Config) {
 
 	// Write concepts for old versions
 	for _, d := range config.Definitions.GetAllDefinitions() {
-		if !d.IsOldVersion {
+		if !d.IsOldVersion || !d.IsOldToc {
 			continue
 		}
-		r := &api.Resource{Definition: d, Name: d.Name}
+		r := &api.Resource{Definition: d, Name: d.Name, Group: d.Group.String(), Version: d.Version.String()}
 		WriteTemplate(t, r, GetConceptFilePath(d))
 	}
 	// Write concepts for items in the Toc
@@ -232,7 +247,7 @@ func WriteDefinitionFiles(config *api.Config) {
 
 	for _, definition := range config.Definitions.GetAllDefinitions() {
 		// Skip things already present in concept docs
-		if definition.InToc || definition.IsInlined || definition.IsOldVersion {
+		if definition.InToc || definition.IsInlined || definition.IsOldToc {
 			continue
 		}
 		WriteTemplate(t, definition, GetDefinitionFilePath(definition))

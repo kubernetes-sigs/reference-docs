@@ -32,14 +32,8 @@ var INLINE_DEFINITIONS = []InlineDefinition{
 	{Name: "EventSource", Match: "${resource}EventSource"},
 }
 
-const (
-	path  = "path"
-	query = "query"
-	body  = "body"
-)
-
 // Inline definitions for "Spec", "Status", "List", etc for definitions
-func (definitions Definitions) initInlinedDefinitions() Definitions {
+func (definitions Definitions) InitInlinedDefinitions() Definitions {
 	for _, d := range definitions.GetAllDefinitions() {
 		for _, name := range definitions.GetInlinedDefinitionNames(d.Name) {
 			if cr, found := definitions.GetByVersionKind(string(d.Group), string(d.Version), name); found {
@@ -53,7 +47,7 @@ func (definitions Definitions) initInlinedDefinitions() Definitions {
 }
 
 // Build the "Appears In" index for definitions
-func (definitions Definitions) initAppearsIn() Definitions {
+func (definitions Definitions) InitAppearsIn() Definitions {
 	for _, d := range definitions.GetAllDefinitions() {
 		for _, child := range getDefinitionFieldDefinitions(d, definitions) {
 			child.AppearsIn = append(child.AppearsIn, d)
@@ -89,63 +83,6 @@ func (c *Definitions) GetInlinedDefinitionNames(parent string) []string {
 		names = append(names, name)
 	}
 	return names
-}
-
-func (definitions *Definitions) initializeOperationParameters(operations Operations) {
-	for _, operation := range operations {
-		pathItem := operation.item
-
-		// Path parameters
-		for _, p := range pathItem.Parameters {
-			switch p.In {
-			case path:
-				operation.PathParams = append(operation.PathParams, definitions.parameterToField(p))
-			case query:
-				operation.QueryParams = append(operation.QueryParams, definitions.parameterToField(p))
-			case body:
-				operation.BodyParams = append(operation.BodyParams, definitions.parameterToField(p))
-			default:
-				panic("")
-			}
-		}
-
-		// Query parameters
-		for _, p := range operation.op.Parameters {
-			switch p.In {
-			case path:
-				operation.PathParams = append(operation.PathParams, definitions.parameterToField(p))
-			case query:
-				operation.QueryParams = append(operation.QueryParams, definitions.parameterToField(p))
-			case body:
-				operation.BodyParams = append(operation.BodyParams, definitions.parameterToField(p))
-			default:
-				panic("")
-			}
-		}
-
-		for code, response := range operation.op.Responses.StatusCodeResponses {
-			if response.Schema == nil {
-				//fmt.Printf("Nil Schema for response: %+v\n", operation.Path)
-				continue
-			}
-			r := &HttpResponse{
-				Field: Field{
-					Description: strings.Replace(response.Description, "\n", " ", -1),
-					Type:        GetTypeName(*response.Schema),
-					Name:        fmt.Sprintf("%d", code),
-				},
-				Code: fmt.Sprintf("%d", code),
-			}
-			if definitions.IsComplex(*response.Schema) {
-				//var f bool
-				r.Definition, _ = definitions.GetForSchema(*response.Schema)
-				if r.Definition != nil {
-					r.Definition.FoundInOperation = true
-				}
-			}
-			operation.HttpResponses = append(operation.HttpResponses, r)
-		}
-	}
 }
 
 func (definitions *Definitions) parameterToField(parameter spec.Parameter) *Field {

@@ -24,10 +24,6 @@ import (
 	"github.com/go-openapi/spec"
 )
 
-func GetGroupVersionKind() {
-
-}
-
 // GetDefinitionVersionKind returns the api version and kind for the spec.  This is the primary key of a Definition.
 func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 	// Get the reference for complex types
@@ -37,7 +33,11 @@ func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 		name := strings.Split(s, ".")
 
 		var group, version, kind string
-		if name[len(name)-3] == "api" {
+		if len(name) == 3 {
+			group = name[0]
+			version = name[1]
+			kind = name[2]
+		} else if name[len(name)-3] == "api" {
 			// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
 			group = "core"
 			version = name[len(name)-2]

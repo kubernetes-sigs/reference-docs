@@ -22,8 +22,8 @@ import (
 	"strings"
 
 	"errors"
-	"github.com/go-openapi/loads"
 	"github.com/go-openapi/spec"
+	"log"
 )
 
 // Definitions indexes open-api definitions
@@ -50,7 +50,7 @@ func (d *Definitions) GetOtherVersions(this *Definition) []*Definition {
 	defs := d.ByKind[this.Name]
 	others := []*Definition{}
 	for _, def := range defs {
-		if def.Version != this.Version {
+		if def.Version != this.Version && def.Group == this.Group {
 			others = append(others, def)
 		}
 	}
@@ -147,15 +147,17 @@ type Definition struct {
 	Group     ApiGroup
 	ShowGroup bool
 	// Api version of the definition (e.g. v1beta1)
-	Version ApiVersion
-	Kind    ApiKind
+	Version                 ApiVersion
+	Kind                    ApiKind
 	DescriptionWithEntities string
-	GroupFullName string
+	GroupFullName           string
 
 	// InToc is true if this definition should appear in the table of contents
 	InToc        bool
 	IsInlined    bool
 	IsOldVersion bool
+	IsOldToc     bool
+	IsReferenced bool
 
 	FoundInField     bool
 	FoundInOperation bool
@@ -187,26 +189,30 @@ func (d *Definition) GetOperationGroupName() string {
 	return strings.Title(d.Group.String())
 }
 
+func (d *Definition) String() string {
+	return fmt.Sprintf("%s.%s.%s", d.Group, d.Version, d.Kind)
+}
+
 func (d *Definition) Key() string {
 	return fmt.Sprintf("%s.%s.%s", d.Group, d.Version, d.Kind)
 }
 
 func (d *Definition) MdLink() string {
-	return fmt.Sprintf("[%s](#%s-%s-%s)", d.Name, strings.ToLower(d.Name), d.Version, d.Group)
+	return fmt.Sprintf("[%s](#%s-%s)", d.Name, strings.ToLower(d.Name), d.Version)
 
 }
 
 func (d *Definition) HrefLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Name)
+	return fmt.Sprintf("<a href=\"#%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Name)
 }
 
 func (d *Definition) FullHrefLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s %s/%s</a>", strings.ToLower(d.Name),
-		d.Version, d.Group, d.Name, d.Group, d.Version)
+	return fmt.Sprintf("<a href=\"#%s-%s\">%s %s</a>", strings.ToLower(d.Name),
+		d.Version, d.Name, d.Version)
 }
 
 func (d *Definition) VersionLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Version)
+	return fmt.Sprintf("<a href=\"#%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Version)
 }
 
 func (d Definition) Description() string {
@@ -215,6 +221,26 @@ func (d Definition) Description() string {
 
 // TODO: Rework this function because it is ugly
 func guessGVK(name string) (group, version, kind string) {
+	if strings.Contains(name, "pkg/apis/") {
+		name = name[strings.Index(name, "pkg/apis/")+len("pkg/apis/"):]
+		parts1 := strings.Split(name, "/")
+		group = parts1[0]
+		parts2 := strings.Split(parts1[1], ".")
+		version = parts2[0]
+		kind = parts2[1]
+		return group, version, kind
+	}
+
+	if strings.Contains(name, "k8s.io/api/") {
+		name = name[strings.Index(name, "k8s.io/api/")+len("k8s.io/api/"):]
+		parts1 := strings.Split(name, "/")
+		group = parts1[0]
+		parts2 := strings.Split(parts1[1], ".")
+		version = parts2[0]
+		kind = parts2[1]
+		return group, version, kind
+	}
+
 	parts := strings.Split(name, ".")
 	if len(parts) < 4 {
 		fmt.Printf("Error: Could not find version and type for definition %s.\n", name)
@@ -248,93 +274,101 @@ func guessGVK(name string) (group, version, kind string) {
 }
 
 // return the map from short group name to full group name
-func buildGroupMapFromExtension(specs []*loads.Document) map[string]string {
+func buildGroupMapFromExtension(spec spec.SwaggerProps) map[string]string {
 	mapping := map[string]string{}
 	mapping["apiregistration"] = "apiregistration.k8s.io"
 	mapping["apiextensions"] = "apiextensions.k8s.io"
 	mapping["meta"] = "meta"
 	mapping["core"] = "core"
 
-	for _, spec := range specs {
-		for name, spec := range spec.Spec().Definitions {
-			group, _, _ := guessGVK(name)
-			if _, found := mapping[group]; found {
-				continue
-			}
-			// special groups where group name from extension is empty!
-			if group == "meta" || group == "core" {
-				continue
-			}
+	for name, spec := range spec.Definitions {
+		group, _, _ := guessGVK(name)
+		if _, found := mapping[group]; found {
+			continue
+		}
+		// special groups where group name from extension is empty!
+		if group == "meta" || group == "core" {
+			continue
+		}
 
-			// full group not exposed as x-kubernetes- openapi extensions
-			// from kube-aggregator project or apiextensions-apiserver project
-			if group == "apiregistration" || group == "apiextensions" {
-				continue
-			}
+		// full group not exposed as x-kubernetes- openapi extensions
+		// from kube-aggregator project or apiextensions-apiserver project
+		if group == "apiregistration" || group == "apiextensions" {
+			continue
+		}
 
-			if extension, found := spec.Extensions[typeKey]; found {
-				gvks, ok := extension.([]interface{})
-				if ok {
-					for _, item := range gvks {
-						gvk, ok := item.(map[string]interface{})
-						if ok {
-							mapping[group] = gvk["group"].(string)
-							break
-						}
+		if extension, found := spec.Extensions[typeKey]; found {
+			gvks, ok := extension.([]interface{})
+			if ok {
+				for _, item := range gvks {
+					gvk, ok := item.(map[string]interface{})
+					if ok {
+						mapping[group] = gvk["group"].(string)
+						break
 					}
 				}
 			}
 		}
+
 	}
 	return mapping
 }
 
-func VisitDefinitions(specs []*loads.Document, fn func(definition *Definition)) {
+func VisitDefinitions(spec spec.SwaggerProps, fn func(definition *Definition)) {
 	groups := map[string]string{}
-	groupMapping := buildGroupMapFromExtension(specs)
-	for _, spec := range specs {
-		for name, spec := range spec.Spec().Definitions {
-			resource := ""
-			if r, found := spec.Extensions.GetString(resourceNameKey); found {
-				resource = r
-			}
+	groupMapping := buildGroupMapFromExtension(spec)
+	for name, spec := range spec.Definitions {
+		resource := ""
+		if r, found := spec.Extensions.GetString(resourceNameKey); found {
+			resource = r
+		}
 
-			// This actually skips the following groups
-			//  'io.k8s.kubernetes.pkg.api.*'
-			//  'io.k8s.kubernetes.pkg.apis.*'
-			if strings.HasPrefix(spec.Description, "Deprecated. Please use") {
-				// old 1.7 definitions
-				continue
-			}
-			if strings.Contains(name, "JSONSchemaPropsOrStringArray") {
-				continue
-			}
+		// This actually skips the following groups
+		//  'io.k8s.kubernetes.pkg.api.*'
+		//  'io.k8s.kubernetes.pkg.apis.*'
+		if strings.HasPrefix(spec.Description, "Deprecated. Please use") {
+			// old 1.7 definitions
+			continue
+		}
+		if strings.Contains(name, "JSONSchemaPropsOrStringArray") {
+			continue
+		}
 
-			group, version, kind := guessGVK(name)
+		// Definitions from openapi-gen, not the apiserver
+		var group, version, kind string
+		if strings.Contains(name, "pkg/apis/") {
+			name = name[strings.Index(name, "pkg/apis/")+len("pkg/apis/"):]
+			parts1 := strings.Split(name, "/")
+			group = parts1[0]
+			parts2 := strings.Split(parts1[1], ".")
+			version = parts2[0]
+			kind = parts2[1]
+		} else {
+			group, version, kind = guessGVK(name)
 			if group == "" {
 				continue
 			} else if group == "error" {
 				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
 			}
-			groups[group] = ""
-
-			full_group, found := groupMapping[group]
-			if !found {
-				// fall back to group name if no mapping found
-				full_group = group
-			}
-
-			fn(&Definition{
-				schema:    spec,
-				Name:      kind,
-				Version:   ApiVersion(version),
-				Kind:      ApiKind(kind),
-				Group:     ApiGroup(group),
-				GroupFullName: full_group,
-				ShowGroup: true,
-				Resource:  resource,
-			})
 		}
+		groups[group] = ""
+
+		full_group, found := groupMapping[group]
+		if !found {
+			// fall back to group name if no mapping found
+			full_group = group
+		}
+
+		fn(&Definition{
+			schema:        spec,
+			Name:          kind,
+			Version:       ApiVersion(version),
+			Kind:          ApiKind(kind),
+			Group:         ApiGroup(group),
+			GroupFullName: full_group,
+			ShowGroup:     true,
+			Resource:      resource,
+		})
 	}
 }
 
@@ -350,7 +384,7 @@ func (d *Definition) GetSamples() []ExampleText {
 	return r
 }
 
-func GetDefinitions(specs []*loads.Document) Definitions {
+func GetDefinitions(specs spec.SwaggerProps, visit func(definitions Definitions, fn ResourceVisitor)) Definitions {
 	d := Definitions{
 		ByGroupVersionKind: map[string]*Definition{},
 		ByKind:             map[string]SortDefinitionsByVersion{},
@@ -359,42 +393,61 @@ func GetDefinitions(specs []*loads.Document) Definitions {
 		d.Put(definition)
 	})
 	d.InitializeFieldsForAll()
+
 	for _, def := range d.GetAllDefinitions() {
 		d.ByKind[def.Name] = append(d.ByKind[def.Name], def)
 	}
 
-	// If there are multiple versions for an object.  Mark all by the newest as old
+	// If there are multiple versions for an object.  Mark all but the newest as old
 	// Sort the ByKind index in by version with newer versions coming before older versions.
-	for k, l := range d.ByKind {
+	for _, l := range d.ByKind {
 		if len(l) <= 1 {
 			continue
 		}
 		sort.Sort(l)
 		// Mark all version as old
 		for i, d := range l {
-			if len(l) > 1 {
-				if i > 0 {
-					fmt.Printf("%s.%s.%s", d.Group, d.Version, k)
-					if len(l) > i-1 {
-						fmt.Printf(",")
-					}
-				} else {
-					fmt.Printf("Current Version: %s.%s.%s", d.Group, d.Version, k)
-					if len(l) > i-1 {
-						fmt.Printf(" Old Versions: [")
-					}
-				}
-			}
 			if i > 0 {
 				d.IsOldVersion = true
 			}
 		}
-		if len(l) > 1 {
-			fmt.Printf("]\n")
-		}
 	}
 	d.InitializeOtherVersions()
-	d.initAppearsIn()
-	d.initInlinedDefinitions()
+
+	visit(d, func(resource *Resource, definition *Definition) {
+		WalkFields(definition)
+	})
+
+	for k, v := range d.ByGroupVersionKind {
+		if !v.IsReferenced {
+			delete(d.ByGroupVersionKind, k)
+		}
+	}
+
+	for k, v := range d.ByKind {
+		l := SortDefinitionsByVersion{}
+		for _, i := range v {
+			if i.IsReferenced {
+				l = append(l, i)
+			}
+		}
+		if len(l) > 0 {
+			d.ByKind[k] = l
+		} else {
+			delete(d.ByKind, k)
+		}
+	}
+
+	for k, l := range d.ByKind {
+		if len(l) <= 1 {
+			continue
+		}
+		versions := []string{}
+		for _, v := range l {
+			versions = append(versions, fmt.Sprintf("%s.%s", v.Group, v.Version))
+		}
+		log.Printf("%s Versions: [%s]\n", k, strings.Join(versions, ", "))
+
+	}
 	return d
 }
