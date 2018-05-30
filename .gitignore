@@ -1,8 +1,11 @@
 *.iml
 .idea/
 _generated_*.md
-gen-kubectldocs/build/
+gen-kubectldocs/generators/build/
+gen-kubectldocs/generators/v1_10/
+gen-kubectldocs/generators/includes/
 gen-kubectldocs/manifest.json
 gen-apidocs/generators/build/
 gen-apidocs/generators/includes/
 gen-apidocs/generators/manifest.json
+gen-compdocs/build/
