@@ -17,13 +17,13 @@ limitations under the License.
 package generators
 
 var DefinitionTemplate = `
-{{define "definition.template"}}##` + "`{{.Name}}` [`{{.GroupDisplayName}}`/`{{.Version}}`]" + `
+{{define "definition.template"}}## {{.Name}} {{.Version}} {{.Group}}
 
 Group        | Version     | Kind
 ------------ | ---------- | -----------
 ` + "`{{.GroupDisplayName}}` | `{{.Version}}` | `{{.Name}}`" + `
 
-{{if .OtherVersions}}<aside class="notice">Other api versions of this object exist: {{range $v := .OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
+{{if .OtherVersions}}<aside class="notice">Other API versions of this object exist: {{range $v := .OtherVersions}}{{$v.VersionLink}} {{end}}</aside>{{end}}
 
 {{.DescriptionWithEntities}}
 
@@ -73,7 +73,7 @@ Code         | Description
 {{define "concept.template"}}
 
 -----------
-# {{.Name}} [{{if .Definition.ShowGroup}}{{.Definition.GroupDisplayName}}/{{end}}{{.Definition.Version}}] 
+# {{.Name}} {{.Definition.Version}} {{if .Definition.ShowGroup}}{{.Definition.GroupDisplayName}}{{end}} 
 
 {{if .Definition.Sample.Sample}}{{$n := .Definition.Sample.Note}}{{range $e := .Definition.GetSamples}}>{{$e.Tab}} {{$n}}
 

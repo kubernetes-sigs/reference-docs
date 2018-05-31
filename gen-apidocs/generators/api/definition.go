@@ -107,7 +107,7 @@ func (d *Definitions) InitializeFields(definition *Definition) {
 		field := &Field{
 			Name:        fieldName,
 			Type:        GetTypeName(property),
-			Description: def,
+			Description: escapeAsterisks(def),
 		}
 		if len(property.Extensions) > 0 {
 			if ps, f := property.Extensions.GetString(patchStrategyKey); f {
@@ -192,25 +192,38 @@ func (d *Definition) Key() string {
 }
 
 func (d *Definition) MdLink() string {
-	return fmt.Sprintf("[%s](#%s-%s-%s)", d.Name, strings.ToLower(d.Name), d.Version, d.Group)
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	return fmt.Sprintf("[%s](#%s-%s-%s)", d.Name, strings.ToLower(d.Name), d.Version, groupName)
 
 }
 
 func (d *Definition) HrefLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Name)
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, groupName, d.Name)
 }
 
 func (d *Definition) FullHrefLink() string {
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s %s/%s</a>", strings.ToLower(d.Name),
-		d.Version, d.Group, d.Name, d.Group, d.Version)
+		d.Version, groupName, d.Name, d.Group, d.Version)
 }
 
 func (d *Definition) VersionLink() string {
-	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, d.Group, d.Version)
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, groupName, d.Version)
+}
+
+// handle '*', 'a/*', '*/b', '*/*' cases
+func escapeAsterisks(des string) string {
+	s := strings.Replace(des, "'*'", `'\*'`, -1)
+	s = strings.Replace(s, "/*'", `/\*'`, -1)
+	s = strings.Replace(s, "'*/", `'\*/`, -1)
+	s = strings.Replace(s, "'*/*'", `'\*/\*'`, -1)
+	return s
 }
 
 func (d Definition) Description() string {
-	return d.schema.Description
+	return escapeAsterisks(d.schema.Description)
 }
 
 // TODO: Rework this function because it is ugly
