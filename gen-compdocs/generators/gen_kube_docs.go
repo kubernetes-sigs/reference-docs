@@ -29,6 +29,7 @@ import (
 	schapp "k8s.io/kubernetes/cmd/kube-scheduler/app"
 	kubeadmapp "k8s.io/kubernetes/cmd/kubeadm/app/cmd"
 	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
+	kubectlcmd "k8s.io/kubernetes/pkg/kubectl/cmd"
 )
 
 func GenerateFiles(path, module string) {
@@ -78,6 +79,10 @@ func GenerateFiles(path, module string) {
 
 		// cleanup generated code for usage as include in the website
 		MarkdownPostProcessing(kubeadm, outDir, cleanupForInclude)
+
+	case "kubectl":
+		kubectl := kubectlcmd.NewDefaultKubectlCommand()
+		GenMarkdownTree(kubectl, outDir, true)
 
 	default:
 		fmt.Fprintf(os.Stderr, "Module %s is not supported", module)

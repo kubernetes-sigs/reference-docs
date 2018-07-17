@@ -51,6 +51,7 @@ comp: cleancomp
 	go run gen-compdocs/main.go gen-compdocs/build kubelet
 	go run gen-compdocs/main.go gen-compdocs/build kube-proxy
 	go run gen-compdocs/main.go gen-compdocs/build kubeadm
+	go run gen-compdocs/main.go gen-compdocs/build kubectl
 
 copycomp:
 	cp $(shell pwd)/gen-compdocs/build/* $(WEBROOT)/docs/reference/generated/
