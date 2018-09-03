@@ -207,7 +207,8 @@ func (d *Definition) Key() string {
 }
 
 func (d *Definition) LinkID() string {
-	link := fmt.Sprintf("%s-%s-%s", d.Name, d.Version, d.Group)
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	link := fmt.Sprintf("%s-%s-%s", d.Name, d.Version, groupName)
 	return strings.ToLower(link)
 }
 
@@ -222,7 +223,7 @@ func (d *Definition) HrefLink() string {
 }
 
 func (d *Definition) FullHrefLink() string {
-	groupName := strings.Replace(strings.ToLower(string(d.Group)), ".", "-", -1)
+	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s [%s/%s]</a>", strings.ToLower(d.Name),
 		d.Version, groupName, d.Name, d.Group, d.Version)
 }

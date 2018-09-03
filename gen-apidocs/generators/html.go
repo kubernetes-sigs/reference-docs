@@ -157,7 +157,7 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 		os.Stderr.WriteString(fmt.Sprintf("%v", err))
 		os.Exit(1)
 	}
-	nvg := fmt.Sprintf("%s %s %s", d.Name, d.Version, d.Group)
+	nvg := fmt.Sprintf("%s %s %s", d.Name, d.Version, d.GroupDisplayName())
 	linkID := getLink(nvg)
 	fmt.Fprintf(f, "<H2 id=\"%s\">%s</H2>\n", linkID, nvg)
 	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
