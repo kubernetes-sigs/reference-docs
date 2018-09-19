@@ -90,7 +90,7 @@ func PrintDebug(config *api.Config) {
 	definitions := config.Definitions
 
 	fmt.Printf("----------------------------------\n")
-	fmt.Printf("Operations with no Defintions:\n")
+	fmt.Printf("Operations with no Definitions:\n")
 	for _, o := range operations {
 		if o.Definition == nil {
 			fmt.Printf("%s\n", o.ID)
