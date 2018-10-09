@@ -29,7 +29,7 @@ cli: cleancli
 copycli: cli
 	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/docs/reference/generated/kubectl/kubectl-commands.html
 	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/docs/reference/generated/kubectl/navData.js
-	cp $(CLISRC)/scroll.js $(CLEDST)/scroll.js
+	cp $(CLISRC)/scroll.js $(CLIDST)/scroll.js
 	cp $(CLISRC)/stylesheet.css $(CLIDST)/stylesheet.css
 	cp $(CLISRC)/tabvisibility.js $(CLIDST)/tabvisibility.js
 	cp $(CLISRC)/node_modules/bootstrap/dist/css/bootstrap.min.css $(CLIDST)/node_modules/bootstrap/dist/css/bootstrap.min.css
