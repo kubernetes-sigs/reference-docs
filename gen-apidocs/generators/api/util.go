@@ -113,7 +113,7 @@ func EscapeAsterisks(des string) string {
 	return s
 }
 
-// IsComplex returns true if the schema is for a complex (non-primitive) defintions
+// IsComplex returns true if the schema is for a complex (non-primitive) definitions
 func IsComplex(schema spec.Schema) bool {
 	_, _, k := GetDefinitionVersionKind(schema)
 	return len(k) > 0

@@ -452,7 +452,7 @@ func (c *Config) setOperation(match, namespace string, ot *OperationType, oc *Op
 		// Each operation should have exactly 1 definition
 		if o.Definition != nil {
 			panic(fmt.Sprintf(
-				"Found multiple matching defintions [%s/%s/%s, %s/%s/%s] for operation key: %s",
+				"Found multiple matching definitions [%s/%s/%s, %s/%s/%s] for operation key: %s",
 				d.Group, d.Version, d.Name, o.Definition.Group, o.Definition.Version, o.Definition.Name, key))
 		}
 		o.Type = *ot
