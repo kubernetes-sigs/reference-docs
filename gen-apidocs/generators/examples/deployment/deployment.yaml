@@ -1,6 +1,6 @@
 note: Deployment Config to run 3 nginx instances (max rollback set to 10 revisions).
 sample: |
-  apiVersion: apps/v1beta1
+  apiVersion: apps/v1
   kind: Deployment
   metadata:
     # Unique key of the Deployment instance
