@@ -1,21 +1,26 @@
 example_location: "examples"
 api_groups:
+  - "AdmissionRegistration"
   - "ApiExtensions"
+  - "ApiRegistration"
   - "Apps"
+  - "AuditRegistration"
   - "Authentication"
   - "Authorization"
   - "Autoscaling"
   - "Batch"
   - "Certificates"
+  - "Coordination"
   - "Core"
   - "Extensions"
   - "Meta"
+  - "Networking"
+  - "Node"
   - "Policy"
   - "Rbac"
   - "Scheduling"
   - "Settings"
   - "Storage"
-  - "RbacAuthorization"
 inline_definitions:
   - name: Spec
     match: ${resource}Spec
@@ -84,6 +89,12 @@ resource_categories:
     - name: ConfigMap
       version: v1
       group: core
+    - name: CSIDriver
+      version: v1beta1
+      group: storage
+    - name: CSINode
+      version: v1beta1
+      group: storage
     - name: Secret
       version: v1
       group: core
@@ -98,7 +109,7 @@ resource_categories:
       version: v1
       group: core
     - name: VolumeAttachment
-      version: v1beta1
+      version: v1
       group: storage
   - name: "Metadata APIs"
     include: "meta"
@@ -118,9 +129,6 @@ resource_categories:
     - name: HorizontalPodAutoscaler
       version: v1
       group: autoscaling
-    - name: InitializerConfiguration
-      version: v1alpha1
-      group: admissionregistration
     - name: MutatingWebhookConfiguration
       version: v1beta1
       group: admissionregistration
@@ -134,7 +142,7 @@ resource_categories:
       version: v1beta1
       group: policy
     - name: PriorityClass
-      version: v1beta1
+      version: v1
       group: scheduling
     - name: PodPreset
       version: v1alpha1
@@ -149,6 +157,9 @@ resource_categories:
     - name: APIService
       version: v1
       group: apiregistration
+    - name: AuditSink
+      version: v1alpha1
+      group: auditregistration
     - name: Binding
       version: v1
       group: core
@@ -164,6 +175,9 @@ resource_categories:
     - name: ComponentStatus
       version: v1
       group: core
+    - name: Lease
+      version: v1
+      group: coordination
     - name: LocalSubjectAccessReview
       version: v1
       group: authorization
@@ -186,6 +200,9 @@ resource_categories:
     - name: RoleBinding
       version: v1
       group: rbac
+    - name: RuntimeClass
+      version: v1beta1
+      group: node
     - name: SelfSubjectAccessReview
       version: v1
       group: authorization
