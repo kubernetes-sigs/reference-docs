@@ -1,7 +1,7 @@
 name: deployment-example
 namespace: default
 request: |
-  apiVersion: apps/v1beta1
+  apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: deployment-example
@@ -21,11 +21,11 @@ request: |
 response: |
   {
     "kind": "Deployment",
-    "apiVersion": "apps/v1beta1",
+    "apiVersion": "apps/v1",
     "metadata": {
       "name": "deployment-example",
       "namespace": "default",
-      "selfLink": "/apis/apps/v1beta1/namespaces/default/deployments/deployment-example",
+      "selfLink": "/apis/apps/v1/namespaces/default/deployments/deployment-example",
       "uid": "4ccca349-9cb1-11e6-9c54-42010a800148",
       "resourceVersion": "2118306",
       "generation": 1,

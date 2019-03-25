@@ -3,11 +3,11 @@ namespace: default
 response: |
   {
     "kind": "Deployment",
-    "apiVersion": "apps/v1beta1",
+    "apiVersion": "apps/v1",
     "metadata": {
       "name": "deployment-example",
       "namespace": "default",
-      "selfLink": "/apis/apps/v1beta1/namespaces/default/deployments/deployment-example",
+      "selfLink": "/apis/apps/v1/namespaces/default/deployments/deployment-example",
       "uid": "1b33145a-9c63-11e6-9c54-42010a800148",
       "resourceVersion": "2064726",
       "generation": 4,
