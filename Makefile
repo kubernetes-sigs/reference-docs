@@ -1,6 +1,6 @@
 WEBROOT=~/src/github.com/kubernetes/website
 K8SROOT=~/src/github.com/kubernetes/kubernetes
-MINOR_VERSION=12
+MINOR_VERSION=13
 
 APISRC=gen-apidocs/generators
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
