@@ -59,20 +59,18 @@ func (s *Definitions) initialize() {
 		// Mark all version as old
 		for i, d := range l {
 			if len(l) > 1 {
-				if i > 0 {
-					fmt.Printf("%s.%s.%s", d.Group, d.Version, k)
-					if len(l) > i-1 {
-						fmt.Printf(",")
-					}
-				} else {
+				if i == 0 {
 					fmt.Printf("Current Version: %s.%s.%s", d.Group, d.Version, k)
 					if len(l) > i-1 {
 						fmt.Printf(" Old Versions: [")
 					}
+				} else {
+					fmt.Printf("%s.%s.%s", d.Group, d.Version, k)
+					if len(l) > i-1 {
+						fmt.Printf(",")
+					}
+					d.IsOldVersion = true
 				}
-			}
-			if i > 0 {
-				d.IsOldVersion = true
 			}
 		}
 		if len(l) > 1 {
@@ -195,6 +193,7 @@ func (d *Definition) GroupDisplayName() string {
 	}
 	return string(d.Group)
 }
+
 func (d *Definition) GetOperationGroupName() string {
 	if strings.ToLower(d.Group.String()) == "rbac" {
 		return "RbacAuthorization"
