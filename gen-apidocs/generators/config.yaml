@@ -79,7 +79,7 @@ resource_categories:
       group: core
     - name: Ingress
       version: v1beta1
-      group: extensions
+      group: networking
     - name: Service
       version: v1
       group: core
@@ -150,7 +150,7 @@ resource_categories:
       description_warning: "Alpha objects should not be used in production and may not be compatible with future versions of the resource type."
     - name: PodSecurityPolicy
       version: v1beta1
-      group: extensions
+      group: policy
   - name: "Cluster APIs"
     include: "cluster"
     resources:
