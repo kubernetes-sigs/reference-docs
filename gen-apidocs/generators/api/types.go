@@ -17,20 +17,108 @@ limitations under the License.
 package api
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/go-openapi/spec"
 )
 
 type ApiGroup string
+
+func (g ApiGroup) String() string {
+	return string(g)
+}
+
+func (g ApiGroup) LessThan(other ApiGroup) bool {
+	// "apps" group APIs are newer than "extensions" group APIs
+	if g.String() == "apps" && other.String() == "extensions" {
+		return true
+	}
+	if other.String() == "apps" && g.String() == "extensions" {
+		return false
+	}
+
+	// "policy" group APIs are newer than "extensions" group APIs
+	if g == "policy" && other.String() == "extensions" {
+		return true
+	}
+	if other.String() == "policy" && g.String() == "extensions" {
+		return false
+	}
+
+	// "networking" group APIs are newer than "extensions" group APIs
+	if g.String() == "networking" && other.String() == "extensions" {
+		return true
+	}
+	if other.String() == "networking" && g.String() == "extensions" {
+		return false
+	}
+
+	return strings.Compare(g.String(), other.String()) < 0
+}
+
 type ApiGroups []ApiGroup
 
+func (a ApiGroups) Len() int      { return len(a) }
+func (a ApiGroups) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ApiGroups) Less(i, j int) bool {
+	return a[i].LessThan(a[j])
+}
+
 type ApiKind string
+func (k ApiKind) String() string {
+	return string(k)
+}
 
 type ApiVersion string
-type ApiVersions []ApiVersion
+
 func (a ApiVersion) String() string {
 	return string(a)
+}
+
+func (this ApiVersion) LessThan(that ApiVersion) bool {
+	re := regexp.MustCompile("(v\\d+)(alpha|beta|)(\\d*)")
+	thisMatches := re.FindStringSubmatch(string(this))
+	thatMatches := re.FindStringSubmatch(string(that))
+
+	a := []string{thisMatches[1]}
+	if len(thisMatches) > 2 {
+		a = []string{thisMatches[2], thisMatches[1], thisMatches[0]}
+	}
+
+	b := []string{thatMatches[1]}
+	if len(thatMatches) > 2 {
+		b = []string{thatMatches[2], thatMatches[1], thatMatches[0]}
+	}
+
+	for i := 0; i < len(a) && i < len(b); i++ {
+		v1 := ""
+		v2 := ""
+		if i < len(a) {
+			v1 = a[i]
+		}
+		if i < len(b) {
+			v2 = b[i]
+		}
+		// If the "beta" or "alpha" is missing, then it is ga (empty string comes before non-empty string)
+		if len(v1) == 0 || len(v2) == 0 {
+			return v1 < v2
+		}
+		// The string with the higher number comes first (or in the case of alpha/beta, beta comes first)
+		if v1 != v2 {
+			return v1 > v2
+		}
+	}
+
+	return false
+}
+
+type ApiVersions []ApiVersion
+
+func (a ApiVersions) Len() int      { return len(a) }
+func (a ApiVersions) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ApiVersions) Less(i, j int) bool {
+	return a[i].LessThan(a[j])
 }
 
 type SortDefinitionsByName []*Definition
@@ -52,12 +140,11 @@ type SortDefinitionsByVersion []*Definition
 func (a SortDefinitionsByVersion) Len() int      { return len(a) }
 func (a SortDefinitionsByVersion) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a SortDefinitionsByVersion) Less(i, j int) bool {
-	switch {
-	case a[i].Version == a[j].Version:
-		return strings.Compare(a[i].Group.String(), a[j].Group.String()) < 0
-	default:
+	if a[i].Group.String() == a[j].Group.String() {
 		return a[i].Version.LessThan(a[j].Version)
 	}
+
+	return a[i].Group.LessThan(a[j].Group)
 }
 
 type Definition struct {
