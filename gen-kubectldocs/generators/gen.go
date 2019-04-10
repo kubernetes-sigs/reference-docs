@@ -65,7 +65,7 @@ func GenerateFiles() {
 
 	manifest := &Manifest{}
 	manifest.Title = "Kubectl Reference Docs"
-	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016 The Kubernetes Authors.</a>"
+	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2019 The Kubernetes Authors.</a>"
 
 	NormalizeSpec(&spec)
 
