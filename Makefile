@@ -1,5 +1,5 @@
 WEBROOT=~/src/github.com/kubernetes/website
-K8SROOT=~/src/github.com/kubernetes/kubernetes
+K8SROOT=~/k8s/src/k8s.io/kubernetes
 MINOR_VERSION=14
 
 APISRC=gen-apidocs/generators

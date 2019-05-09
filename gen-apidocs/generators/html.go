@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators/api"
 )
@@ -552,7 +553,16 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"side-nav side-bar-nav\">\n")
 
 	// html buffer
-	buf := ""
+	// fmt.Fprintf(html, "<BR/><DIV class=\"copyright\">%s</DIV></DIV>\n", h.TOC.Copyright)
+	buf := "<DIV class=\"row\">\n  <DIV class=\"col-md-6 copyright\">\n " + h.TOC.Copyright + "\n  </DIV>\n"
+	buf += "  <DIV class=\"col-md-6 text-right\">\n"
+	buf += fmt.Sprintf("    <DIV>Generated at: %s</DIV>\n", time.Now().Format("2006-01-02 15:04:05 (MST)"))
+	pos := strings.LastIndex(h.Config.SpecVersion, ".")
+	release := fmt.Sprintf("release-%s", h.Config.SpecVersion[1:pos])
+	spec_link := "https://github.com/kubernetes/kubernetes/blob/" + release + "/api/openapi-spec/swagger.json"
+	buf += fmt.Sprintf("    <DIV>API Version: <a href=\"%s\">%s</a></DIV>\n", spec_link, h.Config.SpecVersion)
+	buf += "  </DIV>\n</DIV>"
+
 	for _, sec := range h.TOC.Sections {
 		fmt.Printf("Collecting %s ... ", sec.File)
 		content, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", sec.File))
@@ -584,8 +594,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 		}
 	}
 
-	fmt.Fprintf(html, "%s", navContent)
-	fmt.Fprintf(html, "<BR/><DIV class=\"copyright\">%s</DIV></DIV>\n", h.TOC.Copyright)
+	fmt.Fprintf(html, "%s</DIV>\n", navContent)
 	fmt.Fprintf(html, "<DIV id=\"wrapper\">\n")
 	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"body-content container-fluid\">\n")
 	fmt.Fprintf(html, "%s", string(buf))

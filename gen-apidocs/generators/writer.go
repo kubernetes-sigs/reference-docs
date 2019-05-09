@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators/api"
 )
@@ -51,7 +52,9 @@ func GenerateFiles() {
 	PrintInfo(config)
 	ensureIncludeDir()
 
-	copyright := "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016 The Kubernetes Authors.</a>"
+	copyright_tmpl := "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016-%s The Kubernetes Authors.</a>"
+	now := time.Now().Format("2006")
+	copyright := fmt.Sprintf(copyright_tmpl, now)
 	var title string
 	if !*api.BuildOps {
 		title = "Kubernetes Resource Reference Docs"
