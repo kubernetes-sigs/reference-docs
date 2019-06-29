@@ -41,6 +41,9 @@ func NewConfig() *Config {
 	config := LoadConfigFromYAML()
 	specs := LoadOpenApiSpec()
 
+	// Parse spec version
+	ParseSpecInfo(specs, config)
+
 	// Initialize all of the operations
 	config.Definitions = NewDefinitions(specs)
 

@@ -208,6 +208,8 @@ type Config struct {
 
 	Definitions Definitions
 	Operations  Operations
+	SpecTitle   string
+	SpecVersion string
 }
 
 // InlineDefinition defines a definition that should be inlined when displaying a Concept instead of appearing the in "Definitions"
