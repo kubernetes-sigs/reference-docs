@@ -94,6 +94,10 @@ func FormatCommand(c *Command) {
 }
 
 func FormatDescription(input string) string {
+	/* This fixes an error when the description is a string followed by a
+	   new line and another string that is indented >= four spaces. The marked.js parser
+	   throws a parsing error. Error found in generated file: build/_generated_rollout.md */
+	input = strings.Replace(input, "\n   ", "\n ", 10)
 	return strings.Replace(input, "   *", "*", 10000)
 }
 
