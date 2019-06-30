@@ -1,6 +1,6 @@
 WEBROOT=~/src/github.com/kubernetes/website
 K8SROOT=~/k8s/src/k8s.io/kubernetes
-MINOR_VERSION=14
+MINOR_VERSION=15
 
 APISRC=gen-apidocs/generators
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
@@ -8,7 +8,7 @@ APISRCFONT=$(APISRC)/build/node_modules/font-awesome
 APIDSTFONT=$(APIDST)/node_modules/font-awesome
 
 CLISRC=gen-kubectldocs/generators/build
-CLIDST=$(WEBROOT)/docs/reference/generated/kubectl
+CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
 CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
@@ -27,8 +27,8 @@ cli: cleancli
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
-	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/docs/reference/generated/kubectl/kubectl-commands.html
-	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/docs/reference/generated/kubectl/navData.js
+	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/static/docs/reference/generated/kubectl/kubectl-commands.html
+	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/static/docs/reference/generated/kubectl/navData.js
 	cp $(CLISRC)/scroll.js $(CLIDST)/scroll.js
 	cp $(CLISRC)/stylesheet.css $(CLIDST)/stylesheet.css
 	cp $(CLISRC)/tabvisibility.js $(CLIDST)/tabvisibility.js
