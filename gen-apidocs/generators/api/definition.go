@@ -28,6 +28,23 @@ import (
 	"github.com/go-openapi/spec"
 )
 
+// inlineDefinition is a definition that should be inlined when displaying a Concept
+// instead of appearing the in "Definitions"
+type inlineDefinition struct {
+	Name string
+	Match string
+}
+
+var _INLINE_DEFINITIONS = []inlineDefinition {
+	{Name: "Spec", Match: "${resource}Spec"},
+	{Name: "Status", Match: "${resource}Status"},
+	{Name: "List", Match: "${resource}List"},
+	{Name: "Strategy", Match: "${resource}Strategy"},
+	{Name: "Rollback", Match: "${resource}Rollback"},
+	{Name: "RollingUpdate", Match: "RollingUpdate${resource}"},
+	{Name: "EventSource", Match: "${resource}EventSource"},
+}
+
 func NewDefinitions(specs []*loads.Document) Definitions {
 	s := Definitions{
 		All:	map[string]*Definition{},
@@ -101,7 +118,7 @@ func (s *Definitions) initialize() {
 	// Initialize Inline, IsInlined 
 	// Note: examples of inline definitions are "Spec", "Status", "List", etc
 	for _, d := range s.All {
-		for _, name := range GetInlinedDefinitionNames(d.Name) {
+		for _, name := range s.getInlineDefinitionNames(d.Name) {
 			if cr, ok := s.GetByVersionKind(string(d.Group), string(d.Version), name); ok {
 				d.Inline = append(d.Inline, cr)
 				cr.IsInlined = true
@@ -109,6 +126,15 @@ func (s *Definitions) initialize() {
 			}
 		}
 	}
+}
+
+func (s *Definitions) getInlineDefinitionNames(parent string) []string {
+	names := []string{}
+	for _, id := range _INLINE_DEFINITIONS {
+		name := strings.Replace(id.Match, "${resource}", parent, -1)
+		names = append(names, name)
+	}
+	return names
 }
 
 func (s *Definitions) getReferences(d *Definition) []*Definition {

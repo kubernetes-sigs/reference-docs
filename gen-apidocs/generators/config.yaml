@@ -21,21 +21,6 @@ api_groups:
   - "Scheduling"
   - "Settings"
   - "Storage"
-inline_definitions:
-  - name: Spec
-    match: ${resource}Spec
-  - name: Status
-    match: ${resource}Status
-  - name: List
-    match: ${resource}List
-  - name: DeploymentStrategy
-    match: ${resource}Strategy
-  - name: DeploymentRollback
-    match: ${resource}Rollback
-  - name: RollingUpdateDeployment
-    match: RollingUpdate${resource}
-  - name: EventSource
-    match: ${resource}Source
 resource_categories:
   - name: "Workloads APIs"
     include: "workloads"
@@ -43,7 +28,7 @@ resource_categories:
     - name: Container
       version: v1
       group: core
-      description_warning: "Containers are only ever created within the context of a <a href=\"#pod-v1-core\">Pod</a>.  This is usually done using a Controller.  See Controllers: <a href=\"#deployment-v1beta1-apps\">Deployment</a>, <a href=\"#job-v1-batch\">Job</a>, or <a href=\"#statefulset-v1beta1-apps\">StatefulSet</a>"
+      description_warning: "Containers are only ever created within the context of a <a href=\"#pod-v1-core\">Pod</a>.  This is usually done using a Controller.  See Controllers: <a href=\"#deployment-v1-apps\">Deployment</a>, <a href=\"#job-v1-batch\">Job</a>, or <a href=\"#statefulset-v1-apps\">StatefulSet</a>"
     - name: CronJob
       version: v1beta1
       group: batch
@@ -59,15 +44,15 @@ resource_categories:
     - name: Pod
       version: v1
       group: core
-      description_warning: "It is recommended that users create Pods only through a Controller, and not directly.  See Controllers: <a href=\"#deployment-v1beta1-apps\">Deployment</a>, <a href=\"#job-v1-batch\">Job</a>, or <a href=\"#statefulset-v1beta1-apps\">StatefulSet</a>."
+      description_warning: "It is recommended that users create Pods only through a Controller, and not directly.  See Controllers: <a href=\"#deployment-v1-apps\">Deployment</a>, <a href=\"#job-v1-batch\">Job</a>, or <a href=\"#statefulset-v1-apps\">StatefulSet</a>."
     - name: ReplicaSet
       version: v1
       group: apps
-      description_warning: "In many cases it is recommended to create a <a href=\"#deployment-v1beta1-apps\">Deployment</a> instead of ReplicaSet."
+      description_warning: "In many cases it is recommended to create a <a href=\"#deployment-v1-apps\">Deployment</a> instead of ReplicaSet."
     - name: ReplicationController
       version: v1
       group: core
-      description_warning: "In many cases it is recommended to create a <a href=\"#deployment-v1beta1-apps\">Deployment</a> instead of a ReplicationController."
+      description_warning: "In many cases it is recommended to create a <a href=\"#deployment-v1-apps\">Deployment</a> instead of a ReplicationController."
     - name: StatefulSet
       version: v1
       group: apps
