@@ -24,17 +24,6 @@ import (
 	"github.com/go-openapi/spec"
 )
 
-var INLINE_DEFINITIONS = []InlineDefinition{
-	{Name: "Spec", Match: "${resource}Spec"},
-	{Name: "Status", Match: "${resource}Status"},
-	{Name: "List", Match: "${resource}List"},
-	{Name: "Strategy", Match: "${resource}Strategy"},
-	{Name: "Rollback", Match: "${resource}Rollback"},
-	{Name: "RollingUpdate", Match: "RollingUpdate${resource}"},
-	{Name: "EventSource", Match: "${resource}EventSource"},
-}
-
-
 // GetDefinitionVersionKind returns the api version and kind for the spec.  This is the primary key of a Definition.
 func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 	// Get the reference for complex types
@@ -153,13 +142,4 @@ func GuessGVK(name string) (group, version, kind string) {
 		return "error", "", ""
 	}
 	return group, version, kind
-}
-
-func GetInlinedDefinitionNames(parent string) []string {
-	names := []string{}
-	for _, id := range INLINE_DEFINITIONS {
-		name := strings.Replace(id.Match, "${resource}", parent, -1)
-		names = append(names, name)
-	}
-	return names
 }

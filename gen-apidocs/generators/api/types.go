@@ -212,12 +212,6 @@ type Config struct {
 	SpecVersion string
 }
 
-// InlineDefinition defines a definition that should be inlined when displaying a Concept instead of appearing the in "Definitions"
-type InlineDefinition struct {
-	Name string `yaml:",omitempty"`
-	Match string `yaml:",omitempty"`
-}
-
 type Field struct {
 	Name                    string
 	Type                    string
@@ -326,8 +320,6 @@ type Resource struct {
 	Version string `yaml:",omitempty"`
 	Group   string `yaml:",omitempty"`
 
-	// InlineDefinition is a list of definitions to show along side this resource when displaying it
-	InlineDefinition []string `yaml:inline_definition",omitempty"`
 	// DescriptionWarning is a warning message to show along side this resource when displaying it
 	DescriptionWarning string `yaml:"description_warning,omitempty"`
 	// DescriptionNote is a note message to show along side this resource when displaying it
@@ -336,10 +328,6 @@ type Resource struct {
 	ConceptGuide string `yaml:"concept_guide,omitempty"`
 	// RelatedTasks is as list of tasks related to this concept
 	RelatedTasks []string `yaml:"related_tasks,omitempty"`
-	// IncludeDescription is the path to an md file to incline into the description
-	IncludeDescription string `yaml:"include_description,omitempty"`
-	// LinkToMd is the relative path to the md file containing the contents that clicking on this should link to
-	LinkToMd string `yaml:"link_to_md,omitempty"`
 
 	// Definition of the object
 	Definition *Definition
@@ -351,12 +339,10 @@ type Resources []*Resource
 type ResourceCategory struct {
 	// Name is the display name of this group
 	Name string `yaml:",omitempty"`
-	// Include is the name of the _resource.md file to include in the index.html.md
+	// Include is the name of the _<resource_category>.html file to include in the index.html
 	Include string `yaml:",omitempty"`
 	// Resources are the collection of Resources in this group
 	Resources Resources `yaml:",omitempty"`
-	// LinkToMd is the relative path to the md file containing the contents that clicking on this should link to
-	LinkToMd string `yaml:"link_to_md,omitempty"`
 }
 
 type ExampleConfig struct {
