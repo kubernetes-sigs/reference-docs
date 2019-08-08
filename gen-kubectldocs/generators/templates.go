@@ -1,5 +1,5 @@
 /*
-Copyright 2017 The Kubernetes Authors.
+Copyright 2019 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,49 +20,81 @@ var CategoryTemplate = `
 # <strong>{{.Name}}</strong>
 `
 
-var CommandTemplate = `
-------------
+var CommandTemplate = `{{"---\ntitle: "}}{{.MainCommand.Name}}
+{{"content_template: templates/tool-reference\n---"}}
 
-# {{.MainCommand.Name}}
-
-{{.MainCommand.Example}}
-
+### Overview
 {{.MainCommand.Description}}
 
 ### Usage
 
 ` + "`" + `$ {{.MainCommand.Usage}}` + "`" + `
 
-{{if .MainCommand.Options}}
+{{if .MainCommand.Example}}
+### Example
 
+{{.MainCommand.Example}}
+{{end}}
+
+{{if .MainCommand.Options}}
 ### Flags
 
-Name | Shorthand | Default | Usage
----- | --------- | ------- | ----- {{range $option := .MainCommand.Options}}
-{{$option.Name}} | {{$option.Shorthand}} | {{$option.DefaultValue}} | {{$option.Usage}} {{end}}
+<div class="table-responsive"><table class="table table-bordered">
+<thead class="thead-light">
+<tr>
+            <th>Name</th>
+            <th>Shorthand</th>
+            <th>Default</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{range $option := .MainCommand.Options}}
+    <tr>
+    <td>{{$option.Name}}</td><td>{{$option.Shorthand}}</td><td>{{$option.DefaultValue}}</td><td>{{$option.Usage}}</td>
+    </tr>{{end}}
+</tbody>
+</table></div>
 {{end}}
 {{range $sub := .SubCommands}}
-------------
 
-## <em>{{$sub.Path}}</em>
+<hr>
 
-{{$sub.Example}}
+## {{$sub.Path}}
 
+
+### Overview
 {{$sub.Description}}
 
 ### Usage
 
 ` + "`" + `$ {{$sub.Usage}}` + "`" + `
 
-{{if $sub.Options}}
-
-### Flags
-
-Name | Shorthand | Default | Usage
----- | --------- | ------- | ----- {{range $option := $sub.Options}}
-{{$option.Name}} | {{$option.Shorthand}} | {{$option.DefaultValue}} | {{$option.Usage}} {{end}}
+{{if $sub.Example}}
+### Example
+{{$sub.Example}}
 {{end}}
 
+{{if $sub.Options}}
+### Flags
+
+<div class="table-responsive"><table class="table table-bordered">
+<thead class="thead-light">
+<tr>
+            <th>Name</th>
+            <th>Shorthand</th>
+            <th>Default</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{range $option := $sub.Options}}
+    <tr>
+    <td>{{$option.Name}}</td><td>{{$option.Shorthand}}</td><td>{{$option.DefaultValue}}</td><td>{{$option.Usage}}</td>
+    </tr>{{end}}
+</tbody>
+</table></div>
+{{end}}
 {{end}}
 
 `

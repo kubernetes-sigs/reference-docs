@@ -17,7 +17,6 @@ limitations under the License.
 package generators
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -74,7 +73,7 @@ func GenerateFiles() {
 	}
 
 	WriteCommandFiles(manifest, toc, spec)
-	WriteManifest(manifest)
+	//WriteManifest(manifest)
 }
 
 func NormalizeSpec(spec *KubectlSpec) {
@@ -112,7 +111,7 @@ func FormatExample(input string) string {
 
 		// Skip empty lines
 		if strings.HasPrefix(line, "#") {
-			if len(strings.TrimSpace(strings.Replace(line, "#", ">bdocs-tab:example", 1))) < 1 {
+			if len(strings.TrimSpace(strings.Replace(line, "#", "", 1))) < 1 {
 				continue
 			}
 		}
@@ -129,13 +128,13 @@ func FormatExample(input string) string {
 				result += " " + line
 			} else {
 				// Start a new code block
-				result += strings.Replace(line, "#", ">bdocs-tab:example", 1)
+				result += strings.Replace(line, "#", "", 1)
 			}
 			last = "comment"
 		} else {
 			if last != "command" {
 				// Open a new code section
-				result += "\n\n```bdocs-tab:example_shell"
+				result += "\n\n```shell"
 			}
 			result += "\n" + line
 			last = "command"
@@ -149,6 +148,7 @@ func FormatExample(input string) string {
 	return result
 }
 
+/*
 func WriteManifest(manifest *Manifest) {
 	jsonbytes, err := json.MarshalIndent(manifest, "", "  ")
 	if err != nil {
@@ -167,6 +167,7 @@ func WriteManifest(manifest *Manifest) {
 	}
 
 }
+*/
 
 func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 	t, err := template.New("command.template").Parse(CommandTemplate)
@@ -195,7 +196,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 	}
 
 	for _, c := range toc.Categories {
-		if len(c.Include) > 0 {
+		/*if len(c.Include) > 0 {
 			// Use the static category include
 			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(c.Include)})
 		} else {
@@ -203,7 +204,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 			fn := strings.Replace(c.Name, " ", "_", -1)
 			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(fmt.Sprintf("_generated_category_%s.md", fn))})
 			WriteCategoryFile(c)
-		}
+		}*/
 
 		// Write each of the commands in this category
 		for _, cm := range c.Commands {
@@ -224,6 +225,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 	}
 }
 
+/*
 func WriteCategoryFile(c Category) {
 	ct, err := template.New("category.template").Parse(CategoryTemplate)
 	if err != nil {
@@ -244,6 +246,7 @@ func WriteCategoryFile(c Category) {
 		os.Exit(1)
 	}
 }
+*/
 
 func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) {
 	params.MainCommand.Description = strings.Replace(params.MainCommand.Description, "|", "&#124;", -1)
@@ -255,7 +258,8 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 			o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
 		}
 	}
-	f, err := os.Create(*GenKubectlDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")
+	//f, err := os.Create(*GenKubectlDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")
+	f, err := os.Create(*GenKubectlDir + "/includes/" + strings.ToLower(params.MainCommand.Name) + ".md")
 	if err != nil {
 		fmt.Printf("Failed to open index: %v", err)
 		os.Exit(1)
@@ -267,5 +271,5 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 		fmt.Printf("Failed to execute template: %v", err)
 		os.Exit(1)
 	}
-	manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.MainCommand.Name) + ".md"})
+	//manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.MainCommand.Name) + ".md"})
 }

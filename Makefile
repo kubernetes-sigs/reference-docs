@@ -1,5 +1,5 @@
 WEBROOT=~/src/github.com/kubernetes/website
-K8SROOT=~/k8s/src/k8s.io/kubernetes
+K8SROOT=~/tmp_kubectl_docs/src/k8s.io/kubernetes
 MINOR_VERSION=15
 
 APISRC=gen-apidocs/generators
@@ -15,28 +15,17 @@ CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 default:
 	@echo "Support commands:\ncli api comp copycli copyapi copycomp updateapispec"
 
+
 # Build kubectl docs
 cleancli:
-	sudo rm -f main
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/includes
-	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/build
-	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
 cli: cleancli
+	# go mod init github.com/generators
 	go run gen-kubectldocs/main.go --kubernetes-version v1_$(MINOR_VERSION)
-	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
-	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/static/docs/reference/generated/kubectl/kubectl-commands.html
-	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/static/docs/reference/generated/kubectl/navData.js
-	cp $(CLISRC)/scroll.js $(CLIDST)/scroll.js
-	cp $(CLISRC)/stylesheet.css $(CLIDST)/stylesheet.css
-	cp $(CLISRC)/tabvisibility.js $(CLIDST)/tabvisibility.js
-	cp $(CLISRC)/node_modules/bootstrap/dist/css/bootstrap.min.css $(CLIDST)/node_modules/bootstrap/dist/css/bootstrap.min.css
-	cp $(CLISRC)/node_modules/highlight.js/styles/default.css $(CLIDST)/node_modules/highlight.js/styles/default.css
-	cp $(CLISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(CLIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
-	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
-	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
+	cp gen-kubectldocs/generators/includes/*.md  $(WEBROOT)/content/en/docs/reference/kubectl/kubectl-reference/
 
 # Build kube component docs
 cleancomp:

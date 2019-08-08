@@ -17,15 +17,12 @@ limitations under the License.
 package generators
 
 import (
-	// "io/ioutil"
-	// "os"
 	"sort"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
 	"k8s.io/kubernetes/pkg/kubectl/cmd"
-	// cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 )
 
 func GetSpec() KubectlSpec {
