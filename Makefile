@@ -1,4 +1,4 @@
-WEBROOT=~/src/github.com/kubernetes/website
+WEBROOT=~/tmp_kubectl_docs/src/github.com/website
 K8SROOT=~/tmp_kubectl_docs/src/k8s.io/kubernetes
 MINOR_VERSION=15
 
@@ -7,14 +7,8 @@ APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERS
 APISRCFONT=$(APISRC)/build/node_modules/font-awesome
 APIDSTFONT=$(APIDST)/node_modules/font-awesome
 
-CLISRC=gen-kubectldocs/generators/build
-CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
-CLISRCFONT=$(CLISRC)/node_modules/font-awesome
-CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
-
 default:
 	@echo "Support commands:\ncli api comp copycli copyapi copycomp updateapispec"
-
 
 # Build kubectl docs
 cleancli:
@@ -25,6 +19,7 @@ cli: cleancli
 	go run gen-kubectldocs/main.go --kubernetes-version v1_$(MINOR_VERSION)
 
 copycli: cli
+	mkdir -p $(WEBROOT)/content/en/docs/reference/kubectl/kubectl-reference/
 	cp gen-kubectldocs/generators/includes/*.md  $(WEBROOT)/content/en/docs/reference/kubectl/kubectl-reference/
 
 # Build kube component docs

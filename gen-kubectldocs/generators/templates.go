@@ -28,7 +28,7 @@ var CommandTemplate = `{{"---\ntitle: "}}{{.MainCommand.Name}}
 
 ### Usage
 
-` + "`" + `$ {{.MainCommand.Usage}}` + "`" + `
+` + "`" + `{{.MainCommand.Usage}}` + "`" + `
 
 {{if .MainCommand.Example}}
 ### Example
@@ -68,7 +68,7 @@ var CommandTemplate = `{{"---\ntitle: "}}{{.MainCommand.Name}}
 
 ### Usage
 
-` + "`" + `$ {{$sub.Usage}}` + "`" + `
+` + "`" + `{{$sub.Usage}}` + "`" + `
 
 {{if $sub.Example}}
 ### Example
@@ -78,7 +78,7 @@ var CommandTemplate = `{{"---\ntitle: "}}{{.MainCommand.Name}}
 {{if $sub.Options}}
 ### Flags
 
-<div class="table-responsive"><table class="table table-bordered">
+<div class="table-responsive kubectl-flags-table"><table class="table table-bordered">
 <thead class="thead-light">
 <tr>
             <th>Name</th>
@@ -96,5 +96,15 @@ var CommandTemplate = `{{"---\ntitle: "}}{{.MainCommand.Name}}
 </table></div>
 {{end}}
 {{end}}
+
+
+<hr>
+
+
+### Version
+<div class="kubectl-reference-copyright">
+
+<a href="https://github.com/kubernetes/kubernetes">Kubectl Reference Docs version 1.15 &#xa9;Copyright 2019 The Kubernetes Authors</a>
+</div>
 
 `

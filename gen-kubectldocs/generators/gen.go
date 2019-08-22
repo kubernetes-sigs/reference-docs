@@ -30,8 +30,6 @@ import (
 
 var KubernetesVersion = flag.String("kubernetes-version", "", "Version of Kubernetes to generate docs for.")
 
-const JsonOutputFile = "manifest.json"
-
 var GenKubectlDir = flag.String("gen-kubectl-dir", "gen-kubectldocs/generators", "Directory containing kubectl files")
 
 func getTocFile() string {
@@ -62,9 +60,11 @@ func GenerateFiles() {
 		os.Exit(1)
 	}
 
+	/*
 	manifest := &Manifest{}
 	manifest.Title = "Kubectl Reference Docs"
 	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2019 The Kubernetes Authors.</a>"
+    */
 
 	NormalizeSpec(&spec)
 
@@ -72,8 +72,8 @@ func GenerateFiles() {
 		os.Mkdir(*GenKubectlDir+"/includes", os.FileMode(0700))
 	}
 
-	WriteCommandFiles(manifest, toc, spec)
-	//WriteManifest(manifest)
+	WriteCommandFiles(toc, spec)
+
 }
 
 func NormalizeSpec(spec *KubectlSpec) {
@@ -93,6 +93,8 @@ func FormatCommand(c *Command) {
 }
 
 func FormatDescription(input string) string {
+
+    /* REVISIT, is this cleanup still needed */
 	/* This fixes an error when the description is a string followed by a
 	   new line and another string that is indented >= four spaces. The marked.js parser
 	   throws a parsing error. Error found in generated file: build/_generated_rollout.md */
@@ -148,28 +150,7 @@ func FormatExample(input string) string {
 	return result
 }
 
-/*
-func WriteManifest(manifest *Manifest) {
-	jsonbytes, err := json.MarshalIndent(manifest, "", "  ")
-	if err != nil {
-		fmt.Printf("Could not Marshal manfiest %+v due to error: %v.\n", manifest, err)
-	} else {
-		jsonfile, err := os.Create(*GenKubectlDir + "/" + JsonOutputFile)
-		if err != nil {
-			fmt.Printf("Could not create file %s due to error: %v.\n", JsonOutputFile, err)
-		} else {
-			defer jsonfile.Close()
-			_, err := jsonfile.Write(jsonbytes)
-			if err != nil {
-				fmt.Printf("Failed to write bytes %s to file %s: %v.\n", jsonbytes, JsonOutputFile, err)
-			}
-		}
-	}
-
-}
-*/
-
-func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
+func WriteCommandFiles(toc ToC, params KubectlSpec) {
 	t, err := template.New("command.template").Parse(CommandTemplate)
 	if err != nil {
 		fmt.Printf("Failed to parse template: %v", err)
@@ -183,6 +164,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 		}
 	}
 
+	/*
 	err = filepath.Walk(getStaticIncludesDir(), func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			to := filepath.Join(*GenKubectlDir, "includes", filepath.Base(path))
@@ -194,25 +176,17 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 		fmt.Printf("Failed to copy includes %v.\n", err)
 		return
 	}
+    */
 
 	for _, c := range toc.Categories {
-		/*if len(c.Include) > 0 {
-			// Use the static category include
-			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(c.Include)})
-		} else {
-			// Write a general category include
-			fn := strings.Replace(c.Name, " ", "_", -1)
-			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(fmt.Sprintf("_generated_category_%s.md", fn))})
-			WriteCategoryFile(c)
-		}*/
 
-		// Write each of the commands in this category
+		// Write each of the commands
 		for _, cm := range c.Commands {
 			if tlc, found := m[cm]; !found {
 				fmt.Printf("Could not find top level command %s\n", cm)
 				os.Exit(1)
 			} else {
-				WriteCommandFile(manifest, t, tlc)
+				WriteCommandFile(t, tlc)
 				delete(m, cm)
 			}
 		}
@@ -225,30 +199,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 	}
 }
 
-/*
-func WriteCategoryFile(c Category) {
-	ct, err := template.New("category.template").Parse(CategoryTemplate)
-	if err != nil {
-		fmt.Printf("Failed to parse template: %v", err)
-		os.Exit(1)
-	}
-
-	fn := strings.Replace(c.Name, " ", "_", -1)
-	f, err := os.Create(*GenKubectlDir + "/includes/_generated_category_" + strings.ToLower(fmt.Sprintf("%s.md", fn)))
-	if err != nil {
-		fmt.Printf("Failed to open index: %v", err)
-		os.Exit(1)
-	}
-	defer f.Close()
-	err = ct.Execute(f, c)
-	if err != nil {
-		fmt.Printf("Failed to execute template: %v", err)
-		os.Exit(1)
-	}
-}
-*/
-
-func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) {
+func WriteCommandFile(t *template.Template, params TopLevelCommand) {
 	params.MainCommand.Description = strings.Replace(params.MainCommand.Description, "|", "&#124;", -1)
 	for _, o := range params.MainCommand.Options {
 		o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
@@ -258,7 +209,7 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 			o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
 		}
 	}
-	//f, err := os.Create(*GenKubectlDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")
+
 	f, err := os.Create(*GenKubectlDir + "/includes/" + strings.ToLower(params.MainCommand.Name) + ".md")
 	if err != nil {
 		fmt.Printf("Failed to open index: %v", err)
@@ -271,5 +222,5 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 		fmt.Printf("Failed to execute template: %v", err)
 		os.Exit(1)
 	}
-	//manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.MainCommand.Name) + ".md"})
+
 }
