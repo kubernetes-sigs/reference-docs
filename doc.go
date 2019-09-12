@@ -18,3 +18,4 @@ limitations under the License.
 // is common to both server and clients.
 // This package should never import specific API objects.
 package main
+func main(){}
