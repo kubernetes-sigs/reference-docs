@@ -40,10 +40,9 @@ func GenerateFiles(path, module string) {
 		os.Exit(1)
 	}
 
-	stop := make(chan struct{})
 	switch module {
 	case "kube-apiserver":
-		apiserver := apiservapp.NewAPIServerCommand(stop)
+		apiserver := apiservapp.NewAPIServerCommand()
 		GenMarkdownTree(apiserver, outDir, true)
 
 	case "kube-controller-manager":
@@ -63,7 +62,7 @@ func GenerateFiles(path, module string) {
 		GenMarkdownTree(scheduler, outDir, true)
 
 	case "kubelet":
-		kubelet := kubeletapp.NewKubeletCommand(stop)
+		kubelet := kubeletapp.NewKubeletCommand()
 		GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
