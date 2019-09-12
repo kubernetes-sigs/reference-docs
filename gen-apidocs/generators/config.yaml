@@ -12,6 +12,7 @@ api_groups:
   - "Certificates"
   - "Coordination"
   - "Core"
+  - "Discovery"
   - "Extensions"
   - "Meta"
   - "Networking"
@@ -62,6 +63,9 @@ resource_categories:
     - name: Endpoints
       version: v1
       group: core
+    - name: EndpointSlice
+      version: v1alpha1
+      group: discovery
     - name: Ingress
       version: v1beta1
       group: networking
@@ -103,7 +107,7 @@ resource_categories:
       version: v1
       group: apps
     - name: CustomResourceDefinition
-      version: v1beta1
+      version: v1
       group: apiextensions
     - name: Event
       version: v1
@@ -115,10 +119,10 @@ resource_categories:
       version: v1
       group: autoscaling
     - name: MutatingWebhookConfiguration
-      version: v1beta1
+      version: v1
       group: admissionregistration
     - name: ValidatingWebhookConfiguration
-      version: v1beta1
+      version: v1
       group: admissionregistration
     - name: PodTemplate
       version: v1
@@ -200,6 +204,9 @@ resource_categories:
     - name: SubjectAccessReview
       version: v1
       group: authorization
+    - name: TokenRequest
+      version: v1
+      group: authentication
     - name: TokenReview
       version: v1
       group: authentication

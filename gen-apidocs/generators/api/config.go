@@ -477,6 +477,27 @@ func (c *Config) mapOperationsToDefinitions() {
 			continue
 		}
 
+		// XXX: The TokenRequest definition has operation defined as "createCoreV1NamespacedServiceAccountToken"!
+		if d.Name == "TokenRequest" && d.Group.String() == "authentication" && d.Version == "v1" {
+			operationId := "createCoreV1NamespacedServiceAccountToken"
+			if o, ok := c.Operations[operationId]; ok {
+				ot := OperationType {
+					Name: "Create",
+					Match: "createCoreV1NamespacedServiceAccountToken",
+				}
+				oc := OperationCategory {
+					Name: "Write Operations",
+					OperationTypes: []OperationType { ot, },
+				}
+
+				o.Definition = d
+				o.Definition.InToc = true
+				o.initExample(c)
+				oc.Operations = append(oc.Operations, o)
+			}
+			continue
+		}
+
 		for i := range c.OperationCategories {
 			oc := c.OperationCategories[i]
 			for j := range oc.OperationTypes {

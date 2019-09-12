@@ -97,10 +97,10 @@ func VisitOperations(specs []*loads.Document, fn func(operation Operation)) {
 }
 
 func IsBlacklistedOperation(o *spec.Operation) bool {
-	return false
-	// return strings.HasSuffix(o.ID, "APIGroup") || // These are just the API group meta datas.  Ignore for now.
-		// strings.HasSuffix(o.ID, "APIResources") || // These are just the API group meta datas.  Ignore for now.
-		// strings.HasSuffix(o.ID, "APIVersions") // || // These are just the API group meta datas.  Ignore for now.
+	// return false
+	return strings.HasSuffix(o.ID, "APIGroup") || // These are just the API group meta datas.  Ignore for now.
+		strings.HasSuffix(o.ID, "APIResources") || // These are just the API group meta datas.  Ignore for now.
+		strings.HasSuffix(o.ID, "APIVersions") // || // These are just the API group meta datas.  Ignore for now.
 		//strings.HasPrefix(o.ID, "connect") || // Skip pod connect apis for now.  There are too many.
 		//strings.HasPrefix(o.ID, "proxy")
 }
