@@ -79,13 +79,13 @@ func (h *HTMLWriter) WriteOverview() {
 }
 
 func (h *HTMLWriter) WriteResourceCategory(name, file string) {
-	writeStaticFile(name, file + ".html", h.DefaultStaticContent(name))
+	writeStaticFile(name, "_" + file + ".html", h.DefaultStaticContent(name))
 	link := strings.Replace(strings.ToLower(name), " ", "-", -1)
 	item := TOCItem {
 		Level: 1,
 		Title: strings.ToUpper(name),
 		Link: "-strong-" + link + "-strong-",
-		File: file + ".html",
+		File: "_" + file + ".html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
