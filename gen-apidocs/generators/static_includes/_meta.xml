@@ -1,0 +1,31 @@
+<part id="strong-metadata-apis-strong">
+ <title>Metadata</title>
+
+ <partintro>
+  <para>Metadata resources are responsible for configuring behavior of your other
+      Resources within the Cluster.</para>
+
+  <para>Common resource types:
+   <variablelist>
+    <varlistentry>
+     <term><link linkend="horizontalpodautoscaler-v1-autoscaling">HorizontalPodAutoscaler</link></term>
+     <listitem>
+      <para>(HPA) for automatically scaling the replicacount of your workloads
+          in response to load.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><link linkend="poddisruptionbudget-v1beta1-policy">PodDisruptionBudget</link></term>
+     <listitem>
+      <para>for configuring how many replicas in a given workload maybe made
+          concurrently unavailable when performing maintenance.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><link linkend="event-v1-core">Event</link></term>
+     <listitem><para>for notification of resource lifecycle events in the cluster.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+ </partintro>

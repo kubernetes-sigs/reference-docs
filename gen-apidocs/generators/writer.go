@@ -44,7 +44,7 @@ type DocWriter interface {
 }
 
 var Backend = flag.String("backend", "go",
-                          "Specify the backend to use for doc generation. Valid options are 'brodocs', 'go'.")
+	"Specify the backend to use for doc generation. Valid options are 'brodocs', 'go', 'docbook'.")
 
 func GenerateFiles() {
 	// Load the yaml config
@@ -67,6 +67,8 @@ func GenerateFiles() {
 		writer = NewMarkdownWriter(config, copyright, title)
 	} else if *Backend == "go" {
 		writer = NewHTMLWriter(config, copyright, title)
+	} else if *Backend == "docbook" {
+		writer = NewDocbookWriter(config, copyright, title)
 	} else {
 		panic(fmt.Sprintf("Unknown backend specified: %s", *Backend))
 	}

@@ -1,0 +1,33 @@
+<part id="strong-config-and-storage-apis-strong">
+ <title>Config &amp; Storage</title>
+
+ <partintro>
+  <para>Config and Storage resources are responsible for injecting data into your
+      applications and persisting data externally to your container.</para>
+
+  <para>Common resource types:
+   <variablelist>
+    <varlistentry>
+     <term><link linkend="configmap-v1-core">ConfigMaps</link></term>
+     <listitem>
+      <para>for providing text key value pairs injected into the application
+          through environment variables, command line arguments, or files</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><link linkend="secret-v1-core">Secrets</link></term>
+     <listitem>
+      <para>for providing binary data injected into the application through files</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><link linkend="volume-v1-core">Volumes</link></term>
+     <listitem>
+      <para>for providing a filesystem external to the Container.  Maybe shared
+          across Containers within the same Pod and have a lifetime persisting
+          beyond a Container or Pod.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </para>
+ </partintro>

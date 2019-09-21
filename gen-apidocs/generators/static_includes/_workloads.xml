@@ -1,0 +1,19 @@
+<part id="strong-workloads-apis-strong">
+ <title>Workloads</title>
+ <partintro>
+  <para>Workloads resources are responsible for managing and running your
+      containers on the cluster. <link linkend="container-v1-core">Containers</link>
+      are created by Controllers through <link linkend="pod-v1-core">Pods</link>.
+      Pods run Containers and provide environmental dependencies such as shared or
+      persistent storage <link linkend="volume-v1-core">Volumes</link> and
+      <link linkend="configmap-v1-core">Configuration</link> or
+      <link linkend="secret-v1-core">Secret</link> data injected into the container.</para>
+
+  <para>The most common Controllers are:
+   <itemizedlist>
+    <listitem><para><link linkend="deployment-v1-apps">Deployments</link> for stateless persistent apps (e.g. HTTP servers).</para></listitem>
+    <listitem><para><link linkend="statefulset-v1-apps">StatefulSets</link> for stateful persistent apps (e.g. databases).</para></listitem>
+    <listitem><para><link linkend="job-v1-batch">Jobs</link> for run-to-completion apps (e.g. batch Jobs).</para></listitem>
+   </itemizedlist>
+  </para>
+ </partintro>

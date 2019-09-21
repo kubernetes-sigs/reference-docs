@@ -1,0 +1,7 @@
+<part id="strong-definitions-strong">
+ <title>Definitions</title>
+ <partintro>
+  <para>This section contains definitions for objects used in the Kubernetes APIs.</para>
+ </partintro>
+ <chapter>
+  <title>Definitions</title>

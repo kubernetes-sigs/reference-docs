@@ -1,0 +1,185 @@
+<preface id="strong-api-overview-strong">
+ <title>API Overview</title>
+
+ <para>Welcome to the Kubernetes API.  You can use the Kubernetes API to read
+       and write Kubernetes resource objects via a Kubernetes API endpoint.</para>
+
+ <sect1 id="resource-categories">
+  <title>Resource Categories</title>
+
+  <para>This is a high-level overview of the basic types of resources provided
+        by the Kubernetes API and their primary functions.</para>
+  <para><firstterm>Workloads</firstterm> are objects you use to manage and run
+        your containers on the cluster.</para>
+  <para><firstterm>Discovery &amp; LB</firstterm> resources are objects you use
+        to "stitch" your workloads together into an externally accessible,
+        load-balanced Service.</para>
+  <para><firstterm>Config &amp; Storage</firstterm> resources are objects you
+		use to inject initialization data into your applications, and to persist
+		data that is external to your container.</para>
+  <para><firstterm>Cluster</firstterm> resources objects define how the cluster
+        itself is configured; these are typically used only by cluster operators.</para>
+  <para><firstterm>Metadata</firstterm> resources are objects you use to
+	    configure the behavior of other resources within the cluster, such as
+	    <systemitem>HorizontalPodAutoscaler</systemitem> for scaling workloads.</para>
+ </sect1>
+
+ <sect1 id="resource-objects">
+  <title>Resource Objects</title>
+
+  <para>Resource objects typically have 3 components:</para>
+  <variablelist>
+   <varlistentry>
+	<term>Resource ObjectMeta</term>
+	<listitem><para>This is metadata about the resource, such as its name, type,
+		api version, annotations, and labels.  This contains fields that maybe
+		updated both by the end user and the system (e.g. annotations).</para>
+	</listitem>
+   </varlistentry>
+   <varlistentry>
+	<term>ResourceSpec</term>
+	<listitem><para>This is defined by the user and describes the desired state
+		of system.  Fill this in when creating or updating an object.</para>
+	</listitem>
+   </varlistentry>
+   <varlistentry>
+	<term>ResourceStatus</term>
+	<listitem><para>This is filled in by the server and reports the current
+		state of the system.  In most cases, users don't need to change this.</para>
+	</listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+
+ <sect1 id="resource-operations">
+  <title>Resource Operations</title>
+
+  <para>Most resources provide the following Operations:</para>
+
+  <sect2 id="resource-operations-create">
+   <title>Create</title>
+
+   <para>Create operations will create the resource in the storage backend.
+	   After a resource is create the system will apply the desired state.</para>
+  </sect2>
+
+  <sect2 id="resource-operations-update">
+   <title>Update</title>
+
+	<para>Updates come in 2 forms, <firstterm>Replace</firstterm> and
+		<firstterm>Patch</firstterm>:
+
+     <variablelist>
+      <varlistentry>
+	   <term>Replace</term>
+       <listitem>
+        <para>Replacing a resource object will update the resource by replacing
+			the existing spec with the provided one.  For read-then-write 
+			operations this is safe because an optimistic lock failure will
+			occur if the resource was modified between the read and write.
+
+		 <note><para>The <emphasis>ResourceStatus</emphasis> will be ignored by
+			the system and will not be updated. To update the status, one must
+			invoke the specific status update operation.</para></note>
+
+         <note><para>Replacing a resource object may not result immediately in
+			changes being propagated to downstream objects.  For instance
+			replacing a <systemitem>ConfigMap</systemitem> or <systemitem>Secret</systemitem>
+			resource will not result in all <emphasis>Pod</emphasis>s seeing the
+			changes unless the <emphasis>Pod</emphasis>s are restarted out of band.</para></note>
+        </para>
+	   </listitem>
+	  </varlistentry>
+
+      <varlistentry>
+	  <term>Patch</term>
+      <listitem><para>Patch will apply a change to a specific field.  How the
+		  change is merged is defined per field.  Lists may either be replaced
+		  or merged.  Merging lists will not preserve ordering.</para>
+
+       <para><emphasis>Patches will never cause optimistic locking failures,
+		   and the last write will win.</emphasis>  Patches are recommended
+		   when the full state is not read before an update, or when failing
+		   on optimistic locking is undesirable. <emphasis>When patching complex
+		   types, arrays and maps, how the patch is applied is defined on a
+		   per-field basis and may either replace the field's current value,
+		   or merge the contents into the current value.</emphasis></para>
+	  </listitem>
+	 </varlistentry>
+    </variablelist>
+   </para>
+  </sect2>
+
+  <sect2 id="resource-operations-read">
+   <title>Read</title>
+
+   <para>Reads come in 3 forms, <emphasis>Get</emphasis>, <emphasis>List</emphasis>
+	and <emphasis>Watch</emphasis>:
+
+    <variablelist>
+     <varlistentry>
+	  <term>Get</term>
+	  <listitem><para>Get will retrieve a specific resource object by name.</para>
+	  </listitem>
+	 </varlistentry>
+     <varlistentry>
+	  <term>List</term>
+	  <listitem><para>List will retrieve all resource objects of a specific type
+		  within a namespace, and the results can be restricted to resources
+		  matching a selector query.</para>
+	  </listitem>
+	 </varlistentry>
+     <varlistentry>
+	  <term>List All Namespaces</term>
+	  <listitem><para>Like <emphasis>List</emphasis> but retrieves resources
+		across all namespaces.</para>
+	  </listitem>
+	 </varlistentry>
+     <varlistentry>
+	  <term>Watch</term>
+	  <listitem><para>Watch will stream results for an object(s) as it is
+		  updated.  Similar to a callback, watch is used to respond to resource
+		  changes.</para>
+	  </listitem>
+	 </varlistentry>
+    </variablelist>
+   </para>
+  </sect2>
+
+  <sect2 id="resource-operations-delete">
+   <title>Delete</title>
+
+   <para>Delete will delete a resource.  Depending on the specific resource,
+	   child objects may or may not be garbage collected by the server.  See
+	   notes on specific resource objects for details.</para>
+  </sect2>
+
+  <sect2 id="resource-operations-additional">
+   <title>Additional Operations</title>
+
+   <para>Resources may define additional operations specific to that resource
+	   type.</para>
+
+   <variablelist>
+	<varlistentry>
+	 <term>Rollback</term>
+	 <listitem><para>Rollback a PodTemplate to a previous version.  Only available
+		 for some resource types.</para>
+	 </listitem>
+	</varlistentry>
+	<varlistentry>
+	 <term>Read / Write Scale</term>
+	 <listitem><para>Read or Update the number of replicas for the given resource.
+		 Only available for some resource types.</para>
+	 </listitem>
+    </varlistentry>
+	<varlistentry>
+	 <term>Read / Write Status</term>
+	 <listitem><para>Read or Update the Status for a resource object.  The
+		 Status can only changed through these update operations.</para>
+	 </listitem>
+	</varlistentry>
+   </variablelist>
+  </sect2>
+ </sect1>
+</preface>

@@ -63,6 +63,33 @@ updateapispec:
 api: cleanapi
 	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
 
+mdapi: cleanapi
+	go run gen-apidocs/main.go --backend=brodocs --config-dir=gen-apidocs/generators --munge-groups=false
+
+# DocBook / HTML / PDF generation
+dbapi: cleanapi
+	go run gen-apidocs/main.go --backend=docbook --config-dir=gen-apidocs/generators --munge-groups=false
+
+dbapi-html: gen-apidocs/generators/build/index.xml
+	(cd gen-apidocs/generators/build && \
+	 mkdir -p html && \
+	 cd html && \
+	 xsltproc /usr/share/xml/docbook/stylesheet/docbook-xsl/html/chunk.xsl ../index.xml)
+
+dbapi-pdf-a4: gen-apidocs/generators/build/index.xml
+	(cd gen-apidocs/generators/build && \
+	 mkdir -p pdf-a4 && \
+	 cd pdf-a4 && \
+	 xsltproc --stringparam paper.type A4 -o index-a4.fo ../../../../xsl/api.xsl ../index.xml && \
+	 fop -pdf index-a4.pdf -fo index-a4.fo)
+
+dbapi-pdf-letter: gen-apidocs/generators/build/index.xml
+	(cd gen-apidocs/generators/build && \
+	 mkdir -p pdf-letter && \
+	 cd pdf-letter && \
+	 xsltproc --stringparam paper.type USletter -o index-letter.fo ../../../../xsl/api.xsl ../index.xml && \
+	 fop -pdf index-letter.pdf -fo index-letter.fo)
+
 # NOTE: The following "sudo" may go away when we remove docker based api doc generator
 cleanapi:
 	sudo rm -rf $(shell pwd)/gen-apidocs/generators/build

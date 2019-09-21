@@ -1,0 +1,7 @@
+<part id="strong-cluster-apis-strong">
+ <title>Cluster</title>
+
+<partintro>
+ <para>Cluster resources are responsible for defining configuration of the
+     cluster itself, and are generally only used by cluster operators.</para>
+</partintro>
