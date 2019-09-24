@@ -74,7 +74,7 @@ dbapi-html: gen-apidocs/generators/build/index.xml
 	(cd gen-apidocs/generators/build && \
 	 mkdir -p html && \
 	 cd html && \
-	 xsltproc /usr/share/xml/docbook/stylesheet/docbook-xsl/html/chunk.xsl ../index.xml)
+     xsltproc ../../../../xsl/api-html.xsl ../index.xml)
 
 dbapi-pdf-a4: gen-apidocs/generators/build/index.xml
 	(cd gen-apidocs/generators/build && \
