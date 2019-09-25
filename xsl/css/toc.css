@@ -1,0 +1,33 @@
+div.toc > div.toc {
+    display: block;
+}
+
+div.toc > div.toc .title {
+    color: #303030;
+    position: relative;
+    padding: 7.5px 10px 7.5px 18px;
+    cursor: pointer;
+    transition: 0.3s
+}
+
+
+div.toc > div.toc .title:hover {
+    color: #3371e3
+}
+
+div#tocContent {
+    display: none;
+}
+
+@media screen and (min-width: 1300px) {
+    div.chapter div.toc > div.toc {
+        display: none;
+    }
+    
+    div#tocContent {
+        display: block;
+        flex: 0 0 100px;
+        margin-left: 20px;
+    }    
+
+}

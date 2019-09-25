@@ -6,12 +6,32 @@
     <xsl:param name="generate.toc">
             book      title
             part      title
+            chapter   toc
     </xsl:param>
         
     <!-- UTF-8 encoding -->
     <xsl:param name="chunker.output.encoding">UTF-8</xsl:param>
 
     <xsl:param name="chunk.section.depth">0</xsl:param>
+
+    <xsl:param name="toc.section.depth">0</xsl:param>
+
+    <xsl:variable name="toc.list.type">div</xsl:variable>
+
+    <xsl:variable name="toc.listitem.type">
+        <xsl:choose>
+            <xsl:when test="$toc.list.type = 'div'">dt</xsl:when>
+            <xsl:otherwise>li</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- this is just hack because dl and ul aren't completely isomorphic -->
+    <xsl:variable name="toc.dd.type">
+        <xsl:choose>
+            <xsl:when test="$toc.list.type = 'div'">dd</xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
     <!-- add meta viewport in HEAD -->
     <xsl:template name="user.head.content">
@@ -21,6 +41,7 @@
         <link rel="stylesheet" href="css/base_fonts.css"/>
         <link rel="stylesheet" href="css/jquery-ui.min.css"/>
         <link rel="stylesheet" href="css/callouts.css"/>
+        <link rel="stylesheet" href="css/toc.css"/>
         <script src="js/anchor-4.1.1.min.js"></script>
         <script src="js/jquery-3.2.1.min.js"></script>
         <script src="js/jquery-ui-1.12.1.min.js"></script>
@@ -73,45 +94,43 @@
                 </section>
 
                 <section id="encyclopedia">
-                    <div id="docsToc">                            
-                            <!-- insert ToC here -->
-                            <xsl:call-template name="user.header.content"/>
-                            <!-- end of ToC -->
+                    <div id="docsToc">
+                        <!-- insert ToC here -->
+                        <xsl:call-template name="user.header.content"/>
+                        <!-- end of ToC -->
                             
-                            <button class="push-menu-close-button" onclick="kub.toggleToc()"></button>
-                        </div>
-                        <div id="docsContent">
-                            
-                            <!-- Insert content here-->
-                            <xsl:copy-of select="$content"/>
-                            <!-- end of content -->
-            
-                        </div>
-                    </section>
-                    <footer>
-                        <main class="light-text">
-                            <nav>
-                                <a href="/docs/home/">Home</a>
-                                <a href="/blog/">Blog</a>
-                                <a href="/partners/">Partners</a>
-                                <a href="/community/">Community</a>
-                                <a href="/case-studies/">Case Studies</a>
-                            </nav>
-                            <div id="miceType" class="center">(C) 2019 The Kubernetes Authors | Documentation Distributed under <a href="https://git.k8s.io/website/LICENSE" class="light-text">CC BY 4.0</a></div>
-                            <div id="miceType" class="center">Copyright (C) 2019 The Linux Foundation (R) All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage" class="light-text">Trademark Usage page</a></div>
-                            <div id="miceType" class="center">ICP license: 京ICP备17074266号-3</div>
-                        </main>
-                    </footer>
-                    <button class="flyout-button" onclick="kub.toggleToc()"></button>
+                        <button class="push-menu-close-button" onclick="kub.toggleToc()"></button>
+                    </div>
+                    <div id="docsContent">
+                        <xsl:copy-of select="$content"/>
+                    </div>
+                    <div id="tocContent">
+                        <xsl:call-template name="make.toc">
+                            <xsl:with-param name="nodes" select="sect1"/>
+                            <xsl:with-param name="toc.title.p"></xsl:with-param>
+                        </xsl:call-template>
+                    </div>
+                </section>
+                <footer>
+                    <main class="light-text">
+                        <nav>
+                            <a href="/docs/home/">Home</a>
+                            <a href="/blog/">Blog</a>
+                            <a href="/partners/">Partners</a>
+                            <a href="/community/">Community</a>
+                            <a href="/case-studies/">Case Studies</a>
+                        </nav>
+                        <div id="miceType" class="center">(C) 2019 The Kubernetes Authors | Documentation Distributed under <a href="https://git.k8s.io/website/LICENSE" class="light-text">CC BY 4.0</a></div>
+                        <div id="miceType" class="center">Copyright (C) 2019 The Linux Foundation (R) All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage" class="light-text">Trademark Usage page</a></div>
+                        <div id="miceType" class="center">ICP license: 京ICP备17074266号-3</div>
+                    </main>
+                </footer>
+                <button class="flyout-button" onclick="kub.toggleToc()"></button>
 
             </body>
         </html>
         <xsl:value-of select="$chunk.append"/>
     </xsl:template>
-
-
-    <xsl:variable name="toc.listitem.type">para</xsl:variable>
-
 
     <!-- insert ToC on each chunk -*- based on make.toc template -->
     <xsl:template name="user.header.content">

@@ -1112,7 +1112,7 @@ dd {
 
 #docsContent {
     position: relative;
-    float: right;
+    flex: 1;
     width: 100%
 }
 
@@ -2772,15 +2772,15 @@ html.search #docsContent h1 {
     }
     #encyclopedia {
         padding: 50px 50px 100px 100px;
-        clear: both
+        clear: both;
+        display: flex;
     }
     #docsToc {
         position: relative;
-        float: left;
+        flex: 0 0 350px;
         padding: 0 20px;
         left: 0;
-        width: 350px;
-        z-index: auto
+        z-index: auto;
     }
     #docsToc .push-menu-close-button {
         display: none
