@@ -80,14 +80,14 @@ dbapi-pdf-a4: gen-apidocs/generators/build/index.xml
 	(cd gen-apidocs/generators/build && \
 	 mkdir -p pdf-a4 && \
 	 cd pdf-a4 && \
-	 xsltproc --stringparam paper.type A4 -o index-a4.fo ../../../../xsl/api.xsl ../index.xml && \
+	 xsltproc --stringparam fop1.extensions 1 --stringparam paper.type A4 -o index-a4.fo ../../../../xsl/api.xsl ../index.xml && \
 	 fop -pdf index-a4.pdf -fo index-a4.fo)
 
 dbapi-pdf-letter: gen-apidocs/generators/build/index.xml
 	(cd gen-apidocs/generators/build && \
 	 mkdir -p pdf-letter && \
 	 cd pdf-letter && \
-	 xsltproc --stringparam paper.type USletter -o index-letter.fo ../../../../xsl/api.xsl ../index.xml && \
+	 xsltproc --stringparam fop1.extensions 1 --stringparam paper.type USletter -o index-letter.fo ../../../../xsl/api.xsl ../index.xml && \
 	 fop -pdf index-letter.pdf -fo index-letter.fo)
 
 # NOTE: The following "sudo" may go away when we remove docker based api doc generator
