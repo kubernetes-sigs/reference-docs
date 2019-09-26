@@ -601,7 +601,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "</DIV>\n</DIV>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.2.1.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"jquery.scrollTo.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-3.3.7.min.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.3.1.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"navData.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"scroll.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
