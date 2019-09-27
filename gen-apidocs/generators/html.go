@@ -543,6 +543,12 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 		os.Exit(1)
 	}
 
+	/*
+	Physical location of files referenced in this block:
+	reference-docs/gen-apidocs/generators/static/bootstrap.min.css
+	reference-docs/gen-apidocs/generators/static/font-awesome.min.css
+	reference-docs/gen-apidocs/generators/static/stylesheet.css
+	*/
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
@@ -594,6 +600,17 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 		}
 	}
 
+	/*
+	Physical locations of files referenced:
+	reference-docs/gen-apidocs/generators/static/jquery.scrollTo.min.js
+	reference-docs/gen-apidocs/generators/static/scroll.js
+
+	Make sure jquery-3.2.1.min.js and bootstrap-4.3.1.min.js point to what's in the kubernetes/website repo:
+	kubernetes/website/static/js/jquery-3.2.1.min.js
+	kubernetes/website/static/js/bootstrap-4.3.1.min.js
+
+	navData.js is dynamically generated - see generateNavJS()
+	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
 	fmt.Fprintf(html, "<DIV id=\"wrapper\">\n")
 	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"body-content container-fluid\">\n")
