@@ -37,17 +37,17 @@
     <xsl:template name="user.head.content">
         <meta name="viewport" content="width=device-width, user-scalable=no"/>
         <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
-        <link rel="stylesheet" href="css/style.css"/>
-        <link rel="stylesheet" href="css/base_fonts.css"/>
-        <link rel="stylesheet" href="css/jquery-ui.min.css"/>
-        <link rel="stylesheet" href="css/callouts.css"/>
-        <link rel="stylesheet" href="css/toc.css"/>
-        <script src="js/anchor-4.1.1.min.js"></script>
-        <script src="js/jquery-3.2.1.min.js"></script>
-        <script src="js/jquery-ui-1.12.1.min.js"></script>
-        <script src="js/bootstrap-4.3.1.min.js"></script>
-        <script src="js/sweetalert-2.1.2.min.js"></script>
-        <script src="js/script.js"></script>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <link rel="stylesheet" href="/css/base_fonts.css"/>
+        <link rel="stylesheet" href="/css/jquery-ui.min.css"/>
+        <link rel="stylesheet" href="/css/callouts.css"/>
+        <link rel="stylesheet" href="/css/toc.css"/>
+        <script src="/js/anchor-4.1.1.min.js"></script>
+        <script src="/js/jquery-3.2.1.min.js"></script>
+        <script src="/js/jquery-ui-1.12.1.min.js"></script>
+        <script src="/js/bootstrap-4.3.1.min.js"></script>
+        <script src="/js/sweetalert-2.1.2.min.js"></script>
+        <script src="/js/script.js"></script>
     </xsl:template>
 
     <!-- page content -->
