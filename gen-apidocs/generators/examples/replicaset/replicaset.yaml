@@ -1,6 +1,6 @@
 note: ReplicaSet Config to run 3 nginx instances.
 sample: |
-  apiVersion: extensions/v1beta1
+  apiVersion: apps/v1
   kind: ReplicaSet
   metadata:
     # Unique key of the ReplicaSet instance
@@ -8,6 +8,9 @@ sample: |
   spec:
     # 3 Pods should exist at all times.
     replicas: 3
+    selector:
+      matchLabels:
+        app: nginx
     template:
       metadata:
         labels:
