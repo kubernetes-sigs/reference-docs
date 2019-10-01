@@ -22,7 +22,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators/api"
+	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
 
 type Manifest struct {
