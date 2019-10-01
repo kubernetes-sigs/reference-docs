@@ -18,7 +18,7 @@ package main
 
 import (
 	"flag"
-	"github.com/kubernetes-incubator/reference-docs/gen-kubectldocs/generators"
+	"github.com/kubernetes-sigs/reference-docs/gen-kubectldocs/generators"
 )
 
 func main() {

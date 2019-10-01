@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kubernetes-incubator/reference-docs/gen-compdocs/generators"
+	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/generators"
 )
 
 func main() {

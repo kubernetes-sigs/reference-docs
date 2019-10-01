@@ -19,7 +19,7 @@ package main
 import (
 	"flag"
 
-	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators"
+	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators"
 )
 
 func main() {

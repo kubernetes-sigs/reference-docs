@@ -18,7 +18,7 @@ package generators
 
 import (
 	"fmt"
-	"github.com/kubernetes-incubator/reference-docs/gen-apidocs/generators/api"
+	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 	"strings"
 )
 
