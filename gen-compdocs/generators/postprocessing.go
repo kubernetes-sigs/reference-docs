@@ -60,7 +60,8 @@ func cleanupForInclude(md string) string {
 		if i == 0 {
 			continue
 		}
-		if line == "### SEE ALSO" {
+
+		if strings.HasSuffix(strings.ToUpper(line), "SEE ALSO") {
 			break
 		}
 
