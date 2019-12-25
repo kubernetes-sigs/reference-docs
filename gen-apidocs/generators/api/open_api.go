@@ -63,6 +63,7 @@ func buildGroupMap(specs []*loads.Document) map[string]string {
 	mapping["apiregistration"] = "apiregistration.k8s.io"
 	mapping["apiextensions"] = "apiextensions.k8s.io"
 	mapping["certificates"] = "certificates.k8s.io"
+	mapping["flowcontrol"] = "flowcontrol.apiserver.k8s.io"
 	mapping["meta"] = "meta"
 	mapping["core"] = "core"
 	mapping["extensions"] = "extensions"

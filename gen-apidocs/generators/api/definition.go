@@ -224,6 +224,10 @@ func (d *Definition) GetOperationGroupName() string {
 	if strings.ToLower(d.Group.String()) == "rbac" {
 		return "RbacAuthorization"
 	}
+	if strings.ToLower(d.Group.String()) == "flowcontrol" {
+		return "FlowcontrolApiserver"
+	}
+
 	return strings.Title(d.Group.String())
 }
 
