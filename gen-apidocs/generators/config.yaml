@@ -64,7 +64,7 @@ resource_categories:
       version: v1
       group: core
     - name: EndpointSlice
-      version: v1alpha1
+      version: v1beta1
       group: discovery
     - name: Ingress
       version: v1beta1
@@ -82,7 +82,7 @@ resource_categories:
       version: v1beta1
       group: storage
     - name: CSINode
-      version: v1beta1
+      version: v1
       group: storage
     - name: Secret
       version: v1
@@ -164,6 +164,9 @@ resource_categories:
     - name: ComponentStatus
       version: v1
       group: core
+    - name: FlowSchema
+      version: v1alpha1
+      group: flowcontrol
     - name: Lease
       version: v1
       group: coordination
@@ -180,6 +183,9 @@ resource_categories:
       version: v1
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
+    - name: PriorityLevelConfiguration
+      version: v1alpha1
+      group: flowcontrol
     - name: ResourceQuota
       version: v1
       group: core
