@@ -35,7 +35,7 @@ const (
 
 // Loads all of the open-api documents
 func LoadOpenApiSpec() []*loads.Document {
-	dir := filepath.Join(*ConfigDir, "openapi-spec/")
+	dir := filepath.Join(*ConfigDir, "config/")
 	docs := []*loads.Document{}
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		ext := filepath.Ext(path)

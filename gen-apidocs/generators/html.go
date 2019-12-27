@@ -151,7 +151,7 @@ func (h *HTMLWriter) WriteDefinitionsOverview() {
 
 func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 	fn := "_" + definitionFileName(d) + ".html"
-	path := *api.ConfigDir + "/includes/" + fn
+	path := *api.ConfigDir + "/build/includes/" + fn
 	f, err := os.Create(path)
 	defer f.Close()
 	if err != nil {
@@ -305,7 +305,7 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 
 func (h *HTMLWriter) WriteResource(r *api.Resource) {
 	fn := "_" + conceptFileName(r.Definition) + ".html"
-	path := *api.ConfigDir + "/includes/" + fn
+	path := *api.ConfigDir + "/build/includes/" + fn
 	w, err := os.Create(path)
 	defer w.Close()
 	if err != nil {
@@ -545,9 +545,9 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 	/*
 	Physical location of files referenced in this block:
-	reference-docs/gen-apidocs/generators/static/bootstrap.min.css
-	reference-docs/gen-apidocs/generators/static/font-awesome.min.css
-	reference-docs/gen-apidocs/generators/static/stylesheet.css
+	reference-docs/gen-apidocs/config/static/bootstrap.min.css
+	reference-docs/gen-apidocs/config/static/font-awesome.min.css
+	reference-docs/gen-apidocs/config/static/stylesheet.css
 	*/
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
@@ -571,7 +571,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 	for _, sec := range h.TOC.Sections {
 		fmt.Printf("Collecting %s ... ", sec.File)
-		content, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", sec.File))
+		content, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "build", "includes", sec.File))
 		if err == nil {
 			buf += string(content)
 		}
@@ -579,7 +579,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 		for _, sub := range sec.SubSections {
 			if len(sub.File) > 0 {
-				subdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", sub.File))
+				subdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "build", "includes", sub.File))
 				fmt.Printf("Collecting %s ... ", sub.File)
 				if err == nil {
 					buf += string(subdata)
@@ -589,7 +589,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 			for _, subsub := range sub.SubSections {
 				if len(subsub.File) > 0 {
-					subsubdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", subsub.File))
+					subsubdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "build", "includes", subsub.File))
 					fmt.Printf("Collecting %s ... ", subsub.File)
 					if err == nil {
 						buf += string(subsubdata)
@@ -602,8 +602,8 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 	/*
 	Physical locations of files referenced:
-	reference-docs/gen-apidocs/generators/static/jquery.scrollTo.min.js
-	reference-docs/gen-apidocs/generators/static/scroll.js
+	reference-docs/gen-apidocs/config/static/jquery.scrollTo.min.js
+	reference-docs/gen-apidocs/config/static/scroll.js
 
 	Make sure jquery-3.2.1.min.js and bootstrap-4.3.1.min.js point to what's in the kubernetes/website repo:
 	kubernetes/website/static/js/jquery-3.2.1.min.js

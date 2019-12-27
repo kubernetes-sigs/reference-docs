@@ -2,10 +2,8 @@ WEBROOT=~/src/github.com/kubernetes/website
 K8SROOT=~/k8s/src/k8s.io/kubernetes
 MINOR_VERSION=17
 
-APISRC=gen-apidocs/generators
+APISRC=gen-apidocs
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
-APISRCFONT=$(APISRC)/build/node_modules/font-awesome
-APIDSTFONT=$(APIDST)/node_modules/font-awesome
 
 CLISRC=gen-kubectldocs/generators/build
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
@@ -58,32 +56,30 @@ copycomp:
 
 # Build api docs
 updateapispec:
-	cp $(K8SROOT)/api/openapi-spec/swagger.json gen-apidocs/generators/openapi-spec/swagger.json
+	cp $(K8SROOT)/api/openapi-spec/swagger.json gen-apidocs/config/swagger.json
 
 api: cleanapi
-	go run gen-apidocs/main.go --config-dir=gen-apidocs/generators --munge-groups=false
+	go run gen-apidocs/main.go --config-dir=gen-apidocs --munge-groups=false
 
-# NOTE: The following "sudo" may go away when we remove docker based api doc generator
 cleanapi:
-	sudo rm -rf $(shell pwd)/gen-apidocs/generators/build
-	sudo rm -rf $(shell pwd)/gen-apidocs/generators/includes
+	rm -rf $(shell pwd)/gen-apidocs/build
 
 copyapi:
 	cp $(APISRC)/build/index.html $(APIDST)/index.html
 	cp $(APISRC)/build/navData.js $(APIDST)/navData.js
-	cp $(APISRC)/static/scroll.js $(APIDST)/scroll.js
+	cp $(APISRC)/config/static/scroll.js $(APIDST)/scroll.js
 	mkdir -p $(APIDST)/css
-	cp $(APISRC)/static/stylesheet.css $(APIDST)/css/stylesheet.css
-	cp $(APISRC)/static/bootstrap.min.css $(APIDST)/css/bootstrap.min.css
-	cp $(APISRC)/static/jquery.scrollTo.min.js $(APIDST)/jquery.scrollTo.min.js
-	cp $(APISRC)/static/font-awesome.min.css $(APIDST)/css/font-awesome.min.css
+	cp $(APISRC)/config/static/stylesheet.css $(APIDST)/css/stylesheet.css
+	cp $(APISRC)/config/static/bootstrap.min.css $(APIDST)/css/bootstrap.min.css
+	cp $(APISRC)/config/static/jquery.scrollTo.min.js $(APIDST)/jquery.scrollTo.min.js
+	cp $(APISRC)/config/static/font-awesome.min.css $(APIDST)/css/font-awesome.min.css
 	mkdir -p $(APIDST)/fonts
-	cp $(APISRC)/static/FontAwesome.otf $(APIDST)/fonts/FontAwesome.otf
-	cp $(APISRC)/static/fontawesome-webfont.eot $(APIDST)/fonts/fontawesome-webfont.eot
-	cp $(APISRC)/static/fontawesome-webfont.svg $(APIDST)/fonts/fontawesome-webfont.svg
-	cp $(APISRC)/static/fontawesome-webfont.ttf $(APIDST)/fonts/fontawesome-webfont.ttf
-	cp $(APISRC)/static/fontawesome-webfont.woff $(APIDST)/fonts/fontawesome-webfont.woff
-	cp $(APISRC)/static/fontawesome-webfont.woff2 $(APIDST)/fonts/fontawesome-webfont.woff2
+	cp $(APISRC)/config/static/FontAwesome.otf $(APIDST)/fonts/FontAwesome.otf
+	cp $(APISRC)/config/static/fontawesome-webfont.eot $(APIDST)/fonts/fontawesome-webfont.eot
+	cp $(APISRC)/config/static/fontawesome-webfont.svg $(APIDST)/fonts/fontawesome-webfont.svg
+	cp $(APISRC)/config/static/fontawesome-webfont.ttf $(APIDST)/fonts/fontawesome-webfont.ttf
+	cp $(APISRC)/config/static/fontawesome-webfont.woff $(APIDST)/fonts/fontawesome-webfont.woff
+	cp $(APISRC)/config/static/fontawesome-webfont.woff2 $(APIDST)/fonts/fontawesome-webfont.woff2
 
 # Build resource docs
 resource: cleanapi

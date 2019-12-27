@@ -269,7 +269,7 @@ func (c *Config) CleanUp() {
 
 // LoadConfigFromYAML reads the config yaml file into a struct
 func LoadConfigFromYAML() *Config {
-	f := filepath.Join(*ConfigDir, "config.yaml")
+	f := filepath.Join(*ConfigDir, "config", "config.yaml")
 
 	config := &Config{}
 	contents, err := ioutil.ReadFile(f)

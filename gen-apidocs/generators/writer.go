@@ -110,13 +110,16 @@ func GenerateFiles() {
 }
 
 func ensureIncludeDir() {
-	if _, err := os.Stat(*api.ConfigDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*api.ConfigDir+"/includes", os.FileMode(0700))
+	if _, err := os.Stat(*api.ConfigDir + "/build"); os.IsNotExist(err) {
+		os.Mkdir(*api.ConfigDir + "/build", os.FileMode(0700))
+	}
+	if _, err := os.Stat(*api.ConfigDir + "/build/includes"); os.IsNotExist(err) {
+		os.Mkdir(*api.ConfigDir + "/build/includes", os.FileMode(0700))
 	}
 }
 
 func getStaticIncludesDir() string {
-	return filepath.Join(*api.ConfigDir, "static_includes")
+	return filepath.Join(*api.ConfigDir, "config", "sections")
 }
 
 func definitionFileName(d *api.Definition) string {
@@ -136,7 +139,7 @@ func getLink(s string) string {
 
 func writeStaticFile(title, location, defaultContent string) {
 	fn := filepath.Join(getStaticIncludesDir(), location)
-	to := filepath.Join(*api.ConfigDir, "includes", location)
+	to := filepath.Join(*api.ConfigDir, "build", "includes", location)
 	_, err := os.Stat(fn)
 	if err == nil {
 		// copy the file if it exists
