@@ -16,7 +16,6 @@ limitations under the License.
 package generators
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -43,9 +42,6 @@ type DocWriter interface {
 	Finalize()
 }
 
-var Backend = flag.String("backend", "go",
-                          "Specify the backend to use for doc generation. Valid options are 'brodocs', 'go'.")
-
 func GenerateFiles() {
 	// Load the yaml config
 	config := api.NewConfig()
@@ -62,15 +58,7 @@ func GenerateFiles() {
 		title = "Kubernetes API Reference Docs"
 	}
 
-	var writer DocWriter
-	if *Backend == "brodocs" {
-		writer = NewMarkdownWriter(config, copyright, title)
-	} else if *Backend == "go" {
-		writer = NewHTMLWriter(config, copyright, title)
-	} else {
-		panic(fmt.Sprintf("Unknown backend specified: %s", *Backend))
-	}
-
+	writer := NewHTMLWriter(config, copyright, title)
 	writer.WriteOverview()
 
 	// Write resource definitions
