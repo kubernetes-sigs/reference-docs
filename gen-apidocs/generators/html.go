@@ -151,7 +151,7 @@ func (h *HTMLWriter) WriteDefinitionsOverview() {
 
 func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 	fn := "_" + definitionFileName(d) + ".html"
-	path := *api.ConfigDir + "/includes/" + fn
+	path := filepath.Join(api.IncludesDir, fn)
 	f, err := os.Create(path)
 	defer f.Close()
 	if err != nil {
@@ -163,7 +163,7 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 	fmt.Fprintf(f, "<H2 id=\"%s\">%s</H2>\n", linkID, nvg)
 	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
 	fmt.Fprintf(f, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
-	            d.GroupDisplayName(), d.Version, d.Name)
+		    d.GroupDisplayName(), d.Version, d.Name)
 	fmt.Fprintf(f, "</TBODY>\n</TABLE>\n")
 
 	fmt.Fprintf(f, "<P>%s</P>\n", d.DescriptionWithEntities)
@@ -305,7 +305,7 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 
 func (h *HTMLWriter) WriteResource(r *api.Resource) {
 	fn := "_" + conceptFileName(r.Definition) + ".html"
-	path := *api.ConfigDir + "/includes/" + fn
+	path := filepath.Join(api.IncludesDir, fn)
 	w, err := os.Create(path)
 	defer w.Close()
 	if err != nil {
@@ -322,7 +322,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 	// GVK
 	fmt.Fprintf(w, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
 	fmt.Fprintf(w, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
-	            r.Definition.GroupDisplayName(), r.Definition.Version, r.Name)
+		    r.Definition.GroupDisplayName(), r.Definition.Version, r.Name)
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 
 	if r.DescriptionWarning != "" {
@@ -422,8 +422,7 @@ func (h *HTMLWriter) generateNavContent() string {
 		// class for level-1 navigation item
 		nav += "<UL>\n"
 		if strings.Contains(sec.Link, "strong") {
-			nav += fmt.Sprintf(" <LI class=\"nav-level-1 strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n",
-							   sec.Link, sec.Title)
+			nav += fmt.Sprintf(" <LI class=\"nav-level-1 strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n", sec.Link, sec.Title)
 		} else {
 			nav += fmt.Sprintf(" <LI class=\"nav-level-1\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
 							   sec.Link, sec.Title)
@@ -445,10 +444,10 @@ func (h *HTMLWriter) generateNavContent() string {
 			nav += "  <UL>\n"
 			if strings.Contains(sub.Link, "strong") {
 				nav += fmt.Sprintf("   <LI class=\"nav-level-%d strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n",
-							        sub.Level, sub.Link, sub.Title)
+						   sub.Level, sub.Link, sub.Title)
 			} else {
 				nav += fmt.Sprintf("   <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-							        sub.Level, sub.Link, sub.Title)
+						   sub.Level, sub.Link, sub.Title)
 			}
 			// close this H1/H2 if possible
 			if len(sub.SubSections) == 0 {
@@ -469,7 +468,7 @@ func (h *HTMLWriter) generateNavContent() string {
 				nav += fmt.Sprintf("   <UL id=\"%s-nav\" style=\"display: none;\">\n", subsub.Link)
 				for _, subsubsub := range subsub.SubSections {
 					nav += fmt.Sprintf("    <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-					                   subsubsub.Level, subsubsub.Link, subsubsub.Title)
+							   subsubsub.Level, subsubsub.Link, subsubsub.Title)
 				}
 				nav += "   </UL>\n"
 			}
@@ -490,9 +489,9 @@ func (h *HTMLWriter) generateNavJS() {
 	// generate NavData
 	var tmp string
 	flatToc := []string{}
-	os.MkdirAll(*api.ConfigDir + "/build", os.ModePerm)
+	os.MkdirAll(api.BuildDir, os.ModePerm)
 
-	navjs, err := os.Create(*api.ConfigDir + "/build/navData.js")
+	navjs, err := os.Create(filepath.Join(api.BuildDir, "navData.js"))
 	defer navjs.Close()
 	if err != nil {
 		os.Stderr.WriteString(fmt.Sprintf("%v", err))
@@ -536,19 +535,14 @@ func (h *HTMLWriter) generateNavJS() {
 }
 
 func (h *HTMLWriter) generateHTML(navContent string) {
-	html, err := os.Create(*api.ConfigDir + "/build/index.html")
+	html, err := os.Create(filepath.Join(api.BuildDir, "index.html"))
 	defer html.Close()
 	if err != nil {
 		os.Stderr.WriteString(fmt.Sprintf("%v", err))
 		os.Exit(1)
 	}
 
-	/*
-	Physical location of files referenced in this block:
-	reference-docs/gen-apidocs/generators/static/bootstrap.min.css
-	reference-docs/gen-apidocs/generators/static/font-awesome.min.css
-	reference-docs/gen-apidocs/generators/static/stylesheet.css
-	*/
+	/* Physical location of files referenced in this block: reference-docs/gen-apidocs/static/css/ */
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
@@ -559,7 +553,6 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"side-nav side-bar-nav\">\n")
 
 	// html buffer
-	// fmt.Fprintf(html, "<BR/><DIV class=\"copyright\">%s</DIV></DIV>\n", h.TOC.Copyright)
 	buf := "<DIV class=\"row\">\n  <DIV class=\"col-md-6 copyright\">\n " + h.TOC.Copyright + "\n  </DIV>\n"
 	buf += "  <DIV class=\"col-md-6 text-right\">\n"
 	buf += fmt.Sprintf("    <DIV>Generated at: %s</DIV>\n", time.Now().Format("2006-01-02 15:04:05 (MST)"))
@@ -568,32 +561,39 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	spec_link := "https://github.com/kubernetes/kubernetes/blob/" + release + "/api/openapi-spec/swagger.json"
 	buf += fmt.Sprintf("    <DIV>API Version: <a href=\"%s\">%s</a></DIV>\n", spec_link, h.Config.SpecVersion)
 	buf += "  </DIV>\n</DIV>"
-
+	const OK = "\033[32mOK\033[0m"
+	const NOT_FOUND = "\033[31mNot found\033[0m"
 	for _, sec := range h.TOC.Sections {
 		fmt.Printf("Collecting %s ... ", sec.File)
-		content, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", sec.File))
+		content, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, sec.File))
 		if err == nil {
 			buf += string(content)
+			fmt.Println(OK)
+		} else {
+			fmt.Println(NOT_FOUND)
 		}
-		fmt.Printf("OK\n")
 
 		for _, sub := range sec.SubSections {
 			if len(sub.File) > 0 {
-				subdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", sub.File))
+				subdata, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, sub.File))
 				fmt.Printf("Collecting %s ... ", sub.File)
 				if err == nil {
 					buf += string(subdata)
-					fmt.Printf("OK\n")
+					fmt.Println(OK)
+				} else {
+					fmt.Println(NOT_FOUND)
 				}
 			}
 
 			for _, subsub := range sub.SubSections {
 				if len(subsub.File) > 0 {
-					subsubdata, err := ioutil.ReadFile(filepath.Join(*api.ConfigDir, "includes", subsub.File))
-					fmt.Printf("Collecting %s ... ", subsub.File)
+					subsubdata, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, subsub.File))
+					fmt.Printf("Collecting %s ...", subsub.File)
 					if err == nil {
 						buf += string(subsubdata)
-						fmt.Printf("OK\n")
+						fmt.Println(OK)
+					} else {
+						fmt.Println(NOT_FOUND)
 					}
 				}
 			}
@@ -602,8 +602,8 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 	/*
 	Physical locations of files referenced:
-	reference-docs/gen-apidocs/generators/static/jquery.scrollTo.min.js
-	reference-docs/gen-apidocs/generators/static/scroll.js
+	reference-docs/gen-apidocs/static/js/jquery.scrollTo.min.js
+	reference-docs/gen-apidocs/static/js/scroll.js
 
 	Make sure jquery-3.2.1.min.js and bootstrap-4.3.1.min.js point to what's in the kubernetes/website repo:
 	kubernetes/website/static/js/jquery-3.2.1.min.js
@@ -617,16 +617,16 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "%s", string(buf))
 	fmt.Fprintf(html, "</DIV>\n</DIV>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.2.1.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"jquery.scrollTo.min.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"js/jquery.scrollTo.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.3.1.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"navData.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"scroll.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"js/navData.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"js/scroll.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
 }
 
 func (h *HTMLWriter) Finalize() {
 	// generate NavData
-	os.MkdirAll(*api.ConfigDir + "/build", os.ModePerm)
+	os.MkdirAll(api.BuildDir, os.ModePerm)
 
 	h.generateNavJS()
 	navContent := h.generateNavContent()

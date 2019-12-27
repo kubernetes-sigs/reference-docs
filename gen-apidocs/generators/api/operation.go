@@ -174,7 +174,7 @@ func (o *Operation) GetGroupVersionKindSub() (string, string, string, string) {
 // initExample reads the example config for an operation
 func (o *Operation) initExample(config *Config) {
 	path := o.Type.Name + ".yaml"
-	path = filepath.Join(*ConfigDir, config.ExampleLocation, o.Definition.Name, path)
+	path = filepath.Join(ConfigDir, config.ExampleLocation, o.Definition.Name, path)
 	path = strings.Replace(path, " ", "_", -1)
 	path = strings.ToLower(path)
 	content, err := ioutil.ReadFile(path)

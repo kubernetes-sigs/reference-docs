@@ -278,7 +278,7 @@ func (d *Definition) GetResourceName() string {
 }
 
 func (d *Definition) initExample(config *Config) {
-	path := filepath.Join(*ConfigDir, config.ExampleLocation, d.Name, d.Name + ".yaml")
+	path := filepath.Join(ConfigDir, config.ExampleLocation, d.Name, d.Name + ".yaml")
 	file := strings.Replace(strings.ToLower(path), " ", "_", -1)
 	content, err := ioutil.ReadFile(file)
 	if err != nil || len(content) <= 0 {
