@@ -22,8 +22,6 @@ import (
 	"strings"
 )
 
-const JsonOutputFile = "manifest.json"
-
 func PrintInfo(config *api.Config) {
 	definitions := config.Definitions
 
@@ -83,75 +81,4 @@ func PrintInfo(config *api.Config) {
 	//		}
 	//	}
 	//}
-}
-
-func PrintDebug(config *api.Config) {
-	operations := config.Operations
-	definitions := config.Definitions
-
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("Operations with no Definitions:\n")
-	for _, o := range operations {
-		if o.Definition == nil {
-			fmt.Printf("%s\n", o.ID)
-		}
-	}
-
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("\n\nDefinitions in Toc:\n")
-	for name, d := range definitions.All {
-		if d.InToc {
-			fmt.Printf("\n\n%s \n\tFields:\n", name)
-			for _, f := range d.Fields {
-				if f.Definition != nil {
-					fmt.Printf("\t\t%s:[%s](%s) - (%s)\n", f.Name, f.Type, f.Definition.Name, f.Description)
-				} else {
-					fmt.Printf("\t\t%s:%s - (%s)\n", f.Name, f.Type, f.Description)
-				}
-			}
-			for _, oc := range d.OperationCategories {
-				fmt.Printf("\t Operation Category [%s]\n", oc.Name)
-				for _, o := range oc.Operations {
-					fmt.Printf("\t\t %s (%s) Type: %s\n", o.Type.Name, o.Path, o.Definition.Name)
-					if len(o.PathParams) > 0 {
-						fmt.Printf("\t\t\t Path Params\n")
-						for _, p := range o.PathParams {
-							fmt.Printf("\t\t\t %s:%s - (%s)\n", p.Name, p.Type, p.Description)
-						}
-					}
-					if len(o.QueryParams) > 0 {
-						fmt.Printf("\t\t\t Query Params\n")
-						for _, p := range o.QueryParams {
-							fmt.Printf("\t\t\t %s:%s - (%s)\n", p.Name, p.Type, p.Description)
-						}
-					}
-					fmt.Printf("\t\t\t Responses\n")
-					for _, hr := range o.HttpResponses {
-						fmt.Printf("\t\t\t %s:%s - (%s)\n", hr.Code, hr.Type, hr.Definition.Name)
-					}
-				}
-			}
-		}
-	}
-
-	fmt.Printf("----------------------------------\n")
-	fmt.Printf("\n\nOther Definitions:\n")
-	for name, d := range definitions.All {
-		if !d.InToc && d.FoundInField {
-			fmt.Printf("\n\n%s \n\tFields:\n", name)
-			for _, f := range d.Fields {
-				if f.Definition != nil {
-					fmt.Printf("\t\t%s:[%s](%s) - (%s)\n", f.Name, f.Type, f.Definition.Name, f.Description)
-				} else {
-					fmt.Printf("\t\t%s:%s - (%s)\n", f.Name, f.Type, f.Description)
-				}
-			}
-			for _, oc := range d.OperationCategories {
-				fmt.Printf("\t Operation Category [%s]\n", oc.Name)
-				for _, o := range oc.Operations {
-					fmt.Printf("\t\t %s (%s) Type: %s\n", o.Type.Name, o.Path, o.Definition.Name)
-				}
-			}
-		}
-	}
 }
