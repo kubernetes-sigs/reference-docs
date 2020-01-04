@@ -33,11 +33,26 @@ import (
 )
 
 var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on errors.")
-var ConfigDir = flag.String("config-dir", "", "Directory contain api files.")
+var WorkDir = flag.String("work-dir", "", "Working directory for the generator.")
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var MungeGroups = flag.Bool("munge-groups", true, "If true, munge the group names for the operations to match.")
 
+// Directory for output files
+var BuildDir string
+// Directory for configuration and data files
+var ConfigDir string
+// Directory for static sections
+var SectionsDir string
+// Directory for temporary files that will eventually get merged into the HTML output file.
+var IncludesDir string
+
 func NewConfig() *Config {
+	// Initialize global directories
+	BuildDir = filepath.Join(*WorkDir, "build")
+	ConfigDir = filepath.Join(*WorkDir, "config")
+	IncludesDir = filepath.Join(BuildDir, "includes")
+	SectionsDir = filepath.Join(ConfigDir, "sections")
+
 	config := LoadConfigFromYAML()
 	specs := LoadOpenApiSpec()
 
@@ -269,9 +284,9 @@ func (c *Config) CleanUp() {
 
 // LoadConfigFromYAML reads the config yaml file into a struct
 func LoadConfigFromYAML() *Config {
-	f := filepath.Join(*ConfigDir, "config.yaml")
-
 	config := &Config{}
+
+	f := filepath.Join(ConfigDir, "config.yaml")
 	contents, err := ioutil.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
