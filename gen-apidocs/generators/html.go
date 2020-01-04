@@ -550,6 +550,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/font-awesome.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/stylesheet.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "</HEAD>\n<BODY>\n")
+	fmt.Fprintf(html, "<DIV id=\"wrapper\">\n")
 	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"side-nav side-bar-nav\">\n")
 
 	// html buffer
@@ -612,8 +613,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	navData.js is dynamically generated - see generateNavJS()
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
-	fmt.Fprintf(html, "<DIV id=\"wrapper\">\n")
-	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"body-content container-fluid\">\n")
+	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"body-content container\">\n")
 	fmt.Fprintf(html, "%s", string(buf))
 	fmt.Fprintf(html, "</DIV>\n</DIV>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.2.1.min.js\"></SCRIPT>\n")
