@@ -16,6 +16,7 @@ categories:
   - convert
   - diff
   - edit
+  - kustomize
   - label
   - patch
   - replace
@@ -51,7 +52,6 @@ categories:
   - completion
   - config
   - explain
-  - kustomize
   - options
   - plugin
   - version
