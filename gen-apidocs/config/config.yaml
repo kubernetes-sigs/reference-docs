@@ -82,7 +82,7 @@ resource_categories:
       version: v1beta1
       group: storage
     - name: CSINode
-      version: v1
+      version: v1beta1
       group: storage
     - name: Secret
       version: v1
