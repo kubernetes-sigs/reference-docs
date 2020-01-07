@@ -35,8 +35,8 @@ cleancli:
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/build
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
-cli: createkubectldir cleancli
-	go run gen-kubectldocs/main.go --kubernetes-version v1_$(MINOR_VERSION)
+cli: cleancli
+	go run gen-kubectldocs/main.go --kubernetes-version v$(shell cat "release.tmp")
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
@@ -69,9 +69,12 @@ comp: cleancomp
 # Build api docs
 updateapispec: createversiondirs
 	@echo "Updating swagger.json for release version $(K8SRELEASE)"
-	cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json
+	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then
+		cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json
+	fi
 	cp $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json gen-apidocs/config/swagger.json
-	rm release.tmp
+	# add this back
+	#rm release.tmp
 
 api: cleanapi
 	go run gen-apidocs/main.go --work-dir=gen-apidocs --munge-groups=false
