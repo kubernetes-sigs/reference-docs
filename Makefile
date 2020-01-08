@@ -69,8 +69,8 @@ comp: cleancomp
 # Build api docs
 updateapispec: createversiondirs
 	@echo "Updating swagger.json for release version $(K8SRELEASE)"
-	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then
-		cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json
+	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then \
+		cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json; \
 	fi
 	cp $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json gen-apidocs/config/swagger.json
 	# add this back
