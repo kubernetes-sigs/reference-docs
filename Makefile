@@ -1,9 +1,18 @@
-WEBROOT=~/src/github.com/kubernetes/website
-K8SROOT=~/k8s/src/k8s.io/kubernetes
-MINOR_VERSION=17
+# To generate docs with Makefile targets
+# from this repo base directory,
+# set the following environment variables
+# to match your environment and release version
+#
+# WEBROOT=~/src/github.com/kubernetes/website
+# K8SROOT=~/k8s/src/k8s.io/kubernetes
+# K8S_RELEASE=1.17
+
+WEBROOT=${K8S_WEBROOT}
+K8SROOT=${K8S_ROOT}
+K8SRELEASE=${K8S_RELEASE}
 
 APISRC=gen-apidocs
-APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v1.$(MINOR_VERSION)
+APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE)
 
 CLISRC=gen-kubectldocs/generators/build
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
@@ -11,7 +20,13 @@ CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 default:
-	@echo "Support commands:\ncli api comp copycli copyapi copycomp updateapispec"
+	@echo "Support commands:\ncli api comp copycli copyapi updateapispec"
+
+# create directories for new release
+createversiondirs:
+	@echo "Calling set_version_dirs.sh"
+	./set_version_dirs.sh
+	@echo "$(K8SRELEASE)" | sed "s/\./_/g" > "release.tmp"
 
 # Build kubectl docs
 cleancli:
@@ -21,7 +36,7 @@ cleancli:
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
 cli: cleancli
-	go run gen-kubectldocs/main.go --kubernetes-version v1_$(MINOR_VERSION)
+	go run gen-kubectldocs/main.go --kubernetes-version v$(shell cat "release.tmp")
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
@@ -36,7 +51,7 @@ copycli: cli
 	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
 	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
 
-# Build kube component docs
+# Build kube component,tool docs
 cleancomp:
 	rm -rf $(shell pwd)/gen-compdocs/build
 
@@ -51,12 +66,15 @@ comp: cleancomp
 	go run gen-compdocs/main.go gen-compdocs/build kubeadm
 	go run gen-compdocs/main.go gen-compdocs/build kubectl
 
-copycomp:
-	cp $(shell pwd)/gen-compdocs/build/* $(WEBROOT)/docs/reference/generated/
-
 # Build api docs
-updateapispec:
-	cp $(K8SROOT)/api/openapi-spec/swagger.json gen-apidocs/config/swagger.json
+updateapispec: createversiondirs
+	@echo "Updating swagger.json for release version $(K8SRELEASE)"
+	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then
+		cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json
+	fi
+	cp $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json gen-apidocs/config/swagger.json
+	# add this back
+	#rm release.tmp
 
 api: cleanapi
 	go run gen-apidocs/main.go --work-dir=gen-apidocs --munge-groups=false
@@ -64,7 +82,7 @@ api: cleanapi
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build
 
-copyapi:
+copyapi: api
 	mkdir -p $(APIDST)
 	cp $(APISRC)/build/index.html $(APIDST)/index.html
 	# copy scroll.js, jquery.scrollTo.min.js and the new navData.js
