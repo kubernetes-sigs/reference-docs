@@ -1,6 +1,6 @@
 note: DaemonSet Config to print the `hostname` on each Node in the cluster every 10 seconds.
 sample: |
-  apiVersion: extensions/v1beta1
+  apiVersion: apps/v1
   kind: DaemonSet
   metadata:
     # Unique key of the DaemonSet instance

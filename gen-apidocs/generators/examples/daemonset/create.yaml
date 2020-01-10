@@ -1,7 +1,7 @@
 name: daemonset-example
 namespace: default
 request: |
-  apiVersion: extensions/v1beta1
+  apiVersion: apps/v1
   kind: DaemonSet
   metadata:
     name: daemonset-example
@@ -26,11 +26,11 @@ request: |
 response: |
   {
     "kind": "DaemonSet",
-    "apiVersion": "extensions/v1beta1",
+    "apiVersion": "apps/v1",
     "metadata": {
       "name": "daemonset-example",
       "namespace": "default",
-      "selfLink": "/apis/extensions/v1beta1/namespaces/default/daemonsets/daemonset-example",
+      "selfLink": "/apis/apps/v1/namespaces/default/daemonsets/daemonset-example",
       "uid": "65552ced-b0e2-11e6-aef0-42010af00229",
       "resourceVersion": "3558",
       "generation": 1,
