@@ -23,6 +23,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -292,7 +293,11 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 
 	fmt.Fprintf(w, "<H3>Response</H3>\n")
 	fmt.Fprintf(w, "<TABLE>\n<THEAD><TR><TH>Code</TH><TH>Description</TH></TR></THEAD>\n<TBODY>\n")
-	for _, p := range o.HttpResponses {
+	responses := o.HttpResponses
+	sort.Slice(responses, func(i, j int) bool {
+		return strings.Compare(responses[i].Name, responses[j].Name) < 0
+	})
+	for _, p := range responses {
 		fmt.Fprintf(w, "<TR><TD>%s", p.Name)
 		if p.Field.Link() != "" {
 			fmt.Fprintf(w, "<br /><I>%s</I>", p.Field.FullLink())
