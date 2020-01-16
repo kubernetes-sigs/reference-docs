@@ -36,7 +36,7 @@ const (
 // Loads all of the open-api documents
 func LoadOpenApiSpec() []*loads.Document {
 	docs := []*loads.Document{}
-	err := filepath.Walk(ConfigDir, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(VersionedConfigDir, func(path string, info os.FileInfo, err error) error {
 		ext := filepath.Ext(path)
 		if ext != ".json" {
 			return nil
@@ -153,11 +153,9 @@ func LoadDefinitions(specs []*loads.Document, s *Definitions) {
 	}
 }
 
-
 func ParseSpecInfo(specs []*loads.Document, cfg *Config) {
 	// The following loop can be optimized, there is now only one spec for analysis
 	for _, spec := range specs {
 		cfg.SpecTitle = spec.Spec().Info.InfoProps.Title
-		cfg.SpecVersion = spec.Spec().Info.InfoProps.Version
 	}
 }

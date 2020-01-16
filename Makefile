@@ -68,16 +68,16 @@ comp: cleancomp
 
 # Build api docs
 updateapispec: createversiondirs
-	@echo "Updating swagger.json for release version $(K8SRELEASE)"
+	@echo "Updating swagger.json for release v$(K8SRELEASE).0"
 	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then \
-		cp $(K8SROOT)/api/openapi-spec/swagger.json $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json; \
+		git show "v(K8SRELEASE).0:$(K8SROOT)/api/openapi-spec/swagger.json > swagger.json.$(K8SRELEASE)"; \
+		mv swagger.json.$(K8SRELEASE) $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json; \
 	fi
-	cp $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json gen-apidocs/config/swagger.json
-	# add this back
-	#rm release.tmp
+	# add this to a target
+	# rm release.tmp
 
 api: cleanapi
-	go run gen-apidocs/main.go --work-dir=gen-apidocs --munge-groups=false
+	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE) --work-dir=gen-apidocs --munge-groups=false
 
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build

@@ -19,7 +19,6 @@ package api
 import (
 	"flag"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"html"
 	"io/ioutil"
 	"log"
@@ -29,6 +28,8 @@ import (
 	"strings"
 	"unicode"
 
+	"gopkg.in/yaml.v2"
+
 	"github.com/go-openapi/loads"
 )
 
@@ -36,15 +37,22 @@ var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on error
 var WorkDir = flag.String("work-dir", "", "Working directory for the generator.")
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var MungeGroups = flag.Bool("munge-groups", true, "If true, munge the group names for the operations to match.")
+var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
 
 // Directory for output files
 var BuildDir string
+
 // Directory for configuration and data files
 var ConfigDir string
+
 // Directory for static sections
 var SectionsDir string
+
 // Directory for temporary files that will eventually get merged into the HTML output file.
 var IncludesDir string
+
+// Directory for versioned configuration file and swagger.json
+var VersionedConfigDir string
 
 func NewConfig() *Config {
 	// Initialize global directories
@@ -53,11 +61,19 @@ func NewConfig() *Config {
 	IncludesDir = filepath.Join(BuildDir, "includes")
 	SectionsDir = filepath.Join(ConfigDir, "sections")
 
+	var versionChar = "v"
+
+	var k8sRelease = fmt.Sprintf("%s%s", versionChar, strings.ReplaceAll(*KubernetesRelease, ".", "_"))
+	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
+
 	config := LoadConfigFromYAML()
 	specs := LoadOpenApiSpec()
 
 	// Parse spec version
 	ParseSpecInfo(specs, config)
+
+	// Set the spec version
+	config.SpecVersion = fmt.Sprintf("%s%s.%s", versionChar, *KubernetesRelease, "0")
 
 	// Initialize all of the operations
 	config.Definitions = NewDefinitions(specs)
@@ -134,15 +150,15 @@ func (c *Config) genConfigFromTags(specs []*loads.Document) {
 		c.ApiGroups = append(c.ApiGroups, ApiGroup(groupName))
 		rc := ResourceCategory{
 			Include: string(g),
-			Name: groupName,
+			Name:    groupName,
 		}
 		defList := groupsMap[g]
 		sort.Sort(defList)
 		for _, d := range defList {
 			r := &Resource{
-				Name: d.Name,
-				Group: string(d.Group),
-				Version: string(d.Version),
+				Name:       d.Name,
+				Group:      string(d.Group),
+				Version:    string(d.Version),
 				Definition: d,
 			}
 			rc.Resources = append(rc.Resources, r)
@@ -286,7 +302,7 @@ func (c *Config) CleanUp() {
 func LoadConfigFromYAML() *Config {
 	config := &Config{}
 
-	f := filepath.Join(ConfigDir, "config.yaml")
+	f := filepath.Join(VersionedConfigDir, "config.yaml")
 	contents, err := ioutil.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
@@ -383,7 +399,6 @@ func LoadConfigFromYAML() *Config {
 
 	return config
 }
-
 
 const (
 	PATH  = "path"
@@ -496,13 +511,13 @@ func (c *Config) mapOperationsToDefinitions() {
 		if d.Name == "TokenRequest" && d.Group.String() == "authentication" && d.Version == "v1" {
 			operationId := "createCoreV1NamespacedServiceAccountToken"
 			if o, ok := c.Operations[operationId]; ok {
-				ot := OperationType {
-					Name: "Create",
+				ot := OperationType{
+					Name:  "Create",
 					Match: "createCoreV1NamespacedServiceAccountToken",
 				}
-				oc := OperationCategory {
-					Name: "Write Operations",
-					OperationTypes: []OperationType { ot, },
+				oc := OperationCategory{
+					Name:           "Write Operations",
+					OperationTypes: []OperationType{ot},
 				}
 
 				o.Definition = d
