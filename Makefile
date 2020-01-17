@@ -1,4 +1,4 @@
-# To generate docs with Makefile targets
+# To generate docs with make targets
 # from this repo base directory,
 # set the following environment variables
 # to match your environment and release version
@@ -11,6 +11,9 @@ WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
 
+# create a directory name from release string: 1.17 -> 1_17
+K8SRELEASEDIR=$(shell echo "$(K8SRELEASE)" | sed "s/\./_/g")
+
 APISRC=gen-apidocs
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE)
 
@@ -20,13 +23,13 @@ CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 default:
-	@echo "Support commands:\ncli api comp copycli copyapi updateapispec"
+	@echo "Support commands:\ncli api comp copycli copyapi createversiondirs updateapispec"
 
 # create directories for new release
 createversiondirs:
 	@echo "Calling set_version_dirs.sh"
 	./set_version_dirs.sh
-	@echo "$(K8SRELEASE)" | sed "s/\./_/g" > "release.tmp"
+	@echo "K8S Release dir: $(K8SRELEASEDIR)"
 
 # Build kubectl docs
 cleancli:
@@ -36,7 +39,7 @@ cleancli:
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
 cli: cleancli
-	go run gen-kubectldocs/main.go --kubernetes-version v$(shell cat "release.tmp")
+	go run gen-kubectldocs/main.go --kubernetes-version v$(K8SRELEASEDIR)
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
 
 copycli: cli
@@ -69,12 +72,10 @@ comp: cleancomp
 # Build api docs
 updateapispec: createversiondirs
 	@echo "Updating swagger.json for release v$(K8SRELEASE).0"
-	if ! [ -f $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json ]; then \
-		git show "v(K8SRELEASE).0:$(K8SROOT)/api/openapi-spec/swagger.json > swagger.json.$(K8SRELEASE)"; \
-		mv swagger.json.$(K8SRELEASE) $(APISRC)/config/v$(shell cat "release.tmp")/swagger.json; \
+	if ! [ -f $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json ]; then \
+		git show v$(K8SRELEASE).0:$(K8SROOT)/api/openapi-spec/swagger.json > swagger.json.$(K8SRELEASE); \
+		mv swagger.json.$(K8SRELEASE) $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json; \
 	fi
-	# add this to a target
-	# rm release.tmp
 
 api: cleanapi
 	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE) --work-dir=gen-apidocs --munge-groups=false
