@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# K8S_RELEASE must be set in your environment, for example:1.17
+# K8S_RELEASE must be set in your environment, for example, 1.17
 if [ -n "${K8S_RELEASE}" ]; then
 	echo "Setting up reference directories for ${K8S_RELEASE} release."
 else
@@ -12,23 +12,22 @@ ROOTDIR=$(pwd)
 echo base dir ${ROOTDIR}
 
 # change <major>.<minor> to <major>_<minor>
-echo "${K8S_RELEASE}" | sed "s/\./_/g" > k.tmp
-
-# example: 1_17
-VERSION_DIR="$( cat k.tmp )"
+VERSION_DIR="$(echo "${K8S_RELEASE}" | sed "s/\./_/g")"
 echo version ${VERSION_DIR}
 
-echo ${VERSION_DIR} | sed "s/[0-9]_//g" > minor.tmp
-echo ${VERSION_DIR} | sed "s/_[0-9]*//g" > major.tmp
+MINOR_VERSION="$(echo ${VERSION_DIR} | sed "s/[0-9]_//g")"
+echo minor version ${MINOR_VERSION}
 
-MINOR_VERSION="$( cat minor.tmp )"
-MAJOR_VERSION="$( cat major.tmp )"
+MAJOR_VERSION="$(echo ${VERSION_DIR} | sed "s/_[0-9]*//g")"
+echo major version ${MAJOR_VERSION}
 
 ONE=1
+
 PREV_VERSION_DIR="v""${MAJOR_VERSION}_""$((${MINOR_VERSION} - ${ONE}))"
-echo previous version ${PREV_VERSION_DIR}
+echo previous version dir ${PREV_VERSION_DIR}
+
 VERSION_DIR="v${VERSION_DIR}"
-echo version ${VERSION_DIR}
+echo version dir ${VERSION_DIR}
 
 # Set up versioned directories for new release
 
@@ -39,7 +38,7 @@ if ! [ -f "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/config.yaml" ]; 
 		cp -r ${ROOTDIR}/gen-kubectldocs/generators/${PREV_VERSION_DIR}/* ${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/
 fi
 
-# api reference config.yaml, swagger.json
+# api reference config.yaml
 mkdir -p ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}
 
 # config.yaml
@@ -53,10 +52,7 @@ if ! [ -f "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml" ]; then
 fi
 
 # copy versioned files to the base config dir
+# revisit
 cp ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml ${ROOTDIR}/gen-apidocs/config/config.yaml
 
-# swagger.json
-# copy swagger file using makefile target
-
-# clean up
-rm k.tmp; rm minor.tmp; rm major.tmp
+# api reference swagger.json is copied by updateapispec make target
