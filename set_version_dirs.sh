@@ -43,9 +43,9 @@ mkdir -p ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}
 
 # config.yaml
 if ! [ -f "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml" ]; then
-	if [ -f "${ROOTDIR}/gen-apidocs/config/${PREV_MINOR_VERSION}/config.yaml" ]; then
-			cp ${ROOTDIR}/gen-apidocs/config/${PREV_MINOR_VERSION}/config.yaml ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml
-			echo "Using config file: ${ROOTDIR}/gen-apidocs/config/${PREV_MINOR_VERSION}/config.yaml"
+	if [ -f "${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml" ]; then
+			cp ${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml
+			echo "Using config file: ${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml"
 	else
 			cp ${ROOTDIR}/gen-apidocs/config/config.yaml ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml
 	fi

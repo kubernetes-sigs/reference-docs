@@ -70,11 +70,17 @@ comp: cleancomp
 	go run gen-compdocs/main.go gen-compdocs/build kubectl
 
 # Build api docs
+# Note: May want to clean dir every time and fetch new copy of swagger.json
+# validate size > 0 of swagger.json
 updateapispec: createversiondirs
 	@echo "Updating swagger.json for release v$(K8SRELEASE).0"
+	CURDIR=$(shell pwd)
 	if ! [ -f $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json ]; then \
-		git show v$(K8SRELEASE).0:$(K8SROOT)/api/openapi-spec/swagger.json > swagger.json.$(K8SRELEASE); \
-		mv swagger.json.$(K8SRELEASE) $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json; \
+		cd $(K8SROOT); \
+		git show "v$(K8SRELEASE).0:api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
+		mv swagger.json.$(K8SRELEASE) $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json; \
+		cd $(CURDIR); \
+		echo Current dir $(shell pwd); \
 	fi
 
 api: cleanapi
