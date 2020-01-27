@@ -17,13 +17,11 @@ K8SRELEASEDIR=$(shell echo "$(K8SRELEASE)" | sed "s/\./_/g")
 APISRC=gen-apidocs
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE)
 
-CLISRC=gen-kubectldocs/generators/build
+CLISRC=gen-kubectldocs
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
-CLISRCFONT=$(CLISRC)/node_modules/font-awesome
-CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 default:
-	@echo "Support commands:\ncli api comp copycli copyapi createversiondirs updateapispec"
+	@echo "Support commands:\napi cli comp copyapi copycli createversiondirs updateapispec"
 
 # create directories for new release
 createversiondirs:
@@ -33,26 +31,27 @@ createversiondirs:
 
 # Build kubectl docs
 cleancli:
-	sudo rm -f main
-	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/includes
-	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/build
-	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
+	rm -rf $(shell pwd)/gen-kubectldocs/build
 
 cli: cleancli
-	go run gen-kubectldocs/main.go --kubernetes-version v$(K8SRELEASEDIR)
-	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
+	go run gen-kubectldocs/main.go --kubernetes-release=$(K8SRELEASE)
 
 copycli: cli
-	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/static/docs/reference/generated/kubectl/kubectl-commands.html
-	cp gen-kubectldocs/generators/build/navData.js $(WEBROOT)/static/docs/reference/generated/kubectl/navData.js
-	cp $(CLISRC)/scroll.js $(CLIDST)/scroll.js
-	cp $(CLISRC)/stylesheet.css $(CLIDST)/stylesheet.css
-	cp $(CLISRC)/tabvisibility.js $(CLIDST)/tabvisibility.js
-	cp $(CLISRC)/node_modules/bootstrap/dist/css/bootstrap.min.css $(CLIDST)/node_modules/bootstrap/dist/css/bootstrap.min.css
-	cp $(CLISRC)/node_modules/highlight.js/styles/default.css $(CLIDST)/node_modules/highlight.js/styles/default.css
-	cp $(CLISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(CLIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
-	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
-	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
+# make a versioned directory?
+	cp $(CLISRC)/build/kubectl-commands.html $(CLIDST)/kubectl-commands.html
+
+	# copy js files
+	mkdir -p $(CLIDST)/js
+	cp $(CLISRC)/build/navData.js $(CLIDST)/js/navData.js
+	cp $(CLISRC)/static/js/* $(CLIDST)/js/
+
+	# copy css files
+	mkdir -p $(CLIDST)/css
+	cp $(CLISRC)/static/css/* $(CLIDST)/css/
+
+	# copy fonts data
+	mkdir -p $(CLIDST)/fonts
+	cp $(CLISRC)/static/fonts/* $(CLIDST)/fonts/
 
 # Build kube component,tool docs
 cleancomp:

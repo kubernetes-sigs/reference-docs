@@ -50,23 +50,13 @@ type Command struct {
 	Usage            string   `yaml:",omitempty"`
 }
 
-type Manifest struct {
-	Docs     []Doc    `json:"docs,omitempty"`
-	Title     string `json:"title,omitempty"`
-	Copyright string `json:"copyright,omitempty"`
-}
-
-type Doc struct {
-	Filename string `json:"filename,omitempty"`
-}
-
 type ToC struct {
 	Categories []Category `yaml:",omitempty"`
 }
 
 type Category struct {
-	Name     string `yaml:",omitempty"`
+	Name     string   `yaml:",omitempty"`
 	Commands []string `yaml:",omitempty"`
-	Include string `yaml:",omitempty"`
+	Include  string   `yaml:",omitempty"`
 }
 

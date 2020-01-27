@@ -1,6 +1,5 @@
 categories:
 - name: GETTING STARTED
-  include: _getting_started.md
   commands:
   - create
   - delete
@@ -11,7 +10,6 @@ categories:
   - run
   - set
 - name: DEPLOY
-  include: _app_management.md
   commands:
   - autoscale
   - rollout
@@ -26,7 +24,6 @@ categories:
   - top
   - uncordon
 - name: ADVANCED COMMANDS
-  include: _app_management.md
   commands:
   - apply
   - convert
@@ -36,7 +33,6 @@ categories:
   - replace
   - wait
 - name: TROUBLESHOOTING AND DEBUGGING
-  include: _working_with_apps.md
   commands:
   - attach
   - auth
@@ -63,4 +59,3 @@ categories:
 - name: DEPRECATED COMMANDS
   commands:
   - rolling-update
- 
