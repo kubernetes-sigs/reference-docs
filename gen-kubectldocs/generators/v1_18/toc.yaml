@@ -55,6 +55,4 @@ categories:
   - options
   - plugin
   - version
-- name: DEPRECATED COMMANDS
-  commands:
-  - rolling-update
+
