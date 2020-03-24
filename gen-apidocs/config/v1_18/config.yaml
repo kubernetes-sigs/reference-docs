@@ -69,6 +69,9 @@ resource_categories:
     - name: Ingress
       version: v1beta1
       group: networking
+    - name: IngressClass
+      version: v1beta1
+      group: networking
     - name: Service
       version: v1
       group: core
@@ -79,7 +82,7 @@ resource_categories:
       version: v1
       group: core
     - name: CSIDriver
-      version: v1beta1
+      version: v1
       group: storage
     - name: CSINode
       version: v1
