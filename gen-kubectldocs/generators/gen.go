@@ -65,7 +65,7 @@ func GenerateFiles() {
 
 	manifest := &Manifest{}
 	manifest.Title = "Kubectl Reference Docs"
-	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2019 The Kubernetes Authors.</a>"
+	manifest.Copyright = "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2020 The Kubernetes Authors.</a>"
 
 	NormalizeSpec(&spec)
 
@@ -246,13 +246,19 @@ func WriteCategoryFile(c Category) {
 }
 
 func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) {
-	params.MainCommand.Description = strings.Replace(params.MainCommand.Description, "|", "&#124;", -1)
+	replacer := strings.NewReplacer(
+		"|", "&#124;",
+		"<", "&lt;",
+		">", "&gt;",
+		)
+
+	params.MainCommand.Description = replacer.Replace(params.MainCommand.Description)
 	for _, o := range params.MainCommand.Options {
-		o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
+		o.Usage = replacer.Replace(o.Usage)
 	}
 	for _, sc := range params.SubCommands {
 		for _, o := range sc.Options {
-			o.Usage = strings.Replace(o.Usage, "|", "&#124;", -1)
+			o.Usage = replacer.Replace(o.Usage)
 		}
 	}
 	f, err := os.Create(*GenKubectlDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")

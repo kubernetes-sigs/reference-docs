@@ -3,8 +3,8 @@
 # set the following environment variables
 # to match your environment and release version
 #
-# WEBROOT=~/src/github.com/kubernetes/website
-# K8SROOT=~/k8s/src/k8s.io/kubernetes
+# K8S_WEBROOT=~/src/github.com/kubernetes/website
+# K8S_ROOT=~/k8s/src/k8s.io/kubernetes
 # K8S_RELEASE=1.17
 
 WEBROOT=${K8S_WEBROOT}
@@ -40,7 +40,7 @@ cleancli:
 
 cli: cleancli
 	go run gen-kubectldocs/main.go --kubernetes-version v$(K8SRELEASEDIR)
-	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest pwittrock/brodocs
+	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest brianpursley/brodocs:latest
 
 copycli: cli
 	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/static/docs/reference/generated/kubectl/kubectl-commands.html
@@ -53,6 +53,7 @@ copycli: cli
 	cp $(CLISRC)/node_modules/jquery.scrollto/jquery.scrollTo.min.js $(CLIDST)/node_modules/jquery.scrollto/jquery.scrollTo.min.js
 	cp $(CLISRC)/node_modules/jquery/dist/jquery.min.js $(CLIDST)/node_modules/jquery/dist/jquery.min.js
 	cp $(CLISRCFONT)/css/font-awesome.min.css $(CLIDSTFONT)/css/font-awesome.min.css
+	cp -r $(CLISRCFONT)/fonts $(CLIDSTFONT)
 
 # Build kube component,tool docs
 cleancomp:
