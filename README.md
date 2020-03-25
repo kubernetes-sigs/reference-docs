@@ -2,6 +2,8 @@
 
 Tools to build reference documentation for Kubernetes APIs and CLIs.
 
+See [Generating Reference Documentation for kubectl Commands](https://kubernetes.io/docs/contribute/generate-ref-docs/kubectl/) for information on how to generate kubectl reference docs.
+
 ## Community, discussion, contribution, and support
 
 Learn how to engage with the Kubernetes community on the [community page](http://kubernetes.io/community/).
