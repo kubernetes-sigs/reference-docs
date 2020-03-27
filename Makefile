@@ -103,3 +103,7 @@ copyapi: api
 	# copy fonts data
 	mkdir -p $(APIDST)/fonts
 	cp $(APISRC)/static/fonts/* $(APIDST)/fonts/
+
+# Build Kube Scheduler API Reference
+kubeschedapi:
+	echo "Testing kube-scheduler api ref build"
