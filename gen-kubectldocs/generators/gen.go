@@ -250,7 +250,9 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 		"|", "&#124;",
 		"<", "&lt;",
 		">", "&gt;",
-		)
+		"[", "<span>[</span>",
+		"]", "<span>]</span>",
+	)
 
 	params.MainCommand.Description = replacer.Replace(params.MainCommand.Description)
 	for _, o := range params.MainCommand.Options {
