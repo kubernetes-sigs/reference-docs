@@ -21,4 +21,4 @@ sample: |
         containers:
         - name: nginx
           # Run this image
-          image: nginx:1.10
+          image: nginx:1.14
