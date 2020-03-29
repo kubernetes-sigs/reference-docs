@@ -1,6 +1,6 @@
 name: deployment-example
 namespace: default
-request: '{"spec":{"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.11"}]}}}}'
+request: '{"spec":{"template":{"spec":{"containers":[{"name":"nginx","image":"nginx:1.16"}]}}}}'
 response: |
   {
     "kind": "Deployment",
@@ -38,7 +38,7 @@ response: |
           "containers": [
             {
               "name": "nginx",
-              "image": "nginx:1.11",
+              "image": "nginx:1.16",
               "ports": [
                 {
                   "containerPort": 80,
