@@ -292,7 +292,7 @@ func (d *Definition) initExample(config *Config) {
 
 func (d *Definition) GetSamples() []ExampleText {
 	r := []ExampleText{}
-	for _, p := range GetExampleProviders() {
+	for _, p := range EmptyExampleProviders {
 		r = append(r, ExampleText{
 			Tab:  p.GetTab(),
 			Type: p.GetSampleType(),

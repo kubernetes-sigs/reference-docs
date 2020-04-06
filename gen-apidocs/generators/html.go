@@ -192,7 +192,7 @@ func (h *HTMLWriter) writeSample(w io.Writer, d *api.Definition) {
 		linkID := sType + "-" + d.LinkID()
 		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-toggle=\"collapse\"\n")
 		fmt.Fprintf(w, "  data-target=\"#%s\" aria-controls=\"%s\"\n", linkID, linkID)
-		fmt.Fprintf(w, "  aria-expanded=\"false\">%s example</BUTTON>\n", sType)
+		fmt.Fprintf(w, "  aria-expanded=\"false\">%s</BUTTON>\n", sType)
 	}
 
 	for _, s := range d.GetSamples() {
