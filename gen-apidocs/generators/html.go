@@ -555,8 +555,9 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/font-awesome.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/stylesheet.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "</HEAD>\n<BODY>\n")
-	fmt.Fprintf(html, "<DIV id=\"wrapper\">\n")
-	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"side-nav side-bar-nav\">\n")
+	fmt.Fprintf(html, "<DIV id=\"wrapper\" class=\"container-fluid\">\n")
+	fmt.Fprintf(html, "<DIV class=\"row\">\n")
+	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"col-xs-4 col-sm-3 col-md-2 side-nav side-bar-nav\">\n")
 
 	// html buffer
 	buf := "<DIV class=\"row\">\n  <DIV class=\"col-md-6 copyright\">\n " + h.TOC.Copyright + "\n  </DIV>\n"
@@ -618,9 +619,9 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	navData.js is dynamically generated - see generateNavJS()
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
-	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"body-content container\">\n")
+	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"col-xs-8 offset-xs-4 col-sm-9 offset-sm-3 col-md-10 offset-md-2 body-content\">\n")
 	fmt.Fprintf(html, "%s", string(buf))
-	fmt.Fprintf(html, "</DIV>\n</DIV>\n")
+	fmt.Fprintf(html, "\n</DIV>\n</DIV>\n</DIV>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.2.1.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"js/jquery.scrollTo.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.3.1.min.js\"></SCRIPT>\n")
