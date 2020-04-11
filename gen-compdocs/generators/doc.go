@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -78,9 +79,9 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		long = short
 	}
 
-	//testing tool-reference template (kb)
+	// Write a Markdown file with the tool-reference template
 	if with_title {
-		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_template: templates/tool-reference\nweight: 28\n---\n\n", name); err != nil {
+		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_template: templates/tool-reference\nweight: 30\n---\n\n", name); err != nil {
 			return err
 		}
 
@@ -293,17 +294,18 @@ func flagUsages(f *pflag.FlagSet) string {
 
 	lines := make([]string, 0)
 
-	lines = append(lines, "<table style=\"width: 100%%; table-layout: fixed;\">\n  <colgroup>\n" +
-		"    <col span=\"1\" style=\"width: 10px;\" />\n" +
-		"    <col span=\"1\" />\n" +
-		"  </colgroup>\n" +
-        "  <tbody>\n")
+	lines = append(lines, "   <table style=\"width: 100%%; table-layout: fixed;\">\n<colgroup>\n" +
+		"<col span=\"1\" style=\"width: 10px;\" />\n" +
+		"<col span=\"1\" />\n" +
+		"</colgroup>\n" +
+        "<tbody>\n")
 	f.VisitAll(func(flag *pflag.Flag) {
 		if len(flag.Deprecated) > 0 || flag.Hidden {
 			return
 		}
 
-		line := "    <tr>\n      <td colspan=\"2\">"
+		line := "<tr>\n<td colspan=\"2\">"
+
 		if len(flag.Shorthand) > 0 && len(flag.ShorthandDeprecated) == 0 {
 			line += fmt.Sprintf("-%s, --%s", flag.Shorthand, flag.Name)
 		} else {
@@ -331,25 +333,37 @@ func flagUsages(f *pflag.FlagSet) string {
 				// There are cases where the string is very very long, split
 				// it to mutiple lines manually
 				defaultValue := flag.DefValue
+
 				if len(defaultValue) > 40 {
 					defaultValue = strings.Replace(defaultValue, ",", ",<br />", -1)
 				}
-				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
+				// clean up kubectl cache-dir flag value
+				if strings.Compare(flag.Name, "cache-dir") == 0 {
+					myUser, err := user.Current()
+					if err == nil {
+						noprefix := strings.TrimPrefix(defaultValue, myUser.HomeDir)
+						line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"$HOME%s\"", noprefix)
+					} else {
+						line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
+					}
+				} else {
+					line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
+				}
 			} else {
 				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: %s", flag.DefValue)
 			}
 		}
-		line += "</td>\n    </tr>\n    <tr>\n      <td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
+		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
 
 		// escape '<' and '>', force wrap for "\n"
 		usage = strings.Replace(usage, "<", "&lt;", -1)
 		usage = strings.Replace(usage, ">", "&gt;", -1)
 		usage = strings.Replace(usage, "\n", "<br/>", -1)
-		line += usage + "</td>\n    </tr>\n"
+		line += usage + "</td>\n</tr>\n"
 
 		lines = append(lines, line)
 	})
-	lines = append(lines, "  </tbody>\n</table>\n\n")
+	lines = append(lines, "</tbody>\n</table>\n\n")
 
 	for _, line := range lines {
 		// fmt.Fprintln(x, line[:sidx], spacing, wrap(maxlen+2, cols, line[sidx+1:]))
