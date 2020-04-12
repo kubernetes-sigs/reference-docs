@@ -34,7 +34,7 @@ echo version dir ${VERSION_DIR}
 # kubectl-command static-includes, toc.yaml
 mkdir -p ./gen-kubectldocs/generators/${VERSION_DIR}
 
-if ! [ -f "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/config.yaml" ]; then
+if ! [ -f "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/toc.yaml" ]; then
 		cp -r ${ROOTDIR}/gen-kubectldocs/generators/${PREV_VERSION_DIR}/* ${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/
 fi
 
