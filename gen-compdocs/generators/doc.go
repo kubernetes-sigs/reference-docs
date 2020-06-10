@@ -25,6 +25,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -35,18 +36,18 @@ func (s byName) Len() int           { return len(s) }
 func (s byName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s byName) Less(i, j int) bool { return s[i].Name() < s[j].Name() }
 
-func GenMarkdownTree(cmd *cobra.Command, dir string, with_title bool) error {
+func GenMarkdownTree(cmd *cobra.Command, dir string, withTitle bool) error {
 	identity := func(s string) string { return s }
 	emptyStr := func(s string) string { return "" }
-	return GenMarkdownTreeCustom(cmd, dir, emptyStr, identity, with_title)
+	return GenMarkdownTreeCustom(cmd, dir, emptyStr, identity, withTitle)
 }
 
-func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHandler func(string) string, with_title bool) error {
+func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHandler func(string) string, withTitle bool) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		if err := GenMarkdownTreeCustom(c, dir, filePrepender, linkHandler, with_title); err != nil {
+		if err := GenMarkdownTreeCustom(c, dir, filePrepender, linkHandler, withTitle); err != nil {
 			return err
 		}
 	}
@@ -62,13 +63,13 @@ func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHa
 	if _, err := io.WriteString(f, filePrepender(filename)); err != nil {
 		return err
 	}
-	if err := GenMarkdownCustom(cmd, f, linkHandler, with_title); err != nil {
+	if err := GenMarkdownCustom(cmd, f, linkHandler, withTitle); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string, with_title bool) error {
+func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string, withTitle bool) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 	name := cmd.CommandPath()
@@ -79,13 +80,16 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		long = short
 	}
 
-	// Write a Markdown file with the tool-reference template
-	if with_title {
-		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_template: templates/tool-reference\nweight: 30\n---\n\n", name); err != nil {
+	// Writes a Markdown file with content_type as tool-reference.
+	// Adds headings (heading shortcode).
+	// Note: Files generated for kubeadm tool are snippets of Markdown without a title.
+	// These snippets are included in the corresponding kubeadm pages.
+	if withTitle {
+		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\n---\n\n", name); err != nil {
 			return err
 		}
 
-		if _, err := fmt.Fprintf(w, "%s\n\n", "{{% capture synopsis %}}"); err != nil {
+		if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"synopsis\" %}}"); err != nil {
 			return err
 		}
 
@@ -101,13 +105,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 				return err
 			}
 		}
-
-		if _, err := fmt.Fprintf(w, "%s\n\n", "{{% /capture %}}"); err != nil {
-			return err
-		}
-
 	} else {
-
 		if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
 			return err
 		}
@@ -132,19 +130,14 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 
 	/* Examples */
 	if len(cmd.Example) > 0 {
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% capture examples %}}"); err != nil {
+		if withTitle {
+			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"examples\" %}}"); err != nil {
 				return err
 			}
 
 			if _, err := fmt.Fprintf(w, "```\n%s\n```\n\n", cmd.Example); err != nil {
 				return err
 			}
-
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% /capture %}}"); err != nil {
-				return err
-			}
-
 		} else {
 			if _, err := fmt.Fprintf(w, "### Examples\n\n"); err != nil {
 				return err
@@ -157,16 +150,16 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	}
 
 	/* Options */
-	if err := printOptions(w, cmd, name, with_title); err != nil {
+	if err := printOptions(w, cmd, name, withTitle); err != nil {
 		return err
 	}
 
 	/* SEE ALSO */
 	if hasSeeAlso(cmd) {
 
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% capture seealso %}}"); err != nil {
-			return err
+		if withTitle {
+			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"seealso\" %}}"); err != nil {
+				return err
 			}
 		} else {
 			if _, err := fmt.Fprintf(w, "%s\n\n", "SEE ALSO"); err != nil {
@@ -207,25 +200,19 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		if _, err := fmt.Fprintf(w, "\n"); err != nil {
 			return err
 		}
-
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% /capture %}}"); err != nil {
-				return err
-			}
-		}
 	}
 
 	return nil
 }
 
-func printOptions(w io.Writer, cmd *cobra.Command, name string, with_title bool) error {
+func printOptions(w io.Writer, cmd *cobra.Command, name string, withTitle bool) error {
 	flags := cmd.NonInheritedFlags()
 	flags.SetOutput(w)
 
 	if flags.HasFlags() {
 
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% capture options %}}"); err != nil {
+		if withTitle {
+			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"options\" %}}"); err != nil {
 				return err
 			}
 
@@ -239,20 +226,14 @@ func printOptions(w io.Writer, cmd *cobra.Command, name string, with_title bool)
 		if _, err := fmt.Fprintf(w, "\n"); err != nil {
 			return err
 		}
-
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% /capture %}}"); err != nil {
-				return err
-			}
-		}
 	}
 
 	parentFlags := cmd.InheritedFlags()
 	parentFlags.SetOutput(w)
 	if parentFlags.HasFlags() {
 
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% capture parentoptions %}}"); err != nil {
+		if withTitle {
+			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"parentoptions\" %}}"); err != nil {
 				return err
 			}
 		} else {
@@ -265,12 +246,6 @@ func printOptions(w io.Writer, cmd *cobra.Command, name string, with_title bool)
 
 		if _, err := fmt.Fprintf(w, "\n"); err != nil {
 			return err
-		}
-
-		if with_title {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "{{% /capture %}}"); err != nil {
-				return err
-			}
 		}
 	}
 	return nil
@@ -294,11 +269,11 @@ func flagUsages(f *pflag.FlagSet) string {
 
 	lines := make([]string, 0)
 
-	lines = append(lines, "   <table style=\"width: 100%%; table-layout: fixed;\">\n<colgroup>\n" +
-		"<col span=\"1\" style=\"width: 10px;\" />\n" +
-		"<col span=\"1\" />\n" +
-		"</colgroup>\n" +
-        "<tbody>\n")
+	lines = append(lines, "   <table style=\"width: 100%%; table-layout: fixed;\">\n<colgroup>\n"+
+		"<col span=\"1\" style=\"width: 10px;\" />\n"+
+		"<col span=\"1\" />\n"+
+		"</colgroup>\n"+
+		"<tbody>\n")
 	f.VisitAll(func(flag *pflag.Flag) {
 		if len(flag.Deprecated) > 0 || flag.Hidden {
 			return
