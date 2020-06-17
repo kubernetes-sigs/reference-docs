@@ -103,3 +103,4 @@ copyapi: api
 	# copy fonts data
 	mkdir -p $(APIDST)/fonts
 	cp $(APISRC)/static/fonts/* $(APIDST)/fonts/
+	ln -sf $$(ls -d $(APIDST)/../v[0-9]* | xargs basename -a | sort -V -r | head -1) $(APIDST)/../latest
