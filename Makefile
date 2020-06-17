@@ -16,6 +16,7 @@ K8SRELEASEDIR=$(shell echo "$(K8SRELEASE)" | sed "s/\./_/g")
 
 APISRC=gen-apidocs
 APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE)
+APILATEST=$(shell ( echo v$(K8SRELEASE); ls -d $(dir $(APIDST))/v[0-9]* ) | xargs basename -a | sort -V -r | head -1)
 
 CLISRC=gen-kubectldocs/generators/build
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
@@ -103,3 +104,5 @@ copyapi: api
 	# copy fonts data
 	mkdir -p $(APIDST)/fonts
 	cp $(APISRC)/static/fonts/* $(APIDST)/fonts/
+	# update the redirect rule for the "latest" version of the API (if it exists)
+	sed -i -E "s#(/docs/reference/generated/kubernetes-api/latest/\*[[:space:]]{1,}/docs/reference/generated/kubernetes-api)/v[0-9._-]*/(:splat)#\1/$(APILATEST)/\2#" $(WEBROOT)/static/_redirects
