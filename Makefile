@@ -11,7 +11,7 @@ WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
 
-# create a directory name from release string: 1.17 -> 1_17
+# create a directory name from release string, e.g. 1.17 -> 1_17
 K8SRELEASEDIR=$(shell echo "$(K8SRELEASE)" | sed "s/\./_/g")
 
 APISRC=gen-apidocs
@@ -22,8 +22,8 @@ CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
 CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
-default:
-	@echo "Support commands:\ncli api comp copycli copyapi createversiondirs updateapispec"
+all:
+	@echo "Supported targets:\n\tcli api comp copycli copyapi createversiondirs updateapispec"
 
 # create directories for new release
 createversiondirs:
@@ -93,13 +93,6 @@ cleanapi:
 copyapi: api
 	mkdir -p $(APIDST)
 	cp $(APISRC)/build/index.html $(APIDST)/index.html
-	# copy scroll.js, jquery.scrollTo.min.js and the new navData.js
+	# copy the new navData.js
 	mkdir -p $(APIDST)/js
 	cp $(APISRC)/build/navData.js $(APIDST)/js/
-	cp $(APISRC)/static/js/* $(APIDST)/js/
-	# copy stylesheet.css, bootstrap.min.css, font-awesome.min.css
-	mkdir -p $(APIDST)/css
-	cp $(APISRC)/static/css/* $(APIDST)/css/
-	# copy fonts data
-	mkdir -p $(APIDST)/fonts
-	cp $(APISRC)/static/fonts/* $(APIDST)/fonts/

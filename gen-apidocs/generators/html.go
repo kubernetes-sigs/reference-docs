@@ -31,22 +31,22 @@ import (
 )
 
 type TOCItem struct {
-	Level int
-	Title string
-	Link string
-	File string
+	Level       int
+	Title       string
+	Link        string
+	File        string
 	SubSections []*TOCItem
 }
 
 type TOC struct {
-	Title string
+	Title     string
 	Copyright string
-	Sections []*TOCItem
+	Sections  []*TOCItem
 }
 
 type HTMLWriter struct {
-	Config *api.Config
-	TOC TOC
+	Config         *api.Config
+	TOC            TOC
 	CurrentSection *TOCItem
 }
 
@@ -55,8 +55,8 @@ func NewHTMLWriter(config *api.Config, copyright, title string) DocWriter {
 		Config: config,
 		TOC: TOC{
 			Copyright: copyright,
-			Title: title,
-			Sections: []*TOCItem{},
+			Title:     title,
+			Sections:  []*TOCItem{},
 		},
 	}
 	return &writer
@@ -69,24 +69,24 @@ func (h *HTMLWriter) Extension() string {
 func (h *HTMLWriter) WriteOverview() {
 	fn := "_overview.html"
 	writeStaticFile("Overview", fn, h.DefaultStaticContent("Overview"))
-	item := TOCItem {
+	item := TOCItem{
 		Level: 1,
 		Title: "Overview",
-		Link: "-strong-api-overview-strong-",
-		File: fn,
+		Link:  "-strong-api-overview-strong-",
+		File:  fn,
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
 }
 
 func (h *HTMLWriter) WriteResourceCategory(name, file string) {
-	writeStaticFile(name, "_" + file + ".html", h.DefaultStaticContent(name))
+	writeStaticFile(name, "_"+file+".html", h.DefaultStaticContent(name))
 	link := strings.Replace(strings.ToLower(name), " ", "-", -1)
-	item := TOCItem {
+	item := TOCItem{
 		Level: 1,
 		Title: strings.ToUpper(name),
-		Link: "-strong-" + link + "-strong-",
-		File: "_" + file + ".html",
+		Link:  "-strong-" + link + "-strong-",
+		File:  "_" + file + ".html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
@@ -140,11 +140,11 @@ func (h *HTMLWriter) writeFields(w io.Writer, d *api.Definition) {
 
 func (h *HTMLWriter) WriteDefinitionsOverview() {
 	writeStaticFile("Definitions", "_definitions.html", h.DefaultStaticContent("Definitions"))
-	item := TOCItem {
+	item := TOCItem{
 		Level: 1,
 		Title: "DEFINITIONS",
-		Link: "-strong-definitions-strong-",
-		File: "_definitions.html",
+		Link:  "-strong-definitions-strong-",
+		File:  "_definitions.html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
@@ -164,7 +164,7 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 	fmt.Fprintf(f, "<H2 id=\"%s\">%s</H2>\n", linkID, nvg)
 	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
 	fmt.Fprintf(f, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
-		    d.GroupDisplayName(), d.Version, d.Name)
+		d.GroupDisplayName(), d.Version, d.Name)
 	fmt.Fprintf(f, "</TBODY>\n</TABLE>\n")
 
 	fmt.Fprintf(f, "<P>%s</P>\n", d.DescriptionWithEntities)
@@ -172,11 +172,11 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 	h.writeAppearsIn(f, d)
 	h.writeFields(f, d)
 
-	item := TOCItem {
+	item := TOCItem{
 		Level: 2,
 		Title: nvg,
-		Link: linkID,
-		File: fn,
+		Link:  linkID,
+		File:  fn,
 	}
 	h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &item)
 }
@@ -307,7 +307,6 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 }
 
-
 func (h *HTMLWriter) WriteResource(r *api.Resource) {
 	fn := "_" + conceptFileName(r.Definition) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
@@ -327,7 +326,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 	// GVK
 	fmt.Fprintf(w, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
 	fmt.Fprintf(w, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
-		    r.Definition.GroupDisplayName(), r.Definition.Version, r.Name)
+		r.Definition.GroupDisplayName(), r.Definition.Version, r.Name)
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 
 	if r.DescriptionWarning != "" {
@@ -350,11 +349,11 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 		}
 	}
 
-	item := TOCItem {
+	item := TOCItem{
 		Level: 1,
 		Title: dvg,
-		Link: linkID,
-		File: fn,
+		Link:  linkID,
+		File:  fn,
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
@@ -371,20 +370,20 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 		catID := strings.Replace(strings.ToLower(c.Name), " ", "-", -1) + "-" + r.Definition.LinkID()
 		catID = "-strong-" + catID + "-strong-"
 		fmt.Fprintf(w, "<H2 id=\"%s\"><STRONG>%s</STRONG></H2>\n", catID, c.Name)
-		OCItem := TOCItem {
+		OCItem := TOCItem{
 			Level: 2,
 			Title: c.Name,
-			Link: catID,
+			Link:  catID,
 		}
 		h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &OCItem)
 
 		for _, o := range c.Operations {
 			opID := strings.Replace(strings.ToLower(o.Type.Name), " ", "-", -1) + "-" + r.Definition.LinkID()
 			fmt.Fprintf(w, "<H2 id=\"%s\">%s</H2>\n", opID, o.Type.Name)
-			OPItem := TOCItem {
+			OPItem := TOCItem{
 				Level: 2,
 				Title: o.Type.Name,
-				Link: opID,
+				Link:  opID,
 			}
 			OCItem.SubSections = append(OCItem.SubSections, &OPItem)
 
@@ -411,11 +410,11 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 
 func (h *HTMLWriter) WriteOldVersionsOverview() {
 	writeStaticFile("Old Versions", "_oldversions.html", h.DefaultStaticContent("Old Versions"))
-	item := TOCItem {
+	item := TOCItem{
 		Level: 1,
 		Title: "OLD API VERSIONS",
-		Link: "-strong-old-api-versions-strong-",
-		File: "_oldversions.html",
+		Link:  "-strong-old-api-versions-strong-",
+		File:  "_oldversions.html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
@@ -430,7 +429,7 @@ func (h *HTMLWriter) generateNavContent() string {
 			nav += fmt.Sprintf(" <LI class=\"nav-level-1 strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n", sec.Link, sec.Title)
 		} else {
 			nav += fmt.Sprintf(" <LI class=\"nav-level-1\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-							   sec.Link, sec.Title)
+				sec.Link, sec.Title)
 		}
 
 		// close H1 items which have no subsections or strong navs
@@ -444,15 +443,15 @@ func (h *HTMLWriter) generateNavContent() string {
 		}
 
 		// wrapper1
-	    nav += fmt.Sprintf(" <UL id=\"%s-nav\" style=\"display: none;\">\n", sec.Link)
+		nav += fmt.Sprintf(" <UL id=\"%s-nav\" style=\"display: none;\">\n", sec.Link)
 		for _, sub := range sec.SubSections {
 			nav += "  <UL>\n"
 			if strings.Contains(sub.Link, "strong") {
 				nav += fmt.Sprintf("   <LI class=\"nav-level-%d strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n",
-						   sub.Level, sub.Link, sub.Title)
+					sub.Level, sub.Link, sub.Title)
 			} else {
 				nav += fmt.Sprintf("   <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-						   sub.Level, sub.Link, sub.Title)
+					sub.Level, sub.Link, sub.Title)
 			}
 			// close this H1/H2 if possible
 			if len(sub.SubSections) == 0 {
@@ -473,7 +472,7 @@ func (h *HTMLWriter) generateNavContent() string {
 				nav += fmt.Sprintf("   <UL id=\"%s-nav\" style=\"display: none;\">\n", subsub.Link)
 				for _, subsubsub := range subsub.SubSections {
 					nav += fmt.Sprintf("    <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-							   subsubsub.Level, subsubsub.Link, subsubsub.Title)
+						subsubsub.Level, subsubsub.Link, subsubsub.Title)
 				}
 				nav += "   </UL>\n"
 			}
@@ -526,7 +525,7 @@ func (h *HTMLWriter) generateNavJS() {
 		}
 
 		if strings.Contains(sec.Link, "strong") {
-			tmp =  "{\"section\":\"" + sec.Link + "\",\"subsections\":[]}"
+			tmp = "{\"section\":\"" + sec.Link + "\",\"subsections\":[]}"
 			s2res := strings.Join(s2, ",")
 			if len(s2res) > 0 {
 				tmp = s2res + "," + tmp
@@ -536,7 +535,7 @@ func (h *HTMLWriter) generateNavJS() {
 		}
 		s1 = append([]string{tmp}, s1...)
 	}
-	fmt.Fprintf(navjs, "(function(){navData={\"toc\":[" + strings.Join(s1, ",") + "],\"flatToc\":[" + strings.Join(flatToc, ",") + "]};})();")
+	fmt.Fprintf(navjs, "(function(){navData={\"toc\":["+strings.Join(s1, ",")+"],\"flatToc\":["+strings.Join(flatToc, ",")+"]};})();")
 }
 
 func (h *HTMLWriter) generateHTML(navContent string) {
@@ -547,13 +546,17 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 		os.Exit(1)
 	}
 
-	/* Physical location of files referenced in this block: reference-docs/gen-apidocs/static/css/ */
+	/* Make sure the following stylesheets exist in kubernetes/website repo:
+	   kubernetes/website/static/css/bootstrap-4.3.1.min.css
+	   kubernetes/website/static/css/fontawesome-4.7.0.min.css
+	   kubernetes/website/static/css/style_apiref.css
+	*/
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
-	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/bootstrap.min.css\">\n")
-	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/font-awesome.min.css\" type=\"text/css\">\n")
-	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"css/stylesheet.css\" type=\"text/css\">\n")
+	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\">\n")
+	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/fontawesome-4.7.0.min.css\" type=\"text/css\">\n")
+	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/style_apiref.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "</HEAD>\n<BODY>\n")
 	fmt.Fprintf(html, "<DIV id=\"wrapper\" class=\"container-fluid\">\n")
 	fmt.Fprintf(html, "<DIV class=\"row\">\n")
@@ -608,25 +611,23 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	}
 
 	/*
-	Physical locations of files referenced:
-	reference-docs/gen-apidocs/static/js/jquery.scrollTo.min.js
-	reference-docs/gen-apidocs/static/js/scroll.js
+		Make sure the following scripts exist in kubernetes/website repo:
+		kubernetes/website/static/js/jquery-3.2.1.min.js
+		kubernetes/website/static/js/jquery.scrollTo.min.js
+		kubernetes/website/static/js/bootstrap-4.3.1.min.js
+		kubernetes/website/static/js/scroll.js
 
-	Make sure jquery-3.2.1.min.js and bootstrap-4.3.1.min.js point to what's in the kubernetes/website repo:
-	kubernetes/website/static/js/jquery-3.2.1.min.js
-	kubernetes/website/static/js/bootstrap-4.3.1.min.js
-
-	navData.js is dynamically generated - see generateNavJS()
+		navData.js is dynamically generated - see generateNavJS()
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
 	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"col-xs-8 offset-xs-4 col-sm-9 offset-sm-3 col-md-10 offset-md-2 body-content\">\n")
 	fmt.Fprintf(html, "%s", string(buf))
 	fmt.Fprintf(html, "\n</DIV>\n</DIV>\n</DIV>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.2.1.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"js/jquery.scrollTo.min.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.3.1.min.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery.scrollTo-2.1.2.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.3.1.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"js/navData.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"js/scroll.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/scroll-apiref.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
 }
 
