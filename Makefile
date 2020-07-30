@@ -6,7 +6,9 @@
 # K8S_WEBROOT=~/src/github.com/kubernetes/website
 # K8S_ROOT=~/k8s/src/k8s.io/kubernetes
 # K8S_RELEASE=1.17
+# RC_NUM=-rc.3
 
+RCNUM=${RC_NUM}
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
@@ -78,7 +80,11 @@ updateapispec: createversiondirs
 	CURDIR=$(shell pwd)
 	if ! [ -f $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json ]; then \
 		cd $(K8SROOT); \
-		git show "v$(K8SRELEASE).0:api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
+		if [ -n "${RCNUM}" ]; then \
+			git show "v$(K8SRELEASE).0$(RC_NUM):api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
+		else \
+			git show "v$(K8SRELEASE).0:api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
+		fi; \
 		mv swagger.json.$(K8SRELEASE) $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json; \
 		cd $(CURDIR); \
 		echo Current dir $(shell pwd); \
