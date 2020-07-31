@@ -72,8 +72,8 @@ func (o *Operation) Description() string {
 	return o.op.Description
 }
 
-func (a HttpResponses) Len() int      { return len(a) }
-func (a HttpResponses) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a HttpResponses) Len() int           { return len(a) }
+func (a HttpResponses) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a HttpResponses) Less(i, j int) bool { return a[i].Code < a[j].Code }
 
 // VisitOperations calls fn once for each operation found in the collection of Documents
@@ -101,8 +101,8 @@ func IsBlacklistedOperation(o *spec.Operation) bool {
 	return strings.HasSuffix(o.ID, "APIGroup") || // These are just the API group meta datas.  Ignore for now.
 		strings.HasSuffix(o.ID, "APIResources") || // These are just the API group meta datas.  Ignore for now.
 		strings.HasSuffix(o.ID, "APIVersions") // || // These are just the API group meta datas.  Ignore for now.
-		//strings.HasPrefix(o.ID, "connect") || // Skip pod connect apis for now.  There are too many.
-		//strings.HasPrefix(o.ID, "proxy")
+	//strings.HasPrefix(o.ID, "connect") || // Skip pod connect apis for now.  There are too many.
+	//strings.HasPrefix(o.ID, "proxy")
 }
 
 // Get all operations from the pathitem so we cacn iterate over them
@@ -132,6 +132,7 @@ func (o *Operation) VerifyBlackListed() {
 	case strings.Contains(o.ID, "NamespacedPodExec"):
 	case strings.Contains(o.ID, "replaceCoreV1NamespaceFinalize"):
 	case strings.Contains(o.ID, "V1beta1CertificateSigningRequestApproval"):
+	case strings.Contains(o.ID, "V1CertificateSigningRequestApproval"):
 	case strings.Contains(o.ID, "V1beta1NamespacedReplicationControllerDummyScale"):
 	default:
 		fmt.Printf("No Definition found for %s [%s].  \n", o.ID, o.Path)
