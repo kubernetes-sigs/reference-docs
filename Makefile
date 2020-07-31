@@ -5,19 +5,20 @@
 #
 # K8S_WEBROOT=~/src/github.com/kubernetes/website
 # K8S_ROOT=~/k8s/src/k8s.io/kubernetes
-# K8S_RELEASE=1.17
-# RC_NUM=-rc.3
+# K8S_RELEASE=1.17.0, 1.17.5, 1.17.0-rc.2
+
 
 RCNUM=${RC_NUM}
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
+K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut --characters 1-4)
 
 # create a directory name from release string, e.g. 1.17 -> 1_17
-K8SRELEASEDIR=$(shell echo "$(K8SRELEASE)" | sed "s/\./_/g")
+K8SRELEASEDIR=$(shell echo "$(K8SRELEASE_PREFIX)" | sed "s/\./_/g")
 
 APISRC=gen-apidocs
-APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE)
+APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE_PREFIX)
 
 CLISRC=gen-kubectldocs/generators/build
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
@@ -73,25 +74,13 @@ comp: cleancomp
 	go run gen-compdocs/main.go gen-compdocs/build kubectl
 
 # Build api docs
-# Note: May want to clean dir every time and fetch new copy of swagger.json
-# validate size > 0 of swagger.json
 updateapispec: createversiondirs
-	@echo "Updating swagger.json for release v$(K8SRELEASE).0"
 	CURDIR=$(shell pwd)
-	if ! [ -f $(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json ]; then \
-		cd $(K8SROOT); \
-		if [ -n "${RCNUM}" ]; then \
-			git show "v$(K8SRELEASE).0$(RC_NUM):api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
-		else \
-			git show "v$(K8SRELEASE).0:api/openapi-spec/swagger.json" > swagger.json.$(K8SRELEASE); \
-		fi; \
-		mv swagger.json.$(K8SRELEASE) $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json; \
-		cd $(CURDIR); \
-		echo Current dir $(shell pwd); \
-	fi
+	@echo "Updating swagger.json for release v$(K8SRELEASE)"
+	cd $(K8SROOT) && git show "v$(K8SRELEASE):api/openapi-spec/swagger.json" > $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json
 
 api: cleanapi
-	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE) --work-dir=gen-apidocs --munge-groups=false
+	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=gen-apidocs --munge-groups=false
 
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build
