@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# K8S_RELEASE must be set in your environment, for example, 1.17
+# K8S_RELEASE must be set in your environment, for example, 1.17, 1.17.0, 1.18.0-rc.4
 if [ -n "${K8S_RELEASE}" ]; then
 	echo "Setting up reference directories for ${K8S_RELEASE} release."
 else
-	echo "You must set K8S_RELEASE to a release version, such as 1.17"
+	echo "You must set K8S_RELEASE to a release version, such as 1.17.0"
 	exit 1
 fi
 
@@ -12,7 +12,7 @@ ROOTDIR=$(pwd)
 echo base dir ${ROOTDIR}
 
 # change <major>.<minor> to <major>_<minor>
-VERSION_DIR="$(echo "${K8S_RELEASE}" | sed "s/\./_/g")"
+VERSION_DIR="$(echo "${K8S_RELEASE}" | cut --characters 1-4 | sed "s/\./_/g")"
 echo version ${VERSION_DIR}
 
 MINOR_VERSION="$(echo ${VERSION_DIR} | sed "s/[0-9]_//g")"
