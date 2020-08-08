@@ -12,7 +12,7 @@ ROOTDIR=$(pwd)
 echo base dir ${ROOTDIR}
 
 # change <major>.<minor> to <major>_<minor>
-VERSION_DIR="$(echo "${K8S_RELEASE}" | cut --characters 1-4 | sed "s/\./_/g")"
+VERSION_DIR="$(echo "${K8S_RELEASE}" | cut -c 1-4 | sed "s/\./_/g")"
 echo version ${VERSION_DIR}
 
 MINOR_VERSION="$(echo ${VERSION_DIR} | sed "s/[0-9]_//g")"
