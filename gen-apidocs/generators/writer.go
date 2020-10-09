@@ -34,6 +34,7 @@ type DocWriter interface {
 	Extension() string
 	DefaultStaticContent(title string) string
 	WriteOverview()
+	WriteAPIGroupVersions(gvs api.GroupVersions)
 	WriteResourceCategory(name, file string)
 	WriteResource(r *api.Resource)
 	WriteDefinitionsOverview()
@@ -60,6 +61,9 @@ func GenerateFiles() {
 
 	writer := NewHTMLWriter(config, copyright, title)
 	writer.WriteOverview()
+
+	// Write API groups
+	writer.WriteAPIGroupVersions(config.Definitions.GroupVersions)
 
 	// Write resource definitions
 	for _, c := range config.ResourceCategories {
