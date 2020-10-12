@@ -66,6 +66,7 @@ func (a ApiGroups) Less(i, j int) bool {
 }
 
 type ApiKind string
+
 func (k ApiKind) String() string {
 	return string(k)
 }
@@ -189,10 +190,15 @@ type Definition struct {
 	Resource string
 }
 
+type GroupVersions map[string]ApiVersions
+
 // Definitions indexes open-api definitions
 type Definitions struct {
 	All    map[string]*Definition
 	ByKind map[string]SortDefinitionsByVersion
+
+	// Available API groups and their versions
+	GroupVersions GroupVersions
 }
 
 type DefinitionList []*Definition

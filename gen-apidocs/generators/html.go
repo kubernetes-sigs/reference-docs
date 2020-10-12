@@ -79,6 +79,49 @@ func (h *HTMLWriter) WriteOverview() {
 	h.CurrentSection = &item
 }
 
+func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) {
+	fn := "_group_versions.html"
+	path := filepath.Join(api.IncludesDir, fn)
+	f, err := os.Create(path)
+	defer f.Close()
+	if err != nil {
+		os.Stderr.WriteString(fmt.Sprintf("%v", err))
+		os.Exit(1)
+	}
+
+	fmt.Fprintf(f, h.DefaultStaticContent("API Groups"))
+	fmt.Fprintf(f, "<P>The API Groups and their versions are summarized in the following table.</P>")
+	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH></TR></THEAD>\n<TBODY>\n")
+
+	groups := api.ApiGroups{}
+	for group, _ := range gvs {
+		groups = append(groups, api.ApiGroup(group))
+	}
+	sort.Sort(groups)
+
+	for _, group := range groups {
+		versionList, _ := gvs[group.String()]
+		sort.Sort(versionList)
+		var versions []string
+		for _, v := range versionList {
+			versions = append(versions, v.String())
+		}
+
+		fmt.Fprintf(f, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
+			group, strings.Join(versions, ", "))
+	}
+	fmt.Fprintf(f, "</TBODY>\n</TABLE>\n")
+
+	item := TOCItem{
+		Level: 1,
+		Title: "API Groups",
+		Link:  "-strong-api-groups-strong-",
+		File:  fn,
+	}
+	h.TOC.Sections = append(h.TOC.Sections, &item)
+	h.CurrentSection = &item
+}
+
 func (h *HTMLWriter) WriteResourceCategory(name, file string) {
 	writeStaticFile(name, "_"+file+".html", h.DefaultStaticContent(name))
 	link := strings.Replace(strings.ToLower(name), " ", "-", -1)

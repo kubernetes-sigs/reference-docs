@@ -102,7 +102,8 @@ func buildGroupMap(specs []*loads.Document) map[string]string {
 }
 
 func LoadDefinitions(specs []*loads.Document, s *Definitions) {
-	groups := map[string]string{}
+	var versionList ApiVersions
+
 	groupMapping := buildGroupMap(specs)
 	for _, spec := range specs {
 		for name, spec := range spec.Spec().Definitions {
@@ -111,7 +112,7 @@ func LoadDefinitions(specs []*loads.Document, s *Definitions) {
 				resource = r
 			}
 
-			// This actually skips the following groupsi, i.e. old definitions
+			// This actually skips the following groups, i.e. old definitions
 			//  'io.k8s.kubernetes.pkg.api.*'
 			//  'io.k8s.kubernetes.pkg.apis.*'
 			if strings.HasPrefix(spec.Description, "Deprecated. Please use") {
@@ -129,7 +130,6 @@ func LoadDefinitions(specs []*loads.Document, s *Definitions) {
 			} else if group == "error" {
 				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
 			}
-			groups[group] = ""
 
 			full_group, found := groupMapping[group]
 			if !found {
@@ -149,6 +149,28 @@ func LoadDefinitions(specs []*loads.Document, s *Definitions) {
 			}
 
 			s.All[d.Key()] = d
+
+			// skip "io.k8s.apimachinery.pkg.api.resource.*"
+			// skip "meta" group also
+			if version == "resource" || group == "meta" {
+				continue
+			}
+
+			versionList, found = s.GroupVersions[full_group]
+			if !found {
+				s.GroupVersions[full_group] = ApiVersions{ApiVersion(version)}
+			} else {
+				found = false
+				for _, v := range versionList {
+					if v.String() == version {
+						found = true
+					}
+				}
+				if !found {
+					versionList = append(versionList, ApiVersion(version))
+					s.GroupVersions[full_group] = versionList
+				}
+			}
 		}
 	}
 }
