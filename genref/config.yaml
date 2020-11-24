@@ -1,0 +1,145 @@
+hiddenMemberFields:
+  - "TypeMeta"
+
+externalPackages:
+  - match: ^k8s\.io/apimachinery/pkg/apis/meta/v1\.Duration$
+    target: https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration
+  - match: ^k8s\.io/apimachinery/pkg/types\.UID$
+    target: https://godoc.org/k8s.io/apimachinery/pkg/types#UID
+  - match: ^k8s\.io/apimachinery/pkg/runtime\.RawExtension$
+    target: https://godoc.org/k8s.io/apimachinery/pkg/runtime/#RawExtension
+
+  - match: ^k8s\.io/apimachinery/pkg/runtime\.Unknown$
+    target: https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown
+  - match: ^time\.Duration$
+    target: https://godoc.org/time#Duration
+  - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+
+hideTypePatterns:
+  - "ParseError$"
+  # - "List$"
+
+markdownDisabled: false
+
+stripPrefix:
+  - k8s.io/api/
+  - k8s.io/apimachinery/pkg/apis/
+
+apis:
+  - name: kubelet-config
+    package: k8s.io/kubelet
+    path: config/v1beta1
+    includes:
+      - k8s.io/component-base/config/v1alpha1
+
+  - name: kubelet-stats
+    package: k8s.io/kubelet
+    path: pkg/apis/stats/v1alpha1
+
+  - name: kube-scheduler-config
+    package: k8s.io/kube-scheduler
+    path: config/v1beta1
+    includes:
+      - k8s.io/kube-scheduler/config/v1
+      - k8s.io/component-base/config/v1alpha1
+  - name: kube-scheduler-policy-config
+    package: k8s.io/kube-scheduler
+    path: config/v1
+
+  - name: kube-controller-manager-config
+    package: k8s.io/kube-controller-manager
+    path: config/v1alpha1
+    includes:
+      - k8s.io/cloud-provider/controllers/service/config/v1alpha1
+      - k8s.io/cloud-provider/config/v1alpha1
+      - k8s.io/controller-manager/config/v1alpha1
+
+  - name: kube-proxy-config
+    package: k8s.io/kube-proxy
+    path: config/v1alpha1
+
+  - name: metrics
+    package: k8s.io/metrics
+    path: pkg/apis/metrics/v1alpha1
+
+  - name: metrics
+    package: k8s.io/metrics
+    path: pkg/apis/metrics/v1beta1
+
+  - name: client-authentication
+    package: k8s.io/client-go
+    path: pkg/apis/clientauthentication/v1alpha1
+
+  - name: client-authentication
+    package: k8s.io/client-go
+    path: pkg/apis/clientauthentication/v1beta1
+
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1alpha1
+    # skipped in favor of v1beta1 and v1
+    skip: true
+
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1beta1
+
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1
+
+  # Note: This is named as apiserver-encryption because the so called config
+  # pkg only contains encryption config. Need to differentiate it from the
+  # apiserver-config above.
+  - name: apiserver-encryption
+    package: k8s.io/apiserver
+    path: pkg/apis/config/v1
+
+    # Note: This is named apiserver-audit because it is part of the apiserver module
+  - name: apiserver-audit
+    package: k8s.io/apiserver
+    path: pkg/apis/audit/v1
+
+  - name: apiserver-webhookadmission
+    package: k8s.io/apiserver
+    path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1alpha1
+    # Skip this in favor of v1
+    skip: true
+
+  - name: apiserver-webhookadmission
+    package: k8s.io/apiserver
+    path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1
+
+  - name: apiserver-eventratelimit
+    package: k8s.io/kubernetes
+    path: plugin/pkg/admission/eventratelimit/apis/eventratelimit/v1alpha1
+    # Skipped because k8s.io/kubernetes cannot be imported
+    skip: true
+
+  - name: apiserver-podtolerationrestriction
+    package: k8s.io/kubernetes
+    path: plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction/v1alpha1
+    # Skipped because k8s.io/kubernetes cannot be imported
+    skip: true
+
+  - name: cloud-provider-config
+    package: k8s.io/cloud-provider
+    path: config/v1alpha1
+    includes:
+      - k8s.io/controller-manager/config/v1alpha1
+      - k8s.io/cloud-provider/controllers/service/config/v1alpha1
+
+  - name: cloud-provider-service
+    package: k8s.io/cloud-provider
+    path: controllers/service/config/v1alpha1
+
+  # This is for testing
+  - name: kubeadm-config
+    package: github.com/tengqm/kubeconfig
+    path: config/kubeadm/v1beta1
+
+  # This is for testing
+  - name: kubeadm-config
+    package: github.com/tengqm/kubeconfig
+    path: config/kubeadm/v1beta2
