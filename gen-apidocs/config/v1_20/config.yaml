@@ -136,10 +136,6 @@ resource_categories:
     - name: PriorityClass
       version: v1
       group: scheduling
-    - name: PodPreset
-      version: v1alpha1
-      group: settings
-      description_warning: "Alpha objects should not be used in production and may not be compatible with future versions of the resource type."
     - name: PodSecurityPolicy
       version: v1beta1
       group: policy
@@ -165,7 +161,7 @@ resource_categories:
       version: v1
       group: core
     - name: FlowSchema
-      version: v1alpha1
+      version: v1beta1
       group: flowcontrol
     - name: Lease
       version: v1
@@ -184,7 +180,7 @@ resource_categories:
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
     - name: PriorityLevelConfiguration
-      version: v1alpha1
+      version: v1beta1
       group: flowcontrol
     - name: ResourceQuota
       version: v1
@@ -196,7 +192,7 @@ resource_categories:
       version: v1
       group: rbac
     - name: RuntimeClass
-      version: v1beta1
+      version: v1
       group: node
     - name: SelfSubjectAccessReview
       version: v1
