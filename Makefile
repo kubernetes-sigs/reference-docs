@@ -66,7 +66,7 @@ comp: cleancomp
 	mkdir -p gen-compdocs/build
 	go run gen-compdocs/main.go gen-compdocs/build kube-apiserver
 	go run gen-compdocs/main.go gen-compdocs/build kube-controller-manager
-	go run gen-compdocs/main.go gen-compdocs/build cloud-controller-manager
+	#go run gen-compdocs/main.go gen-compdocs/build cloud-controller-manager
 	go run gen-compdocs/main.go gen-compdocs/build kube-scheduler
 	go run gen-compdocs/main.go gen-compdocs/build kubelet
 	go run gen-compdocs/main.go gen-compdocs/build kube-proxy

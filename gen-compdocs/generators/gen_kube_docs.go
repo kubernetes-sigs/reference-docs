@@ -21,7 +21,7 @@ import (
 	"os"
 
 	"github.com/spf13/pflag"
-	ccmapp "k8s.io/kubernetes/cmd/cloud-controller-manager/app"
+	//ccmapp "k8s.io/kubernetes/cmd/cloud-controller-manager/app"
 	"k8s.io/kubernetes/cmd/genutils"
 	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
 	cmapp "k8s.io/kubernetes/cmd/kube-controller-manager/app"
@@ -49,9 +49,9 @@ func GenerateFiles(path, module string) {
 		controllermanager := cmapp.NewControllerManagerCommand()
 		GenMarkdownTree(controllermanager, outDir, true)
 
-	case "cloud-controller-manager":
-		cloudcontrollermanager := ccmapp.NewCloudControllerManagerCommand()
-		GenMarkdownTree(cloudcontrollermanager, outDir, true)
+	//case "cloud-controller-manager":
+	//	cloudcontrollermanager := ccmapp.NewCloudControllerManagerCommand()
+	//	GenMarkdownTree(cloudcontrollermanager, outDir, true)
 
 	case "kube-proxy":
 		proxy := proxyapp.NewProxyCommand()
