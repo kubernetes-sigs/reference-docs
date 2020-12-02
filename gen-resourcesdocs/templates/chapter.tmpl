@@ -1,0 +1,70 @@
+---
+api_metadata:
+  apiVersion: "{{.ApiVersion}}"
+  import: "{{.Import}}"
+  kind: "{{.Kind}}"
+content_type: "api_reference"
+description: "{{.Metadata.Description}}"
+title: "{{.Metadata.Title}}"
+weight: {{.Metadata.Weight}}
+---
+
+{{if .ApiVersion}}`apiVersion: {{.ApiVersion}}`{{end}}
+
+{{if .Import}}`import "{{.Import}}"`{{end}}
+
+{{range .Sections}}
+## {{.Name}}
+
+{{.Description | replace "<" "\\<" }}
+
+{{range .Fields}}
+{{ ""  | indent .Indent | indent .Indent}}- {{.Name}}{{if .Value}}: {{.Value}}{{end}}
+{{if .Description}}
+{{.Description | replace "<" "\\<" | indent 2 | indent .Indent | indent .Indent}}
+{{- end}}
+{{if .TypeDefinition}}
+{{.TypeDefinition | indent 2 | indent .Indent | indent .Indent}}
+{{end}}
+{{- end}}{{/* range .Fields */}}
+
+{{range .FieldCategories}}
+### {{.Name}}
+
+{{range .Fields}}
+{{ ""  | indent .Indent | indent .Indent}}- {{.Name}}{{if .Value}}: {{.Value}}{{end}}
+{{if .Description}}
+{{.Description | replace "<" "\\<" | indent 2 | indent .Indent | indent .Indent}}
+{{- end}}
+{{if .TypeDefinition}}
+{{.TypeDefinition | indent 2 | indent .Indent | indent .Indent}}
+{{end}}
+{{- end}}{{/* range .Fields */}}
+
+{{- end}}{{/* range .FieldCategories */}}
+
+{{range .Operations}}
+
+### `{{.Verb}}` {{.Title}}
+
+#### HTTP Request
+
+{{.RequestMethod}} {{.RequestPath}}
+
+#### Parameters
+
+{{range .Parameters}}
+- {{.Title}}
+
+{{.Description | indent 2}}
+
+{{end}}{{/* range .Parameters */}}
+
+#### Response
+
+{{range .Responses}}
+{{.Code}}{{if .Type}} ({{.Type}}){{end}}: {{.Description}}
+{{end}}{{/* range .Responses */}}
+
+{{- end}}{{/* range .Operations */}}
+{{- end}}{{/* range .Sections */}}
