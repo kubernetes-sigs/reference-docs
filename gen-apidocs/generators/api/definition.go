@@ -222,11 +222,16 @@ func (d *Definition) GroupDisplayName() string {
 }
 
 func (d *Definition) GetOperationGroupName() string {
+	// TODO(Qiming): Expose this to config.yaml so that we don't need to
+	// change the Go source next time.
 	if strings.ToLower(d.Group.String()) == "rbac" {
 		return "RbacAuthorization"
 	}
 	if strings.ToLower(d.Group.String()) == "flowcontrol" {
 		return "FlowcontrolApiserver"
+	}
+	if strings.ToLower(d.Group.String()) == "apiserverinternal" {
+		return "InternalApiserver"
 	}
 
 	return strings.Title(d.Group.String())

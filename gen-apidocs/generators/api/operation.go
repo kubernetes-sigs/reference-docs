@@ -122,6 +122,8 @@ func (o *Operation) GetDisplayHttp() string {
 }
 
 func (o *Operation) VerifyBlackListed() {
+	// TODO(Qiming): Expose this to the config.yaml file so that we don't need
+	// to change the source code next time.
 	switch {
 	case strings.Contains(o.ID, "connectCoreV1Patch"):
 	case strings.Contains(o.ID, "createCoreV1NamespacedPodBinding"):
@@ -134,8 +136,10 @@ func (o *Operation) VerifyBlackListed() {
 	case strings.Contains(o.ID, "V1beta1CertificateSigningRequestApproval"):
 	case strings.Contains(o.ID, "V1CertificateSigningRequestApproval"):
 	case strings.Contains(o.ID, "V1beta1NamespacedReplicationControllerDummyScale"):
+	case strings.Contains(o.ID, "getServiceAccountIssuerOpenIDConfiguration"):
+	case strings.Contains(o.ID, "getServiceAccountIssuerOpenIDKeyset"):
 	default:
-		fmt.Printf("No Definition found for %s [%s].  \n", o.ID, o.Path)
+		fmt.Printf("\033[31mNo Definition found for %s [%s].\033[0m\n", o.ID, o.Path)
 	}
 }
 
