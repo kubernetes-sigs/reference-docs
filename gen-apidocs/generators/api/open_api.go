@@ -56,58 +56,9 @@ func LoadOpenApiSpec() []*loads.Document {
 	return docs
 }
 
-// return the map from short group name to full group name
-func buildGroupMap(specs []*loads.Document) map[string]string {
-	// TODO(Qiming): Expose this map to the config.yaml so that we don't need
-	// to revise the source code next time.
-	mapping := map[string]string{}
-	mapping["apiregistration"] = "apiregistration.k8s.io"
-	mapping["apiextensions"] = "apiextensions.k8s.io"
-	mapping["certificates"] = "certificates.k8s.io"
-	mapping["flowcontrol"] = "flowcontrol.apiserver.k8s.io"
-	mapping["apiserverinternal"] = "internal.apiserver.k8s.io"
-	mapping["meta"] = "meta"
-	mapping["core"] = "core"
-	mapping["extensions"] = "extensions"
-
-	for _, spec := range specs {
-		for name, spec := range spec.Spec().Definitions {
-			group, _, _ := GuessGVK(name)
-			if _, found := mapping[group]; found {
-				continue
-			}
-			// special groups where group name from extension is empty!
-			if group == "meta" || group == "core" {
-				continue
-			}
-
-			// full group not exposed as x-kubernetes- openapi extensions
-			// from kube-aggregator project or apiextensions-apiserver project
-			if group == "apiregistration" || group == "apiextensions" {
-				continue
-			}
-
-			if extension, found := spec.Extensions[typeKey]; found {
-				gvks, ok := extension.([]interface{})
-				if ok {
-					for _, item := range gvks {
-						gvk, ok := item.(map[string]interface{})
-						if ok {
-							mapping[group] = gvk["group"].(string)
-							break
-						}
-					}
-				}
-			}
-		}
-	}
-	return mapping
-}
-
-func LoadDefinitions(specs []*loads.Document, s *Definitions) {
+func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) {
 	var versionList ApiVersions
 
-	groupMapping := buildGroupMap(specs)
 	for _, spec := range specs {
 		for name, spec := range spec.Spec().Definitions {
 			resource := ""
@@ -134,9 +85,10 @@ func LoadDefinitions(specs []*loads.Document, s *Definitions) {
 				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
 			}
 
-			full_group, found := groupMapping[group]
+			full_group, found := config.GroupFullNames[group]
 			if !found {
 				// fall back to group name if no mapping found
+				fmt.Printf("\033[31mWarning: full name for '%s' not provided, guessing...\033[0m\n", group)
 				full_group = group
 			}
 

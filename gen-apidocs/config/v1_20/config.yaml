@@ -293,3 +293,31 @@ excluded_operations:
   - V1beta1NamespacedReplicationControllerDummyScale
   - getServiceAccountIssuerOpenIDConfiguration
   - getServiceAccountIssuerOpenIDKeyset
+
+# Map from group name to its full name
+group_full_names:
+  admission: admission
+  admissionregistration: admissionregistration.k8s.io
+  apiextensions: apiextensions.k8s.io
+  apiregistration: apiregistration.k8s.io
+  apiserverinternal: internal.apiserver.k8s.io
+  apps: apps
+  authentication: authentication.k8s.io
+  authorization: authorization.k8s.io
+  autoscaling: autoscaling
+  batch: batch
+  certificates: certificates.k8s.io
+  coordination: coordination.k8s.io
+  core: core
+  discovery: discovery.k8s.io
+  events: events.k8s.io
+  extensions: extensions
+  flowcontrol: flowcontrol.apiserver.k8s.io
+  meta: meta
+  networking: networking.k8s.io
+  node: node.k8s.io
+  policy: policy
+  rbac: rbac.authorization.k8s.io
+  scheduling: scheduling.k8s.io
+  storage: storage.k8s.io
+

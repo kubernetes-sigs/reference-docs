@@ -76,7 +76,7 @@ func NewConfig() *Config {
 	config.SpecVersion = fmt.Sprintf("%s%s.%s", versionChar, *KubernetesRelease, "0")
 
 	// Initialize all of the operations
-	config.Definitions = NewDefinitions(specs)
+	config.Definitions = NewDefinitions(config, specs)
 
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
@@ -119,7 +119,6 @@ func NewConfig() *Config {
 func (c *Config) genConfigFromTags(specs []*loads.Document) {
 	log.Printf("Using OpenAPI extension tags to configure.")
 
-	c.ExampleLocation = "examples"
 	// build the apis from the observed groups
 	groupsMap := map[ApiGroup]DefinitionList{}
 	for _, d := range c.Definitions.All {
