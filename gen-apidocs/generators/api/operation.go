@@ -121,28 +121,6 @@ func (o *Operation) GetDisplayHttp() string {
 	return fmt.Sprintf("%s %s", o.HttpMethod, o.Path)
 }
 
-func (o *Operation) VerifyBlackListed() {
-	// TODO(Qiming): Expose this to the config.yaml file so that we don't need
-	// to change the source code next time.
-	switch {
-	case strings.Contains(o.ID, "connectCoreV1Patch"):
-	case strings.Contains(o.ID, "createCoreV1NamespacedPodBinding"):
-	case strings.Contains(o.ID, "getCodeVersion"):
-	case strings.Contains(o.ID, "logFileHandler"):
-	case strings.Contains(o.ID, "logFileListHandler"):
-	case strings.Contains(o.ID, "NamespacedPodAttach"):
-	case strings.Contains(o.ID, "NamespacedPodExec"):
-	case strings.Contains(o.ID, "replaceCoreV1NamespaceFinalize"):
-	case strings.Contains(o.ID, "V1beta1CertificateSigningRequestApproval"):
-	case strings.Contains(o.ID, "V1CertificateSigningRequestApproval"):
-	case strings.Contains(o.ID, "V1beta1NamespacedReplicationControllerDummyScale"):
-	case strings.Contains(o.ID, "getServiceAccountIssuerOpenIDConfiguration"):
-	case strings.Contains(o.ID, "getServiceAccountIssuerOpenIDKeyset"):
-	default:
-		fmt.Printf("\033[31mNo Definition found for %s [%s].\033[0m\n", o.ID, o.Path)
-	}
-}
-
 func (o *Operation) GetMethod() string {
 	switch o.HttpMethod {
 	case "GET":
