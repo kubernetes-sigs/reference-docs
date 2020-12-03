@@ -306,7 +306,7 @@ func LoadConfigFromYAML() *Config {
 	contents, err := ioutil.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
-			fmt.Printf("Failed to read yaml file %s: %v", f, err)
+			fmt.Printf("\033[31mFailed to read yaml file %s: %v\033[0m", f, err)
 			os.Exit(2)
 		}
 	} else {
@@ -584,12 +584,12 @@ func (c *Config) visitResourcesInToc() {
 				d.initExample(c)
 				r.Definition = d
 			} else {
-				fmt.Printf("Could not find definition for resource in TOC: %s %s %s.\n", r.Group, r.Version, r.Name)
+				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
 				missing = true
 			}
 		}
 	}
 	if missing {
-		fmt.Printf("All known definitions: %v\n", c.Definitions.All)
+		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
 	}
 }

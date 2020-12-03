@@ -58,11 +58,14 @@ func LoadOpenApiSpec() []*loads.Document {
 
 // return the map from short group name to full group name
 func buildGroupMap(specs []*loads.Document) map[string]string {
+	// TODO(Qiming): Expose this map to the config.yaml so that we don't need
+	// to revise the source code next time.
 	mapping := map[string]string{}
 	mapping["apiregistration"] = "apiregistration.k8s.io"
 	mapping["apiextensions"] = "apiextensions.k8s.io"
 	mapping["certificates"] = "certificates.k8s.io"
 	mapping["flowcontrol"] = "flowcontrol.apiserver.k8s.io"
+	mapping["apiserverinternal"] = "internal.apiserver.k8s.io"
 	mapping["meta"] = "meta"
 	mapping["core"] = "core"
 	mapping["extensions"] = "extensions"
