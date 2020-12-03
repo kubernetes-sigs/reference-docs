@@ -211,7 +211,7 @@ type Config struct {
 	ExcludedOperations  []string            `yaml:"excluded_operations,omitempty"`
 
 	// Used to map the group as the resource sees it to the group as the operation sees it
-	GroupMap map[string]string
+	OperationGroupMap map[string]string `yaml:"operation_group_map,omitempty"`
 
 	GroupFullNames map[string]string `yaml:"group_full_names,omitempty"`
 

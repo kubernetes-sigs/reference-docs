@@ -321,3 +321,9 @@ group_full_names:
   scheduling: scheduling.k8s.io
   storage: storage.k8s.io
 
+# The map from the group as the resource sees it to the group as the operation
+# sees it.
+operation_group_map:
+  rbac: RbacAuthorization
+  flowcontrol: FlowcontrolApiserver
+  apiserverinternal: InternalApiserver
