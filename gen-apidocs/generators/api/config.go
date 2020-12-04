@@ -36,7 +36,6 @@ import (
 var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on errors.")
 var WorkDir = flag.String("work-dir", "", "Working directory for the generator.")
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
-var MungeGroups = flag.Bool("munge-groups", true, "If true, munge the group names for the operations to match.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
 
 // Directory for output files
@@ -226,35 +225,11 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) {
 
 // initOperations returns all Operations found in the Documents
 func (c *Config) initOperations(specs []*loads.Document) {
-	ops := Operations{}
-
-	c.GroupMap = map[string]string{}
+	c.Operations = Operations{}
 	VisitOperations(specs, func(op Operation) {
-		ops[op.ID] = &op
-
-		// Build a map of the group names to the group name appearing in operation ids
-		// This is necessary because the group will appear without the domain
-		// in the resource, but with the domain in the operationID, and we
-		// will be unable to match the operationID to the resource because they
-		// don't agree on the name of the group.
-		// TODO: Fix this by getting the group-version-kind in the resource
-		if *MungeGroups {
-			if v, ok := op.op.Extensions[typeKey]; ok {
-				gvk := v.(map[string]interface{})
-				group, ok := gvk["group"].(string)
-				if !ok {
-					log.Fatalf("group not type string %v", v)
-				}
-				groupId := ""
-				for _, s := range strings.Split(group, ".") {
-					groupId = groupId + strings.Title(s)
-				}
-				c.GroupMap[strings.Title(strings.Split(group, ".")[0])] = groupId
-			}
-		}
+		c.Operations[op.ID] = &op
 	})
 
-	c.Operations = ops
 	c.mapOperationsToDefinitions()
 	c.initOperationsFromTags(specs)
 
@@ -451,7 +426,6 @@ func (c *Config) initOperationParameters() {
 
 		for code, response := range op.op.Responses.StatusCodeResponses {
 			if response.Schema == nil {
-				// fmt.Printf("Nil Schema for response: %+v\n", op.Path)
 				continue
 			}
 			r := &HttpResponse{
@@ -473,16 +447,20 @@ func (c *Config) initOperationParameters() {
 	}
 }
 
-func (c *Config) getOperationId(match string, group string, version ApiVersion, kind string) string {
-	// Lookup the name of the group as the operation expects it (different than the resource)
-	if g, ok := c.GroupMap[group]; ok {
-		group = g
+func (c *Config) getOperationGroupName(group string) string {
+	for k, v := range c.OperationGroupMap {
+		if strings.ToLower(group) == k {
+			return v
+		}
 	}
+	return strings.Title(group)
+}
 
+func (c *Config) getOperationId(match string, group string, version ApiVersion, kind string) string {
 	ver := []rune(string(version))
 	ver[0] = unicode.ToUpper(ver[0])
 
-	match = strings.Replace(match, "${group}", string(group), -1)
+	match = strings.Replace(match, "${group}", group, -1)
 	match = strings.Replace(match, "${version}", string(ver), -1)
 	match = strings.Replace(match, "${resource}", kind, -1)
 	return match
@@ -542,7 +520,8 @@ func (c *Config) mapOperationsToDefinitions() {
 			oc := c.OperationCategories[i]
 			for j := range oc.OperationTypes {
 				ot := oc.OperationTypes[j]
-				operationId := c.getOperationId(ot.Match, d.GetOperationGroupName(), d.Version, d.Name)
+				groupName := c.getOperationGroupName(d.Group.String())
+				operationId := c.getOperationId(ot.Match, groupName, d.Version, d.Name)
 				c.setOperation(operationId, "Namespaced", &ot, &oc, d)
 				c.setOperation(operationId, "", &ot, &oc, d)
 			}

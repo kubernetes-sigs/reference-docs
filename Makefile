@@ -81,7 +81,7 @@ updateapispec: createversiondirs
 	cd $(K8SROOT) && git show "v$(K8SRELEASE):api/openapi-spec/swagger.json" > $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json
 
 api: cleanapi
-	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=gen-apidocs --munge-groups=false
+	go run gen-apidocs/main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=gen-apidocs
 
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build
