@@ -276,3 +276,20 @@ operation_categories:
       match: create${group}${version}(Namespaced)?${resource}Rollback
     - name: Read Log
       match: read${group}${version}(Namespaced)?${resource}Log
+
+# List of *partial* operation IDs for matching. All matched operations are
+# excluded from the reference doc.
+excluded_operations:
+  - connectCoreV1Patch
+  - createCoreV1NamespacedPodBinding
+  - getCodeVersion
+  - logFileHandler
+  - logFileListHandler
+  - NamespacedPodAttach
+  - NamespacedPodExec
+  - replaceCoreV1NamespaceFinalize
+  - V1beta1CertificateSigningRequestApproval
+  - V1CertificateSigningRequestApproval
+  - V1beta1NamespacedReplicationControllerDummyScale
+  - getServiceAccountIssuerOpenIDConfiguration
+  - getServiceAccountIssuerOpenIDKeyset

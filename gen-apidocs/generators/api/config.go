@@ -261,7 +261,9 @@ func (c *Config) initOperations(specs []*loads.Document) {
 
 	VisitOperations(specs, func(target Operation) {
 		if op, ok := c.Operations[target.ID]; !ok || op.Definition == nil {
-			op.VerifyBlackListed()
+			if !c.opExcluded(op.ID) {
+				fmt.Printf("\033[31mNo Definition found for %s [%s].\033[0m\n", op.ID, op.Path)
+			}
 		}
 	})
 	c.initOperationParameters()
@@ -275,6 +277,15 @@ func (c *Config) initOperations(specs []*loads.Document) {
 			d.OperationCategories = []*OperationCategory{}
 		}
 	}
+}
+
+func (c *Config) opExcluded(op string) bool {
+	for _, pattern := range c.ExcludedOperations {
+		if strings.Contains(op, pattern) {
+			return true
+		}
+	}
+	return false
 }
 
 // CleanUp sorts and dedups fields
