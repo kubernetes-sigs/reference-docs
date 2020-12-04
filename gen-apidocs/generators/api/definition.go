@@ -45,14 +45,14 @@ var _INLINE_DEFINITIONS = []inlineDefinition{
 	{Name: "EventSource", Match: "${resource}EventSource"},
 }
 
-func NewDefinitions(specs []*loads.Document) Definitions {
+func NewDefinitions(config *Config, specs []*loads.Document) Definitions {
 	s := Definitions{
 		All:           map[string]*Definition{},
 		ByKind:        map[string]SortDefinitionsByVersion{},
 		GroupVersions: map[string]ApiVersions{},
 	}
 
-	LoadDefinitions(specs, &s)
+	LoadDefinitions(config, specs, &s)
 	s.initialize()
 	return s
 }

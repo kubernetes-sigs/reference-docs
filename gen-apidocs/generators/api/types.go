@@ -213,6 +213,8 @@ type Config struct {
 	// Used to map the group as the resource sees it to the group as the operation sees it
 	GroupMap map[string]string
 
+	GroupFullNames map[string]string `yaml:"group_full_names,omitempty"`
+
 	Definitions Definitions
 	Operations  Operations
 	SpecTitle   string
