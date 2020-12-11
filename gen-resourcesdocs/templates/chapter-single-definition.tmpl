@@ -28,7 +28,7 @@ weight: {{.Metadata.Weight}}
 {{- end}}{{/* range .Fields */}}
 
 {{range .FieldCategories}}
-### {{.Name}}
+### {{.Name}} {#{{.Name}}}
 
 {{range .Fields}}
 {{ ""  | indent .Indent | indent .Indent}}- {{.Name}}{{if .Value}}: {{.Value}}{{end}}

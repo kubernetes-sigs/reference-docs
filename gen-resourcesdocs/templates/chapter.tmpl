@@ -14,7 +14,7 @@ weight: {{.Metadata.Weight}}
 {{if .Import}}`import "{{.Import}}"`{{end}}
 
 {{range .Sections}}
-## {{.Name}}
+## {{.Name}} {#{{.Name}}}
 
 {{.Description | replace "<" "\\<" }}
 

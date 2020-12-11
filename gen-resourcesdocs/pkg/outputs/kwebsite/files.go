@@ -63,7 +63,6 @@ func escapeName(parts ...string) string {
 
 // headingID returns the ID built by hugo for a given header
 func headingID(s string) string {
-	result := strings.ToLower(s)
-	result = strings.ReplaceAll(result, " ", "-")
+	result := strings.ReplaceAll(s, " ", "-")
 	return result
 }
