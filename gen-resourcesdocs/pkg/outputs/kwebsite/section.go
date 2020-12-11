@@ -24,7 +24,7 @@ func (o Section) AddContent(s string) error {
 }
 
 // AddTypeDefinition adds the definition of a type to a section
-func (o Section) AddTypeDefinition(s string) error {
+func (o Section) AddTypeDefinition(typ string, description string) error {
 	i := len(o.chapter.data.Sections)
 	cats := o.chapter.data.Sections[i-1].FieldCategories
 	var fields *[]FieldData
@@ -34,7 +34,8 @@ func (o Section) AddTypeDefinition(s string) error {
 		fields = &cats[len(cats)-1].Fields
 	}
 	j := len(*fields)
-	(*fields)[j-1].TypeDefinition = "*" + s + "*"
+	(*fields)[j-1].Type = typ
+	(*fields)[j-1].TypeDefinition = "*" + description + "*"
 	return nil
 }
 

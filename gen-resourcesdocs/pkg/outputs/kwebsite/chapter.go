@@ -51,6 +51,7 @@ type FieldData struct {
 	Name           string
 	Value          string
 	Description    string
+	Type           string
 	TypeDefinition string
 	Indent         int
 }

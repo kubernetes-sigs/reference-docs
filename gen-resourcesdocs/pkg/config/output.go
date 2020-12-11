@@ -212,7 +212,7 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 						return err
 					}
 
-					err = outputSection.AddTypeDefinition(target.Description)
+					err = outputSection.AddTypeDefinition(property.TypeKey.ResourceName(), target.Description)
 					if err != nil {
 						return err
 					}

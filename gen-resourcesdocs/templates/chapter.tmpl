@@ -24,6 +24,7 @@ weight: {{.Metadata.Weight}}
 {{.Description | replace "<" "\\<" | indent 2 | indent .Indent | indent .Indent}}
 {{- end}}
 {{if .TypeDefinition}}
+{{ ""  | indent .Indent | indent .Indent}}  <a name="{{.Type}}"></a>
 {{.TypeDefinition | indent 2 | indent .Indent | indent .Indent}}
 {{end}}
 {{- end}}{{/* range .Fields */}}
@@ -37,6 +38,7 @@ weight: {{.Metadata.Weight}}
 {{.Description | replace "<" "\\<" | indent 2 | indent .Indent | indent .Indent}}
 {{- end}}
 {{if .TypeDefinition}}
+{{ ""  | indent .Indent | indent .Indent}}  <a name="{{.Type}}"></a>
 {{.TypeDefinition | indent 2 | indent .Indent | indent .Indent}}
 {{end}}
 {{- end}}{{/* range .Fields */}}
