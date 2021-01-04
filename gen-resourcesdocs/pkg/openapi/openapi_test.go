@@ -3,7 +3,7 @@ package openapi_test
 import (
 	"testing"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/openapi"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/openapi"
 )
 
 func TestLoadOpenAPISpecV119(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig"
-	"github.com/feloy/kubernetes-api-reference/pkg/outputs"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/outputs"
 )
 
 // Chapter of a KWebsite output

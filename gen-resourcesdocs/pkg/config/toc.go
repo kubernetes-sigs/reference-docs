@@ -7,9 +7,9 @@ import (
 	"os"
 	"sort"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
-	"github.com/feloy/kubernetes-api-reference/pkg/outputs/kwebsite"
 	"github.com/go-openapi/spec"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/outputs/kwebsite"
 	"gopkg.in/yaml.v2"
 )
 

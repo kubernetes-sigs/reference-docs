@@ -3,7 +3,7 @@ package config
 import (
 	"io/ioutil"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 	"gopkg.in/yaml.v2"
 )
 

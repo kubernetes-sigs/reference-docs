@@ -1,8 +1,6 @@
 package outputs
 
-import (
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
-)
+import "github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 
 // Output is an interface for output formats
 type Output interface {

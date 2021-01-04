@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 )
 
 // Section of a Hugo output

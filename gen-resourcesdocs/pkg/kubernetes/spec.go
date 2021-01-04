@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/openapi"
 	"github.com/go-openapi/spec"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/openapi"
 )
 
 // Spec represents the Kubernetes API Specification

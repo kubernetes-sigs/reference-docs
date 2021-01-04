@@ -16,6 +16,7 @@ weight: {{.Metadata.Weight}}
 {{range .Sections}}
 {{.Description | replace "<" "\\<" }}
 
+<hr>
 {{range .Fields}}
 {{ ""  | indent .Indent | indent .Indent}}- {{.Name}}{{if .Value}}: {{.Value}}{{end}}
 {{if .Description}}

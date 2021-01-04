@@ -3,8 +3,8 @@ package cli
 import (
 	"path"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/config"
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/config"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 	"github.com/spf13/cobra"
 )
 

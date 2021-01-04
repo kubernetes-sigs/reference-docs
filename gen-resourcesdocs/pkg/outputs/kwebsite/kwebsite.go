@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/outputs"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/outputs"
 )
 
 // KWebsite output
