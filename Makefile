@@ -92,3 +92,6 @@ copyapi: api
 	# copy the new navData.js
 	mkdir -p $(APIDST)/js
 	cp $(APISRC)/build/navData.js $(APIDST)/js/
+
+genresources:
+	cd gen-resourcesdocs && $(MAKE) kbwebsite

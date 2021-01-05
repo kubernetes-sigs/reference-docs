@@ -1,20 +1,29 @@
 env:
   global:
-    - KUBE_VERSION: 1.16
+    - KUBE_VERSION: 1.20
+    - K8S_RELEASE: 1.20
+
 language: go
 go:
-  - 1.12.1
+  - 1.15.5
 
 install:
 - export PATH=$GOPATH/bin:$PATH
 - mkdir -p $GOPATH/src/k8s.io/kubernetes
 - wget https://dl.k8s.io/v${KUBE_VERSION}.0/kubernetes-src.tar.gz -P $GOPATH/src/k8s.io/kubernetes
 - pushd $GOPATH/src/k8s.io/kubernetes && tar xzf kubernetes-src.tar.gz && popd
-- pushd $GOPATH/src/k8s.io/kubernetes && make generated_files && cp -L -R vendor ${GOPATH}/src/ && rm -r vendor && popd
+- pushd $GOPATH/src/k8s.io/kubernetes && make generated_files && cp -L -R vendor ${GOPATH}/src/ && popd
+- pushd $GOPATH/src/k8s.io/kubernetes && rm -r vendor/github.com/spf13/cobra && rm -r vendor/github.com/spf13/pflag && popd
+- pushd $GOPATH/src/k8s.io/kubernetes && cp -R vendor/k8s.io/kubectl/pkg/cmd  pkg/kubectl/ && popd
 - go get -v github.com/kubernetes-sigs/reference-docs/gen-compdocs
+- go get -v github.com/kubernetes-sigs/reference-docs/gen-kubectldocs
 
 script:
 - make comp
+- make genresources
+- make updateapispec
+- make cli
+
 # TODO: uncomment the following to make other docs
+# TODO: revisit api version dir for this script
 # - make api
-# - make cli
