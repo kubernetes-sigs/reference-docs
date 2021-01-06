@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/feloy/kubernetes-api-reference/cmd/cli"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/cmd/cli"
 )
 
 func main() {

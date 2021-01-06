@@ -3,7 +3,7 @@ package kubernetes_test
 import (
 	"testing"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 )
 
 func TestAPIGroupReplaces(t *testing.T) {

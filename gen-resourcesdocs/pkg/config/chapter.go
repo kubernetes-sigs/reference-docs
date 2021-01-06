@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
 	"github.com/go-openapi/spec"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 )
 
 // Chapter contains a definition of a main resource and its associated resources and definitions

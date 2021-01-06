@@ -1,8 +1,8 @@
 package kwebsite
 
 import (
-	"github.com/feloy/kubernetes-api-reference/pkg/kubernetes"
-	"github.com/feloy/kubernetes-api-reference/pkg/outputs"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
+	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/outputs"
 )
 
 // Part of a KWebsite output
