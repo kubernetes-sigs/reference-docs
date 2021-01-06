@@ -4,7 +4,6 @@ import "github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernet
 
 // Output is an interface for output formats
 type Output interface {
-	Prepare() error
 	AddPart(i int, name string) (Part, error)
 	NewPart(i int, name string) (Part, error)
 	Terminate() error

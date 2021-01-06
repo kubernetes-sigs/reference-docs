@@ -145,17 +145,7 @@ func GetGV(group kubernetes.APIGroup, version kubernetes.APIVersion) string {
 
 // ToKWebsite outputs documentation in Markdown format for k/website in dir directory
 func (o *TOC) ToKWebsite(outputDir string, templatesDir string) error {
-	// Test that dir is empty
-	fileinfos, err := ioutil.ReadDir(outputDir)
-	if err != nil {
-		return fmt.Errorf("Unable to open directory %s", outputDir)
-	}
-	if len(fileinfos) > 0 {
-		return fmt.Errorf("Directory %s must be empty", outputDir)
-	}
-
 	kw := kwebsite.NewKWebsite(outputDir, templatesDir)
-
 	return o.OutputDocument(kw)
 }
 

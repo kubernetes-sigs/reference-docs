@@ -9,19 +9,6 @@ import (
 	"github.com/stoewer/go-strcase"
 )
 
-func (o *KWebsite) addMainIndex() error {
-	t := template.Must(template.ParseFiles(filepath.Join(o.TemplatesDir, "main-index.tmpl")))
-
-	filename := filepath.Join(o.Directory, "_index.md")
-	f, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	return t.Execute(f, nil)
-}
-
 type PartIndex struct {
 	Title  string
 	Weight int
