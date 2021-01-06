@@ -21,7 +21,7 @@ install:
 script:
 - make comp
 - make genresources
-- make updateapispec
+#- make updateapispec
 - make cli
 
 # TODO: uncomment the following to make other docs
