@@ -94,4 +94,4 @@ copyapi: api
 	cp $(APISRC)/build/navData.js $(APIDST)/js/
 
 genresources:
-	cd gen-resourcesdocs && $(MAKE) kbwebsite
+	cd gen-resourcesdocs && $(MAKE) kwebsite
