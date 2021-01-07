@@ -1,20 +1,20 @@
 env:
   global:
-    - KUBE_VERSION: 1.16
+    - KUBE_VERSION: 1.20
+    - BUILD_PATH: /home/travis/gopath
 language: go
 go:
-  - 1.12.1
+  - 1.15.5
 
 install:
-- export PATH=$GOPATH/bin:$PATH
-- mkdir -p $GOPATH/src/k8s.io/kubernetes
-- wget https://dl.k8s.io/v${KUBE_VERSION}.0/kubernetes-src.tar.gz -P $GOPATH/src/k8s.io/kubernetes
-- pushd $GOPATH/src/k8s.io/kubernetes && tar xzf kubernetes-src.tar.gz && popd
-- pushd $GOPATH/src/k8s.io/kubernetes && make generated_files && cp -L -R vendor ${GOPATH}/src/ && rm -r vendor && popd
-- go get -v github.com/kubernetes-sigs/reference-docs/gen-compdocs
+- mkdir -p ${BUILD_PATH}/src/k8s.io
+- wget https://github.com/kubernetes/kubernetes/archive/v${KUBE_VERSION}.0.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
+- pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${KUBE_VERSION}.0 kubernetes && popd
+- pushd ${BUILD_PATH}/src/k8s.io/kubernetes && make generated_files && popd
 
 script:
 - make comp
+- make gen-resourcesdocs
 # TODO: uncomment the following to make other docs
 # - make api
 # - make cli

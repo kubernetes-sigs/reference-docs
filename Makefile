@@ -11,7 +11,7 @@
 RCNUM=${RC_NUM}
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
-K8SRELEASE=${K8S_RELEASE}
+K8SRELEASE=${K8S_RELEASE:1.20.0}
 K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut -c 1-4)
 
 # create a directory name from release string, e.g. 1.17 -> 1_17
@@ -65,14 +65,7 @@ cleancomp:
 
 comp: cleancomp
 	mkdir -p gen-compdocs/build
-	go run gen-compdocs/main.go gen-compdocs/build kube-apiserver
-	go run gen-compdocs/main.go gen-compdocs/build kube-controller-manager
-	#go run gen-compdocs/main.go gen-compdocs/build cloud-controller-manager
-	go run gen-compdocs/main.go gen-compdocs/build kube-scheduler
-	go run gen-compdocs/main.go gen-compdocs/build kubelet
-	go run gen-compdocs/main.go gen-compdocs/build kube-proxy
-	go run gen-compdocs/main.go gen-compdocs/build kubeadm
-	go run gen-compdocs/main.go gen-compdocs/build kubectl
+	make -C gen-compdocs
 
 # Build api docs
 updateapispec: createversiondirs
@@ -92,3 +85,6 @@ copyapi: api
 	# copy the new navData.js
 	mkdir -p $(APIDST)/js
 	cp $(APISRC)/build/navData.js $(APIDST)/js/
+
+genresources:
+	make -C gen-resourcesdocs kwebsite 
