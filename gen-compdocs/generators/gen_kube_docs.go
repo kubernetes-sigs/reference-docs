@@ -22,6 +22,7 @@ import (
 
 	"github.com/spf13/pflag"
 	//ccmapp "k8s.io/kubernetes/cmd/cloud-controller-manager/app"
+	kubectlcmd "k8s.io/kubectl/pkg/cmd"
 	"k8s.io/kubernetes/cmd/genutils"
 	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
 	cmapp "k8s.io/kubernetes/cmd/kube-controller-manager/app"
@@ -29,7 +30,6 @@ import (
 	schapp "k8s.io/kubernetes/cmd/kube-scheduler/app"
 	kubeadmapp "k8s.io/kubernetes/cmd/kubeadm/app/cmd"
 	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
-	kubectlcmd "k8s.io/kubernetes/pkg/kubectl/cmd"
 )
 
 func GenerateFiles(path, module string) {
