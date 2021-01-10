@@ -20,15 +20,6 @@ func NewKWebsite(dir string, templatesDir string) *KWebsite {
 	return &KWebsite{Directory: dir, TemplatesDir: templatesDir}
 }
 
-// Prepare a new output
-func (o *KWebsite) Prepare() error {
-	err := o.addMainIndex()
-	if err != nil {
-		return fmt.Errorf("Error writing index file in %s: %s", o.Directory, err)
-	}
-	return nil
-}
-
 // NewPart creates a new part for the output
 func (o *KWebsite) NewPart(i int, name string) (outputs.Part, error) {
 	partname := escapeName(name)

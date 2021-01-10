@@ -12,13 +12,8 @@ import (
 
 // OutputDocument outputs contents using output
 func (o *TOC) OutputDocument(output outputs.Output) error {
-	err := output.Prepare()
-	if err != nil {
-		return err
-	}
-
 	for p, tocPart := range o.Parts {
-		err = o.OutputPart(p, tocPart, output)
+		err := o.OutputPart(p, tocPart, output)
 		if err != nil {
 			return err
 		}
@@ -26,7 +21,7 @@ func (o *TOC) OutputDocument(output outputs.Output) error {
 
 	o.OutputCommonParameters(len(o.Parts), output)
 
-	err = output.Terminate()
+	err := output.Terminate()
 	if err != nil {
 		return err
 	}
