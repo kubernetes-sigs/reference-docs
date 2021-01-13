@@ -1,0 +1,5 @@
+# configuration for automated builds
+
+latest = "v1.20"
+fullversion = "v1.20.0"
+version = "v1.20"

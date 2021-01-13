@@ -1,0 +1,51 @@
+name: build-refdocs
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+  pull_request:
+
+jobs:
+  build:
+    name: Build reference docs
+
+    strategy:
+      matrix:
+        go-version: [1.15.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+        id: go
+
+      - name: Check out reference-docs code
+        uses: actions/checkout@v2
+
+      - name: Set release version
+        id: version_value
+        run: |
+            echo 'KUBE_VERSION<<EOF' >> $GITHUB_ENV
+            awk '/^version/ {print}' config.toml | cut -c 12-16 >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+
+      - name: Build references
+        run: |
+          echo "Building comp and gen-resourcesdocs"
+          echo "$GITHUB_WORKSPACE"
+          mkdir -p ${BUILD_PATH}/src/k8s.io
+          echo "${BUILD_PATH}"
+          wget https://github.com/kubernetes/kubernetes/archive/${KUBE_VERSION}.0.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
+          pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${KUBE_VERSION}.0 kubernetes && popd
+          pushd ${BUILD_PATH}/src/k8s.io/kubernetes && make generated_files && popd
+          make comp
+          make genresources
+        env:
+          BUILD_PATH: ${{ github.workspace }}/tmp
