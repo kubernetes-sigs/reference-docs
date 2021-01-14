@@ -36,6 +36,18 @@ func (s byName) Len() int           { return len(s) }
 func (s byName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s byName) Less(i, j int) bool { return s[i].Name() < s[j].Name() }
 
+const generated_warning = `<!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference conent, please follow the 
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+`
+
 func GenMarkdownTree(cmd *cobra.Command, dir string, withTitle bool) error {
 	identity := func(s string) string { return s }
 	emptyStr := func(s string) string { return "" }
@@ -85,9 +97,12 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	// Note: Files generated for kubeadm tool are snippets of Markdown without a title.
 	// These snippets are included in the corresponding kubeadm pages.
 	if withTitle {
-		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\n---\n\n", name); err != nil {
+		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\nauto_generated: true\n---\n\n", name); err != nil {
 			return err
 		}
+
+		// Print the "generated" warning
+		fmt.Fprintf(w, "%s\n\n", generated_warning)
 
 		if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"synopsis\" %}}"); err != nil {
 			return err
