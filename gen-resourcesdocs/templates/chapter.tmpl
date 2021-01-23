@@ -14,7 +14,7 @@ weight: {{.Metadata.Weight}}
 {{if .Import}}`import "{{.Import}}"`{{end}}
 
 {{range .Sections}}
-## {{.Name}} {#{{.Name}}}{{/* explicitly set fragment to keep capitalization */}}
+## {{.Name}} {#{{"-" | regexReplaceAll "[^a-zA-Z0-9]+" .Name }}}{{/* explicitly set fragment to keep capitalization */}}
 
 {{.Description | replace "<" "\\<" }}
 

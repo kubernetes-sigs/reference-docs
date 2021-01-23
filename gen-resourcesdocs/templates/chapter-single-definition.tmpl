@@ -29,7 +29,7 @@ weight: {{.Metadata.Weight}}
 {{- end}}{{/* range .Fields */}}
 
 {{range .FieldCategories}}
-### {{.Name}} {#{{.Name}}}{{/* explicitly set fragment to keep capitalization */}}
+### {{.Name}} {#{{"-" | regexReplaceAll "[^a-zA-Z0-9]+" .Name }}}{{/* explicitly set fragment to keep capitalization */}}
 
 {{range .Fields}}
 {{ ""  | indent .Indent | indent .Indent}}- {{.Name}}{{if .Value}}: {{.Value}}{{end}}
