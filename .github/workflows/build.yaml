@@ -32,9 +32,13 @@ jobs:
       - name: Set release version
         id: version_value
         run: |
-            echo 'KUBE_VERSION<<EOF' >> $GITHUB_ENV
-            awk '/^version/ {print}' config.toml | cut -c 12-16 >> $GITHUB_ENV
-            echo 'EOF' >> $GITHUB_ENV
+          mkdir -p ${BUILD_PATH}
+          cd ${BUILD_PATH} && wget https://raw.githubusercontent.com/kubernetes/website/master/config.toml
+          echo 'KUBE_VERSION<<EOF' >> $GITHUB_ENV
+          awk '/^version/ {print}' ${BUILD_PATH}/config.toml | cut -c 12-16 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+        env:
+          BUILD_PATH: ${{ github.workspace }}/tmp
 
       - name: Build references
         run: |
