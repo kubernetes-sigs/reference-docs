@@ -11,7 +11,12 @@
 RCNUM=${RC_NUM}
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
-K8SRELEASE=${K8S_RELEASE:1.20.0}
+K8SRELEASE=${K8S_RELEASE}
+
+ifeq ($(origin K8SRELEASE), undefined)
+K8SRELEASE=1.20.0
+endif
+
 K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut -c 1-4)
 
 # create a directory name from release string, e.g. 1.17 -> 1_17
