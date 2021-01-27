@@ -18,6 +18,9 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
 
+    env:
+      BUILD_PATH: ${{ github.workspace }}/tmp
+
     steps:
 
       - name: Set up Go ${{ matrix.go-version }}
@@ -32,24 +35,20 @@ jobs:
       - name: Set release version
         id: version_value
         run: |
-          mkdir -p ${BUILD_PATH}
-          cd ${BUILD_PATH} && wget https://raw.githubusercontent.com/kubernetes/website/master/config.toml
+          mkdir -p ${{env.BUILD_PATH}}
+          cd ${{env.BUILD_PATH}} && wget https://raw.githubusercontent.com/kubernetes/website/master/config.toml
           echo 'KUBE_VERSION<<EOF' >> $GITHUB_ENV
-          awk '/^version/ {print}' ${BUILD_PATH}/config.toml | cut -c 12-16 >> $GITHUB_ENV
+          awk '/^version/ {print}' ${{env.BUILD_PATH}}/config.toml | cut -c 12-16 >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-        env:
-          BUILD_PATH: ${{ github.workspace }}/tmp
 
       - name: Build references
         run: |
           echo "Building comp and gen-resourcesdocs"
           echo "$GITHUB_WORKSPACE"
-          mkdir -p ${BUILD_PATH}/src/k8s.io
-          echo "${BUILD_PATH}"
-          wget https://github.com/kubernetes/kubernetes/archive/${KUBE_VERSION}.0.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
-          pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${KUBE_VERSION}.0 kubernetes && popd
-          pushd ${BUILD_PATH}/src/k8s.io/kubernetes && make generated_files && popd
+          mkdir -p ${{env.BUILD_PATH}}/src/k8s.io
+          echo "${{env.BUILD_PATH}}"
+          wget https://github.com/kubernetes/kubernetes/archive/${{env.KUBE_VERSION}}.0.tar.gz -O ${{env.BUILD_PATH}}/src/k8s.io/kubernetes-src.tar.gz
+          pushd ${{env.BUILD_PATH}}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${{env.KUBE_VERSION}}.0 kubernetes && popd
+          pushd ${{env.BUILD_PATH}}/src/k8s.io/kubernetes && make generated_files && popd
           make comp
           make genresources
-        env:
-          BUILD_PATH: ${{ github.workspace }}/tmp
