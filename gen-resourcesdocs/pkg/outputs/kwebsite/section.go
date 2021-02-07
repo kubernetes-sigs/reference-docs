@@ -53,7 +53,7 @@ func (o Section) AddFieldCategory(name string) error {
 }
 
 // AddProperty adds a property to the section
-func (o Section) AddProperty(name string, property *kubernetes.Property, linkend []string, indent bool, defname string, shortName string) error {
+func (o Section) AddProperty(name string, property *kubernetes.Property, linkend []string, indent int, defname string, shortName string) error {
 	if property.HardCodedValue != nil {
 		i := len(o.chapter.data.Sections)
 		cats := o.chapter.data.Sections[i-1].FieldCategories
@@ -71,10 +71,6 @@ func (o Section) AddProperty(name string, property *kubernetes.Property, linkend
 		return nil
 	}
 
-	indentLevel := 0
-	if indent {
-		indentLevel++
-	}
 	required := ""
 	if property.Required {
 		required = ", required"
@@ -130,8 +126,11 @@ func (o Section) AddProperty(name string, property *kubernetes.Property, linkend
 	*fields = append(*fields, FieldData{
 		Name:        title,
 		Description: description,
-		Indent:      indentLevel,
+		Indent:      indent,
 	})
+	if indent > 3 {
+		fmt.Printf("Warning: %s/%s indentation is %d\n", o.chapter.name, name, indent)
+	}
 	return nil
 }
 

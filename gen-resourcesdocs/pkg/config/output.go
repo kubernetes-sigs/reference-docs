@@ -168,7 +168,7 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 				} else if name == "kind" {
 					property = kubernetes.NewHardCodedValueProperty(name, defname)
 				}
-				err := outputSection.AddProperty(name, property, []string{}, false, defname, name)
+				err := outputSection.AddProperty(name, property, []string{}, 0, defname, name)
 				if err != nil {
 					return err
 				}
@@ -186,7 +186,7 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 			}
 			completeName := prefix
 			completeName = append(completeName, name)
-			err = outputSection.AddProperty(strings.Join(completeName, "."), property, linkend, len(prefix) > 0, defname, name)
+			err = outputSection.AddProperty(strings.Join(completeName, "."), property, linkend, len(prefix), defname, name)
 			if err != nil {
 				return err
 			}
