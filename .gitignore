@@ -9,4 +9,3 @@ gen-apidocs/generators/includes/
 gen-apidocs/generators/manifest.json
 gen-compdocs/build/
 gen-resourcesdocs/kwebsite/
-docsy-example/content/en/docs/reference/kubernetes-api/
