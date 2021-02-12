@@ -14,7 +14,7 @@ install:
 
 script:
 - make comp
-- make gen-resourcesdocs
+- make genresources
 # TODO: uncomment the following to make other docs
 # - make api
 # - make cli
