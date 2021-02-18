@@ -1,0 +1,5586 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="kubescheduler-config-k8s-io-v1">Package: <span style="font-family: monospace">kubescheduler.config.k8s.io/v1</span></H2>
+            <p></p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#kubescheduler-config-k8s-io-v1-Policy">Policy</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-Policy">Policy
+    </H3>
+
+  
+
+  <p>Policy describes a struct for a policy resource used in api.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>Policy</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>predicates</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-PredicatePolicy">
+                <span style="font-family: monospace">[]PredicatePolicy</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Holds the information to configure the fit predicate functions
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>priorities</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-PriorityPolicy">
+                <span style="font-family: monospace">[]PriorityPolicy</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Holds the information to configure the priority functions
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>extenders</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-LegacyExtender">
+                <span style="font-family: monospace">[]LegacyExtender</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Holds the information to communicate with the extender(s)
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>hardPodAffinitySymmetricWeight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          RequiredDuringScheduling affinity is not symmetric, but there is an implicit PreferredDuringScheduling affinity rule
+corresponding to every RequiredDuringScheduling affinity rule.
+HardPodAffinitySymmetricWeight represents the weight of implicit PreferredDuringScheduling affinity rule, in the range 1-100.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>alwaysCheckAllPredicates</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          When AlwaysCheckAllPredicates is set to true, scheduler checks all
+the configured predicates even after one or more of them fails.
+When the flag is set to false, scheduler skips checking the rest
+of the predicates after it finds one predicate that failed.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-ExtenderManagedResource">ExtenderManagedResource
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-Extender">Extender</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1-LegacyExtender">LegacyExtender</a>)
+    </p>
+  
+
+  <p>ExtenderManagedResource describes the arguments of extended resources
+managed by an extender.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name is the extended resource name.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>ignoredByScheduler</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          IgnoredByScheduler indicates whether kube-scheduler should ignore this
+resource when applying predicates.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-ExtenderTLSConfig">ExtenderTLSConfig
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-Extender">Extender</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1-LegacyExtender">LegacyExtender</a>)
+    </p>
+  
+
+  <p>ExtenderTLSConfig contains settings to enable TLS with extender</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>insecure</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Server should be accessed without verifying the TLS certificate. For testing only.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>serverName</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          ServerName is passed to the server for SNI and is used in the client to check server
+certificates against. If ServerName is empty, the hostname used to contact the
+server is used.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>certFile</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Server requires TLS client certificate authentication
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>keyFile</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Server requires TLS client certificate authentication
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>caFile</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Trusted root certificates for server
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>certData</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]byte</span>
+            
+          
+        </td>
+        <td>
+          
+
+          CertData holds PEM-encoded bytes (typically read from a client certificate file).
+CertData takes precedence over CertFile
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>keyData</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]byte</span>
+            
+          
+        </td>
+        <td>
+          
+
+          KeyData holds PEM-encoded bytes (typically read from a client certificate key file).
+KeyData takes precedence over KeyFile
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>caData</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]byte</span>
+            
+          
+        </td>
+        <td>
+          
+
+          CAData holds PEM-encoded bytes (typically read from a root certificates bundle).
+CAData takes precedence over CAFile
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-LabelPreference">LabelPreference
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PriorityArgument">PriorityArgument</a>)
+    </p>
+  
+
+  <p>LabelPreference holds the parameters that are used to configure the corresponding priority function</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>label</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Used to identify node "groups"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>presence</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          This is a boolean flag
+If true, higher priority is given to nodes that have the label
+If false, higher priority is given to nodes that do not have the label
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-LabelsPresence">LabelsPresence
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PredicateArgument">PredicateArgument</a>)
+    </p>
+  
+
+  <p>LabelsPresence holds the parameters that are used to configure the corresponding predicate in scheduler policy configuration.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>labels</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The list of labels that identify node "groups"
+All of the labels should be either present (or absent) for the node to be considered a fit for hosting the pod
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>presence</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The boolean flag that indicates whether the labels should be present or absent from the node
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-LegacyExtender">LegacyExtender
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-Policy">Policy</a>)
+    </p>
+  
+
+  <p>LegacyExtender holds the parameters used to communicate with the extender. If a verb is unspecified/empty,
+it is assumed that the extender chose not to provide that extension.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>urlPrefix</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          URLPrefix at which the extender is available
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>filterVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the filter call, empty if not supported. This verb is appended to the URLPrefix when issuing the filter call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>preemptVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the preempt call, empty if not supported. This verb is appended to the URLPrefix when issuing the preempt call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>prioritizeVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the prioritize call, empty if not supported. This verb is appended to the URLPrefix when issuing the prioritize call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The numeric multiplier for the node scores that the prioritize call generates.
+The weight should be a positive integer
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>bindVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the bind call, empty if not supported. This verb is appended to the URLPrefix when issuing the bind call to extender.
+If this method is implemented by the extender, it is the extender's responsibility to bind the pod to apiserver. Only one extender
+can implement this function.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>enableHttps</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          EnableHTTPS specifies whether https should be used to communicate with the extender
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>tlsConfig</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ExtenderTLSConfig">
+                <span style="font-family: monospace">ExtenderTLSConfig</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          TLSConfig specifies the transport layer security config
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>httpTimeout</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/time#Duration">
+                <span style="font-family: monospace">time.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          HTTPTimeout specifies the timeout duration for a call to the extender. Filter timeout fails the scheduling of the pod. Prioritize
+timeout is ignored, k8s/other extenders priorities are used to select the node.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>nodeCacheCapable</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          NodeCacheCapable specifies that the extender is capable of caching node information,
+so the scheduler should only send minimal information about the eligible nodes
+assuming that the extender already cached full details of all nodes in the cluster
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>managedResources</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ExtenderManagedResource">
+                <span style="font-family: monospace">[]ExtenderManagedResource</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          ManagedResources is a list of extended resources that are managed by
+this extender.
+- A pod will be sent to the extender on the Filter, Prioritize and Bind
+  (if the extender is the binder) phases iff the pod requests at least
+  one of the extended resources in this list. If empty or unspecified,
+  all pods will be sent to this extender.
+- If IgnoredByScheduler is set to true for a resource, kube-scheduler
+  will skip checking the resource in predicates.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>ignorable</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Ignorable specifies if the extender is ignorable, i.e. scheduling should not
+fail when the extender returns an error or is not reachable.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-PredicateArgument">PredicateArgument
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PredicatePolicy">PredicatePolicy</a>)
+    </p>
+  
+
+  <p>PredicateArgument represents the arguments to configure predicate functions in scheduler policy configuration.
+Only one of its members may be specified</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>serviceAffinity</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ServiceAffinity">
+                <span style="font-family: monospace">ServiceAffinity</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The predicate that provides affinity for pods belonging to a service
+It uses a label to identify nodes that belong to the same "group"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>labelsPresence</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-LabelsPresence">
+                <span style="font-family: monospace">LabelsPresence</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The predicate that checks whether a particular node has a certain label
+defined or not, regardless of value
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-PredicatePolicy">PredicatePolicy
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-Policy">Policy</a>)
+    </p>
+  
+
+  <p>PredicatePolicy describes a struct of a predicate policy.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Identifier of the predicate policy
+For a custom predicate, the name can be user-defined
+For the Kubernetes provided predicates, the name is the identifier of the pre-defined predicate
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>argument</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-PredicateArgument">
+                <span style="font-family: monospace">PredicateArgument</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Holds the parameters to configure the given predicate
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-PriorityArgument">PriorityArgument
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PriorityPolicy">PriorityPolicy</a>)
+    </p>
+  
+
+  <p>PriorityArgument represents the arguments to configure priority functions in scheduler policy configuration.
+Only one of its members may be specified</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>serviceAntiAffinity</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ServiceAntiAffinity">
+                <span style="font-family: monospace">ServiceAntiAffinity</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The priority function that ensures a good spread (anti-affinity) for pods belonging to a service
+It uses a label to identify nodes that belong to the same "group"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>labelPreference</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-LabelPreference">
+                <span style="font-family: monospace">LabelPreference</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The priority function that checks whether a particular node has a certain label
+defined or not, regardless of value
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>requestedToCapacityRatioArguments</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioArguments">
+                <span style="font-family: monospace">RequestedToCapacityRatioArguments</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The RequestedToCapacityRatio priority function is parametrized with function shape.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-PriorityPolicy">PriorityPolicy
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-Policy">Policy</a>)
+    </p>
+  
+
+  <p>PriorityPolicy describes a struct of a priority policy.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Identifier of the priority policy
+For a custom priority, the name can be user-defined
+For the Kubernetes provided priority functions, the name is the identifier of the pre-defined priority function
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The numeric multiplier for the node scores that the priority function generates
+The weight should be non-zero and can be a positive or a negative integer
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>argument</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-PriorityArgument">
+                <span style="font-family: monospace">PriorityArgument</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Holds the parameters to configure the given priority function
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioArguments">RequestedToCapacityRatioArguments
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PriorityArgument">PriorityArgument</a>)
+    </p>
+  
+
+  <p>RequestedToCapacityRatioArguments holds arguments specific to RequestedToCapacityRatio priority function.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>shape</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-UtilizationShapePoint">
+                <span style="font-family: monospace">[]UtilizationShapePoint</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Array of point defining priority function shape.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ResourceSpec">
+                <span style="font-family: monospace">[]ResourceSpec</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-ResourceSpec">ResourceSpec
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioArguments">RequestedToCapacityRatioArguments</a>)
+    </p>
+  
+
+  <p>ResourceSpec represents single resource and weight for bin packing of priority RequestedToCapacityRatioArguments.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name of the resource to be managed by RequestedToCapacityRatio function.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Weight of the resource.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-ServiceAffinity">ServiceAffinity
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PredicateArgument">PredicateArgument</a>)
+    </p>
+  
+
+  <p>ServiceAffinity holds the parameters that are used to configure the corresponding predicate in scheduler policy configuration.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>labels</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The list of labels that identify node "groups"
+All of the labels should match for the node to be considered a fit for hosting the pod
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-ServiceAntiAffinity">ServiceAntiAffinity
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-PriorityArgument">PriorityArgument</a>)
+    </p>
+  
+
+  <p>ServiceAntiAffinity holds the parameters that are used to configure the corresponding priority function</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>label</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Used to identify node "groups"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1-UtilizationShapePoint">UtilizationShapePoint
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1-RequestedToCapacityRatioArguments">RequestedToCapacityRatioArguments</a>)
+    </p>
+  
+
+  <p>UtilizationShapePoint represents single point of priority function shape.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>utilization</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Utilization (x axis). Valid values are 0 to 100. Fully utilized node maps to 100.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>score</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Score assigned to given utilization (y axis). Valid values are 0 to 10.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+          
+          
+            
+            
+              
+                
+  <H3 id="ClientConnectionConfiguration">ClientConnectionConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>)
+    </p>
+  
+
+  <p>ClientConnectionConfiguration contains details for constructing a client.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>kubeconfig</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          kubeconfig is the path to a KubeConfig file.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>acceptContentTypes</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          acceptContentTypes defines the Accept header sent by clients when connecting to a server, overriding the
+default value of 'application/json'. This field will control all connections to the server used by a particular
+client.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>contentType</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          contentType is the content type used when sending data to the server from this client.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>qps</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">float32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          qps controls the number of queries per second allowed for this connection.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>burst</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          burst allows extra queries to accumulate when a client is exceeding its rate.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="DebuggingConfiguration">DebuggingConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>)
+    </p>
+  
+
+  <p>DebuggingConfiguration holds configuration for Debugging related features.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>enableProfiling</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          enableProfiling enables profiling via web interface host:port/debug/pprof/
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>enableContentionProfiling</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          enableContentionProfiling enables lock contention profiling, if
+enableProfiling is true.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="LeaderElectionConfiguration">LeaderElectionConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>)
+    </p>
+  
+
+  <p>LeaderElectionConfiguration defines the configuration of leader election
+clients for components that can run with leader election enabled.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>leaderElect</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          leaderElect enables a leader election client to gain leadership
+before executing the main loop. Enable this when running replicated
+components for high availability.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>leaseDuration</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          leaseDuration is the duration that non-leader candidates will wait
+after observing a leadership renewal until attempting to acquire
+leadership of a led but unrenewed leader slot. This is effectively the
+maximum duration that a leader can be stopped before it is replaced
+by another candidate. This is only applicable if leader election is
+enabled.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>renewDeadline</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          renewDeadline is the interval between attempts by the acting master to
+renew a leadership slot before it stops leading. This must be less
+than or equal to the lease duration. This is only applicable if leader
+election is enabled.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>retryPeriod</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          retryPeriod is the duration the clients should wait between attempting
+acquisition and renewal of a leadership. This is only applicable if
+leader election is enabled.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceLock</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          resourceLock indicates the resource object type that will be used to lock
+during leader election cycles.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceName</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          resourceName indicates the name of resource object that will be used to lock
+during leader election cycles.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceNamespace</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          resourceName indicates the namespace of resource object that will be used to lock
+during leader election cycles.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="LoggingConfiguration">LoggingConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a>)
+    </p>
+  
+
+  <p>LoggingConfiguration contains logging options
+Refer [Logs Options](https://github.com/kubernetes/component-base/blob/master/logs/options.go) for more information.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>format</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Format Flag specifies the structure of log messages.
+default value of format is `text`
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>sanitization</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          [Experimental] When enabled prevents logging of fields tagged as sensitive (passwords, keys, tokens).
+Runtime log sanitization may introduce significant computation overhead and therefore should not be enabled in production.`)
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+          
+
+          <HR />
+        
+          
+          
+            <H2 id="kubescheduler-config-k8s-io-v1beta1">Package: <span style="font-family: monospace">kubescheduler.config.k8s.io/v1beta1</span></H2>
+            <p></p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-DefaultPreemptionArgs">DefaultPreemptionArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-InterPodAffinityArgs">InterPodAffinityArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-NodeAffinityArgs">NodeAffinityArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-NodeLabelArgs">NodeLabelArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-NodeResourcesFitArgs">NodeResourcesFitArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-NodeResourcesLeastAllocatedArgs">NodeResourcesLeastAllocatedArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-NodeResourcesMostAllocatedArgs">NodeResourcesMostAllocatedArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-PodTopologySpreadArgs">PodTopologySpreadArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-RequestedToCapacityRatioArgs">RequestedToCapacityRatioArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-ServiceAffinityArgs">ServiceAffinityArgs</a>
+                  </li><li>
+                    <a href="#kubescheduler-config-k8s-io-v1beta1-VolumeBindingArgs">VolumeBindingArgs</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-DefaultPreemptionArgs">DefaultPreemptionArgs
+    </H3>
+
+  
+
+  <p>DefaultPreemptionArgs holds arguments used to configure the
+DefaultPreemption plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>DefaultPreemptionArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>minCandidateNodesPercentage</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          MinCandidateNodesPercentage is the minimum number of candidates to
+shortlist when dry running preemption as a percentage of number of nodes.
+Must be in the range [0, 100]. Defaults to 10% of the cluster size if
+unspecified.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>minCandidateNodesAbsolute</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          MinCandidateNodesAbsolute is the absolute minimum number of candidates to
+shortlist. The likely number of candidates enumerated for dry running
+preemption is given by the formula:
+numCandidates = max(numNodes &lowast; minCandidateNodesPercentage, minCandidateNodesAbsolute)
+We say "likely" because there are other factors such as PDB violations
+that play a role in the number of candidates shortlisted. Must be at least
+0 nodes. Defaults to 100 nodes if unspecified.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-InterPodAffinityArgs">InterPodAffinityArgs
+    </H3>
+
+  
+
+  <p>InterPodAffinityArgs holds arguments used to configure the InterPodAffinity plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>InterPodAffinityArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>hardPodAffinityWeight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          HardPodAffinityWeight is the scoring weight for existing pods with a
+matching hard affinity to the incoming pod.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration
+    </H3>
+
+  
+
+  <p>KubeSchedulerConfiguration configures a scheduler</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>KubeSchedulerConfiguration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>parallelism</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Parallelism defines the amount of parallelism in algorithms for scheduling a Pods. Must be greater than 0. Defaults to 16
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>leaderElection</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#LeaderElectionConfiguration">
+                <span style="font-family: monospace">LeaderElectionConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          LeaderElection defines the configuration of leader election client.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>clientConnection</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#ClientConnectionConfiguration">
+                <span style="font-family: monospace">ClientConnectionConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          ClientConnection specifies the kubeconfig file and client connection
+settings for the proxy server to use when communicating with the apiserver.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>healthzBindAddress</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          HealthzBindAddress is the IP address and port for the health check server to serve on,
+defaulting to 0.0.0.0:10251
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>metricsBindAddress</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          MetricsBindAddress is the IP address and port for the metrics server to
+serve on, defaulting to 0.0.0.0:10251.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>DebuggingConfiguration</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#DebuggingConfiguration">
+                <span style="font-family: monospace">DebuggingConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+            <p>(Members of <code>DebuggingConfiguration</code> are embedded into this type.)</p>
+          
+
+          DebuggingConfiguration holds configuration for Debugging related features
+TODO: We might wanna make this a substruct like Debugging componentbaseconfigv1alpha1.DebuggingConfiguration
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>percentageOfNodesToScore</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          PercentageOfNodesToScore is the percentage of all nodes that once found feasible
+for running a pod, the scheduler stops its search for more feasible nodes in
+the cluster. This helps improve scheduler's performance. Scheduler always tries to find
+at least "minFeasibleNodesToFind" feasible nodes no matter what the value of this flag is.
+Example: if the cluster size is 500 nodes and the value of this flag is 30,
+then scheduler stops finding further feasible nodes once it finds 150 feasible ones.
+When the value is 0, default percentage (5%--50% based on the size of the cluster) of the
+nodes will be scored.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>podInitialBackoffSeconds</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          PodInitialBackoffSeconds is the initial backoff for unschedulable pods.
+If specified, it must be greater than 0. If this value is null, the default value (1s)
+will be used.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>podMaxBackoffSeconds</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          PodMaxBackoffSeconds is the max backoff for unschedulable pods.
+If specified, it must be greater than podInitialBackoffSeconds. If this value is null,
+the default value (10s) will be used.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>profiles</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerProfile">
+                <span style="font-family: monospace">[]KubeSchedulerProfile</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Profiles are scheduling profiles that kube-scheduler supports. Pods can
+choose to be scheduled under a particular profile by setting its associated
+scheduler name. Pods that don't specify any scheduler name are scheduled
+with the "default-scheduler" profile, if present here.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>extenders</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-Extender">
+                <span style="font-family: monospace">[]Extender</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Extenders are the list of scheduler extenders, each holding the values of how to communicate
+with the extender. These extenders are shared by all scheduler profiles.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-NodeAffinityArgs">NodeAffinityArgs
+    </H3>
+
+  
+
+  <p>NodeAffinityArgs holds arguments to configure the NodeAffinity plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeAffinityArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>addedAffinity</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#nodeaffinity-v1-core">
+                <span style="font-family: monospace">core/v1.NodeAffinity</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          AddedAffinity is applied to all Pods additionally to the NodeAffinity
+specified in the PodSpec. That is, Nodes need to satisfy AddedAffinity
+AND .spec.NodeAffinity. AddedAffinity is empty by default (all Nodes
+match).
+When AddedAffinity is used, some Pods with affinity requirements that match
+a specific Node (such as Daemonset Pods) might remain unschedulable.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-NodeLabelArgs">NodeLabelArgs
+    </H3>
+
+  
+
+  <p>NodeLabelArgs holds arguments used to configure the NodeLabel plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeLabelArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>presentLabels</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          PresentLabels should be present for the node to be considered a fit for hosting the pod
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>absentLabels</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          AbsentLabels should be absent for the node to be considered a fit for hosting the pod
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>presentLabelsPreference</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Nodes that have labels in the list will get a higher score.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>absentLabelsPreference</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Nodes that don't have labels in the list will get a higher score.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-NodeResourcesFitArgs">NodeResourcesFitArgs
+    </H3>
+
+  
+
+  <p>NodeResourcesFitArgs holds arguments used to configure the NodeResourcesFit plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeResourcesFitArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>ignoredResources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          IgnoredResources is the list of resources that NodeResources fit filter
+should ignore.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>ignoredResourceGroups</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          IgnoredResourceGroups defines the list of resource groups that NodeResources fit filter should ignore.
+e.g. if group is ["example.com"], it will ignore all resource names that begin
+with "example.com", such as "example.com/aaa" and "example.com/bbb".
+A resource group name can't contain '/'.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-NodeResourcesLeastAllocatedArgs">NodeResourcesLeastAllocatedArgs
+    </H3>
+
+  
+
+  <p>NodeResourcesLeastAllocatedArgs holds arguments used to configure NodeResourcesLeastAllocated plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeResourcesLeastAllocatedArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-ResourceSpec">
+                <span style="font-family: monospace">[]ResourceSpec</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Resources to be managed, if no resource is provided, default resource set with both
+the weight of "cpu" and "memory" set to "1" will be applied.
+Resource with "0" weight will not accountable for the final score.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-NodeResourcesMostAllocatedArgs">NodeResourcesMostAllocatedArgs
+    </H3>
+
+  
+
+  <p>NodeResourcesMostAllocatedArgs holds arguments used to configure NodeResourcesMostAllocated plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeResourcesMostAllocatedArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-ResourceSpec">
+                <span style="font-family: monospace">[]ResourceSpec</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Resources to be managed, if no resource is provided, default resource set with both
+the weight of "cpu" and "memory" set to "1" will be applied.
+Resource with "0" weight will not accountable for the final score.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-PodTopologySpreadArgs">PodTopologySpreadArgs
+    </H3>
+
+  
+
+  <p>PodTopologySpreadArgs holds arguments used to configure the PodTopologySpread plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>PodTopologySpreadArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>defaultConstraints</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#topologyspreadconstraint-v1-core">
+                <span style="font-family: monospace">[]core/v1.TopologySpreadConstraint</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          DefaultConstraints defines topology spread constraints to be applied to
+Pods that don't define any in `pod.spec.topologySpreadConstraints`.
+`.defaultConstraints[&lowast;].labelSelectors` must be empty, as they are
+deduced from the Pod's membership to Services, ReplicationControllers,
+ReplicaSets or StatefulSets.
+When not empty, .defaultingType must be "List".
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>defaultingType</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PodTopologySpreadConstraintsDefaulting">
+                <span style="font-family: monospace">PodTopologySpreadConstraintsDefaulting</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          DefaultingType determines how .defaultConstraints are deduced. Can be one
+of "System" or "List".
+
+- "System": Use kubernetes defined constraints that spread Pods among
+  Nodes and Zones.
+- "List": Use constraints defined in .defaultConstraints.
+
+Defaults to "List" if feature gate DefaultPodTopologySpread is disabled
+and to "System" if enabled.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-RequestedToCapacityRatioArgs">RequestedToCapacityRatioArgs
+    </H3>
+
+  
+
+  <p>RequestedToCapacityRatioArgs holds arguments used to configure RequestedToCapacityRatio plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>RequestedToCapacityRatioArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>shape</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-UtilizationShapePoint">
+                <span style="font-family: monospace">[]UtilizationShapePoint</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Points defining priority function shape
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-ResourceSpec">
+                <span style="font-family: monospace">[]ResourceSpec</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Resources to be managed
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-ServiceAffinityArgs">ServiceAffinityArgs
+    </H3>
+
+  
+
+  <p>ServiceAffinityArgs holds arguments used to configure the ServiceAffinity plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>ServiceAffinityArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>affinityLabels</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          AffinityLabels are homogeneous for pods that are scheduled to a node.
+(i.e. it returns true IFF this pod can be added to this node such that all other pods in
+the same service are running on nodes with the exact same values for Labels).
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>antiAffinityLabelsPreference</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          AntiAffinityLabelsPreference are the labels to consider for service anti affinity scoring.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-VolumeBindingArgs">VolumeBindingArgs
+    </H3>
+
+  
+
+  <p>VolumeBindingArgs holds arguments used to configure the VolumeBinding plugin.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubescheduler.config.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>VolumeBindingArgs</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>bindTimeoutSeconds</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          BindTimeoutSeconds is the timeout in seconds in volume binding operation.
+Value must be non-negative integer. The value zero indicates no waiting.
+If this value is nil, the default value (600) will be used.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-Extender">Extender
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>)
+    </p>
+  
+
+  <p>Extender holds the parameters used to communicate with the extender. If a verb is unspecified/empty,
+it is assumed that the extender chose not to provide that extension.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>urlPrefix</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          URLPrefix at which the extender is available
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>filterVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the filter call, empty if not supported. This verb is appended to the URLPrefix when issuing the filter call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>preemptVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the preempt call, empty if not supported. This verb is appended to the URLPrefix when issuing the preempt call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>prioritizeVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the prioritize call, empty if not supported. This verb is appended to the URLPrefix when issuing the prioritize call to extender.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The numeric multiplier for the node scores that the prioritize call generates.
+The weight should be a positive integer
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>bindVerb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb for the bind call, empty if not supported. This verb is appended to the URLPrefix when issuing the bind call to extender.
+If this method is implemented by the extender, it is the extender's responsibility to bind the pod to apiserver. Only one extender
+can implement this function.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>enableHTTPS</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          EnableHTTPS specifies whether https should be used to communicate with the extender
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>tlsConfig</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ExtenderTLSConfig">
+                <span style="font-family: monospace">ExtenderTLSConfig</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          TLSConfig specifies the transport layer security config
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>httpTimeout</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          HTTPTimeout specifies the timeout duration for a call to the extender. Filter timeout fails the scheduling of the pod. Prioritize
+timeout is ignored, k8s/other extenders priorities are used to select the node.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>nodeCacheCapable</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          NodeCacheCapable specifies that the extender is capable of caching node information,
+so the scheduler should only send minimal information about the eligible nodes
+assuming that the extender already cached full details of all nodes in the cluster
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>managedResources</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1-ExtenderManagedResource">
+                <span style="font-family: monospace">[]ExtenderManagedResource</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          ManagedResources is a list of extended resources that are managed by
+this extender.
+- A pod will be sent to the extender on the Filter, Prioritize and Bind
+  (if the extender is the binder) phases iff the pod requests at least
+  one of the extended resources in this list. If empty or unspecified,
+  all pods will be sent to this extender.
+- If IgnoredByScheduler is set to true for a resource, kube-scheduler
+  will skip checking the resource in predicates.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>ignorable</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Ignorable specifies if the extender is ignorable, i.e. scheduling should not
+fail when the extender returns an error or is not reachable.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-KubeSchedulerProfile">KubeSchedulerProfile
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>)
+    </p>
+  
+
+  <p>KubeSchedulerProfile is a scheduling profile.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>schedulerName</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          SchedulerName is the name of the scheduler associated to this profile.
+If SchedulerName matches with the pod's "spec.schedulerName", then the pod
+is scheduled with this profile.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>plugins</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-Plugins">
+                <span style="font-family: monospace">Plugins</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Plugins specify the set of plugins that should be enabled or disabled.
+Enabled plugins are the ones that should be enabled in addition to the
+default plugins. Disabled plugins are any of the default plugins that
+should be disabled.
+When no enabled or disabled plugin is specified for an extension point,
+default plugins for that extension point will be used if there is any.
+If a QueueSort plugin is specified, the same QueueSort Plugin and
+PluginConfig must be specified for all profiles.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>pluginConfig</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginConfig">
+                <span style="font-family: monospace">[]PluginConfig</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PluginConfig is an optional set of custom plugin arguments for each plugin.
+Omitting config args for a plugin is equivalent to using the default config
+for that plugin.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-Plugin">Plugin
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">PluginSet</a>)
+    </p>
+  
+
+  <p>Plugin specifies a plugin name and its weight when applicable. Weight is used only for Score plugins.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name defines the name of plugin
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Weight defines the weight of plugin, only used for Score plugins.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-PluginConfig">PluginConfig
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerProfile">KubeSchedulerProfile</a>)
+    </p>
+  
+
+  <p>PluginConfig specifies arguments that should be passed to a plugin at the time of initialization.
+A plugin that is invoked at multiple extension points is initialized once. Args can have arbitrary structure.
+It is up to the plugin to process these Args.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name defines the name of plugin being configured
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>args</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime/#RawExtension">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.RawExtension</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Args defines the arguments passed to the plugins at the time of initialization. Args can have arbitrary structure.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-PluginSet">PluginSet
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-Plugins">Plugins</a>)
+    </p>
+  
+
+  <p>PluginSet specifies enabled and disabled plugins for an extension point.
+If an array is empty, missing, or nil, default plugins at that extension point will be used.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>enabled</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-Plugin">
+                <span style="font-family: monospace">[]Plugin</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Enabled specifies plugins that should be enabled in addition to default plugins.
+These are called after default plugins and in the same order specified here.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>disabled</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-Plugin">
+                <span style="font-family: monospace">[]Plugin</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Disabled specifies default plugins that should be disabled.
+When all default plugins need to be disabled, an array containing only one "&lowast;" should be provided.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-Plugins">Plugins
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-KubeSchedulerProfile">KubeSchedulerProfile</a>)
+    </p>
+  
+
+  <p>Plugins include multiple extension points. When specified, the list of plugins for
+a particular extension point are the only ones enabled. If an extension point is
+omitted from the config, then the default set of plugins is used for that extension point.
+Enabled plugins are called in the order specified here, after default plugins. If they need to
+be invoked before default plugins, default plugins must be disabled and re-enabled here in desired order.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>queueSort</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          QueueSort is a list of plugins that should be invoked when sorting pods in the scheduling queue.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>preFilter</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PreFilter is a list of plugins that should be invoked at "PreFilter" extension point of the scheduling framework.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>filter</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Filter is a list of plugins that should be invoked when filtering out nodes that cannot run the Pod.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>postFilter</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PostFilter is a list of plugins that are invoked after filtering phase, no matter whether filtering succeeds or not.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>preScore</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PreScore is a list of plugins that are invoked before scoring.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>score</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Score is a list of plugins that should be invoked when ranking nodes that have passed the filtering phase.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>reserve</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Reserve is a list of plugins invoked when reserving/unreserving resources
+after a node is assigned to run the pod.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>permit</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Permit is a list of plugins that control binding of a Pod. These plugins can prevent or delay binding of a Pod.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>preBind</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PreBind is a list of plugins that should be invoked before a pod is bound.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>bind</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Bind is a list of plugins that should be invoked at "Bind" extension point of the scheduling framework.
+The scheduler call these plugins in order. Scheduler skips the rest of these plugins as soon as one returns success.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>postBind</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubescheduler-config-k8s-io-v1beta1-PluginSet">
+                <span style="font-family: monospace">PluginSet</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          PostBind is a list of plugins that should be invoked after a pod is successfully bound.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-PodTopologySpreadConstraintsDefaulting">PodTopologySpreadConstraintsDefaulting
+    (<code>string</code> alias)</p></H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-PodTopologySpreadArgs">PodTopologySpreadArgs</a>)
+    </p>
+  
+
+  <p>PodTopologySpreadConstraintsDefaulting defines how to set default constraints
+for the PodTopologySpread plugin.</p>
+
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-ResourceSpec">ResourceSpec
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-NodeResourcesLeastAllocatedArgs">NodeResourcesLeastAllocatedArgs</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta1-NodeResourcesMostAllocatedArgs">NodeResourcesMostAllocatedArgs</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta1-RequestedToCapacityRatioArgs">RequestedToCapacityRatioArgs</a>)
+    </p>
+  
+
+  <p>ResourceSpec represents single resource and weight for bin packing of priority RequestedToCapacityRatioArguments.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name of the resource to be managed by RequestedToCapacityRatio function.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>weight</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int64</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Weight of the resource.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="kubescheduler-config-k8s-io-v1beta1-UtilizationShapePoint">UtilizationShapePoint
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta1-RequestedToCapacityRatioArgs">RequestedToCapacityRatioArgs</a>)
+    </p>
+  
+
+  <p>UtilizationShapePoint represents single point of priority function shape.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>utilization</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Utilization (x axis). Valid values are 0 to 100. Fully utilized node maps to 100.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>score</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Score assigned to given utilization (y axis). Valid values are 0 to 10.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>

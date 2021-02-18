@@ -1,0 +1,1594 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="audit-k8s-io-v1">Package: <span style="font-family: monospace">audit.k8s.io/v1</span></H2>
+            <p></p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#audit-k8s-io-v1-Event">Event</a>
+                  </li><li>
+                    <a href="#audit-k8s-io-v1-EventList">EventList</a>
+                  </li><li>
+                    <a href="#audit-k8s-io-v1-Policy">Policy</a>
+                  </li><li>
+                    <a href="#audit-k8s-io-v1-PolicyList">PolicyList</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="audit-k8s-io-v1-Event">Event
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-EventList">EventList</a>)
+    </p>
+  
+
+  <p>Event captures all the information that can be included in an API audit log.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>audit.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>Event</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>level</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Level">
+                <span style="font-family: monospace">Level</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          AuditLevel at which event was generated
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>auditID</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/types#UID">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/types.UID</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Unique audit ID, generated for each request.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>stage</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Stage">
+                <span style="font-family: monospace">Stage</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Stage of the request handling when this event instance was generated.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>requestURI</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          RequestURI is the request URI as sent by the client to a server.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>verb</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Verb is the kubernetes verb associated with the request.
+For non-resource requests, this is the lower-cased HTTP method.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>user</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication">
+                <span style="font-family: monospace">authentication/v1.UserInfo</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Authenticated user information.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>impersonatedUser</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication">
+                <span style="font-family: monospace">authentication/v1.UserInfo</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Impersonated user information.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>sourceIPs</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Source IPs, from where the request originated and intermediate proxies.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>userAgent</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          UserAgent records the user agent string reported by the client.
+Note that the UserAgent is provided by the client, and must not be trusted.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>objectRef</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-ObjectReference">
+                <span style="font-family: monospace">ObjectReference</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Object reference this request is targeted at.
+Does not apply for List-type requests, or non-resource requests.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>responseStatus</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#status-v1-meta">
+                <span style="font-family: monospace">meta/v1.Status</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The response status, populated even when the ResponseObject is not a Status type.
+For successful responses, this will only include the Code and StatusSuccess.
+For non-status type error responses, this will be auto-populated with the error Message.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>requestObject</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          API object from the request, in JSON format. The RequestObject is recorded as-is in the request
+(possibly re-encoded as JSON), prior to version conversion, defaulting, admission or
+merging. It is an external versioned object type, and may not be a valid object on its own.
+Omitted for non-resource requests.  Only logged at Request Level and higher.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>responseObject</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          API object returned in the response, in JSON. The ResponseObject is recorded after conversion
+to the external type, and serialized as JSON.  Omitted for non-resource requests.  Only logged
+at Response Level.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>requestReceivedTimestamp</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta">
+                <span style="font-family: monospace">meta/v1.MicroTime</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Time the request reached the apiserver.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>stageTimestamp</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta">
+                <span style="font-family: monospace">meta/v1.MicroTime</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Time the request reached current audit stage.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>annotations</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">map[string]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Annotations is an unstructured key value map stored with an audit event that may be set by
+plugins invoked in the request serving chain, including authentication, authorization and
+admission plugins. Note that these annotations are for the audit event, and do not correspond
+to the metadata.annotations of the submitted object. Keys should uniquely identify the informing
+component to avoid name collisions (e.g. podsecuritypolicy.admission.k8s.io/policy). Values
+should be short. Annotations are included in the Metadata level.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-EventList">EventList
+    </H3>
+
+  
+
+  <p>EventList is a list of audit Events.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>audit.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>EventList</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ListMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>items</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Event">
+                <span style="font-family: monospace">[]Event</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-Policy">Policy
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-PolicyList">PolicyList</a>)
+    </p>
+  
+
+  <p>Policy defines the configuration of audit logging, and the rules for how different request
+categories are logged.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>audit.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>Policy</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ObjectMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          ObjectMeta is included for interoperability with API infrastructure.
+
+          
+            Refer to the Kubernetes API documentation for the fields of the
+            <code>metadata</code> field.
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>rules</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-PolicyRule">
+                <span style="font-family: monospace">[]PolicyRule</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Rules specify the audit Level a request should be recorded at.
+A request may match multiple rules, in which case the FIRST matching rule is used.
+The default audit level is None, but can be overridden by a catch-all rule at the end of the list.
+PolicyRules are strictly ordered.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>omitStages</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Stage">
+                <span style="font-family: monospace">[]Stage</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          OmitStages is a list of stages for which no events are created. Note that this can also
+be specified per rule in which case the union of both are omitted.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-PolicyList">PolicyList
+    </H3>
+
+  
+
+  <p>PolicyList is a list of audit Policies.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>audit.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>PolicyList</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ListMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>items</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Policy">
+                <span style="font-family: monospace">[]Policy</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-GroupResources">GroupResources
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a>)
+    </p>
+  
+
+  <p>GroupResources represents resource kinds in an API group.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>group</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Group is the name of the API group that contains the resources.
+The empty string represents the core API group.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Resources is a list of resources this rule applies to.
+
+For example:
+'pods' matches pods.
+'pods/log' matches the log subresource of pods.
+'&lowast;' matches all resources and their subresources.
+'pods/&lowast;' matches all subresources of pods.
+'&lowast;/scale' matches all scale subresources.
+
+If wildcard is present, the validation rule will ensure resources do not
+overlap with each other.
+
+An empty list implies all resources and subresources in this API groups apply.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceNames</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          ResourceNames is a list of resource instance names that the policy matches.
+Using this field requires Resources to be specified.
+An empty list implies that every instance of the resource is matched.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-Level">Level
+    (<code>string</code> alias)</p></H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-Event">Event</a>, 
+        <a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a>)
+    </p>
+  
+
+  <p>Level defines the amount of information logged during auditing</p>
+
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-ObjectReference">ObjectReference
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-Event">Event</a>)
+    </p>
+  
+
+  <p>ObjectReference contains enough information to let you inspect or modify the referred object.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>resource</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>namespace</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>uid</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/types#UID">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/types.UID</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>apiGroup</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          APIGroup is the name of the API group that contains the referred object.
+The empty string represents the core API group.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>apiVersion</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          APIVersion is the version of the API group that contains the referred object.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceVersion</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>subresource</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-PolicyRule">PolicyRule
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-Policy">Policy</a>)
+    </p>
+  
+
+  <p>PolicyRule maps requests based off metadata to an audit Level.
+Requests must match the rules of every field (an intersection of rules).</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>level</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Level">
+                <span style="font-family: monospace">Level</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The Level that requests matching this rule are recorded at.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>users</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The users (by authenticated user name) this rule applies to.
+An empty list implies every user.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>userGroups</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The user groups this rule applies to. A user is considered matching
+if it is a member of any of the UserGroups.
+An empty list implies every user group.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>verbs</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          The verbs that match this rule.
+An empty list implies every verb.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-GroupResources">
+                <span style="font-family: monospace">[]GroupResources</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Resources that this rule matches. An empty list implies all kinds in all API groups.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>namespaces</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Namespaces that this rule matches.
+The empty string "" matches non-namespaced resources.
+An empty list implies every namespace.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>nonResourceURLs</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          NonResourceURLs is a set of URL paths that should be audited.
+&lowast;s are allowed, but only as the full, final step in the path.
+Examples:
+ "/metrics" - Log requests for apiserver metrics
+ "/healthz&lowast;" - Log all health checks
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>omitStages</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#audit-k8s-io-v1-Stage">
+                <span style="font-family: monospace">[]Stage</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          OmitStages is a list of stages for which no events are created. Note that this can also
+be specified policy wide in which case the union of both are omitted.
+An empty list means no restrictions will apply.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="audit-k8s-io-v1-Stage">Stage
+    (<code>string</code> alias)</p></H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#audit-k8s-io-v1-Event">Event</a>, 
+        <a href="#audit-k8s-io-v1-Policy">Policy</a>, 
+        <a href="#audit-k8s-io-v1-PolicyRule">PolicyRule</a>)
+    </p>
+  
+
+  <p>Stage defines the stages in request handling that audit events may be generated.</p>
+
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>

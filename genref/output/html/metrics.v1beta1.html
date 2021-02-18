@@ -1,0 +1,705 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="metrics-k8s-io-v1beta1">Package: <span style="font-family: monospace">metrics.k8s.io/v1beta1</span></H2>
+            <p>Package v1beta1 is the v1beta1 version of the metrics API.</p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#metrics-k8s-io-v1beta1-NodeMetrics">NodeMetrics</a>
+                  </li><li>
+                    <a href="#metrics-k8s-io-v1beta1-NodeMetricsList">NodeMetricsList</a>
+                  </li><li>
+                    <a href="#metrics-k8s-io-v1beta1-PodMetrics">PodMetrics</a>
+                  </li><li>
+                    <a href="#metrics-k8s-io-v1beta1-PodMetricsList">PodMetricsList</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="metrics-k8s-io-v1beta1-NodeMetrics">NodeMetrics
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#metrics-k8s-io-v1beta1-NodeMetricsList">NodeMetricsList</a>)
+    </p>
+  
+
+  <p>NodeMetrics sets resource usage metrics of a node.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>metrics.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeMetrics</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ObjectMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+            Refer to the Kubernetes API documentation for the fields of the
+            <code>metadata</code> field.
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>timestamp</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta">
+                <span style="font-family: monospace">meta/v1.Time</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The following fields define time interval from which metrics were
+collected from the interval [Timestamp-Window, Timestamp].
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>window</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>usage</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core">
+                <span style="font-family: monospace">core/v1.ResourceList</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The memory usage is the memory working set.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="metrics-k8s-io-v1beta1-NodeMetricsList">NodeMetricsList
+    </H3>
+
+  
+
+  <p>NodeMetricsList is a list of NodeMetrics.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>metrics.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>NodeMetricsList</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ListMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Standard list metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>items</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#metrics-k8s-io-v1beta1-NodeMetrics">
+                <span style="font-family: monospace">[]NodeMetrics</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          List of node metrics.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="metrics-k8s-io-v1beta1-PodMetrics">PodMetrics
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#metrics-k8s-io-v1beta1-PodMetricsList">PodMetricsList</a>)
+    </p>
+  
+
+  <p>PodMetrics sets resource usage metrics of a pod.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>metrics.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>PodMetrics</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ObjectMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+            Refer to the Kubernetes API documentation for the fields of the
+            <code>metadata</code> field.
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>timestamp</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta">
+                <span style="font-family: monospace">meta/v1.Time</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The following fields define time interval from which metrics were
+collected from the interval [Timestamp-Window, Timestamp].
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>window</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>containers</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#metrics-k8s-io-v1beta1-ContainerMetrics">
+                <span style="font-family: monospace">[]ContainerMetrics</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Metrics for all containers are collected within the same time window.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="metrics-k8s-io-v1beta1-PodMetricsList">PodMetricsList
+    </H3>
+
+  
+
+  <p>PodMetricsList is a list of PodMetrics.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>metrics.k8s.io/v1beta1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>PodMetricsList</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>metadata</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+                <span style="font-family: monospace">meta/v1.ListMeta</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Standard list metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>items</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#metrics-k8s-io-v1beta1-PodMetrics">
+                <span style="font-family: monospace">[]PodMetrics</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          List of pod metrics.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="metrics-k8s-io-v1beta1-ContainerMetrics">ContainerMetrics
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#metrics-k8s-io-v1beta1-PodMetrics">PodMetrics</a>)
+    </p>
+  
+
+  <p>ContainerMetrics sets resource usage metrics of a container.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Container name corresponding to the one from pod.spec.containers.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>usage</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core">
+                <span style="font-family: monospace">core/v1.ResourceList</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          The memory usage is the memory working set.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>

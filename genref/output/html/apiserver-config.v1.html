@@ -1,0 +1,239 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="apiserver-config-k8s-io-v1">Package: <span style="font-family: monospace">apiserver.config.k8s.io/v1</span></H2>
+            <p>Package v1 is the v1 version of the API.</p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#apiserver-config-k8s-io-v1-AdmissionConfiguration">AdmissionConfiguration</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-AdmissionConfiguration">AdmissionConfiguration
+    </H3>
+
+  
+
+  <p>AdmissionConfiguration provides versioned configuration for admission controllers.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>apiserver.config.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>AdmissionConfiguration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>plugins</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-AdmissionPluginConfiguration">
+                <span style="font-family: monospace">[]AdmissionPluginConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Plugins allows specifying a configuration per admission control plugin.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-AdmissionPluginConfiguration">AdmissionPluginConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-AdmissionConfiguration">AdmissionConfiguration</a>)
+    </p>
+  
+
+  <p>AdmissionPluginConfiguration provides the configuration for a single plug-in.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Name is the name of the admission controller.
+It must match the registered admission plugin name.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>path</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Path is the path to a configuration file that contains the plugin's
+configuration
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>configuration</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          Configuration is an embedded configuration object to be used as the plugin's
+configuration. If present, it will be used instead of the path to the configuration file.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>
