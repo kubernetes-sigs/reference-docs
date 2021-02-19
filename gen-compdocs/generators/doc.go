@@ -28,6 +28,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark-highlighting"
 )
 
 type byName []*cobra.Command
@@ -345,11 +347,8 @@ func flagUsages(f *pflag.FlagSet) string {
 		}
 		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
 
-		// escape '<' and '>', force wrap for "\n"
-		usage = strings.Replace(usage, "<", "&lt;", -1)
-		usage = strings.Replace(usage, ">", "&gt;", -1)
-		usage = strings.Replace(usage, "\n", "<br/>", -1)
-		line += usage + "</td>\n</tr>\n"
+		// process markdown in usage, force wrap for "\n"
+		line = processUsage(usage) + "</td>\n</tr>\n"
 
 		lines = append(lines, line)
 	})
@@ -421,4 +420,17 @@ func UnquoteUsage(flag *pflag.Flag) (name string, usage string) {
 	}
 
 	return
+}
+
+func processUsage(usage string) string {
+	var buf bytes.Buffer
+	var result string
+	md := goldmark.New(goldmark.WithExtensions(highlighting.Highlighting))
+	if err := md.Convert([]byte(usage), &buf); err != nil {
+		result = usage
+	} else {
+		result = buf.String()
+	}
+	result = strings.Replace(result, "\n", "<br/>", -1)
+	return result
 }
