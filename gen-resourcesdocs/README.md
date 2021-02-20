@@ -1,6 +1,6 @@
-# Kubernetes Resources documentation generator
+# Kubernetes API resources documentation generator
 
-This tool extracts information from the OpenAPI specification file of [the Kubernetes API](https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json) and creates a documentation in the Markdown format suitable for [the Kubernetes website content](https://kubernetes.io/docs/reference/kubernetes-api/).
+This tool extracts information from the OpenAPI specification file of the [Kubernetes API](https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json) and creates documentation in Markdown format, suitable for the [Kubernetes website](https://kubernetes.io/docs/reference/kubernetes-api/).
 
 ## Outline
 
@@ -37,7 +37,7 @@ parts:
 
 In this example, the first part contains two chapters and the second part one chapter.
 
-The first chapter describes the main `Deployment` resource (from the `apps` group and the `v1` version) and its associated resources and definitions. By default, if no `otherDefinitions` are defined, the associated resources are the `List` resource and the `Spec` and `Status` definitions, if approriate. In this case, `Deployment`, `DeploymentList`, `DeploymentSpec` and `DeploymentStatus` are documented.
+The first chapter describes the main `Deployment` resource (from the `apps` group and the `v1` version) and its associated resources and definitions. By default, if no `otherDefinitions` are defined, the associated resources are the `List` resource and the `Spec` and `Status` definitions, if appropriate. In this case, `Deployment`, `DeploymentList`, `DeploymentSpec` and `DeploymentStatus` are documented.
 
 The second chapter first describes the main `Pod` resource. The other resources and definitions documented in the chapter are listed in the `otherDefinitions` field.
 
