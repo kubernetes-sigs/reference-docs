@@ -13,7 +13,7 @@ parts:
 - name: Part I
   chapters:
   - name: Deployment
-    group: appshttps://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json
+    group: apps
     version: v1
   - name: Pod
     group: ""
