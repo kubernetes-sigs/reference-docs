@@ -302,7 +302,7 @@ func flagUsages(f *pflag.FlagSet) string {
 			line += fmt.Sprintf("--%s", flag.Name)
 		}
 
-		varname, usage := UnquoteUsage(flag)
+		varname, usage := unquoteUsage(flag)
 		if len(varname) > 0 {
 			line += " " + varname
 		}
@@ -319,11 +319,10 @@ func flagUsages(f *pflag.FlagSet) string {
 			}
 		}
 		if !defaultIsZeroValue(flag) {
+			defaultValue := flag.DefValue
 			if flag.Value.Type() == "string" {
 				// There are cases where the string is very very long, split
 				// it to mutiple lines manually
-				defaultValue := flag.DefValue
-
 				if len(defaultValue) > 40 {
 					defaultValue = strings.Replace(defaultValue, ",", ",<br />", -1)
 				}
@@ -332,15 +331,19 @@ func flagUsages(f *pflag.FlagSet) string {
 					myUser, err := user.Current()
 					if err == nil {
 						noprefix := strings.TrimPrefix(defaultValue, myUser.HomeDir)
-						line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"$HOME%s\"", noprefix)
-					} else {
-						line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
+						defaultValue = fmt.Sprintf("$HOME%s", noprefix)
 					}
-				} else {
-					line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
 				}
+				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
+			} else if flag.Value.Type() == "stringSlice" {
+				defaultValue := flag.DefValue
+				// For string slices, the default value should not contain '[' ]r ']'
+				defaultValue = strings.TrimPrefix(defaultValue, "[")
+				defaultValue = strings.TrimSuffix(defaultValue, "]")
+				defaultValue = strings.Replace(defaultValue, " ", "", -1)
+				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
 			} else {
-				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: %s", flag.DefValue)
+				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: %s", defaultValue)
 			}
 		}
 		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
@@ -377,6 +380,8 @@ func defaultIsZeroValue(f *pflag.Flag) bool {
 		return f.DefValue == "<nil>"
 	case "intSlice", "stringSlice", "stringArray":
 		return f.DefValue == "[]"
+	case "namedCertKey":
+		return f.DefValue == "[]"
 	default:
 		switch f.Value.String() {
 		case "false":
@@ -392,7 +397,8 @@ func defaultIsZeroValue(f *pflag.Flag) bool {
 	}
 }
 
-func UnquoteUsage(flag *pflag.Flag) (name string, usage string) {
+// Adapted usage function from pflag
+func unquoteUsage(flag *pflag.Flag) (name string, usage string) {
 	// Look for a back-quoted name, but avoid the strings package.
 	usage = flag.Usage
 	for i := 0; i < len(usage); i++ {
@@ -412,13 +418,32 @@ func UnquoteUsage(flag *pflag.Flag) (name string, usage string) {
 	switch name {
 	case "bool":
 		name = ""
-	case "float64":
+	case "float64", "float32":
 		name = "float"
-	case "int64":
+	case "int64", "severity", "Level":
 		name = "int"
 	case "uint64":
 		name = "uint"
+	case "stringSlice", "stringArray":
+		name = "strings"
+	case "intSlice":
+		name = "ints"
+	case "uintSlice":
+		name = "uints"
+	case "boolSlice":
+		name = "bools"
+	case "mapStringString":
+		name = "&lt;comma-separated 'key=value' pairs&gt;"
+	case "mapStringBool":
+		name = "&lt;comma-separated 'key=True|False' pairs&gt;"
+	case "namedCertKey", "ip":
+		name = "string"
+	case "moduleSpec":
+		name = "&lt;comma-separated 'pattern=N' settings&gt;"
+	case "portRange":
+		name = "&lt;a string in the form 'N1-N2'&gt;"
+	case "traceLocation":
+		name = "&lt;a string in the form 'file:N'&gt;"
 	}
-
 	return
 }
