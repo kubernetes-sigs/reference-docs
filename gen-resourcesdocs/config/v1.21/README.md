@@ -8,3 +8,4 @@
 - `Secret.immutable` GA
 - `PodSecurityPolicy` deprecated
 - `ServiceSpec.topologyKeys` deprecated
+- `CronJob` v2alpha1 removed

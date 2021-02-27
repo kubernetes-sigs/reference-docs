@@ -61,9 +61,6 @@ parts:
   - name: CronJob
     group: batch
     version: v1beta1
-  - name: CronJob
-    group: batch
-    version: v2alpha1
   - name: HorizontalPodAutoscaler
     group: autoscaling
     version: v1
