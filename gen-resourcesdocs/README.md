@@ -4,7 +4,11 @@ This tool extracts information from the OpenAPI specification file of the [Kuber
 
 ## Outline
 
-The documentation is splitted in several *parts*, and each part contains several *chapters*, each chapter describing a main Kubernetes resource and its associated resources and definitions, followed by the *Operations* operating on the resources documented in the chapter.
+The documentation is split into *parts*. Each part can contain any number of *chapters*. A chapter describes:
+
+- a main Kubernetes resource,
+- any resources and definitions associated with the main resource,
+- any *Operations* operating on the resources documented in the chapter.
 
 The parts and chapters are defined in the `config/<version>/toc.yaml` file.
 
@@ -80,7 +84,7 @@ The `nodeAffinity` field type of the `Affinity` composite type is `NodeAffinity`
 
 ### Ordering and categorization of fields
 
-By default, the fields of a Definition are listed in alphabetic order. The `content/<version>/fields.yaml` file is used to order the fields in another order, and also to group fields into categories.
+By default, the fields of a Definition are rendered in alphabetic order. The `content/<version>/fields.yaml` file is used to order the fields in another order, and also to group fields into categories.
 
 ```yaml
 - definition: io.k8s.api.core.v1.PodSpec
@@ -113,7 +117,7 @@ Note that if a Definition appears in the `fields.yaml` file and some fields of t
 
 The `name` attribute of `field_categories` in `fields.yaml` is optional. You can omit `name` when you want either to specify the order of the fields for a Definition  without creating a category, or to place some fields outside of any category, before other categories.
 
-## Common Definitions
+## Common definitions
 
 The `toc.yaml` file defines a **Common Definitions** part, containing a list of Definitions that are used in different places in the Kubernetes API.
 
