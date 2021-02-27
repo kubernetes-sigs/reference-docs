@@ -14,7 +14,7 @@
 # limitations under the License.
 
 parts:
-- name: Workloads Resources
+- name: Workload Resources
   chapters:
   - name: Pod
     group: ""
@@ -70,7 +70,7 @@ parts:
   - name: PriorityClass
     group: scheduling.k8s.io
     version: v1
-- name: Services Resources
+- name: Service Resources
   chapters:
   - name: Service
     group: ""
@@ -166,7 +166,7 @@ parts:
   - name: RoleBinding
     group: rbac.authorization.k8s.io
     version: v1
-- name: Policies Resources
+- name: Policy Resources
   chapters:
   - name: LimitRange
     group: ""
