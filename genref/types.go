@@ -341,6 +341,10 @@ func (t *apiType) References() []*apiType {
 // groupName extracts the "//+groupName" meta-comment from the specified
 // package's comments, or returns empty string if it cannot be found.
 func groupName(gopkg *types.Package) string {
+	p := gopkg.Constants["GroupName"]
+	if p != nil {
+		return *p.ConstValue
+	}
 	m := types.ExtractCommentTags("+", gopkg.Comments)
 	v := m["groupName"]
 	if len(v) == 1 {
