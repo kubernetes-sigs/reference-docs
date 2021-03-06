@@ -24,7 +24,7 @@ import (
 
 var (
 	flConfig  = flag.String("c", "config.yaml", "path to config file")
-	flFormat  = flag.String("f", "html", "format for output, one of 'html' and 'markdown'.")
+	flFormat  = flag.String("f", "markdown", "format for output, one of 'html' and 'markdown'.")
 	flInclude = flag.String("include", "", "API definitions to include, comma-separated list")
 	flExclude = flag.String("exclude", "", "API definitions to exclude, comma-separated list")
 	flPath    = flag.String("o", ".", "path for the output files")
@@ -73,6 +73,9 @@ type externalPackage struct {
 type apiDefinition struct {
 	// Name is the key string that represents a specific package
 	Name string `json:"name"`
+
+	// Title is the string that will appear as the title of the generated page
+	Title string `json:"title"`
 
 	// Package is the import path for the API package where a type is defined.
 	Package string `json:"package"`
@@ -127,7 +130,7 @@ func init() {
 }
 
 // processAPIPath processes a path for package enumeration and processing.
-func processAPIPath(path string, includes []string) ([]*apiPackage, error) {
+func processAPIPath(path string, includes []string, title string) ([]*apiPackage, error) {
 	pinfo("Parsing go packages in %s", path)
 	gopkgs, err := parseAPIPackages(path)
 	if err != nil {
@@ -147,7 +150,7 @@ func processAPIPath(path string, includes []string) ([]*apiPackage, error) {
 		}
 	}
 
-	pkgs, err := combineAPIPackages(gopkgs)
+	pkgs, err := combineAPIPackages(gopkgs, title)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +211,7 @@ func parseAPIPackages(dir string) ([]*types.Package, error) {
 
 // combineAPIPackages groups the Go packages by the <apiGroup+apiVersion> they
 // offer, and combines the types in them.
-func combineAPIPackages(pkgs []*types.Package) ([]*apiPackage, error) {
+func combineAPIPackages(pkgs []*types.Package, title string) ([]*apiPackage, error) {
 	pkgMap := make(map[string]*apiPackage)
 	re := `^v\d+((alpha|beta)\d+)?$`
 
@@ -234,6 +237,7 @@ func combineAPIPackages(pkgs []*types.Package) ([]*apiPackage, error) {
 				apiVersion: version,
 				Types:      typeList,
 				GoPackages: []*types.Package{gopkg},
+				Title:      title,
 			}
 		} else {
 			v.Types = append(v.Types, typeList...)
@@ -334,7 +338,7 @@ func main() {
 		if len(pkgInclude) > 0 && !containsString(pkgInclude, item.Name) {
 			continue
 		}
-		pkgs, err := processAPIPath(apiDir, item.Includes)
+		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title)
 		if err != nil {
 			perror("%+v", err)
 			continue
