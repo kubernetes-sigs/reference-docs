@@ -9,3 +9,13 @@
 - `PodSecurityPolicy` deprecated
 - `ServiceSpec.topologyKeys` deprecated
 - `CronJob` v2alpha1 removed
+- `CronJob` GA
+- `EndpointSlice` GA
+- `JobSpec`: new field `completionMode`
+- `JobStatus`; new field `completedIndexes`
+- `CronJobStatus`: new field `lastSuccessfulTime`
+- `PodAffinityTerm`: new field `namespaceSelector`
+- `ServiceSpec`: new field `loadBalancerClass`
+- `IngressClassParametersReference` added
+- `IngressClassSpec.parameters` of type `IngressClassParametersReference` (v1 and v1beta1)
+- `PodDisruptionBudgetStatus`: new field `conditions`

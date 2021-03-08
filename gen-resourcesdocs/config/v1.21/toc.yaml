@@ -60,7 +60,7 @@ parts:
     version: v1
   - name: CronJob
     group: batch
-    version: v1beta1
+    version: v1
   - name: HorizontalPodAutoscaler
     group: autoscaling
     version: v1
@@ -80,7 +80,7 @@ parts:
     version: v1
   - name: EndpointSlice
     group: discovery.k8s.io
-    version: v1beta1
+    version: v1
   - name: Ingress
     group: networking.k8s.io
     version: v1
