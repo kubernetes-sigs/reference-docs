@@ -391,7 +391,7 @@
     - completedIndexes
     - conditions
 
-- definition: io.k8s.api.batch.v1beta1.CronJobSpec
+- definition: io.k8s.api.batch.v1.CronJobSpec
   field_categories:
   - fields:
     - jobTemplate
@@ -466,7 +466,7 @@
     - name
     - appProtocol
 
-- definition: io.k8s.api.discovery.v1beta1.EndpointPort
+- definition: io.k8s.api.discovery.v1.EndpointPort
   field_categories:
   - fields:
     - port
