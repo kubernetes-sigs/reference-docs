@@ -3,7 +3,6 @@ module github.com/kubernetes-sigs/reference-docs/gen-compdocs
 go 1.15
 
 require (
-	github.com/go-logr/logr v0.3.0 // indirect
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -11,14 +10,10 @@ require (
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/pflag v1.0.5
-	github.com/yuin/goldmark v1.1.27 // indirect
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691 // indirect
 	golang.org/x/mod v0.3.0 // indirect
-	golang.org/x/tools v0.0.0-20200616133436-c1934b75d054 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
-	k8s.io/gengo v0.0.0-20201113003025-83324d819ded // indirect
-	k8s.io/klog/v2 v2.4.0 // indirect
 	k8s.io/kubectl v0.0.0
 	k8s.io/kubernetes v0.0.0
 	sigs.k8s.io/yaml v1.2.0 // indirect
