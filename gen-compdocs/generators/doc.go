@@ -351,7 +351,7 @@ func flagUsages(f *pflag.FlagSet) string {
 		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
 
 		// process markdown in usage, force wrap for "\n"
-		line = processUsage(usage) + "</td>\n</tr>\n"
+		line += processUsage(usage) + "</td>\n</tr>\n"
 
 		lines = append(lines, line)
 	})
@@ -456,6 +456,7 @@ func processUsage(usage string) string {
 	} else {
 		result = buf.String()
 	}
+	result = strings.TrimSuffix(result, "\n")
 	result = strings.Replace(result, "\n", "<br/>", -1)
 	return result
 }
