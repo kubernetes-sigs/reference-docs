@@ -151,6 +151,7 @@
     - httpGet
     - tcpSocket
     - initialDelaySeconds
+    - terminationGracePeriodSeconds
     - periodSeconds
     - timeoutSeconds
     - failureThreshold
@@ -375,6 +376,7 @@
     - backoffLimit
     - activeDeadlineSeconds
     - ttlSecondsAfterFinished
+    - suspend
   - name: Selector
     fields:
     - selector
@@ -435,6 +437,7 @@
     - loadBalancerClass
     - externalName
     - externalTrafficPolicy
+    - internalTrafficPolicy
     - healthCheckNodePort
     - publishNotReadyAddresses
     - sessionAffinityConfig

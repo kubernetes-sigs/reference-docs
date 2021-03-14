@@ -125,7 +125,7 @@ parts:
     version: v1
   - name: CSIStorageCapacity
     group: storage.k8s.io
-    version: v1alpha1
+    version: v1beta1
 - name: Authentication Resources
   chapters:
   - name: ServiceAccount
@@ -179,7 +179,7 @@ parts:
     version: v1
   - name: PodDisruptionBudget
     group: policy
-    version: v1beta1
+    version: v1
   - name: PodSecurityPolicy
     group: policy
     version: v1beta1
