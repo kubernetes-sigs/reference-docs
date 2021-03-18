@@ -1,11 +1,13 @@
-{{ define "packages" }}
+{{ define "packages" -}}
 
-{{ range .packages }}
+{{- range .packages -}}
 {{/* Only display package that has a group name */}}
-{{ if ne .GroupName "" }}
+{{- if ne .GroupName "" -}}
 ---
-title: {{ .DisplayName }}
+title: {{ .Title }}
 content_type: tool-reference
+package: {{ .DisplayName }}
+auto_generated: true
 ---
 {{ .GetComment }}
 {{- end -}}

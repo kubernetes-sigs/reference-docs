@@ -28,26 +28,31 @@ stripPrefix:
 
 apis:
   - name: kubelet-config
+    title: Kubelet Configuration (v1beta1)
     package: k8s.io/kubelet
     path: config/v1beta1
     includes:
       - k8s.io/component-base/config/v1alpha1
 
   - name: kubelet-stats
+    title: Kubelet Stats (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/stats/v1alpha1
 
   - name: kube-scheduler-config
+    title: kube-scheduler Configuration (v1beta1)
     package: k8s.io/kube-scheduler
     path: config/v1beta1
     includes:
       - k8s.io/kube-scheduler/config/v1
       - k8s.io/component-base/config/v1alpha1
   - name: kube-scheduler-policy-config
+    title: kube-scheduler Policy Configuration (v1)
     package: k8s.io/kube-scheduler
     path: config/v1
 
   - name: kube-controller-manager-config
+    title: kube-controller-manager Configuration (v1alpha1)
     package: k8s.io/kube-controller-manager
     path: config/v1alpha1
     includes:
@@ -56,36 +61,44 @@ apis:
       - k8s.io/controller-manager/config/v1alpha1
 
   - name: kube-proxy-config
+    title: kube-proxy Configuration (v1alpha1)
     package: k8s.io/kube-proxy
     path: config/v1alpha1
 
   - name: metrics
+    title: Kubernetes Metrics (v1alpha1)
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1alpha1
 
   - name: metrics
+    title: Kubernetes Metrics (v1alpha1)
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1beta1
 
   - name: client-authentication
+    title: Client Authentication (v1alpha1)
     package: k8s.io/client-go
     path: pkg/apis/clientauthentication/v1alpha1
 
   - name: client-authentication
+    title: Client Authentication (v1beta1)
     package: k8s.io/client-go
     path: pkg/apis/clientauthentication/v1beta1
 
   - name: apiserver-config
+    title: kube-apiserver Configuration (v1alpha1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1alpha1
     # skipped in favor of v1beta1 and v1
     skip: true
 
   - name: apiserver-config
+    title: kube-apiserver Configuration (v1beta1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1beta1
 
   - name: apiserver-config
+    title: kube-apiserver Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1
 
@@ -93,37 +106,44 @@ apis:
   # pkg only contains encryption config. Need to differentiate it from the
   # apiserver-config above.
   - name: apiserver-encryption
+    title: kube-apiserver Encryption Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/config/v1
 
     # Note: This is named apiserver-audit because it is part of the apiserver module
   - name: apiserver-audit
+    title: kube-apiserver Audit Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
 
   - name: apiserver-webhookadmission
+    title: WebhookAdmission Configuration (v1alpha1)
     package: k8s.io/apiserver
     path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1alpha1
     # Skip this in favor of v1
     skip: true
 
   - name: apiserver-webhookadmission
+    title: WebhookAdmission Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1
 
   - name: apiserver-eventratelimit
+    title: Event Rate Limit Configuration (v1alpha1)
     package: k8s.io/kubernetes
     path: plugin/pkg/admission/eventratelimit/apis/eventratelimit/v1alpha1
     # Skipped because k8s.io/kubernetes cannot be imported
     skip: true
 
   - name: apiserver-podtolerationrestriction
+    title: Pod Toleration Restriction (v1alpha1)
     package: k8s.io/kubernetes
     path: plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction/v1alpha1
     # Skipped because k8s.io/kubernetes cannot be imported
     skip: true
 
   - name: cloud-provider-config
+    title: Cloud Provider Configuration (v1alpha1)
     package: k8s.io/cloud-provider
     path: config/v1alpha1
     includes:
@@ -131,15 +151,18 @@ apis:
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
 
   - name: cloud-provider-service
+    title: Cloud Provider Service Configuration (v1alpha1)
     package: k8s.io/cloud-provider
     path: controllers/service/config/v1alpha1
 
   # This is for testing
   - name: kubeadm-config
+    title: kubeadm Configuration (v1beta1)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta1
 
   # This is for testing
   - name: kubeadm-config
+    title: kubeadm Configuration (v1beta2)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta2

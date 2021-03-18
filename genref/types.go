@@ -29,6 +29,9 @@ type apiPackage struct {
 	// List of Types defined. Note that multiple 'types.Package's can define
 	// Types for the same apiVersion.
 	Types []*apiType
+
+	// Title is set from config
+	Title string
 }
 
 // DisplayName returns the full name of the API package
