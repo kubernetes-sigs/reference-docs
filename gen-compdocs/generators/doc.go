@@ -38,7 +38,8 @@ func (s byName) Len() int           { return len(s) }
 func (s byName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s byName) Less(i, j int) bool { return s[i].Name() < s[j].Name() }
 
-const generated_warning = `<!--
+const generated_warning = `
+<!--
 The file is auto-generated from the Go source code of the component using a generic
 [generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
 to generate the reference documentation, please read
@@ -123,6 +124,9 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 			}
 		}
 	} else {
+		// Print the "generated" warning
+		fmt.Fprintf(w, "%s\n\n", generated_warning)
+
 		if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
 			return err
 		}
