@@ -2,6 +2,7 @@ example_location: "examples"
 api_groups:
   - "AdmissionRegistration"
   - "ApiExtensions"
+  - "InternalApiserver"
   - "ApiRegistration"
   - "Apps"
   - "AuditRegistration"
@@ -14,6 +15,7 @@ api_groups:
   - "Core"
   - "Discovery"
   - "Extensions"
+  - "FlowControl"
   - "Meta"
   - "Networking"
   - "Node"
@@ -136,10 +138,6 @@ resource_categories:
     - name: PriorityClass
       version: v1
       group: scheduling
-    - name: PodPreset
-      version: v1alpha1
-      group: settings
-      description_warning: "Alpha objects should not be used in production and may not be compatible with future versions of the resource type."
     - name: PodSecurityPolicy
       version: v1beta1
       group: policy
@@ -165,7 +163,7 @@ resource_categories:
       version: v1
       group: core
     - name: FlowSchema
-      version: v1alpha1
+      version: v1beta1
       group: flowcontrol
     - name: Lease
       version: v1
@@ -184,7 +182,7 @@ resource_categories:
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
     - name: PriorityLevelConfiguration
-      version: v1alpha1
+      version: v1beta1
       group: flowcontrol
     - name: ResourceQuota
       version: v1
@@ -196,7 +194,7 @@ resource_categories:
       version: v1
       group: rbac
     - name: RuntimeClass
-      version: v1beta1
+      version: v1
       group: node
     - name: SelfSubjectAccessReview
       version: v1
@@ -207,6 +205,9 @@ resource_categories:
     - name: ServiceAccount
       version: v1
       group: core
+    - name: StorageVersion
+      version: v1alpha1
+      group: apiserverinternal
     - name: SubjectAccessReview
       version: v1
       group: authorization
@@ -275,3 +276,54 @@ operation_categories:
       match: create${group}${version}(Namespaced)?${resource}Rollback
     - name: Read Log
       match: read${group}${version}(Namespaced)?${resource}Log
+
+# List of *partial* operation IDs for matching. All matched operations are
+# excluded from the reference doc.
+excluded_operations:
+  - connectCoreV1Patch
+  - createCoreV1NamespacedPodBinding
+  - getCodeVersion
+  - logFileHandler
+  - logFileListHandler
+  - NamespacedPodAttach
+  - NamespacedPodExec
+  - replaceCoreV1NamespaceFinalize
+  - V1beta1CertificateSigningRequestApproval
+  - V1CertificateSigningRequestApproval
+  - V1beta1NamespacedReplicationControllerDummyScale
+  - getServiceAccountIssuerOpenIDConfiguration
+  - getServiceAccountIssuerOpenIDKeyset
+
+# Map from group name to its full name
+group_full_names:
+  admission: admission
+  admissionregistration: admissionregistration.k8s.io
+  apiextensions: apiextensions.k8s.io
+  apiregistration: apiregistration.k8s.io
+  apiserverinternal: internal.apiserver.k8s.io
+  apps: apps
+  authentication: authentication.k8s.io
+  authorization: authorization.k8s.io
+  autoscaling: autoscaling
+  batch: batch
+  certificates: certificates.k8s.io
+  coordination: coordination.k8s.io
+  core: core
+  discovery: discovery.k8s.io
+  events: events.k8s.io
+  extensions: extensions
+  flowcontrol: flowcontrol.apiserver.k8s.io
+  meta: meta
+  networking: networking.k8s.io
+  node: node.k8s.io
+  policy: policy
+  rbac: rbac.authorization.k8s.io
+  scheduling: scheduling.k8s.io
+  storage: storage.k8s.io
+
+# The map from the group as the resource sees it to the group as the operation
+# sees it.
+operation_group_map:
+  rbac: RbacAuthorization
+  flowcontrol: FlowcontrolApiserver
+  apiserverinternal: InternalApiserver
