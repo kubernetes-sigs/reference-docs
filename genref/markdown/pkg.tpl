@@ -1,8 +1,8 @@
 {{ define "packages" -}}
 
-{{- range .packages -}}
+{{- range $idx, $val := .packages -}}
 {{/* Only display package that has a group name */}}
-{{- if ne .GroupName "" -}}
+{{- if and (ne .GroupName "") (eq $idx 0) -}}
 ---
 title: {{ .Title }}
 content_type: tool-reference

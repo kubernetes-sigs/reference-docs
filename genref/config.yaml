@@ -116,6 +116,11 @@ apis:
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
 
+  - name: apiserver-resourcequota
+    title: kube-apiserver ResourceQuota Configuration (v1)
+    package: k8s.io/apiserver
+    path: pkg/admission/plugin/resourcequota/apis/resourcequota/v1
+
   - name: apiserver-webhookadmission
     title: WebhookAdmission Configuration (v1alpha1)
     package: k8s.io/apiserver
