@@ -19,6 +19,7 @@
     - runtimeClassName
     - priorityClassName
     - priority
+    - topologySpreadConstraints
   - name: Lifecycle
     fields:
     - restartPolicy
@@ -48,12 +49,11 @@
     - securityContext
   - name: Beta level
     fields:
+    - preemptionPolicy
     - overhead
-    - topologySpreadConstraints
   - name: Alpha level
     fields:
     - ephemeralContainers
-    - preemptionPolicy
   - name: Deprecated
     fields:
     - serviceAccount
@@ -132,6 +132,7 @@
     - terminationMessagePolicy
     - livenessProbe
     - readinessProbe
+    - startupProbe
   - name: Security Context
     fields:
     - securityContext
@@ -140,9 +141,6 @@
     - stdin
     - stdinOnce
     - tty
-  - name: Beta level
-    fields:
-    - startupProbe
 
 - definition: io.k8s.api.core.v1.Probe
   field_categories:
@@ -501,6 +499,7 @@
     - azureFile
     - cephfs
     - cinder
+    - csi
     - fc
     - flexVolume
     - flocker
@@ -515,9 +514,6 @@
     - scaleIO
     - storageos
     - vsphereVolume
-  - name: Beta level
-    fields:
-    - csi
   - name: Alpha level
     fields:
     - ephemeral
@@ -596,6 +592,7 @@
     - azureFile
     - cephfs
     - cinder
+    - csi
     - fc
     - flexVolume
     - flocker
@@ -610,9 +607,6 @@
     - scaleIO
     - storageos
     - vsphereVolume
-  - name: Beta level
-    fields:
-    - csi
 
 - definition: io.k8s.api.rbac.v1.PolicyRule
   field_categories:
