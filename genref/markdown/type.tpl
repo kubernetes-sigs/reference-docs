@@ -24,8 +24,8 @@
     {{/* . is a apiType */}}
     {{- if .IsExported -}}
 {{/* Add apiVersion and kind rows if deemed necessary */}}
-<tr><td><samp>apiVersion</samp><br/>string</td><td><samp>{{- .APIGroup -}}</samp></td></tr>
-<tr><td><samp>kind</samp><br/>string</td><td><samp>{{- .Name.Name -}}</samp></td></tr>
+<tr><td><code>apiVersion</code><br/>string</td><td><code>{{- .APIGroup -}}</code></td></tr>
+<tr><td><code>kind</code><br/>string</td><td><code>{{- .Name.Name -}}</code></td></tr>
     {{ end -}}
 
 {{/* The actual list of members is in the following template */}}
