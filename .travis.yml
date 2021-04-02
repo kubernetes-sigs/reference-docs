@@ -1,10 +1,10 @@
 env:
   global:
-    - KUBE_VERSION: 1.20
+    - KUBE_VERSION: 1.21
     - BUILD_PATH: /home/travis/gopath
 language: go
 go:
-  - 1.15.5
+  - 1.16.3
 
 install:
 - mkdir -p ${BUILD_PATH}/src/k8s.io
