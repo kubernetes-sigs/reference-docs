@@ -1,0 +1,283 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="apiserver-config-k8s-io-v1">Package: <span style="font-family: monospace">apiserver.config.k8s.io/v1</span></H2>
+            <p>Package v1 is the v1 version of the API.</p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#apiserver-config-k8s-io-v1-Configuration">Configuration</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-Configuration">Configuration
+    </H3>
+
+  
+
+  <p>Configuration provides configuration for the ResourceQuota admission controller.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>apiserver.config.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>Configuration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>limitedResources</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-LimitedResource">
+                <span style="font-family: monospace">[]LimitedResource</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          LimitedResources whose consumption is limited by default.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-LimitedResource">LimitedResource
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-Configuration">Configuration</a>)
+    </p>
+  
+
+  <p>LimitedResource matches a resource whose consumption is limited by default.
+To consume the resource, there must exist an associated quota that limits
+its consumption.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>apiGroup</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          APIGroup is the name of the APIGroup that contains the limited resource.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resource</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          Resource is the name of the resource this rule applies to.
+For example, if the administrator wants to limit consumption
+of a storage resource associated with persistent volume claims,
+the value would be "persistentvolumeclaims".
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>matchContains</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          For each intercepted request, the quota system will evaluate
+its resource usage.  It will iterate through each resource consumed
+and if the resource contains any substring in this listing, the
+quota system will ensure that there is a covering quota.  In the
+absence of a covering quota, the quota system will deny the request.
+For example, if an administrator wants to globally enforce that
+that a quota must exist to consume persistent volume claims associated
+with any storage class, the list would include
+".storageclass.storage.k8s.io/requests.storage"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>matchScopes</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#scopedresourceselectorrequirement-v1-core">
+                <span style="font-family: monospace">[]core/v1.ScopedResourceSelectorRequirement</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          For each intercepted request, the quota system will figure out if the input object
+satisfies a scope which is present in this listing, then
+quota system will ensure that there is a covering quota.  In the
+absence of a covering quota, the quota system will deny the request.
+For example, if an administrator wants to globally enforce that
+a quota must exist to create a pod with "cluster-services" priorityclass
+the list would include "scopeName=PriorityClass, Operator=In, Value=cluster-services"
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>

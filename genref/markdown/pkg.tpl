@@ -1,24 +1,25 @@
 {{ define "packages" -}}
 
+{{ $grpname := "" -}}
 {{- range $idx, $val := .packages -}}
-{{/* Only display package that has a group name */}}
-{{- if and (ne .GroupName "") (eq $idx 0) -}}
+{{- if and (ne .GroupName "") (eq $grpname "") -}}
 ---
 title: {{ .Title }}
 content_type: tool-reference
 package: {{ .DisplayName }}
 auto_generated: true
 ---
-{{ .GetComment }}
+{{ .GetComment -}}
+{{ $grpname = .GroupName }}
 {{- end -}}
 {{- end }}
 
 ## Resource Types 
 
-{{ range .packages }}
-  {{ if ne .GroupName "" -}}
+{{ range .packages -}}
+  {{- if ne .GroupName "" -}}
     {{- range .VisibleTypes -}}
-      {{ if .IsExported }}
+      {{- if .IsExported }}
 - [{{ .DisplayName }}]({{ .Link }})
       {{- end -}}
     {{- end -}}

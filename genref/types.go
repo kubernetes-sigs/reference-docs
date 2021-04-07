@@ -332,7 +332,15 @@ func (t *apiType) References() []*apiType {
 		}
 	}
 	for k := range m {
-		out = append(out, k)
+		found := false
+		for _, e := range out {
+			if k.DisplayName() == e.DisplayName() && k.Link() == e.Link() {
+				found = true
+			}
+		}
+		if !found {
+			out = append(out, k)
+		}
 	}
 	sortTypes(out)
 	return out

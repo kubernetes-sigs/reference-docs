@@ -1,0 +1,796 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+        
+          
+          
+            <H2 id="apiserver-config-k8s-io-v1">Package: <span style="font-family: monospace">apiserver.config.k8s.io/v1</span></H2>
+            <p>Package v1 is the v1 version of the API.</p>
+
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#apiserver-config-k8s-io-v1-EncryptionConfiguration">EncryptionConfiguration</a>
+                  </li></ul>
+
+            
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-EncryptionConfiguration">EncryptionConfiguration
+    </H3>
+
+  
+
+  <p>EncryptionConfiguration stores the complete configuration for encryption providers.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>apiserver.config.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>EncryptionConfiguration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-ResourceConfiguration">
+                <span style="font-family: monospace">[]ResourceConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          resources is a list containing resources, and their corresponding encryption providers.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-AESConfiguration">AESConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-ProviderConfiguration">ProviderConfiguration</a>)
+    </p>
+  
+
+  <p>AESConfiguration contains the API configuration for an AES transformer.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>keys</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-Key">
+                <span style="font-family: monospace">[]Key</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          keys is a list of keys to be used for creating the AES transformer.
+Each key has to be 32 bytes long for AES-CBC and 16, 24 or 32 bytes for AES-GCM.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-IdentityConfiguration">IdentityConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-ProviderConfiguration">ProviderConfiguration</a>)
+    </p>
+  
+
+  <p>IdentityConfiguration is an empty struct to allow identity transformer in provider configuration.</p>
+
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-KMSConfiguration">KMSConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-ProviderConfiguration">ProviderConfiguration</a>)
+    </p>
+  
+
+  <p>KMSConfiguration contains the name, cache size and path to configuration file for a KMS based envelope transformer.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          name is the name of the KMS plugin to be used.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>cachesize</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          cachesize is the maximum number of secrets which are cached in memory. The default value is 1000.
+Set to a negative value to disable caching.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>endpoint</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          endpoint is the gRPC server listening address, for example "unix:///var/run/kms-provider.sock".
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>timeout</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          timeout for gRPC calls to kms-plugin (ex. 5s). The default is 3 seconds.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-Key">Key
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-AESConfiguration">AESConfiguration</a>, 
+        <a href="#apiserver-config-k8s-io-v1-SecretboxConfiguration">SecretboxConfiguration</a>)
+    </p>
+  
+
+  <p>Key contains name and secret of the provided key for a transformer.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          name is the name of the key to be used while storing data to disk.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>secret</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          secret is the actual key, encoded in base64.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-ProviderConfiguration">ProviderConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-ResourceConfiguration">ResourceConfiguration</a>)
+    </p>
+  
+
+  <p>ProviderConfiguration stores the provided configuration for an encryption provider.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>aesgcm</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-AESConfiguration">
+                <span style="font-family: monospace">AESConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          aesgcm is the configuration for the AES-GCM transformer.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>aescbc</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-AESConfiguration">
+                <span style="font-family: monospace">AESConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          aescbc is the configuration for the AES-CBC transformer.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>secretbox</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-SecretboxConfiguration">
+                <span style="font-family: monospace">SecretboxConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          secretbox is the configuration for the Secretbox based transformer.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>identity</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-IdentityConfiguration">
+                <span style="font-family: monospace">IdentityConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          identity is the (empty) configuration for the identity transformer.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>kms</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-KMSConfiguration">
+                <span style="font-family: monospace">KMSConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          kms contains the name, cache size and path to configuration file for a KMS based envelope transformer.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-ResourceConfiguration">ResourceConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-EncryptionConfiguration">EncryptionConfiguration</a>)
+    </p>
+  
+
+  <p>ResourceConfiguration stores per resource configuration.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>resources</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          resources is a list of kubernetes resources which have to be encrypted.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>providers</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-ProviderConfiguration">
+                <span style="font-family: monospace">[]ProviderConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          providers is a list of transformers to be used for reading and writing the resources to disk.
+eg: aesgcm, aescbc, secretbox, identity.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+              
+  <H3 id="apiserver-config-k8s-io-v1-SecretboxConfiguration">SecretboxConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-config-k8s-io-v1-ProviderConfiguration">ProviderConfiguration</a>)
+    </p>
+  
+
+  <p>SecretboxConfiguration contains the API configuration for an Secretbox transformer.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>keys</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-config-k8s-io-v1-Key">
+                <span style="font-family: monospace">[]Key</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          keys is a list of keys to be used for creating the Secretbox transformer.
+Each key has to be 32 bytes long.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+            
+          
+
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+      </div>
+    </body>
+  </html>

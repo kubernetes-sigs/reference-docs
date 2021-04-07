@@ -38,6 +38,8 @@ apis:
     title: Kubelet Stats (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/stats/v1alpha1
+    # Skip this because not referenced anywhere and it has no group name
+    skip: true
 
   - name: kube-scheduler-config
     title: kube-scheduler Configuration (v1beta1)
@@ -69,6 +71,8 @@ apis:
     title: Kubernetes Metrics (v1alpha1)
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1alpha1
+    # superceded by v1beta1 version
+    skip: true
 
   - name: metrics
     title: Kubernetes Metrics (v1alpha1)
@@ -79,6 +83,8 @@ apis:
     title: Client Authentication (v1alpha1)
     package: k8s.io/client-go
     path: pkg/apis/clientauthentication/v1alpha1
+    # superceded by v1beta1
+    skip: true
 
   - name: client-authentication
     title: Client Authentication (v1beta1)
