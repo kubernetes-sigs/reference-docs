@@ -380,7 +380,25 @@ func LoadConfigFromYAML() *Config {
 		},
 	}
 
-	config.OperationCategories = append([]OperationCategory{writeCategory, readCategory, statusCategory}, config.OperationCategories...)
+	ephemaralCategory := OperationCategory{
+		Name: "EphemeralContainers Operations",
+		OperationTypes: []OperationType{
+			{
+				Name:  "Patch EphemeralContainers",
+				Match: "patch${group}${version}(Namespaced)?${resource}Ephemeralcontainers",
+			},
+			{
+				Name:  "Read EphemeralContainers",
+				Match: "read${group}${version}(Namespaced)?${resource}Ephemeralcontainers",
+			},
+			{
+				Name:  "Replace EphemeralContainers",
+				Match: "replace${group}${version}(Namespaced)?${resource}Ephemeralcontainers",
+			},
+		},
+	}
+
+	config.OperationCategories = append([]OperationCategory{writeCategory, readCategory, statusCategory, ephemaralCategory}, config.OperationCategories...)
 
 	return config
 }
