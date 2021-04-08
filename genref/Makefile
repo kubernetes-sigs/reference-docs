@@ -1,3 +1,3 @@
 
 all:
-	go build -o genref
+	go build -mod mod -o genref

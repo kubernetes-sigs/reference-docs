@@ -15,6 +15,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-highlighting"
 	"k8s.io/gengo/types"
+	"k8s.io/klog/v2"
 )
 
 // apiPackage is a collection of Go packages where API type definitions are found.
@@ -195,7 +196,7 @@ func (t *apiType) APIGroup() string {
 
 	p := typePkgMap[t.String()]
 	if p == nil {
-		pwarning("Cannot read apiVersion for %s from type=>pkg map", t.Name.String())
+		klog.Warningf("Cannot read apiVersion for %s from type=>pkg map", t.Name.String())
 		return "<UNKNOWN_API_GROUP>"
 	}
 
@@ -244,7 +245,7 @@ func (t *apiType) Link() string {
 		for _, v := range config.ExternalPackages {
 			r, err := regexp.Compile(v.Match)
 			if err != nil {
-				perror("Pattern %q failed to compile: %+v", v.Match, err)
+				klog.Errorf("Pattern %q failed to compile: %+v", v.Match, err)
 				return ""
 			}
 			// The type identifier is identified as a type from an "external" package
@@ -254,7 +255,7 @@ func (t *apiType) Link() string {
 					"arrIndex": arrIndex,
 				}).Parse(v.Target)
 				if err != nil {
-					perror("Failed to parse the 'target': %s", v.Target)
+					klog.Errorf("Failed to parse the 'target': %s", v.Target)
 					return ""
 				}
 
@@ -265,7 +266,7 @@ func (t *apiType) Link() string {
 					"PackageSegments": segments,
 				})
 				if err != nil {
-					perror("Failed to execute template: %+v", err)
+					klog.Errorf("Failed to execute template: %+v", err)
 					return ""
 				}
 				return b.String()
@@ -274,7 +275,7 @@ func (t *apiType) Link() string {
 
 		// We are here if the type identifier for the type is not listed as an
 		// external one. This means we have to parse it.
-		perror("External link source for '%s.%s' is not found.", t.Name.Package, t.Name.Name)
+		klog.Errorf("External link source for '%s.%s' is not found.", t.Name.Package, t.Name.Name)
 	}
 	return ""
 }
@@ -300,7 +301,7 @@ func (t *apiType) DisplayName() string {
 	case types.Map: // return original name
 		return t.Name.Name
 	default:
-		pwarning("Type '%s' has kind='%v' which is unhandled", t.Name, t.Kind)
+		klog.Warningf("Type '%s' has kind='%v' which is unhandled", t.Name, t.Kind)
 	}
 
 	// strip prefix if desired
@@ -403,7 +404,7 @@ func renderComments(comments []string) template.HTML {
 			),
 		)
 		if err := md.Convert([]byte(doc), &buf); err != nil {
-			perror("Bad doc detected: %+v", err)
+			klog.Errorf("Bad doc detected: %+v", err)
 			res = doc
 		} else {
 			res = buf.String()
@@ -414,4 +415,14 @@ func renderComments(comments []string) template.HTML {
 		res = strings.Replace(doc, "\n\n", string(template.HTML("<br/><br/>")), -1)
 	}
 	return template.HTML(res)
+}
+
+// containsString checks if a given string is a member of the string list
+func containsString(sl []string, str string) bool {
+	for _, s := range sl {
+		if str == s {
+			return true
+		}
+	}
+	return false
 }
