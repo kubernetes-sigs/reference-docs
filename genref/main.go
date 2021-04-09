@@ -18,6 +18,7 @@ import (
 	"github.com/pkg/errors"
 	"k8s.io/gengo/parser"
 	"k8s.io/gengo/types"
+	"k8s.io/klog/v2"
 
 	"sigs.k8s.io/yaml"
 )
@@ -28,11 +29,16 @@ var (
 	flInclude = flag.String("include", "", "API definitions to include, comma-separated list")
 	flExclude = flag.String("exclude", "", "API definitions to exclude, comma-separated list")
 	flPath    = flag.String("o", ".", "path for the output files")
-	flVerbose = flag.Bool("v", false, "turn on verbose output")
+	// flVerbose = flag.Bool("verbose", false, "turn on verbose output")
 )
 
 const (
 	docCommentForceIncludes = "// +gencrdrefdocs:force"
+
+	CRED    = "\033[31m"
+	CGREEN  = "\033[32m"
+	CYELLOW = "\033[33m"
+	CEND    = "\033[0m"
 )
 
 type generatorConfig struct {
@@ -101,28 +107,28 @@ var config generatorConfig
 var references map[string][]*apiType
 
 func init() {
+	klog.InitFlags(nil)
+
+	flag.Set("logtostderr", "true")
 	flag.Parse()
 
-	if *flConfig == "" {
-		panic("-config not specified")
-	}
 	var path string
 	var err error
 	if *flFormat == "html" || *flFormat == "markdown" {
 		path, err = filepath.Abs(*flFormat)
 	} else {
-		panic(errors.Errorf("unsupported format '%s' specified", *flFormat))
+		klog.Fatal("unsupported format '%s' specified", *flFormat)
 	}
 
 	if err != nil {
-		panic(errors.Wrapf(err, "template directory '%s' is not found", path))
+		klog.Fatal(errors.Wrapf(err, "template directory '%s' is not found", path))
 	}
 	fi, err := os.Stat(path)
 	if err != nil {
-		panic(errors.Wrapf(err, "cannot read the %s directory", path))
+		klog.Fatal(errors.Wrapf(err, "cannot read the %s directory", path))
 	}
 	if !fi.IsDir() {
-		panic(errors.Errorf("%s path is not a directory", path))
+		klog.Fatal("%s path is not a directory", path)
 	}
 
 	typePkgMap = make(map[string]*apiPackage)
@@ -131,7 +137,7 @@ func init() {
 
 // processAPIPath processes a path for package enumeration and processing.
 func processAPIPath(path string, includes []string, title string) ([]*apiPackage, error) {
-	pinfo("Parsing go packages in %s", path)
+	klog.V(0).Infof("Parsing go packages in %s", path)
 	gopkgs, err := parseAPIPackages(path)
 	if err != nil {
 		return nil, err
@@ -185,23 +191,23 @@ func parseAPIPackages(dir string) ([]*types.Package, error) {
 	for p := range scan {
 		gopkg := scan[p]
 		gname := groupName(gopkg)
-		pverbose("trying package=%s groupName=%s", p, gname)
-		pverbose("num types=%d", len(gopkg.Types))
+		klog.V(5).Infof("trying package=%s groupName=%s", p, gname)
+		klog.V(6).Infof("num types=%d", len(gopkg.Types))
 		// Do not pick up packages that are in vendor/ as API packages.
 		if isVendorPackage(gopkg) {
-			pwarning("Ignoring vendor package '%v'", p)
+			klog.Warningf("Ignoring vendor package '%v'", p)
 			continue
 		}
 
 		if len(gopkg.Types) > 0 || containsString(gopkg.DocComments, docCommentForceIncludes) {
-			pverbose("Package=%v has group name and has types", p)
+			klog.V(5).Infof("Package=%v has group name and has types", p)
 			pkgNames = append(pkgNames, p)
 		}
 	}
 	sort.Strings(pkgNames)
 	var pkgs []*types.Package
 	for _, p := range pkgNames {
-		pverbose("Using package=%s", p)
+		klog.V(5).Infof("Using package=%s", p)
 		if p == dir {
 			pkgs = append(pkgs, scan[p])
 		}
@@ -296,22 +302,22 @@ func writeFile(pkgs []*apiPackage, outputPath string) error {
 	s := b.String()
 
 	if err := ioutil.WriteFile(outputPath, []byte(s), 0644); err != nil {
-		return errors.Errorf("failed to write to out file: %v", err)
+		return errors.Errorf(CRED+"Failed to write output file: %v"+CEND, err)
 	}
 
-	pinfo("Output written to %s", outputPath)
+	klog.Infof(CGREEN+"Output written to %s"+CEND, outputPath)
 	return nil
 }
 
 func main() {
 	f, err := ioutil.ReadFile(*flConfig)
 	if err != nil {
-		perror("Failed to open config file: %+v", err)
+		klog.Fatal("Failed to open config file: %+v", err)
 		os.Exit(-1)
 	}
 
 	if err = yaml.UnmarshalStrict(f, &config); err != nil {
-		perror("Failed to parse config file: %+v", err)
+		klog.Fatal("Failed to parse config file: %+v", err)
 		os.Exit(-1)
 	}
 
@@ -340,7 +346,7 @@ func main() {
 		}
 		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title)
 		if err != nil {
-			perror("%+v", err)
+			klog.ErrorS(err, "cannot process API path")
 			continue
 		}
 
@@ -353,7 +359,7 @@ func main() {
 			fn = fn + ".md"
 		}
 		if err = writeFile(pkgs, fn); err != nil {
-			perror("%+v", err)
+			klog.ErrorS(err, "cannot write file")
 			continue
 		}
 	}
