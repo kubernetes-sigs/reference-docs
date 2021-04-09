@@ -9,11 +9,12 @@ import (
 
 // Chapter contains a definition of a main resource and its associated resources and definitions
 type Chapter struct {
-	Name     string                 `yaml:"name"`
-	Group    *kubernetes.APIGroup   `yaml:"group"`
-	Version  *kubernetes.APIVersion `yaml:"version"`
-	Key      kubernetes.Key         `yaml:"key"`
-	Sections []*Section
+	Name             string                 `yaml:"name"`
+	Group            *kubernetes.APIGroup   `yaml:"group"`
+	Version          *kubernetes.APIVersion `yaml:"version"`
+	Key              kubernetes.Key         `yaml:"key"`
+	OtherDefinitions []string               `yaml:"otherDefinitions"`
+	Sections         []*Section
 }
 
 func (o *Chapter) isResource() bool {
@@ -46,12 +47,45 @@ func (o *Chapter) populate(part *Part, toc *TOC, thespec *kubernetes.Spec) error
 	toc.DocumentedDefinitions[o.Key] = []string{o.Name}
 
 	if o.isResource() {
-		o.searchDefinitionsFromResource([]string{"Spec", "Status"}, part, toc, thespec)
-		o.searchResourcesFromResource([]string{"List"}, part, toc, thespec)
+		if o.OtherDefinitions == nil {
+			o.searchDefinitionsFromResource([]string{"Spec", "Status"}, part, toc, thespec)
+			o.searchResourcesFromResource([]string{"List"}, part, toc, thespec)
+		} else {
+			for _, definition := range o.OtherDefinitions {
+				o.addDefinitionFromResource(definition, part, toc, thespec)
+			}
+		}
 	} else {
-		o.searchDefinitionsFromDefinition([]string{"Status"}, part, toc, thespec)
+		if o.OtherDefinitions == nil {
+			o.searchDefinitionsFromDefinition([]string{"Status"}, part, toc, thespec)
+		} else {
+			for _, definition := range o.OtherDefinitions {
+				o.addDefinitionFromDefinition(definition, part, toc, thespec)
+			}
+		}
 	}
 	return nil
+}
+
+func (o *Chapter) addDefinitionFromResource(definition string, part *Part, toc *TOC, thespec *kubernetes.Spec) {
+	gvRes := kubernetes.Resource{
+		GVKExtension: kubernetes.GVKExtension{
+			Group:   *o.Group,
+			Version: *o.Version,
+		},
+	}
+	keys := thespec.GVToKey[gvRes.GetGV()]
+	for _, key := range keys {
+		resourceKey := kubernetes.Key(key + "." + definition)
+		o.addDefinition(definition, resourceKey, part, toc, thespec)
+	}
+	// Mark the resource as documented
+	thespec.GetResource(*o.Group, *o.Version, kubernetes.APIKind(definition), true)
+}
+
+func (o *Chapter) addDefinitionFromDefinition(definition string, part *Part, toc *TOC, thespec *kubernetes.Spec) {
+	newKey := kubernetes.Key(o.Key.RemoveResourceName() + "." + definition)
+	o.addDefinition(definition, newKey, part, toc, thespec)
 }
 
 func (o *Chapter) searchDefinitionsFromResource(suffixes []string, part *Part, toc *TOC, thespec *kubernetes.Spec) {
