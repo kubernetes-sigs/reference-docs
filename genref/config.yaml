@@ -66,6 +66,8 @@ apis:
     title: kube-proxy Configuration (v1alpha1)
     package: k8s.io/kube-proxy
     path: config/v1alpha1
+    includes:
+      - k8s.io/component-base/config/v1alpha1
 
   - name: metrics
     title: Kubernetes Metrics (v1alpha1)

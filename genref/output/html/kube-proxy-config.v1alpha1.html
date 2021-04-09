@@ -1470,10 +1470,205 @@ this always falls back to the userspace proxy.</p>
 
           <HR />
         
+          
+          
+            
+            
+              
+                
+  <H3 id="ClientConnectionConfiguration">ClientConnectionConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubeproxy-config-k8s-io-v1alpha1-KubeProxyConfiguration">KubeProxyConfiguration</a>)
+    </p>
+  
+
+  <p>ClientConnectionConfiguration contains details for constructing a client.</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>kubeconfig</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          kubeconfig is the path to a KubeConfig file.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>acceptContentTypes</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          acceptContentTypes defines the Accept header sent by clients when connecting to a server, overriding the
+default value of 'application/json'. This field will control all connections to the server used by a particular
+client.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>contentType</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          contentType is the content type used when sending data to the server from this client.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>qps</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">float32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          qps controls the number of queries per second allowed for this connection.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>burst</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          burst allows extra queries to accumulate when a client is exceeding its rate.
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+            
+              
+            
+              
+            
+          
+
+          <HR />
+        
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+        <p><em>Generated with <code>gendoc</code> on git commit <code>9f1f2474</code></em></p>
       </div>
     </body>
   </html>
