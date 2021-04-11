@@ -11,3 +11,10 @@ kwebsite: clean
 
 copy_files: kwebsite
 	cp -r kwebsite/content/en/docs/* ../docsy-example/content/en/docs/Reference/
+
+pofiles:
+	mkdir -p po
+	go run cmd/main.go po -f api/$(VERSION)/swagger.json -p po/
+
+initlang:
+	scripts/initlang.sh

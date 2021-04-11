@@ -15,6 +15,7 @@ const (
 	outputDirOption       = "output-dir"
 	templatesDirOption    = "templates"
 	showDefinitionsOption = "show-definitions"
+	poDirectory           = "po-directory"
 )
 
 // RootCmd defines the root cli command
@@ -37,7 +38,7 @@ func RootCmd() *cobra.Command {
 	cmd.MarkFlagRequired(fileOption)
 
 	subcommands := []func() *cobra.Command{
-		ResourceslistCmd, ShowTOCCmd, GVKeysMap, KWebsite,
+		ResourceslistCmd, ShowTOCCmd, GVKeysMap, KWebsite, CreatePoFilesCmd,
 	}
 	for _, subcommand := range subcommands {
 		cmd.AddCommand(subcommand())

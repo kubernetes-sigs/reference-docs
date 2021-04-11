@@ -1,0 +1,99 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.policy.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: PodDisruptionBudget
+msgid "PodDisruptionBudget is an object to define the max disruption that can be caused to a collection of pods"
+msgstr ""
+
+#: PodDisruptionBudget.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: PodDisruptionBudget.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: PodDisruptionBudget.metadata
+msgid "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: PodDisruptionBudget.spec
+msgid "Specification of the desired behavior of the PodDisruptionBudget."
+msgstr ""
+
+#: PodDisruptionBudget.status
+msgid "Most recently observed status of the PodDisruptionBudget."
+msgstr ""
+
+#: PodDisruptionBudgetList
+msgid "PodDisruptionBudgetList is a collection of PodDisruptionBudgets."
+msgstr ""
+
+# PodDisruptionBudgetList.apiVersion
+# same as PodDisruptionBudget.apiVersion
+#: PodDisruptionBudgetList.items
+msgid "Items is a list of PodDisruptionBudgets"
+msgstr ""
+
+# PodDisruptionBudgetList.kind
+# same as PodDisruptionBudget.kind
+# PodDisruptionBudgetList.metadata
+# same as PodDisruptionBudget.metadata
+#: PodDisruptionBudgetSpec
+msgid "PodDisruptionBudgetSpec is a description of a PodDisruptionBudget."
+msgstr ""
+
+#: PodDisruptionBudgetSpec.maxUnavailable
+msgid "An eviction is allowed if at most \"maxUnavailable\" pods selected by \"selector\" are unavailable after the eviction, i.e. even in absence of the evicted pod. For example, one can prevent all voluntary evictions by specifying 0. This is a mutually exclusive setting with \"minAvailable\"."
+msgstr ""
+
+#: PodDisruptionBudgetSpec.minAvailable
+msgid "An eviction is allowed if at least \"minAvailable\" pods selected by \"selector\" will still be available after the eviction, i.e. even in the absence of the evicted pod.  So for example you can prevent all voluntary evictions by specifying \"100%\"."
+msgstr ""
+
+#: PodDisruptionBudgetSpec.selector
+msgid "Label query over pods whose evictions are managed by the disruption budget. A null selector will match no pods, while an empty ({}) selector will select all pods within the namespace."
+msgstr ""
+
+#: PodDisruptionBudgetStatus
+msgid "PodDisruptionBudgetStatus represents information about the status of a PodDisruptionBudget. Status may trail the actual state of a system."
+msgstr ""
+
+#: PodDisruptionBudgetStatus.conditions
+msgid "Conditions contain conditions for PDB. The disruption controller sets the DisruptionAllowed condition. The following are known values for the reason field (additional reasons could be added in the future): - SyncFailed: The controller encountered an error and wasn't able to compute              the number of allowed disruptions. Therefore no disruptions are              allowed and the status of the condition will be False.- InsufficientPods: The number of pods are either at or below the number                    required by the PodDisruptionBudget. No disruptions are                    allowed and the status of the condition will be False.- SufficientPods: There are more pods than required by the PodDisruptionBudget.                  The condition will be True, and the number of allowed                  disruptions are provided by the disruptionsAllowed property."
+msgstr ""
+
+#: PodDisruptionBudgetStatus.currentHealthy
+msgid "current number of healthy pods"
+msgstr ""
+
+#: PodDisruptionBudgetStatus.desiredHealthy
+msgid "minimum desired number of healthy pods"
+msgstr ""
+
+#: PodDisruptionBudgetStatus.disruptedPods
+msgid "DisruptedPods contains information about pods whose eviction was processed by the API server eviction subresource handler but has not yet been observed by the PodDisruptionBudget controller. A pod will be in this map from the time when the API server processed the eviction request to the time when the pod is seen by PDB controller as having been marked for deletion (or after a timeout). The key in the map is the name of the pod and the value is the time when the API server processed the eviction request. If the deletion didn't occur and a pod is still there it will be removed from the list automatically by PodDisruptionBudget controller after some time. If everything goes smooth this map should be empty for the most of the time. Large number of entries in the map may indicate problems with pod deletions."
+msgstr ""
+
+#: PodDisruptionBudgetStatus.disruptionsAllowed
+msgid "Number of pod disruptions that are currently allowed."
+msgstr ""
+
+#: PodDisruptionBudgetStatus.expectedPods
+msgid "total number of pods counted by this disruption budget"
+msgstr ""
+
+#: PodDisruptionBudgetStatus.observedGeneration
+msgid "Most recent generation observed when updating this PDB status. DisruptionsAllowed and other status information is valid only if observedGeneration equals to PDB's object generation."
+msgstr ""

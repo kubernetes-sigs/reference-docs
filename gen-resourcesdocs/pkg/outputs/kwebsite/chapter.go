@@ -16,6 +16,7 @@ type Chapter struct {
 	part     *Part
 	name     string
 	data     *ChapterData
+	domain   string
 }
 
 type ChapterData struct {

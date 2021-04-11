@@ -11,7 +11,7 @@ type Output interface {
 
 // Part is an interface to a part of an output
 type Part interface {
-	AddChapter(i int, name string, gv string, version *kubernetes.APIVersion, description string, importPrefix string) (Chapter, error)
+	AddChapter(i int, name string, gv string, version *kubernetes.APIVersion, description string, importPrefix string, domain string) (Chapter, error)
 }
 
 // Chapter is an interface to a chapter of an output

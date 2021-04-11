@@ -1,0 +1,17 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.apimachinery.pkg.runtime\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: RawExtension
+msgid "RawExtension is used to hold extensions in external versions.To use this, make a field which has RawExtension as its type in your external, versioned struct, and Object in your internal struct. You also need to register your various plugin types.// Internal package: type MyAPIObject struct {\truntime.TypeMeta `json:\",inline\"`\tMyPlugin runtime.Object `json:\"myPlugin\"`} type PluginA struct {\tAOption string `json:\"aOption\"`}// External package: type MyAPIObject struct {\truntime.TypeMeta `json:\",inline\"`\tMyPlugin runtime.RawExtension `json:\"myPlugin\"`} type PluginA struct {\tAOption string `json:\"aOption\"`}// On the wire, the JSON will look something like this: {\t\"kind\":\"MyAPIObject\",\t\"apiVersion\":\"v1\",\t\"myPlugin\": {\t\t\"kind\":\"PluginA\",\t\t\"aOption\":\"foo\",\t},}So what happens? Decode first uses json or yaml to unmarshal the serialized data into your external MyAPIObject. That causes the raw JSON to be stored, but not unpacked. The next step is to copy (using pkg/conversion) into the internal struct. The runtime package's DefaultScheme has conversion functions installed which will unpack the JSON stored in RawExtension, turning it into the correct object type, and storing it in the Object. (TODO: In the case where the object is of an unknown type, a runtime.Unknown object will be created and stored.)"
+msgstr ""

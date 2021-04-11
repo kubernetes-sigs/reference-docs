@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"X-Generator: xgotext\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+
+#: section.go:83
+msgid ", required"
+msgstr ", requis"
+
+#: section.go:95
+msgid "Atomic: will be replaced during a merge"
+msgstr "Atomique : sera remplacé lors d'un merge"
+
+#: section.go:100
+msgid "Map: unique values on key %s will be kept during a merge"
+msgstr "Map : les valeurs uniques sur la clé %s seront conservées lors d'un merge"
+
+#: section.go:102
+msgid "Map: unique values on keys `%s` will be kept during a merge"
+msgstr "Map : les valeurs uniques sur les clés `%s` seront conservées lors d'un merge"
+
+#: section.go:112
+msgid "Patch strategies: retainKeys, merge on key `%s`"
+msgstr "Stratégies de patch : retainKeys, merge sur la clé `%s`"
+
+#: section.go:114
+msgid "Patch strategy: merge on key `%s`"
+msgstr "Stratégie de patch : merge sur la clé `%s`"
+
+#: section.go:116
+msgid "Patch strategy: retainKeys"
+msgstr "Stratégie de patch : retainKeys"
+
+#: section.go:97
+msgid "Set: unique values will be kept during a merge"
+msgstr "Set : les valeurs uniques seront conservées lors d'un merge"

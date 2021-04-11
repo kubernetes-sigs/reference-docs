@@ -1,0 +1,61 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.scheduling.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: PriorityClass
+msgid "PriorityClass defines mapping from a priority class name to the priority integer value. The value can be any valid integer."
+msgstr ""
+
+#: PriorityClass.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: PriorityClass.description
+msgid "description is an arbitrary string that usually provides guidelines on when this priority class should be used."
+msgstr ""
+
+#: PriorityClass.globalDefault
+msgid "globalDefault specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class. Only one PriorityClass can be marked as `globalDefault`. However, if more than one PriorityClasses exists with their `globalDefault` field set to true, the smallest value of such global default PriorityClasses will be used as the default priority."
+msgstr ""
+
+#: PriorityClass.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: PriorityClass.metadata
+msgid "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: PriorityClass.preemptionPolicy
+msgid "PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is beta-level, gated by the NonPreemptingPriority feature-gate."
+msgstr ""
+
+#: PriorityClass.value
+msgid "The value of this priority class. This is the actual priority that pods receive when they have the name of this class in their pod spec."
+msgstr ""
+
+#: PriorityClassList
+msgid "PriorityClassList is a collection of priority classes."
+msgstr ""
+
+# PriorityClassList.apiVersion
+# same as PriorityClass.apiVersion
+#: PriorityClassList.items
+msgid "items is the list of PriorityClasses"
+msgstr ""
+
+# PriorityClassList.kind
+# same as PriorityClass.kind
+#: PriorityClassList.metadata
+msgid "Standard list metadata More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""

@@ -1,0 +1,73 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.coordination.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: Lease
+msgid "Lease defines a lease concept."
+msgstr ""
+
+#: Lease.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: Lease.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: Lease.metadata
+msgid "More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: Lease.spec
+msgid "Specification of the Lease. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: LeaseList
+msgid "LeaseList is a list of Lease objects."
+msgstr ""
+
+# LeaseList.apiVersion
+# same as Lease.apiVersion
+#: LeaseList.items
+msgid "Items is a list of schema objects."
+msgstr ""
+
+# LeaseList.kind
+# same as Lease.kind
+#: LeaseList.metadata
+msgid "Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: LeaseSpec
+msgid "LeaseSpec is a specification of a Lease."
+msgstr ""
+
+#: LeaseSpec.acquireTime
+msgid "acquireTime is a time when the current lease was acquired."
+msgstr ""
+
+#: LeaseSpec.holderIdentity
+msgid "holderIdentity contains the identity of the holder of a current lease."
+msgstr ""
+
+#: LeaseSpec.leaseDurationSeconds
+msgid "leaseDurationSeconds is a duration that candidates for a lease need to wait to force acquire it. This is measure against time of last observed RenewTime."
+msgstr ""
+
+#: LeaseSpec.leaseTransitions
+msgid "leaseTransitions is the number of transitions of a lease between holders."
+msgstr ""
+
+#: LeaseSpec.renewTime
+msgid "renewTime is a time when the current holder of a lease has last updated the lease."
+msgstr ""

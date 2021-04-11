@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
+	"github.com/leonelquinteros/gotext"
 )
 
 // Section of a Hugo output
@@ -19,7 +20,8 @@ type Section struct {
 // AddContent adds content to a section
 func (o Section) AddContent(s string) error {
 	i := len(o.chapter.data.Sections)
-	o.chapter.data.Sections[i-1].Description = s
+	gotext.SetDomain(o.chapter.domain)
+	o.chapter.data.Sections[i-1].Description = gotext.Get(removeEOL(s))
 	return nil
 }
 
@@ -35,7 +37,8 @@ func (o Section) AddTypeDefinition(typ string, description string) error {
 	}
 	j := len(*fields)
 	(*fields)[j-1].Type = typ
-	(*fields)[j-1].TypeDefinition = "*" + description + "*"
+	gotext.SetDomain(o.chapter.domain)
+	(*fields)[j-1].TypeDefinition = "*" + gotext.Get(removeEOL(description)) + "*"
 	return nil
 }
 
@@ -71,9 +74,14 @@ func (o Section) AddProperty(name string, property *kubernetes.Property, linkend
 		return nil
 	}
 
+	gotext.SetDomain(o.chapter.domain)
+	description := gotext.Get(removeEOL(property.Description))
+
+	gotext.SetDomain("gen-resourcesdocs")
+
 	required := ""
 	if property.Required {
-		required = ", required"
+		required = gotext.Get(", required")
 	}
 
 	typ := property.Type
@@ -82,19 +90,17 @@ func (o Section) AddProperty(name string, property *kubernetes.Property, linkend
 	}
 	title := fmt.Sprintf("**%s** (%s)%s", name, typ, required)
 
-	description := property.Description
-
 	listType := ""
 	if property.ListType != nil {
 		if *property.ListType == "atomic" {
-			listType = "Atomic: will be replaced during a merge"
+			listType = gotext.Get("Atomic: will be replaced during a merge")
 		} else if *property.ListType == "set" {
-			listType = "Set: unique values will be kept during a merge"
+			listType = gotext.Get("Set: unique values will be kept during a merge")
 		} else if *property.ListType == "map" {
 			if len(property.ListMapKeys) == 1 {
-				listType = "Map: unique values on key " + property.ListMapKeys[0] + " will be kept during a merge"
+				listType = fmt.Sprintf(gotext.Get("Map: unique values on key %s will be kept during a merge"), property.ListMapKeys[0])
 			} else {
-				listType = "Map: unique values on keys `" + strings.Join(property.ListMapKeys, ", ") + "` will be kept during a merge"
+				listType = fmt.Sprintf(gotext.Get("Map: unique values on keys `%s` will be kept during a merge"), strings.Join(property.ListMapKeys, ", "))
 			}
 		}
 	}
@@ -104,11 +110,11 @@ func (o Section) AddProperty(name string, property *kubernetes.Property, linkend
 
 	var patches string
 	if property.MergeStrategyKey != nil && property.RetainKeysStrategy {
-		patches = fmt.Sprintf("Patch strategies: retainKeys, merge on key `%s`", *property.MergeStrategyKey)
+		patches = fmt.Sprintf(gotext.Get("Patch strategies: retainKeys, merge on key `%s`"), *property.MergeStrategyKey)
 	} else if property.MergeStrategyKey != nil {
-		patches = fmt.Sprintf("Patch strategy: merge on key `%s`", *property.MergeStrategyKey)
+		patches = fmt.Sprintf(gotext.Get("Patch strategy: merge on key `%s`"), *property.MergeStrategyKey)
 	} else if property.RetainKeysStrategy {
-		patches = "Patch strategy: retainKeys"
+		patches = gotext.Get("Patch strategy: retainKeys")
 	}
 
 	if len(patches) > 0 {
@@ -244,4 +250,10 @@ func paramName(s string, in string) string {
 	default:
 		return fmt.Sprintf("**%s**", s)
 	}
+}
+
+func removeEOL(s string) string {
+	s = strings.ReplaceAll(s, "\r", "")
+	s = strings.ReplaceAll(s, "\n", "")
+	return s
 }

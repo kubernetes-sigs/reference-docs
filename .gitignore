@@ -15,3 +15,4 @@ node_modules/
 tech-doc-hugo
 content/en/docs/Reference/*-resources/
 content/en/docs/Reference/common-*/
+/docsy-example/content/en/docs/Reference

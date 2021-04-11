@@ -1,0 +1,4164 @@
+# Translations for Kubernetes API specifications.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.core.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: AWSElasticBlockStoreVolumeSource
+msgid ""
+"Represents a Persistent Disk resource in AWS."
+""
+"An AWS EBS disk must exist before mounting to a container. The disk must also be in the same AWS zone as the kubelet. An AWS EBS disk can only be mounted as read/write once. AWS EBS volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: AWSElasticBlockStoreVolumeSource.fsType
+msgid "Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore"
+msgstr ""
+
+#: AWSElasticBlockStoreVolumeSource.partition
+msgid "The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as \"1\". Similarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty)."
+msgstr ""
+
+#: AWSElasticBlockStoreVolumeSource.readOnly
+msgid "Specify \"true\" to force and set the ReadOnly property in VolumeMounts to \"true\". If omitted, the default is \"false\". More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore"
+msgstr ""
+
+#: AWSElasticBlockStoreVolumeSource.volumeID
+msgid "Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore"
+msgstr ""
+
+#: Affinity
+msgid "Affinity is a group of affinity scheduling rules."
+msgstr ""
+
+#: Affinity.nodeAffinity
+msgid "Describes node affinity scheduling rules for the pod."
+msgstr ""
+
+#: Affinity.podAffinity
+msgid "Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc. as some other pod(s))."
+msgstr ""
+
+#: Affinity.podAntiAffinity
+msgid "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s))."
+msgstr ""
+
+#: AttachedVolume
+msgid "AttachedVolume describes a volume attached to a node"
+msgstr ""
+
+#: AttachedVolume.devicePath
+msgid "DevicePath represents the device path where the volume should be available"
+msgstr ""
+
+#: AttachedVolume.name
+msgid "Name of the attached volume"
+msgstr ""
+
+#: AzureDiskVolumeSource
+msgid "AzureDisk represents an Azure Data Disk mount on the host and bind mount to the pod."
+msgstr ""
+
+#: AzureDiskVolumeSource.cachingMode
+msgid "Host Caching mode: None, Read Only, Read Write."
+msgstr ""
+
+#: AzureDiskVolumeSource.diskName
+msgid "The Name of the data disk in the blob storage"
+msgstr ""
+
+#: AzureDiskVolumeSource.diskURI
+msgid "The URI the data disk in the blob storage"
+msgstr ""
+
+#: AzureDiskVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified."
+msgstr ""
+
+#: AzureDiskVolumeSource.kind
+msgid "Expected values Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared"
+msgstr ""
+
+#: AzureDiskVolumeSource.readOnly
+msgid "Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts."
+msgstr ""
+
+#: AzureFilePersistentVolumeSource
+msgid "AzureFile represents an Azure File Service mount on the host and bind mount to the pod."
+msgstr ""
+
+# AzureFilePersistentVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+#: AzureFilePersistentVolumeSource.secretName
+msgid "the name of secret that contains Azure Storage Account Name and Key"
+msgstr ""
+
+#: AzureFilePersistentVolumeSource.secretNamespace
+msgid "the namespace of the secret that contains Azure Storage Account Name and Key default is the same as the Pod"
+msgstr ""
+
+#: AzureFilePersistentVolumeSource.shareName
+msgid "Share Name"
+msgstr ""
+
+# AzureFileVolumeSource
+# same as AzureFilePersistentVolumeSource
+
+# AzureFileVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+# AzureFileVolumeSource.secretName
+# same as AzureFilePersistentVolumeSource.secretName
+
+# AzureFileVolumeSource.shareName
+# same as AzureFilePersistentVolumeSource.shareName
+
+#: Binding
+msgid "Binding ties one object to another; for example, a pod is bound to a node by a scheduler. Deprecated in 1.7, please use the bindings subresource of pods instead."
+msgstr ""
+
+#: Binding.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: Binding.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: Binding.metadata
+msgid "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: Binding.target
+msgid "The target object that you want to bind to the standard object."
+msgstr ""
+
+#: CSIPersistentVolumeSource
+msgid "Represents storage that is managed by an external CSI volume driver (Beta feature)"
+msgstr ""
+
+#: CSIPersistentVolumeSource.controllerExpandSecretRef
+msgid "ControllerExpandSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI ControllerExpandVolume call. This is an alpha field and requires enabling ExpandCSIVolumes feature gate. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed."
+msgstr ""
+
+#: CSIPersistentVolumeSource.controllerPublishSecretRef
+msgid "ControllerPublishSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI ControllerPublishVolume and ControllerUnpublishVolume calls. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed."
+msgstr ""
+
+#: CSIPersistentVolumeSource.driver
+msgid "Driver is the name of the driver to use for this volume. Required."
+msgstr ""
+
+#: CSIPersistentVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\"."
+msgstr ""
+
+#: CSIPersistentVolumeSource.nodePublishSecretRef
+msgid "NodePublishSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI NodePublishVolume and NodeUnpublishVolume calls. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed."
+msgstr ""
+
+#: CSIPersistentVolumeSource.nodeStageSecretRef
+msgid "NodeStageSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI NodeStageVolume and NodeStageVolume and NodeUnstageVolume calls. This field is optional, and may be empty if no secret is required. If the secret object contains more than one secret, all secrets are passed."
+msgstr ""
+
+#: CSIPersistentVolumeSource.readOnly
+msgid "Optional: The value to pass to ControllerPublishVolumeRequest. Defaults to false (read/write)."
+msgstr ""
+
+#: CSIPersistentVolumeSource.volumeAttributes
+msgid "Attributes of the volume to publish."
+msgstr ""
+
+#: CSIPersistentVolumeSource.volumeHandle
+msgid "VolumeHandle is the unique volume name returned by the CSI volume plugin’s CreateVolume to refer to the volume on all subsequent calls. Required."
+msgstr ""
+
+#: CSIVolumeSource
+msgid "Represents a source location of a volume to mount, managed by an external CSI driver"
+msgstr ""
+
+#: CSIVolumeSource.driver
+msgid "Driver is the name of the CSI driver that handles this volume. Consult with your admin for the correct name as registered in the cluster."
+msgstr ""
+
+#: CSIVolumeSource.fsType
+msgid "Filesystem type to mount. Ex. \"ext4\", \"xfs\", \"ntfs\". If not provided, the empty value is passed to the associated CSI driver which will determine the default filesystem to apply."
+msgstr ""
+
+#: CSIVolumeSource.nodePublishSecretRef
+msgid "NodePublishSecretRef is a reference to the secret object containing sensitive information to pass to the CSI driver to complete the CSI NodePublishVolume and NodeUnpublishVolume calls. This field is optional, and  may be empty if no secret is required. If the secret object contains more than one secret, all secret references are passed."
+msgstr ""
+
+#: CSIVolumeSource.readOnly
+msgid "Specifies a read-only configuration for the volume. Defaults to false (read/write)."
+msgstr ""
+
+#: CSIVolumeSource.volumeAttributes
+msgid "VolumeAttributes stores driver-specific properties that are passed to the CSI driver. Consult your driver's documentation for supported values."
+msgstr ""
+
+#: Capabilities
+msgid "Adds and removes POSIX capabilities from running containers."
+msgstr ""
+
+#: Capabilities.add
+msgid "Added capabilities"
+msgstr ""
+
+#: Capabilities.drop
+msgid "Removed capabilities"
+msgstr ""
+
+#: CephFSPersistentVolumeSource
+msgid "Represents a Ceph Filesystem mount that lasts the lifetime of a pod Cephfs volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: CephFSPersistentVolumeSource.monitors
+msgid "Required: Monitors is a collection of Ceph monitors More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+msgstr ""
+
+#: CephFSPersistentVolumeSource.path
+msgid "Optional: Used as the mounted root, rather than the full Ceph tree, default is /"
+msgstr ""
+
+#: CephFSPersistentVolumeSource.readOnly
+msgid "Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+msgstr ""
+
+#: CephFSPersistentVolumeSource.secretFile
+msgid "Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+msgstr ""
+
+#: CephFSPersistentVolumeSource.secretRef
+msgid "Optional: SecretRef is reference to the authentication secret for User, default is empty. More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+msgstr ""
+
+#: CephFSPersistentVolumeSource.user
+msgid "Optional: User is the rados user name, default is admin More info: https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
+msgstr ""
+
+# CephFSVolumeSource
+# same as CephFSPersistentVolumeSource
+
+# CephFSVolumeSource.monitors
+# same as CephFSPersistentVolumeSource.monitors
+
+# CephFSVolumeSource.path
+# same as CephFSPersistentVolumeSource.path
+
+# CephFSVolumeSource.readOnly
+# same as CephFSPersistentVolumeSource.readOnly
+
+# CephFSVolumeSource.secretFile
+# same as CephFSPersistentVolumeSource.secretFile
+
+# CephFSVolumeSource.secretRef
+# same as CephFSPersistentVolumeSource.secretRef
+
+# CephFSVolumeSource.user
+# same as CephFSPersistentVolumeSource.user
+
+#: CinderPersistentVolumeSource
+msgid "Represents a cinder volume resource in Openstack. A Cinder volume must exist before mounting to a container. The volume must also be in the same region as the kubelet. Cinder volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: CinderPersistentVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+msgstr ""
+
+#: CinderPersistentVolumeSource.readOnly
+msgid "Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts. More info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+msgstr ""
+
+#: CinderPersistentVolumeSource.secretRef
+msgid "Optional: points to a secret object containing parameters used to connect to OpenStack."
+msgstr ""
+
+#: CinderPersistentVolumeSource.volumeID
+msgid "volume id used to identify the volume in cinder. More info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+msgstr ""
+
+# CinderVolumeSource
+# same as CinderPersistentVolumeSource
+
+# CinderVolumeSource.fsType
+# same as CinderPersistentVolumeSource.fsType
+
+# CinderVolumeSource.readOnly
+# same as CinderPersistentVolumeSource.readOnly
+
+# CinderVolumeSource.secretRef
+# same as CinderPersistentVolumeSource.secretRef
+
+# CinderVolumeSource.volumeID
+# same as CinderPersistentVolumeSource.volumeID
+
+#: ClientIPConfig
+msgid "ClientIPConfig represents the configurations of Client IP based session affinity."
+msgstr ""
+
+#: ClientIPConfig.timeoutSeconds
+msgid "timeoutSeconds specifies the seconds of ClientIP type session sticky time. The value must be >0 && <=86400(for 1 day) if ServiceAffinity == \"ClientIP\". Default value is 10800(for 3 hours)."
+msgstr ""
+
+#: ComponentCondition
+msgid "Information about the condition of a component."
+msgstr ""
+
+#: ComponentCondition.error
+msgid "Condition error code for a component. For example, a health check error code."
+msgstr ""
+
+#: ComponentCondition.message
+msgid "Message about the condition for a component. For example, information about a health check."
+msgstr ""
+
+#: ComponentCondition.status
+msgid "Status of the condition for a component. Valid values for \"Healthy\": \"True\", \"False\", or \"Unknown\"."
+msgstr ""
+
+#: ComponentCondition.type
+msgid "Type of condition for a component. Valid value: \"Healthy\""
+msgstr ""
+
+#: ComponentStatus
+msgid "ComponentStatus (and ComponentStatusList) holds the cluster validation info. Deprecated: This API is deprecated in v1.19+"
+msgstr ""
+
+# ComponentStatus.apiVersion
+# same as Binding.apiVersion
+
+#: ComponentStatus.conditions
+msgid "List of component conditions observed"
+msgstr ""
+
+# ComponentStatus.kind
+# same as Binding.kind
+
+# ComponentStatus.metadata
+# same as Binding.metadata
+
+#: ComponentStatusList
+msgid "Status of all the conditions for the component as a list of ComponentStatus objects. Deprecated: This API is deprecated in v1.19+"
+msgstr ""
+
+# ComponentStatusList.apiVersion
+# same as Binding.apiVersion
+
+#: ComponentStatusList.items
+msgid "List of ComponentStatus objects."
+msgstr ""
+
+# ComponentStatusList.kind
+# same as Binding.kind
+
+#: ComponentStatusList.metadata
+msgid "Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: ConfigMap
+msgid "ConfigMap holds configuration data for pods to consume."
+msgstr ""
+
+# ConfigMap.apiVersion
+# same as Binding.apiVersion
+
+#: ConfigMap.binaryData
+msgid "BinaryData contains the binary data. Each key must consist of alphanumeric characters, '-', '_' or '.'. BinaryData can contain byte sequences that are not in the UTF-8 range. The keys stored in BinaryData must not overlap with the ones in the Data field, this is enforced during validation process. Using this field will require 1.10+ apiserver and kubelet."
+msgstr ""
+
+#: ConfigMap.data
+msgid "Data contains the configuration data. Each key must consist of alphanumeric characters, '-', '_' or '.'. Values with non-UTF-8 byte sequences must use the BinaryData field. The keys stored in Data must not overlap with the keys in the BinaryData field, this is enforced during validation process."
+msgstr ""
+
+#: ConfigMap.immutable
+msgid "Immutable, if set to true, ensures that data stored in the ConfigMap cannot be updated (only object metadata can be modified). If not set to true, the field can be modified at any time. Defaulted to nil."
+msgstr ""
+
+# ConfigMap.kind
+# same as Binding.kind
+
+# ConfigMap.metadata
+# same as Binding.metadata
+
+#: ConfigMapEnvSource
+msgid ""
+"ConfigMapEnvSource selects a ConfigMap to populate the environment variables with."
+""
+"The contents of the target ConfigMap's Data field will represent the key-value pairs as environment variables."
+msgstr ""
+
+#: ConfigMapEnvSource.name
+msgid "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+msgstr ""
+
+#: ConfigMapEnvSource.optional
+msgid "Specify whether the ConfigMap must be defined"
+msgstr ""
+
+#: ConfigMapKeySelector
+msgid "Selects a key from a ConfigMap."
+msgstr ""
+
+#: ConfigMapKeySelector.key
+msgid "The key to select."
+msgstr ""
+
+# ConfigMapKeySelector.name
+# same as ConfigMapEnvSource.name
+
+#: ConfigMapKeySelector.optional
+msgid "Specify whether the ConfigMap or its key must be defined"
+msgstr ""
+
+#: ConfigMapList
+msgid "ConfigMapList is a resource containing a list of ConfigMap objects."
+msgstr ""
+
+# ConfigMapList.apiVersion
+# same as Binding.apiVersion
+
+#: ConfigMapList.items
+msgid "Items is the list of ConfigMaps."
+msgstr ""
+
+# ConfigMapList.kind
+# same as Binding.kind
+
+#: ConfigMapList.metadata
+msgid "More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: ConfigMapNodeConfigSource
+msgid "ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node."
+msgstr ""
+
+#: ConfigMapNodeConfigSource.kubeletConfigKey
+msgid "KubeletConfigKey declares which key of the referenced ConfigMap corresponds to the KubeletConfiguration structure This field is required in all cases."
+msgstr ""
+
+#: ConfigMapNodeConfigSource.name
+msgid "Name is the metadata.name of the referenced ConfigMap. This field is required in all cases."
+msgstr ""
+
+#: ConfigMapNodeConfigSource.namespace
+msgid "Namespace is the metadata.namespace of the referenced ConfigMap. This field is required in all cases."
+msgstr ""
+
+#: ConfigMapNodeConfigSource.resourceVersion
+msgid "ResourceVersion is the metadata.ResourceVersion of the referenced ConfigMap. This field is forbidden in Node.Spec, and required in Node.Status."
+msgstr ""
+
+#: ConfigMapNodeConfigSource.uid
+msgid "UID is the metadata.UID of the referenced ConfigMap. This field is forbidden in Node.Spec, and required in Node.Status."
+msgstr ""
+
+#: ConfigMapProjection
+msgid ""
+"Adapts a ConfigMap into a projected volume."
+""
+"The contents of the target ConfigMap's Data field will be presented in a projected volume as files using the keys in the Data field as the file names, unless the items element is populated with specific mappings of keys to paths. Note that this is identical to a configmap volume source without the default mode."
+msgstr ""
+
+#: ConfigMapProjection.items
+msgid "If unspecified, each key-value pair in the Data field of the referenced ConfigMap will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the ConfigMap, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'."
+msgstr ""
+
+# ConfigMapProjection.name
+# same as ConfigMapEnvSource.name
+
+#: ConfigMapProjection.optional
+msgid "Specify whether the ConfigMap or its keys must be defined"
+msgstr ""
+
+#: ConfigMapVolumeSource
+msgid ""
+"Adapts a ConfigMap into a volume."
+""
+"The contents of the target ConfigMap's Data field will be presented in a volume as files using the keys in the Data field as the file names, unless the items element is populated with specific mappings of keys to paths. ConfigMap volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: ConfigMapVolumeSource.defaultMode
+msgid "Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set."
+msgstr ""
+
+# ConfigMapVolumeSource.items
+# same as ConfigMapProjection.items
+
+# ConfigMapVolumeSource.name
+# same as ConfigMapEnvSource.name
+
+# ConfigMapVolumeSource.optional
+# same as ConfigMapProjection.optional
+
+#: Container
+msgid "A single application container that you want to run within a pod."
+msgstr ""
+
+#: Container.args
+msgid "Arguments to the entrypoint. The docker image's CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell"
+msgstr ""
+
+#: Container.command
+msgid "Entrypoint array. Not executed within a shell. The docker image's ENTRYPOINT is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container's environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell"
+msgstr ""
+
+#: Container.env
+msgid "List of environment variables to set in the container. Cannot be updated."
+msgstr ""
+
+#: Container.envFrom
+msgid "List of sources to populate environment variables in the container. The keys defined within a source must be a C_IDENTIFIER. All invalid keys will be reported as an event when the container is starting. When a key exists in multiple sources, the value associated with the last source will take precedence. Values defined by an Env with a duplicate key will take precedence. Cannot be updated."
+msgstr ""
+
+#: Container.image
+msgid "Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images This field is optional to allow higher level config management to default or override container images in workload controllers like Deployments and StatefulSets."
+msgstr ""
+
+#: Container.imagePullPolicy
+msgid "Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated. More info: https://kubernetes.io/docs/concepts/containers/images#updating-images"
+msgstr ""
+
+#: Container.lifecycle
+msgid "Actions that the management system should take in response to container lifecycle events. Cannot be updated."
+msgstr ""
+
+#: Container.livenessProbe
+msgid "Periodic probe of container liveness. Container will be restarted if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+msgstr ""
+
+#: Container.name
+msgid "Name of the container specified as a DNS_LABEL. Each container in a pod must have a unique name (DNS_LABEL). Cannot be updated."
+msgstr ""
+
+#: Container.ports
+msgid "List of ports to expose from the container. Exposing a port here gives the system additional information about the network connections a container uses, but is primarily informational. Not specifying a port here DOES NOT prevent that port from being exposed. Any port which is listening on the default \"0.0.0.0\" address inside a container will be accessible from the network. Cannot be updated."
+msgstr ""
+
+#: Container.readinessProbe
+msgid "Periodic probe of container service readiness. Container will be removed from service endpoints if the probe fails. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+msgstr ""
+
+#: Container.resources
+msgid "Compute Resources required by this container. Cannot be updated. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+msgstr ""
+
+#: Container.securityContext
+msgid "Security options the pod should run with. More info: https://kubernetes.io/docs/concepts/policy/security-context/ More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/"
+msgstr ""
+
+#: Container.startupProbe
+msgid "StartupProbe indicates that the Pod has successfully initialized. If specified, no other probes are executed until this completes successfully. If this probe fails, the Pod will be restarted, just as if the livenessProbe failed. This can be used to provide different probe parameters at the beginning of a Pod's lifecycle, when it might take a long time to load data or warm a cache, than during steady-state operation. This cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+msgstr ""
+
+#: Container.stdin
+msgid "Whether this container should allocate a buffer for stdin in the container runtime. If this is not set, reads from stdin in the container will always result in EOF. Default is false."
+msgstr ""
+
+#: Container.stdinOnce
+msgid "Whether the container runtime should close the stdin channel after it has been opened by a single attach. When stdin is true the stdin stream will remain open across multiple attach sessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the first client attaches to stdin, and then remains open and accepts data until the client disconnects, at which time stdin is closed and remains closed until the container is restarted. If this flag is false, a container processes that reads from stdin will never receive an EOF. Default is false"
+msgstr ""
+
+#: Container.terminationMessagePath
+msgid "Optional: Path at which the file to which the container's termination message will be written is mounted into the container's filesystem. Message written is intended to be brief final status, such as an assertion failure message. Will be truncated by the node if greater than 4096 bytes. The total message length across all containers will be limited to 12kb. Defaults to /dev/termination-log. Cannot be updated."
+msgstr ""
+
+#: Container.terminationMessagePolicy
+msgid "Indicate how the termination message should be populated. File will use the contents of terminationMessagePath to populate the container status message on both success and failure. FallbackToLogsOnError will use the last chunk of container log output if the termination message file is empty and the container exited with an error. The log output is limited to 2048 bytes or 80 lines, whichever is smaller. Defaults to File. Cannot be updated."
+msgstr ""
+
+#: Container.tty
+msgid "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true. Default is false."
+msgstr ""
+
+#: Container.volumeDevices
+msgid "volumeDevices is the list of block devices to be used by the container."
+msgstr ""
+
+#: Container.volumeMounts
+msgid "Pod volumes to mount into the container's filesystem. Cannot be updated."
+msgstr ""
+
+#: Container.workingDir
+msgid "Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated."
+msgstr ""
+
+#: ContainerImage
+msgid "Describe a container image"
+msgstr ""
+
+#: ContainerImage.names
+msgid "Names by which this image is known. e.g. [\"k8s.gcr.io/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]"
+msgstr ""
+
+#: ContainerImage.sizeBytes
+msgid "The size of the image in bytes."
+msgstr ""
+
+#: ContainerPort
+msgid "ContainerPort represents a network port in a single container."
+msgstr ""
+
+#: ContainerPort.containerPort
+msgid "Number of port to expose on the pod's IP address. This must be a valid port number, 0 < x < 65536."
+msgstr ""
+
+#: ContainerPort.hostIP
+msgid "What host IP to bind the external port to."
+msgstr ""
+
+#: ContainerPort.hostPort
+msgid "Number of port to expose on the host. If specified, this must be a valid port number, 0 < x < 65536. If HostNetwork is specified, this must match ContainerPort. Most containers do not need this."
+msgstr ""
+
+#: ContainerPort.name
+msgid "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each named port in a pod must have a unique name. Name for the port that can be referred to by services."
+msgstr ""
+
+#: ContainerPort.protocol
+msgid "Protocol for port. Must be UDP, TCP, or SCTP. Defaults to \"TCP\"."
+msgstr ""
+
+#: ContainerState
+msgid "ContainerState holds a possible state of container. Only one of its members may be specified. If none of them is specified, the default one is ContainerStateWaiting."
+msgstr ""
+
+#: ContainerState.running
+msgid "Details about a running container"
+msgstr ""
+
+#: ContainerState.terminated
+msgid "Details about a terminated container"
+msgstr ""
+
+#: ContainerState.waiting
+msgid "Details about a waiting container"
+msgstr ""
+
+#: ContainerStateRunning
+msgid "ContainerStateRunning is a running state of a container."
+msgstr ""
+
+#: ContainerStateRunning.startedAt
+msgid "Time at which the container was last (re-)started"
+msgstr ""
+
+#: ContainerStateTerminated
+msgid "ContainerStateTerminated is a terminated state of a container."
+msgstr ""
+
+#: ContainerStateTerminated.containerID
+msgid "Container's ID in the format 'docker://<container_id>'"
+msgstr ""
+
+#: ContainerStateTerminated.exitCode
+msgid "Exit status from the last termination of the container"
+msgstr ""
+
+#: ContainerStateTerminated.finishedAt
+msgid "Time at which the container last terminated"
+msgstr ""
+
+#: ContainerStateTerminated.message
+msgid "Message regarding the last termination of the container"
+msgstr ""
+
+#: ContainerStateTerminated.reason
+msgid "(brief) reason from the last termination of the container"
+msgstr ""
+
+#: ContainerStateTerminated.signal
+msgid "Signal from the last termination of the container"
+msgstr ""
+
+#: ContainerStateTerminated.startedAt
+msgid "Time at which previous execution of the container started"
+msgstr ""
+
+#: ContainerStateWaiting
+msgid "ContainerStateWaiting is a waiting state of a container."
+msgstr ""
+
+#: ContainerStateWaiting.message
+msgid "Message regarding why the container is not yet running."
+msgstr ""
+
+#: ContainerStateWaiting.reason
+msgid "(brief) reason the container is not yet running."
+msgstr ""
+
+#: ContainerStatus
+msgid "ContainerStatus contains details for the current status of this container."
+msgstr ""
+
+#: ContainerStatus.containerID
+msgid "Container's ID in the format 'docker://<container_id>'."
+msgstr ""
+
+#: ContainerStatus.image
+msgid "The image the container is running. More info: https://kubernetes.io/docs/concepts/containers/images"
+msgstr ""
+
+#: ContainerStatus.imageID
+msgid "ImageID of the container's image."
+msgstr ""
+
+#: ContainerStatus.lastState
+msgid "Details about the container's last termination condition."
+msgstr ""
+
+#: ContainerStatus.name
+msgid "This must be a DNS_LABEL. Each container in a pod must have a unique name. Cannot be updated."
+msgstr ""
+
+#: ContainerStatus.ready
+msgid "Specifies whether the container has passed its readiness probe."
+msgstr ""
+
+#: ContainerStatus.restartCount
+msgid "The number of times the container has been restarted, currently based on the number of dead containers that have not yet been removed. Note that this is calculated from dead containers. But those containers are subject to garbage collection. This value will get capped at 5 by GC."
+msgstr ""
+
+#: ContainerStatus.started
+msgid "Specifies whether the container has passed its startup probe. Initialized as false, becomes true after startupProbe is considered successful. Resets to false when the container is restarted, or if kubelet loses state temporarily. Is always true when no startupProbe is defined."
+msgstr ""
+
+#: ContainerStatus.state
+msgid "Details about the container's current condition."
+msgstr ""
+
+#: DaemonEndpoint
+msgid "DaemonEndpoint contains information about a single Daemon endpoint."
+msgstr ""
+
+#: DaemonEndpoint.Port
+msgid "Port number of the given endpoint."
+msgstr ""
+
+#: DownwardAPIProjection
+msgid "Represents downward API info for projecting into a projected volume. Note that this is identical to a downwardAPI volume source without the default mode."
+msgstr ""
+
+#: DownwardAPIProjection.items
+msgid "Items is a list of DownwardAPIVolume file"
+msgstr ""
+
+#: DownwardAPIVolumeFile
+msgid "DownwardAPIVolumeFile represents information to create the file containing the pod field"
+msgstr ""
+
+#: DownwardAPIVolumeFile.fieldRef
+msgid "Required: Selects a field of the pod: only annotations, labels, name and namespace are supported."
+msgstr ""
+
+#: DownwardAPIVolumeFile.mode
+msgid "Optional: mode bits used to set permissions on this file, must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set."
+msgstr ""
+
+#: DownwardAPIVolumeFile.path
+msgid "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+msgstr ""
+
+#: DownwardAPIVolumeFile.resourceFieldRef
+msgid "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported."
+msgstr ""
+
+#: DownwardAPIVolumeSource
+msgid "DownwardAPIVolumeSource represents a volume containing downward API info. Downward API volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: DownwardAPIVolumeSource.defaultMode
+msgid "Optional: mode bits to use on created files by default. Must be a Optional: mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Defaults to 0644. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set."
+msgstr ""
+
+#: DownwardAPIVolumeSource.items
+msgid "Items is a list of downward API volume file"
+msgstr ""
+
+#: EmptyDirVolumeSource
+msgid "Represents an empty directory for a pod. Empty directory volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: EmptyDirVolumeSource.medium
+msgid "What type of storage medium should back this directory. The default is \"\" which means to use the node's default medium. Must be an empty string (default) or Memory. More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir"
+msgstr ""
+
+#: EmptyDirVolumeSource.sizeLimit
+msgid "Total amount of local storage required for this EmptyDir volume. The size limit is also applicable for memory medium. The maximum usage on memory medium EmptyDir would be the minimum value between the SizeLimit specified here and the sum of memory limits of all containers in a pod. The default is nil which means that the limit is undefined. More info: http://kubernetes.io/docs/user-guide/volumes#emptydir"
+msgstr ""
+
+#: EndpointAddress
+msgid "EndpointAddress is a tuple that describes single IP address."
+msgstr ""
+
+#: EndpointAddress.hostname
+msgid "The Hostname of this endpoint"
+msgstr ""
+
+#: EndpointAddress.ip
+msgid "The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24). IPv6 is also accepted but not fully supported on all platforms. Also, certain kubernetes components, like kube-proxy, are not IPv6 ready."
+msgstr ""
+
+#: EndpointAddress.nodeName
+msgid "Optional: Node hosting this endpoint. This can be used to determine endpoints local to a node."
+msgstr ""
+
+#: EndpointAddress.targetRef
+msgid "Reference to object providing the endpoint."
+msgstr ""
+
+#: EndpointPort
+msgid "EndpointPort is a tuple that describes a single port."
+msgstr ""
+
+#: EndpointPort.appProtocol
+msgid "The application protocol for this port. This field follows standard Kubernetes label syntax. Un-prefixed names are reserved for IANA standard service names (as per RFC-6335 and http://www.iana.org/assignments/service-names). Non-standard protocols should use prefixed names such as mycompany.com/my-custom-protocol. This is a beta field that is guarded by the ServiceAppProtocol feature gate and enabled by default."
+msgstr ""
+
+#: EndpointPort.name
+msgid "The name of this port.  This must match the 'name' field in the corresponding ServicePort. Must be a DNS_LABEL. Optional only if one port is defined."
+msgstr ""
+
+#: EndpointPort.port
+msgid "The port number of the endpoint."
+msgstr ""
+
+#: EndpointPort.protocol
+msgid "The IP protocol for this port. Must be UDP, TCP, or SCTP. Default is TCP."
+msgstr ""
+
+#: EndpointSubset
+msgid ""
+"EndpointSubset is a group of addresses with a common set of ports. The expanded set of endpoints is the Cartesian product of Addresses x Ports. For example, given:"
+"  {"
+"    Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],"
+"    Ports:     [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]"
+"  }"
+"The resulting set of endpoints can be viewed as:"
+"    a: [ 10.10.1.1:8675, 10.10.2.2:8675 ],"
+"    b: [ 10.10.1.1:309, 10.10.2.2:309 ]"
+msgstr ""
+
+#: EndpointSubset.addresses
+msgid "IP addresses which offer the related ports that are marked as ready. These endpoints should be considered safe for load balancers and clients to utilize."
+msgstr ""
+
+#: EndpointSubset.notReadyAddresses
+msgid "IP addresses which offer the related ports but are not currently marked as ready because they have not yet finished starting, have recently failed a readiness check, or have recently failed a liveness check."
+msgstr ""
+
+#: EndpointSubset.ports
+msgid "Port numbers available on the related IP addresses."
+msgstr ""
+
+#: Endpoints
+msgid ""
+"Endpoints is a collection of endpoints that implement the actual service. Example:"
+"  Name: \"mysvc\","
+"  Subsets: ["
+"    {"
+"      Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],"
+"      Ports: [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]"
+"    },"
+"    {"
+"      Addresses: [{\"ip\": \"10.10.3.3\"}],"
+"      Ports: [{\"name\": \"a\", \"port\": 93}, {\"name\": \"b\", \"port\": 76}]"
+"    },"
+" ]"
+msgstr ""
+
+# Endpoints.apiVersion
+# same as Binding.apiVersion
+
+# Endpoints.kind
+# same as Binding.kind
+
+# Endpoints.metadata
+# same as Binding.metadata
+
+#: Endpoints.subsets
+msgid "The set of all endpoints is the union of all subsets. Addresses are placed into subsets according to the IPs they share. A single address with multiple ports, some of which are ready and some of which are not (because they come from different containers) will result in the address being displayed in different subsets for the different ports. No address will appear in both Addresses and NotReadyAddresses in the same subset. Sets of addresses and ports that comprise a service."
+msgstr ""
+
+#: EndpointsList
+msgid "EndpointsList is a list of endpoints."
+msgstr ""
+
+# EndpointsList.apiVersion
+# same as Binding.apiVersion
+
+#: EndpointsList.items
+msgid "List of endpoints."
+msgstr ""
+
+# EndpointsList.kind
+# same as Binding.kind
+
+# EndpointsList.metadata
+# same as ComponentStatusList.metadata
+
+#: EnvFromSource
+msgid "EnvFromSource represents the source of a set of ConfigMaps"
+msgstr ""
+
+#: EnvFromSource.configMapRef
+msgid "The ConfigMap to select from"
+msgstr ""
+
+#: EnvFromSource.prefix
+msgid "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER."
+msgstr ""
+
+#: EnvFromSource.secretRef
+msgid "The Secret to select from"
+msgstr ""
+
+#: EnvVar
+msgid "EnvVar represents an environment variable present in a Container."
+msgstr ""
+
+#: EnvVar.name
+msgid "Name of the environment variable. Must be a C_IDENTIFIER."
+msgstr ""
+
+#: EnvVar.value
+msgid "Variable references $(VAR_NAME) are expanded using the previous defined environment variables in the container and any service environment variables. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to \"\"."
+msgstr ""
+
+#: EnvVar.valueFrom
+msgid "Source for the environment variable's value. Cannot be used if value is not empty."
+msgstr ""
+
+#: EnvVarSource
+msgid "EnvVarSource represents a source for the value of an EnvVar."
+msgstr ""
+
+#: EnvVarSource.configMapKeyRef
+msgid "Selects a key of a ConfigMap."
+msgstr ""
+
+#: EnvVarSource.fieldRef
+msgid "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs."
+msgstr ""
+
+#: EnvVarSource.resourceFieldRef
+msgid "Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported."
+msgstr ""
+
+#: EnvVarSource.secretKeyRef
+msgid "Selects a key of a secret in the pod's namespace"
+msgstr ""
+
+#: EphemeralContainer
+msgid "An EphemeralContainer is a container that may be added temporarily to an existing pod for user-initiated activities such as debugging. Ephemeral containers have no resource or scheduling guarantees, and they will not be restarted when they exit or when a pod is removed or restarted. If an ephemeral container causes a pod to exceed its resource allocation, the pod may be evicted. Ephemeral containers may not be added by directly updating the pod spec. They must be added via the pod's ephemeralcontainers subresource, and they will appear in the pod spec once added. This is an alpha feature enabled by the EphemeralContainers feature flag."
+msgstr ""
+
+# EphemeralContainer.args
+# same as Container.args
+
+# EphemeralContainer.command
+# same as Container.command
+
+# EphemeralContainer.env
+# same as Container.env
+
+# EphemeralContainer.envFrom
+# same as Container.envFrom
+
+#: EphemeralContainer.image
+msgid "Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images"
+msgstr ""
+
+# EphemeralContainer.imagePullPolicy
+# same as Container.imagePullPolicy
+
+#: EphemeralContainer.lifecycle
+msgid "Lifecycle is not allowed for ephemeral containers."
+msgstr ""
+
+#: EphemeralContainer.livenessProbe
+msgid "Probes are not allowed for ephemeral containers."
+msgstr ""
+
+#: EphemeralContainer.name
+msgid "Name of the ephemeral container specified as a DNS_LABEL. This name must be unique among all containers, init containers and ephemeral containers."
+msgstr ""
+
+#: EphemeralContainer.ports
+msgid "Ports are not allowed for ephemeral containers."
+msgstr ""
+
+# EphemeralContainer.readinessProbe
+# same as EphemeralContainer.livenessProbe
+
+#: EphemeralContainer.resources
+msgid "Resources are not allowed for ephemeral containers. Ephemeral containers use spare resources already allocated to the pod."
+msgstr ""
+
+#: EphemeralContainer.securityContext
+msgid "SecurityContext is not allowed for ephemeral containers."
+msgstr ""
+
+# EphemeralContainer.startupProbe
+# same as EphemeralContainer.livenessProbe
+
+# EphemeralContainer.stdin
+# same as Container.stdin
+
+# EphemeralContainer.stdinOnce
+# same as Container.stdinOnce
+
+#: EphemeralContainer.targetContainerName
+msgid "If set, the name of the container from PodSpec that this ephemeral container targets. The ephemeral container will be run in the namespaces (IPC, PID, etc) of this container. If not set then the ephemeral container is run in whatever namespaces are shared for the pod. Note that the container runtime must support this feature."
+msgstr ""
+
+# EphemeralContainer.terminationMessagePath
+# same as Container.terminationMessagePath
+
+# EphemeralContainer.terminationMessagePolicy
+# same as Container.terminationMessagePolicy
+
+# EphemeralContainer.tty
+# same as Container.tty
+
+# EphemeralContainer.volumeDevices
+# same as Container.volumeDevices
+
+# EphemeralContainer.volumeMounts
+# same as Container.volumeMounts
+
+# EphemeralContainer.workingDir
+# same as Container.workingDir
+
+#: EphemeralContainers
+msgid "A list of ephemeral containers used with the Pod ephemeralcontainers subresource."
+msgstr ""
+
+# EphemeralContainers.apiVersion
+# same as Binding.apiVersion
+
+#: EphemeralContainers.ephemeralContainers
+msgid "A list of ephemeral containers associated with this pod. New ephemeral containers may be appended to this list, but existing ephemeral containers may not be removed or modified."
+msgstr ""
+
+# EphemeralContainers.kind
+# same as Binding.kind
+
+#: EphemeralVolumeSource
+msgid "Represents an ephemeral volume that is handled by a normal storage driver."
+msgstr ""
+
+#: EphemeralVolumeSource.volumeClaimTemplate
+msgid ""
+"Will be used to create a stand-alone PVC to provision the volume. The pod in which this EphemeralVolumeSource is embedded will be the owner of the PVC, i.e. the PVC will be deleted together with the pod.  The name of the PVC will be `<pod name>-<volume name>` where `<volume name>` is the name from the `PodSpec.Volumes` array entry. Pod validation will reject the pod if the concatenated name is not valid for a PVC (for example, too long)."
+""
+"An existing PVC with that name that is not owned by the pod will *not* be used for the pod to avoid using an unrelated volume by mistake. Starting the pod is then blocked until the unrelated PVC is removed. If such a pre-created PVC is meant to be used by the pod, the PVC has to updated with an owner reference to the pod once the pod exists. Normally this should not be necessary, but it may be useful when manually reconstructing a broken cluster."
+""
+"This field is read-only and no changes will be made by Kubernetes to the PVC after it has been created."
+""
+"Required, must not be nil."
+msgstr ""
+
+#: Event
+msgid "Event is a report of an event somewhere in the cluster.  Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data."
+msgstr ""
+
+#: Event.action
+msgid "What action was taken/failed regarding to the Regarding object."
+msgstr ""
+
+# Event.apiVersion
+# same as Binding.apiVersion
+
+#: Event.count
+msgid "The number of times this event has occurred."
+msgstr ""
+
+#: Event.eventTime
+msgid "Time when this Event was first observed."
+msgstr ""
+
+#: Event.firstTimestamp
+msgid "The time at which the event was first recorded. (Time of server receipt is in TypeMeta.)"
+msgstr ""
+
+#: Event.involvedObject
+msgid "The object that this event is about."
+msgstr ""
+
+# Event.kind
+# same as Binding.kind
+
+#: Event.lastTimestamp
+msgid "The time at which the most recent occurrence of this event was recorded."
+msgstr ""
+
+#: Event.message
+msgid "A human-readable description of the status of this operation."
+msgstr ""
+
+# Event.metadata
+# same as Binding.metadata
+
+#: Event.reason
+msgid "This should be a short, machine understandable string that gives the reason for the transition into the object's current status."
+msgstr ""
+
+#: Event.related
+msgid "Optional secondary object for more complex actions."
+msgstr ""
+
+#: Event.reportingComponent
+msgid "Name of the controller that emitted this Event, e.g. `kubernetes.io/kubelet`."
+msgstr ""
+
+#: Event.reportingInstance
+msgid "ID of the controller instance, e.g. `kubelet-xyzf`."
+msgstr ""
+
+#: Event.series
+msgid "Data about the Event series this event represents or nil if it's a singleton Event."
+msgstr ""
+
+#: Event.source
+msgid "The component reporting this event. Should be a short machine understandable string."
+msgstr ""
+
+#: Event.type
+msgid "Type of this event (Normal, Warning), new types could be added in the future"
+msgstr ""
+
+#: EventList
+msgid "EventList is a list of events."
+msgstr ""
+
+# EventList.apiVersion
+# same as Binding.apiVersion
+
+#: EventList.items
+msgid "List of events"
+msgstr ""
+
+# EventList.kind
+# same as Binding.kind
+
+# EventList.metadata
+# same as ComponentStatusList.metadata
+
+#: EventSeries
+msgid "EventSeries contain information on series of events, i.e. thing that was/is happening continuously for some time."
+msgstr ""
+
+#: EventSeries.count
+msgid "Number of occurrences in this series up to the last heartbeat time"
+msgstr ""
+
+#: EventSeries.lastObservedTime
+msgid "Time of the last occurrence observed"
+msgstr ""
+
+#: EventSource
+msgid "EventSource contains information for an event."
+msgstr ""
+
+#: EventSource.component
+msgid "Component from which the event is generated."
+msgstr ""
+
+#: EventSource.host
+msgid "Node name on which the event is generated."
+msgstr ""
+
+#: ExecAction
+msgid "ExecAction describes a \"run in container\" action."
+msgstr ""
+
+#: ExecAction.command
+msgid "Command is the command line to execute inside the container, the working directory for the command  is root ('/') in the container's filesystem. The command is simply exec'd, it is not run inside a shell, so traditional shell instructions ('|', etc) won't work. To use a shell, you need to explicitly call out to that shell. Exit status of 0 is treated as live/healthy and non-zero is unhealthy."
+msgstr ""
+
+#: FCVolumeSource
+msgid "Represents a Fibre Channel volume. Fibre Channel volumes can only be mounted as read/write once. Fibre Channel volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+# FCVolumeSource.fsType
+# same as AzureDiskVolumeSource.fsType
+
+#: FCVolumeSource.lun
+msgid "Optional: FC target lun number"
+msgstr ""
+
+#: FCVolumeSource.readOnly
+msgid "Optional: Defaults to false (read/write). ReadOnly here will force the ReadOnly setting in VolumeMounts."
+msgstr ""
+
+#: FCVolumeSource.targetWWNs
+msgid "Optional: FC target worldwide names (WWNs)"
+msgstr ""
+
+#: FCVolumeSource.wwids
+msgid "Optional: FC volume world wide identifiers (wwids) Either wwids or combination of targetWWNs and lun must be set, but not both simultaneously."
+msgstr ""
+
+#: FlexPersistentVolumeSource
+msgid "FlexPersistentVolumeSource represents a generic persistent volume resource that is provisioned/attached using an exec based plugin."
+msgstr ""
+
+#: FlexPersistentVolumeSource.driver
+msgid "Driver is the name of the driver to use for this volume."
+msgstr ""
+
+#: FlexPersistentVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". The default filesystem depends on FlexVolume script."
+msgstr ""
+
+#: FlexPersistentVolumeSource.options
+msgid "Optional: Extra command options if any."
+msgstr ""
+
+# FlexPersistentVolumeSource.readOnly
+# same as FCVolumeSource.readOnly
+
+#: FlexPersistentVolumeSource.secretRef
+msgid "Optional: SecretRef is reference to the secret object containing sensitive information to pass to the plugin scripts. This may be empty if no secret object is specified. If the secret object contains more than one secret, all secrets are passed to the plugin scripts."
+msgstr ""
+
+#: FlexVolumeSource
+msgid "FlexVolume represents a generic volume resource that is provisioned/attached using an exec based plugin."
+msgstr ""
+
+# FlexVolumeSource.driver
+# same as FlexPersistentVolumeSource.driver
+
+# FlexVolumeSource.fsType
+# same as FlexPersistentVolumeSource.fsType
+
+# FlexVolumeSource.options
+# same as FlexPersistentVolumeSource.options
+
+# FlexVolumeSource.readOnly
+# same as FCVolumeSource.readOnly
+
+# FlexVolumeSource.secretRef
+# same as FlexPersistentVolumeSource.secretRef
+
+#: FlockerVolumeSource
+msgid "Represents a Flocker volume mounted by the Flocker agent. One and only one of datasetName and datasetUUID should be set. Flocker volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: FlockerVolumeSource.datasetName
+msgid "Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated"
+msgstr ""
+
+#: FlockerVolumeSource.datasetUUID
+msgid "UUID of the dataset. This is unique identifier of a Flocker dataset"
+msgstr ""
+
+#: GCEPersistentDiskVolumeSource
+msgid ""
+"Represents a Persistent Disk resource in Google Compute Engine."
+""
+"A GCE PD must exist before mounting to a container. The disk must also be in the same GCE project and zone as the kubelet. A GCE PD can only be mounted as read/write once or read-only many times. GCE PDs support ownership management and SELinux relabeling."
+msgstr ""
+
+#: GCEPersistentDiskVolumeSource.fsType
+msgid "Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: GCEPersistentDiskVolumeSource.partition
+msgid "The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as \"1\". Similarly, the volume partition for /dev/sda is \"0\" (or you can leave the property empty). More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: GCEPersistentDiskVolumeSource.pdName
+msgid "Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: GCEPersistentDiskVolumeSource.readOnly
+msgid "ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: GitRepoVolumeSource
+msgid ""
+"Represents a volume that is populated with the contents of a git repository. Git repo volumes do not support ownership management. Git repo volumes support SELinux relabeling."
+""
+"DEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an EmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir into the Pod's container."
+msgstr ""
+
+#: GitRepoVolumeSource.directory
+msgid "Target directory name. Must not contain or start with '..'.  If '.' is supplied, the volume directory will be the git repository.  Otherwise, if specified, the volume will contain the git repository in the subdirectory with the given name."
+msgstr ""
+
+#: GitRepoVolumeSource.repository
+msgid "Repository URL"
+msgstr ""
+
+#: GitRepoVolumeSource.revision
+msgid "Commit hash for the specified revision."
+msgstr ""
+
+#: GlusterfsPersistentVolumeSource
+msgid "Represents a Glusterfs mount that lasts the lifetime of a pod. Glusterfs volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: GlusterfsPersistentVolumeSource.endpoints
+msgid "EndpointsName is the endpoint name that details Glusterfs topology. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+msgstr ""
+
+#: GlusterfsPersistentVolumeSource.endpointsNamespace
+msgid "EndpointsNamespace is the namespace that contains Glusterfs endpoint. If this field is empty, the EndpointNamespace defaults to the same namespace as the bound PVC. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+msgstr ""
+
+#: GlusterfsPersistentVolumeSource.path
+msgid "Path is the Glusterfs volume path. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+msgstr ""
+
+#: GlusterfsPersistentVolumeSource.readOnly
+msgid "ReadOnly here will force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: https://examples.k8s.io/volumes/glusterfs/README.md#create-a-pod"
+msgstr ""
+
+# GlusterfsVolumeSource
+# same as GlusterfsPersistentVolumeSource
+
+# GlusterfsVolumeSource.endpoints
+# same as GlusterfsPersistentVolumeSource.endpoints
+
+# GlusterfsVolumeSource.path
+# same as GlusterfsPersistentVolumeSource.path
+
+# GlusterfsVolumeSource.readOnly
+# same as GlusterfsPersistentVolumeSource.readOnly
+
+#: HTTPGetAction
+msgid "HTTPGetAction describes an action based on HTTP Get requests."
+msgstr ""
+
+#: HTTPGetAction.host
+msgid "Host name to connect to, defaults to the pod IP. You probably want to set \"Host\" in httpHeaders instead."
+msgstr ""
+
+#: HTTPGetAction.httpHeaders
+msgid "Custom headers to set in the request. HTTP allows repeated headers."
+msgstr ""
+
+#: HTTPGetAction.path
+msgid "Path to access on the HTTP server."
+msgstr ""
+
+#: HTTPGetAction.port
+msgid "Name or number of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+msgstr ""
+
+#: HTTPGetAction.scheme
+msgid "Scheme to use for connecting to the host. Defaults to HTTP."
+msgstr ""
+
+#: HTTPHeader
+msgid "HTTPHeader describes a custom header to be used in HTTP probes"
+msgstr ""
+
+#: HTTPHeader.name
+msgid "The header field name"
+msgstr ""
+
+#: HTTPHeader.value
+msgid "The header field value"
+msgstr ""
+
+#: Handler
+msgid "Handler defines a specific action that should be taken"
+msgstr ""
+
+#: Handler.exec
+msgid "One and only one of the following should be specified. Exec specifies the action to take."
+msgstr ""
+
+#: Handler.httpGet
+msgid "HTTPGet specifies the http request to perform."
+msgstr ""
+
+#: Handler.tcpSocket
+msgid "TCPSocket specifies an action involving a TCP port. TCP hooks not yet supported"
+msgstr ""
+
+#: HostAlias
+msgid "HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the pod's hosts file."
+msgstr ""
+
+#: HostAlias.hostnames
+msgid "Hostnames for the above IP address."
+msgstr ""
+
+#: HostAlias.ip
+msgid "IP address of the host file entry."
+msgstr ""
+
+#: HostPathVolumeSource
+msgid "Represents a host path mapped into a pod. Host path volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: HostPathVolumeSource.path
+msgid "Path of the directory on the host. If the path is a symlink, it will follow the link to the real path. More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
+msgstr ""
+
+#: HostPathVolumeSource.type
+msgid "Type for HostPath Volume Defaults to \"\" More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
+msgstr ""
+
+#: ISCSIPersistentVolumeSource
+msgid "ISCSIPersistentVolumeSource represents an ISCSI disk. ISCSI volumes can only be mounted as read/write once. ISCSI volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.chapAuthDiscovery
+msgid "whether support iSCSI Discovery CHAP authentication"
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.chapAuthSession
+msgid "whether support iSCSI Session CHAP authentication"
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.fsType
+msgid "Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi"
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.initiatorName
+msgid "Custom iSCSI Initiator Name. If initiatorName is specified with iscsiInterface simultaneously, new iSCSI interface <target portal>:<volume name> will be created for the connection."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.iqn
+msgid "Target iSCSI Qualified Name."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.iscsiInterface
+msgid "iSCSI Interface Name that uses an iSCSI transport. Defaults to 'default' (tcp)."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.lun
+msgid "iSCSI Target Lun number."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.portals
+msgid "iSCSI Target Portal List. The Portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260)."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.readOnly
+msgid "ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false."
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.secretRef
+msgid "CHAP Secret for iSCSI target and initiator authentication"
+msgstr ""
+
+#: ISCSIPersistentVolumeSource.targetPortal
+msgid "iSCSI Target Portal. The Portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260)."
+msgstr ""
+
+#: ISCSIVolumeSource
+msgid "Represents an ISCSI disk. ISCSI volumes can only be mounted as read/write once. ISCSI volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+# ISCSIVolumeSource.chapAuthDiscovery
+# same as ISCSIPersistentVolumeSource.chapAuthDiscovery
+
+# ISCSIVolumeSource.chapAuthSession
+# same as ISCSIPersistentVolumeSource.chapAuthSession
+
+# ISCSIVolumeSource.fsType
+# same as ISCSIPersistentVolumeSource.fsType
+
+# ISCSIVolumeSource.initiatorName
+# same as ISCSIPersistentVolumeSource.initiatorName
+
+# ISCSIVolumeSource.iqn
+# same as ISCSIPersistentVolumeSource.iqn
+
+# ISCSIVolumeSource.iscsiInterface
+# same as ISCSIPersistentVolumeSource.iscsiInterface
+
+# ISCSIVolumeSource.lun
+# same as ISCSIPersistentVolumeSource.lun
+
+#: ISCSIVolumeSource.portals
+msgid "iSCSI Target Portal List. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260)."
+msgstr ""
+
+# ISCSIVolumeSource.readOnly
+# same as ISCSIPersistentVolumeSource.readOnly
+
+# ISCSIVolumeSource.secretRef
+# same as ISCSIPersistentVolumeSource.secretRef
+
+# ISCSIVolumeSource.targetPortal
+# same as ISCSIPersistentVolumeSource.targetPortal
+
+#: KeyToPath
+msgid "Maps a string key to a path within a volume."
+msgstr ""
+
+#: KeyToPath.key
+msgid "The key to project."
+msgstr ""
+
+#: KeyToPath.mode
+msgid "Optional: mode bits used to set permissions on this file. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. If not specified, the volume defaultMode will be used. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set."
+msgstr ""
+
+#: KeyToPath.path
+msgid "The relative path of the file to map the key to. May not be an absolute path. May not contain the path element '..'. May not start with the string '..'."
+msgstr ""
+
+#: Lifecycle
+msgid "Lifecycle describes actions that the management system should take in response to container lifecycle events. For the PostStart and PreStop lifecycle handlers, management of the container blocks until the action is complete, unless the container process fails, in which case the handler is aborted."
+msgstr ""
+
+#: Lifecycle.postStart
+msgid "PostStart is called immediately after a container is created. If the handler fails, the container is terminated and restarted according to its restart policy. Other management of the container blocks until the hook completes. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
+msgstr ""
+
+#: Lifecycle.preStop
+msgid "PreStop is called immediately before a container is terminated due to an API request or management event such as liveness/startup probe failure, preemption, resource contention, etc. The handler is not called if the container crashes or exits. The reason for termination is passed to the handler. The Pod's termination grace period countdown begins before the PreStop hooked is executed. Regardless of the outcome of the handler, the container will eventually terminate within the Pod's termination grace period. Other management of the container blocks until the hook completes or until the termination grace period is reached. More info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks"
+msgstr ""
+
+#: LimitRange
+msgid "LimitRange sets resource usage limits for each kind of resource in a Namespace."
+msgstr ""
+
+# LimitRange.apiVersion
+# same as Binding.apiVersion
+
+# LimitRange.kind
+# same as Binding.kind
+
+# LimitRange.metadata
+# same as Binding.metadata
+
+#: LimitRange.spec
+msgid "Spec defines the limits enforced. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: LimitRangeItem
+msgid "LimitRangeItem defines a min/max usage limit for any resource that matches on kind."
+msgstr ""
+
+#: LimitRangeItem.default
+msgid "Default resource requirement limit value by resource name if resource limit is omitted."
+msgstr ""
+
+#: LimitRangeItem.defaultRequest
+msgid "DefaultRequest is the default resource requirement request value by resource name if resource request is omitted."
+msgstr ""
+
+#: LimitRangeItem.max
+msgid "Max usage constraints on this kind by resource name."
+msgstr ""
+
+#: LimitRangeItem.maxLimitRequestRatio
+msgid "MaxLimitRequestRatio if specified, the named resource must have a request and limit that are both non-zero where limit divided by request is less than or equal to the enumerated value; this represents the max burst for the named resource."
+msgstr ""
+
+#: LimitRangeItem.min
+msgid "Min usage constraints on this kind by resource name."
+msgstr ""
+
+#: LimitRangeItem.type
+msgid "Type of resource that this limit applies to."
+msgstr ""
+
+#: LimitRangeList
+msgid "LimitRangeList is a list of LimitRange items."
+msgstr ""
+
+# LimitRangeList.apiVersion
+# same as Binding.apiVersion
+
+#: LimitRangeList.items
+msgid "Items is a list of LimitRange objects. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+msgstr ""
+
+# LimitRangeList.kind
+# same as Binding.kind
+
+# LimitRangeList.metadata
+# same as ComponentStatusList.metadata
+
+#: LimitRangeSpec
+msgid "LimitRangeSpec defines a min/max usage limit for resources that match on kind."
+msgstr ""
+
+#: LimitRangeSpec.limits
+msgid "Limits is the list of LimitRangeItem objects that are enforced."
+msgstr ""
+
+#: LoadBalancerIngress
+msgid "LoadBalancerIngress represents the status of a load-balancer ingress point: traffic intended for the service should be sent to an ingress point."
+msgstr ""
+
+#: LoadBalancerIngress.hostname
+msgid "Hostname is set for load-balancer ingress points that are DNS based (typically AWS load-balancers)"
+msgstr ""
+
+#: LoadBalancerIngress.ip
+msgid "IP is set for load-balancer ingress points that are IP based (typically GCE or OpenStack load-balancers)"
+msgstr ""
+
+#: LoadBalancerIngress.ports
+msgid "Ports is a list of records of service ports If used, every port defined in the service should have an entry in it"
+msgstr ""
+
+#: LoadBalancerStatus
+msgid "LoadBalancerStatus represents the status of a load-balancer."
+msgstr ""
+
+#: LoadBalancerStatus.ingress
+msgid "Ingress is a list containing ingress points for the load-balancer. Traffic intended for the service should be sent to these ingress points."
+msgstr ""
+
+#: LocalObjectReference
+msgid "LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace."
+msgstr ""
+
+# LocalObjectReference.name
+# same as ConfigMapEnvSource.name
+
+#: LocalVolumeSource
+msgid "Local represents directly-attached storage with node affinity (Beta feature)"
+msgstr ""
+
+#: LocalVolumeSource.fsType
+msgid "Filesystem type to mount. It applies only when the Path is a block device. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". The default value is to auto-select a fileystem if unspecified."
+msgstr ""
+
+#: LocalVolumeSource.path
+msgid "The full path to the volume on the node. It can be either a directory or block device (disk, partition, ...)."
+msgstr ""
+
+#: NFSVolumeSource
+msgid "Represents an NFS mount that lasts the lifetime of a pod. NFS volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: NFSVolumeSource.path
+msgid "Path that is exported by the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+msgstr ""
+
+#: NFSVolumeSource.readOnly
+msgid "ReadOnly here will force the NFS export to be mounted with read-only permissions. Defaults to false. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+msgstr ""
+
+#: NFSVolumeSource.server
+msgid "Server is the hostname or IP address of the NFS server. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+msgstr ""
+
+#: Namespace
+msgid "Namespace provides a scope for Names. Use of multiple namespaces is optional."
+msgstr ""
+
+# Namespace.apiVersion
+# same as Binding.apiVersion
+
+# Namespace.kind
+# same as Binding.kind
+
+# Namespace.metadata
+# same as Binding.metadata
+
+#: Namespace.spec
+msgid "Spec defines the behavior of the Namespace. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: Namespace.status
+msgid "Status describes the current status of a Namespace. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: NamespaceCondition
+msgid "NamespaceCondition contains details about state of namespace."
+msgstr ""
+
+#: NamespaceCondition.status
+msgid "Status of the condition, one of True, False, Unknown."
+msgstr ""
+
+#: NamespaceCondition.type
+msgid "Type of namespace controller condition."
+msgstr ""
+
+#: NamespaceList
+msgid "NamespaceList is a list of Namespaces."
+msgstr ""
+
+# NamespaceList.apiVersion
+# same as Binding.apiVersion
+
+#: NamespaceList.items
+msgid "Items is the list of Namespace objects in the list. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
+msgstr ""
+
+# NamespaceList.kind
+# same as Binding.kind
+
+# NamespaceList.metadata
+# same as ComponentStatusList.metadata
+
+#: NamespaceSpec
+msgid "NamespaceSpec describes the attributes on a Namespace."
+msgstr ""
+
+#: NamespaceSpec.finalizers
+msgid "Finalizers is an opaque list of values that must be empty to permanently remove object from storage. More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/"
+msgstr ""
+
+#: NamespaceStatus
+msgid "NamespaceStatus is information about the current status of a Namespace."
+msgstr ""
+
+#: NamespaceStatus.conditions
+msgid "Represents the latest available observations of a namespace's current state."
+msgstr ""
+
+#: NamespaceStatus.phase
+msgid "Phase is the current lifecycle phase of the namespace. More info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/"
+msgstr ""
+
+#: Node
+msgid "Node is a worker node in Kubernetes. Each node will have a unique identifier in the cache (i.e. in etcd)."
+msgstr ""
+
+# Node.apiVersion
+# same as Binding.apiVersion
+
+# Node.kind
+# same as Binding.kind
+
+# Node.metadata
+# same as Binding.metadata
+
+#: Node.spec
+msgid "Spec defines the behavior of a node. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: Node.status
+msgid "Most recently observed status of the node. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: NodeAddress
+msgid "NodeAddress contains information for the node's address."
+msgstr ""
+
+#: NodeAddress.address
+msgid "The node address."
+msgstr ""
+
+#: NodeAddress.type
+msgid "Node address type, one of Hostname, ExternalIP or InternalIP."
+msgstr ""
+
+#: NodeAffinity
+msgid "Node affinity is a group of node affinity scheduling rules."
+msgstr ""
+
+#: NodeAffinity.preferredDuringSchedulingIgnoredDuringExecution
+msgid "The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node matches the corresponding matchExpressions; the node(s) with the highest sum are the most preferred."
+msgstr ""
+
+#: NodeAffinity.requiredDuringSchedulingIgnoredDuringExecution
+msgid "If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to an update), the system may or may not try to eventually evict the pod from its node."
+msgstr ""
+
+#: NodeCondition
+msgid "NodeCondition contains condition information for a node."
+msgstr ""
+
+#: NodeCondition.lastHeartbeatTime
+msgid "Last time we got an update on a given condition."
+msgstr ""
+
+#: NodeCondition.lastTransitionTime
+msgid "Last time the condition transit from one status to another."
+msgstr ""
+
+#: NodeCondition.message
+msgid "Human readable message indicating details about last transition."
+msgstr ""
+
+#: NodeCondition.reason
+msgid "(brief) reason for the condition's last transition."
+msgstr ""
+
+# NodeCondition.status
+# same as NamespaceCondition.status
+
+#: NodeCondition.type
+msgid "Type of node condition."
+msgstr ""
+
+#: NodeConfigSource
+msgid "NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil."
+msgstr ""
+
+#: NodeConfigSource.configMap
+msgid "ConfigMap is a reference to a Node's ConfigMap"
+msgstr ""
+
+#: NodeConfigStatus
+msgid "NodeConfigStatus describes the status of the config assigned by Node.Spec.ConfigSource."
+msgstr ""
+
+#: NodeConfigStatus.active
+msgid "Active reports the checkpointed config the node is actively using. Active will represent either the current version of the Assigned config, or the current LastKnownGood config, depending on whether attempting to use the Assigned config results in an error."
+msgstr ""
+
+#: NodeConfigStatus.assigned
+msgid "Assigned reports the checkpointed config the node will try to use. When Node.Spec.ConfigSource is updated, the node checkpoints the associated config payload to local disk, along with a record indicating intended config. The node refers to this record to choose its config checkpoint, and reports this record in Assigned. Assigned only updates in the status after the record has been checkpointed to disk. When the Kubelet is restarted, it tries to make the Assigned config the Active config by loading and validating the checkpointed payload identified by Assigned."
+msgstr ""
+
+#: NodeConfigStatus.error
+msgid "Error describes any problems reconciling the Spec.ConfigSource to the Active config. Errors may occur, for example, attempting to checkpoint Spec.ConfigSource to the local Assigned record, attempting to checkpoint the payload associated with Spec.ConfigSource, attempting to load or validate the Assigned config, etc. Errors may occur at different points while syncing config. Earlier errors (e.g. download or checkpointing errors) will not result in a rollback to LastKnownGood, and may resolve across Kubelet retries. Later errors (e.g. loading or validating a checkpointed config) will result in a rollback to LastKnownGood. In the latter case, it is usually possible to resolve the error by fixing the config assigned in Spec.ConfigSource. You can find additional information for debugging by searching the error message in the Kubelet log. Error is a human-readable description of the error state; machines can check whether or not Error is empty, but should not rely on the stability of the Error text across Kubelet versions."
+msgstr ""
+
+#: NodeConfigStatus.lastKnownGood
+msgid "LastKnownGood reports the checkpointed config the node will fall back to when it encounters an error attempting to use the Assigned config. The Assigned config becomes the LastKnownGood config when the node determines that the Assigned config is stable and correct. This is currently implemented as a 10-minute soak period starting when the local record of Assigned config is updated. If the Assigned config is Active at the end of this period, it becomes the LastKnownGood. Note that if Spec.ConfigSource is reset to nil (use local defaults), the LastKnownGood is also immediately reset to nil, because the local default config is always assumed good. You should not make assumptions about the node's method of determining config stability and correctness, as this may change or become configurable in the future."
+msgstr ""
+
+#: NodeDaemonEndpoints
+msgid "NodeDaemonEndpoints lists ports opened by daemons running on the Node."
+msgstr ""
+
+#: NodeDaemonEndpoints.kubeletEndpoint
+msgid "Endpoint on which Kubelet is listening."
+msgstr ""
+
+#: NodeList
+msgid "NodeList is the whole list of all Nodes which have been registered with master."
+msgstr ""
+
+# NodeList.apiVersion
+# same as Binding.apiVersion
+
+#: NodeList.items
+msgid "List of nodes"
+msgstr ""
+
+# NodeList.kind
+# same as Binding.kind
+
+# NodeList.metadata
+# same as ComponentStatusList.metadata
+
+#: NodeSelector
+msgid "A node selector represents the union of the results of one or more label queries over a set of nodes; that is, it represents the OR of the selectors represented by the node selector terms."
+msgstr ""
+
+#: NodeSelector.nodeSelectorTerms
+msgid "Required. A list of node selector terms. The terms are ORed."
+msgstr ""
+
+#: NodeSelectorRequirement
+msgid "A node selector requirement is a selector that contains values, a key, and an operator that relates the key and values."
+msgstr ""
+
+#: NodeSelectorRequirement.key
+msgid "The label key that the selector applies to."
+msgstr ""
+
+#: NodeSelectorRequirement.operator
+msgid "Represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt."
+msgstr ""
+
+#: NodeSelectorRequirement.values
+msgid "An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer. This array is replaced during a strategic merge patch."
+msgstr ""
+
+#: NodeSelectorTerm
+msgid "A null or empty node selector term matches no objects. The requirements of them are ANDed. The TopologySelectorTerm type implements a subset of the NodeSelectorTerm."
+msgstr ""
+
+#: NodeSelectorTerm.matchExpressions
+msgid "A list of node selector requirements by node's labels."
+msgstr ""
+
+#: NodeSelectorTerm.matchFields
+msgid "A list of node selector requirements by node's fields."
+msgstr ""
+
+#: NodeSpec
+msgid "NodeSpec describes the attributes that a node is created with."
+msgstr ""
+
+#: NodeSpec.configSource
+msgid "If specified, the source to get node configuration from The DynamicKubeletConfig feature gate must be enabled for the Kubelet to use this field"
+msgstr ""
+
+#: NodeSpec.externalID
+msgid "Deprecated. Not all kubelets will set this field. Remove field after 1.13. see: https://issues.k8s.io/61966"
+msgstr ""
+
+#: NodeSpec.podCIDR
+msgid "PodCIDR represents the pod IP range assigned to the node."
+msgstr ""
+
+#: NodeSpec.podCIDRs
+msgid "podCIDRs represents the IP ranges assigned to the node for usage by Pods on that node. If this field is specified, the 0th entry must match the podCIDR field. It may contain at most 1 value for each of IPv4 and IPv6."
+msgstr ""
+
+#: NodeSpec.providerID
+msgid "ID of the node assigned by the cloud provider in the format: <ProviderName>://<ProviderSpecificNodeID>"
+msgstr ""
+
+#: NodeSpec.taints
+msgid "If specified, the node's taints."
+msgstr ""
+
+#: NodeSpec.unschedulable
+msgid "Unschedulable controls node schedulability of new pods. By default, node is schedulable. More info: https://kubernetes.io/docs/concepts/nodes/node/#manual-node-administration"
+msgstr ""
+
+#: NodeStatus
+msgid "NodeStatus is information about the current status of a node."
+msgstr ""
+
+#: NodeStatus.addresses
+msgid "List of addresses reachable to the node. Queried from cloud provider, if available. More info: https://kubernetes.io/docs/concepts/nodes/node/#addresses Note: This field is declared as mergeable, but the merge key is not sufficiently unique, which can cause data corruption when it is merged. Callers should instead use a full-replacement patch. See http://pr.k8s.io/79391 for an example."
+msgstr ""
+
+#: NodeStatus.allocatable
+msgid "Allocatable represents the resources of a node that are available for scheduling. Defaults to Capacity."
+msgstr ""
+
+#: NodeStatus.capacity
+msgid "Capacity represents the total resources of a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity"
+msgstr ""
+
+#: NodeStatus.conditions
+msgid "Conditions is an array of current observed node conditions. More info: https://kubernetes.io/docs/concepts/nodes/node/#condition"
+msgstr ""
+
+#: NodeStatus.config
+msgid "Status of the config assigned to the node via the dynamic Kubelet config feature."
+msgstr ""
+
+#: NodeStatus.daemonEndpoints
+msgid "Endpoints of daemons running on the Node."
+msgstr ""
+
+#: NodeStatus.images
+msgid "List of container images on this node"
+msgstr ""
+
+#: NodeStatus.nodeInfo
+msgid "Set of ids/uuids to uniquely identify the node. More info: https://kubernetes.io/docs/concepts/nodes/node/#info"
+msgstr ""
+
+#: NodeStatus.phase
+msgid "NodePhase is the recently observed lifecycle phase of the node. More info: https://kubernetes.io/docs/concepts/nodes/node/#phase The field is never populated, and now is deprecated."
+msgstr ""
+
+#: NodeStatus.volumesAttached
+msgid "List of volumes that are attached to the node."
+msgstr ""
+
+#: NodeStatus.volumesInUse
+msgid "List of attachable volumes in use (mounted) by the node."
+msgstr ""
+
+#: NodeSystemInfo
+msgid "NodeSystemInfo is a set of ids/uuids to uniquely identify the node."
+msgstr ""
+
+#: NodeSystemInfo.architecture
+msgid "The Architecture reported by the node"
+msgstr ""
+
+#: NodeSystemInfo.bootID
+msgid "Boot ID reported by the node."
+msgstr ""
+
+#: NodeSystemInfo.containerRuntimeVersion
+msgid "ContainerRuntime Version reported by the node through runtime remote API (e.g. docker://1.5.0)."
+msgstr ""
+
+#: NodeSystemInfo.kernelVersion
+msgid "Kernel Version reported by the node from 'uname -r' (e.g. 3.16.0-0.bpo.4-amd64)."
+msgstr ""
+
+#: NodeSystemInfo.kubeProxyVersion
+msgid "KubeProxy Version reported by the node."
+msgstr ""
+
+#: NodeSystemInfo.kubeletVersion
+msgid "Kubelet Version reported by the node."
+msgstr ""
+
+#: NodeSystemInfo.machineID
+msgid "MachineID reported by the node. For unique machine identification in the cluster this field is preferred. Learn more from man(5) machine-id: http://man7.org/linux/man-pages/man5/machine-id.5.html"
+msgstr ""
+
+#: NodeSystemInfo.operatingSystem
+msgid "The Operating System reported by the node"
+msgstr ""
+
+#: NodeSystemInfo.osImage
+msgid "OS Image reported by the node from /etc/os-release (e.g. Debian GNU/Linux 7 (wheezy))."
+msgstr ""
+
+#: NodeSystemInfo.systemUUID
+msgid "SystemUUID reported by the node. For unique machine identification MachineID is preferred. This field is specific to Red Hat hosts https://access.redhat.com/documentation/en-us/red_hat_subscription_management/1/html/rhsm/uuid"
+msgstr ""
+
+#: ObjectFieldSelector
+msgid "ObjectFieldSelector selects an APIVersioned field of an object."
+msgstr ""
+
+#: ObjectFieldSelector.apiVersion
+msgid "Version of the schema the FieldPath is written in terms of, defaults to \"v1\"."
+msgstr ""
+
+#: ObjectFieldSelector.fieldPath
+msgid "Path of the field to select in the specified API version."
+msgstr ""
+
+#: ObjectReference
+msgid "ObjectReference contains enough information to let you inspect or modify the referred object."
+msgstr ""
+
+#: ObjectReference.apiVersion
+msgid "API version of the referent."
+msgstr ""
+
+#: ObjectReference.fieldPath
+msgid "If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: \"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered the event) or if no container name is specified \"spec.containers[2]\" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object."
+msgstr ""
+
+#: ObjectReference.kind
+msgid "Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+# ObjectReference.name
+# same as ConfigMapEnvSource.name
+
+#: ObjectReference.namespace
+msgid "Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
+msgstr ""
+
+#: ObjectReference.resourceVersion
+msgid "Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency"
+msgstr ""
+
+#: ObjectReference.uid
+msgid "UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids"
+msgstr ""
+
+#: PersistentVolume
+msgid "PersistentVolume (PV) is a storage resource provisioned by an administrator. It is analogous to a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes"
+msgstr ""
+
+# PersistentVolume.apiVersion
+# same as Binding.apiVersion
+
+# PersistentVolume.kind
+# same as Binding.kind
+
+# PersistentVolume.metadata
+# same as Binding.metadata
+
+#: PersistentVolume.spec
+msgid "Spec defines a specification of a persistent volume owned by the cluster. Provisioned by an administrator. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes"
+msgstr ""
+
+#: PersistentVolume.status
+msgid "Status represents the current information/status for the persistent volume. Populated by the system. Read-only. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes"
+msgstr ""
+
+#: PersistentVolumeClaim
+msgid "PersistentVolumeClaim is a user's request for and claim to a persistent volume"
+msgstr ""
+
+# PersistentVolumeClaim.apiVersion
+# same as Binding.apiVersion
+
+# PersistentVolumeClaim.kind
+# same as Binding.kind
+
+# PersistentVolumeClaim.metadata
+# same as Binding.metadata
+
+#: PersistentVolumeClaim.spec
+msgid "Spec defines the desired characteristics of a volume requested by a pod author. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+msgstr ""
+
+#: PersistentVolumeClaim.status
+msgid "Status represents the current information/status of a persistent volume claim. Read-only. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+msgstr ""
+
+#: PersistentVolumeClaimCondition
+msgid "PersistentVolumeClaimCondition contails details about state of pvc"
+msgstr ""
+
+#: PersistentVolumeClaimCondition.lastProbeTime
+msgid "Last time we probed the condition."
+msgstr ""
+
+#: PersistentVolumeClaimCondition.lastTransitionTime
+msgid "Last time the condition transitioned from one status to another."
+msgstr ""
+
+#: PersistentVolumeClaimCondition.message
+msgid "Human-readable message indicating details about last transition."
+msgstr ""
+
+#: PersistentVolumeClaimCondition.reason
+msgid "Unique, this should be a short, machine understandable string that gives the reason for condition's last transition. If it reports \"ResizeStarted\" that means the underlying persistent volume is being resized."
+msgstr ""
+
+#: PersistentVolumeClaimList
+msgid "PersistentVolumeClaimList is a list of PersistentVolumeClaim items."
+msgstr ""
+
+# PersistentVolumeClaimList.apiVersion
+# same as Binding.apiVersion
+
+#: PersistentVolumeClaimList.items
+msgid "A list of persistent volume claims. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+msgstr ""
+
+# PersistentVolumeClaimList.kind
+# same as Binding.kind
+
+# PersistentVolumeClaimList.metadata
+# same as ComponentStatusList.metadata
+
+#: PersistentVolumeClaimSpec
+msgid "PersistentVolumeClaimSpec describes the common attributes of storage devices and allows a Source for provider-specific attributes"
+msgstr ""
+
+#: PersistentVolumeClaimSpec.accessModes
+msgid "AccessModes contains the desired access modes the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1"
+msgstr ""
+
+#: PersistentVolumeClaimSpec.dataSource
+msgid "This field can be used to specify either: * An existing VolumeSnapshot object (snapshot.storage.k8s.io/VolumeSnapshot) * An existing PVC (PersistentVolumeClaim) * An existing custom resource that implements data population (Alpha) In order to use custom resource types that implement data population, the AnyVolumeDataSource feature gate must be enabled. If the provisioner or an external controller can support the specified data source, it will create a new volume based on the contents of the specified data source."
+msgstr ""
+
+#: PersistentVolumeClaimSpec.resources
+msgid "Resources represents the minimum resources the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources"
+msgstr ""
+
+#: PersistentVolumeClaimSpec.selector
+msgid "A label query over volumes to consider for binding."
+msgstr ""
+
+#: PersistentVolumeClaimSpec.storageClassName
+msgid "Name of the StorageClass required by the claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1"
+msgstr ""
+
+#: PersistentVolumeClaimSpec.volumeMode
+msgid "volumeMode defines what type of volume is required by the claim. Value of Filesystem is implied when not included in claim spec."
+msgstr ""
+
+#: PersistentVolumeClaimSpec.volumeName
+msgid "VolumeName is the binding reference to the PersistentVolume backing this claim."
+msgstr ""
+
+#: PersistentVolumeClaimStatus
+msgid "PersistentVolumeClaimStatus is the current status of a persistent volume claim."
+msgstr ""
+
+#: PersistentVolumeClaimStatus.accessModes
+msgid "AccessModes contains the actual access modes the volume backing the PVC has. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1"
+msgstr ""
+
+#: PersistentVolumeClaimStatus.capacity
+msgid "Represents the actual resources of the underlying volume."
+msgstr ""
+
+#: PersistentVolumeClaimStatus.conditions
+msgid "Current Condition of persistent volume claim. If underlying persistent volume is being resized then the Condition will be set to 'ResizeStarted'."
+msgstr ""
+
+#: PersistentVolumeClaimStatus.phase
+msgid "Phase represents the current phase of PersistentVolumeClaim."
+msgstr ""
+
+#: PersistentVolumeClaimTemplate
+msgid "PersistentVolumeClaimTemplate is used to produce PersistentVolumeClaim objects as part of an EphemeralVolumeSource."
+msgstr ""
+
+#: PersistentVolumeClaimTemplate.metadata
+msgid "May contain labels and annotations that will be copied into the PVC when creating it. No other fields are allowed and will be rejected during validation."
+msgstr ""
+
+#: PersistentVolumeClaimTemplate.spec
+msgid "The specification for the PersistentVolumeClaim. The entire content is copied unchanged into the PVC that gets created from this template. The same fields as in a PersistentVolumeClaim are also valid here."
+msgstr ""
+
+#: PersistentVolumeClaimVolumeSource
+msgid "PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace. This volume finds the bound PV and mounts that volume for the pod. A PersistentVolumeClaimVolumeSource is, essentially, a wrapper around another type of volume that is owned by someone else (the system)."
+msgstr ""
+
+#: PersistentVolumeClaimVolumeSource.claimName
+msgid "ClaimName is the name of a PersistentVolumeClaim in the same namespace as the pod using this volume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+msgstr ""
+
+#: PersistentVolumeClaimVolumeSource.readOnly
+msgid "Will force the ReadOnly setting in VolumeMounts. Default false."
+msgstr ""
+
+#: PersistentVolumeList
+msgid "PersistentVolumeList is a list of PersistentVolume items."
+msgstr ""
+
+# PersistentVolumeList.apiVersion
+# same as Binding.apiVersion
+
+#: PersistentVolumeList.items
+msgid "List of persistent volumes. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes"
+msgstr ""
+
+# PersistentVolumeList.kind
+# same as Binding.kind
+
+# PersistentVolumeList.metadata
+# same as ComponentStatusList.metadata
+
+#: PersistentVolumeSpec
+msgid "PersistentVolumeSpec is the specification of a persistent volume."
+msgstr ""
+
+#: PersistentVolumeSpec.accessModes
+msgid "AccessModes contains all ways the volume can be mounted. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes"
+msgstr ""
+
+#: PersistentVolumeSpec.awsElasticBlockStore
+msgid "AWSElasticBlockStore represents an AWS Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore"
+msgstr ""
+
+# PersistentVolumeSpec.azureDisk
+# same as AzureDiskVolumeSource
+
+# PersistentVolumeSpec.azureFile
+# same as AzureFilePersistentVolumeSource
+
+#: PersistentVolumeSpec.capacity
+msgid "A description of the persistent volume's resources and capacity. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity"
+msgstr ""
+
+#: PersistentVolumeSpec.cephfs
+msgid "CephFS represents a Ceph FS mount on the host that shares a pod's lifetime"
+msgstr ""
+
+#: PersistentVolumeSpec.cinder
+msgid "Cinder represents a cinder volume attached and mounted on kubelets host machine. More info: https://examples.k8s.io/mysql-cinder-pd/README.md"
+msgstr ""
+
+#: PersistentVolumeSpec.claimRef
+msgid "ClaimRef is part of a bi-directional binding between PersistentVolume and PersistentVolumeClaim. Expected to be non-nil when bound. claim.VolumeName is the authoritative bind between PV and PVC. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#binding"
+msgstr ""
+
+#: PersistentVolumeSpec.csi
+msgid "CSI represents storage that is handled by an external CSI driver (Beta feature)."
+msgstr ""
+
+#: PersistentVolumeSpec.fc
+msgid "FC represents a Fibre Channel resource that is attached to a kubelet's host machine and then exposed to the pod."
+msgstr ""
+
+# PersistentVolumeSpec.flexVolume
+# same as FlexVolumeSource
+
+#: PersistentVolumeSpec.flocker
+msgid "Flocker represents a Flocker volume attached to a kubelet's host machine and exposed to the pod for its usage. This depends on the Flocker control service being running"
+msgstr ""
+
+#: PersistentVolumeSpec.gcePersistentDisk
+msgid "GCEPersistentDisk represents a GCE Disk resource that is attached to a kubelet's host machine and then exposed to the pod. Provisioned by an admin. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: PersistentVolumeSpec.glusterfs
+msgid "Glusterfs represents a Glusterfs volume that is attached to a host and exposed to the pod. Provisioned by an admin. More info: https://examples.k8s.io/volumes/glusterfs/README.md"
+msgstr ""
+
+#: PersistentVolumeSpec.hostPath
+msgid "HostPath represents a directory on the host. Provisioned by a developer or tester. This is useful for single-node development and testing only! On-host storage is not supported in any way and WILL NOT WORK in a multi-node cluster. More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
+msgstr ""
+
+#: PersistentVolumeSpec.iscsi
+msgid "ISCSI represents an ISCSI Disk resource that is attached to a kubelet's host machine and then exposed to the pod. Provisioned by an admin."
+msgstr ""
+
+#: PersistentVolumeSpec.local
+msgid "Local represents directly-attached storage with node affinity"
+msgstr ""
+
+#: PersistentVolumeSpec.mountOptions
+msgid "A list of mount options, e.g. [\"ro\", \"soft\"]. Not validated - mount will simply fail if one is invalid. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options"
+msgstr ""
+
+#: PersistentVolumeSpec.nfs
+msgid "NFS represents an NFS mount on the host. Provisioned by an admin. More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+msgstr ""
+
+#: PersistentVolumeSpec.nodeAffinity
+msgid "NodeAffinity defines constraints that limit what nodes this volume can be accessed from. This field influences the scheduling of pods that use this volume."
+msgstr ""
+
+#: PersistentVolumeSpec.persistentVolumeReclaimPolicy
+msgid "What happens to a persistent volume when released from its claim. Valid options are Retain (default for manually created PersistentVolumes), Delete (default for dynamically provisioned PersistentVolumes), and Recycle (deprecated). Recycle must be supported by the volume plugin underlying this PersistentVolume. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#reclaiming"
+msgstr ""
+
+#: PersistentVolumeSpec.photonPersistentDisk
+msgid "PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine"
+msgstr ""
+
+#: PersistentVolumeSpec.portworxVolume
+msgid "PortworxVolume represents a portworx volume attached and mounted on kubelets host machine"
+msgstr ""
+
+#: PersistentVolumeSpec.quobyte
+msgid "Quobyte represents a Quobyte mount on the host that shares a pod's lifetime"
+msgstr ""
+
+#: PersistentVolumeSpec.rbd
+msgid "RBD represents a Rados Block Device mount on the host that shares a pod's lifetime. More info: https://examples.k8s.io/volumes/rbd/README.md"
+msgstr ""
+
+#: PersistentVolumeSpec.scaleIO
+msgid "ScaleIO represents a ScaleIO persistent volume attached and mounted on Kubernetes nodes."
+msgstr ""
+
+#: PersistentVolumeSpec.storageClassName
+msgid "Name of StorageClass to which this persistent volume belongs. Empty value means that this volume does not belong to any StorageClass."
+msgstr ""
+
+#: PersistentVolumeSpec.storageos
+msgid "StorageOS represents a StorageOS volume that is attached to the kubelet's host machine and mounted into the pod More info: https://examples.k8s.io/volumes/storageos/README.md"
+msgstr ""
+
+#: PersistentVolumeSpec.volumeMode
+msgid "volumeMode defines if a volume is intended to be used with a formatted filesystem or to remain in raw block state. Value of Filesystem is implied when not included in spec."
+msgstr ""
+
+#: PersistentVolumeSpec.vsphereVolume
+msgid "VsphereVolume represents a vSphere volume attached and mounted on kubelets host machine"
+msgstr ""
+
+#: PersistentVolumeStatus
+msgid "PersistentVolumeStatus is the current status of a persistent volume."
+msgstr ""
+
+#: PersistentVolumeStatus.message
+msgid "A human-readable message indicating details about why the volume is in this state."
+msgstr ""
+
+#: PersistentVolumeStatus.phase
+msgid "Phase indicates if a volume is available, bound to a claim, or released by a claim. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#phase"
+msgstr ""
+
+#: PersistentVolumeStatus.reason
+msgid "Reason is a brief CamelCase string that describes any failure and is meant for machine parsing and tidy display in the CLI."
+msgstr ""
+
+#: PhotonPersistentDiskVolumeSource
+msgid "Represents a Photon Controller persistent disk resource."
+msgstr ""
+
+# PhotonPersistentDiskVolumeSource.fsType
+# same as AzureDiskVolumeSource.fsType
+
+#: PhotonPersistentDiskVolumeSource.pdID
+msgid "ID that identifies Photon Controller persistent disk"
+msgstr ""
+
+#: Pod
+msgid "Pod is a collection of containers that can run on a host. This resource is created by clients and scheduled onto hosts."
+msgstr ""
+
+# Pod.apiVersion
+# same as Binding.apiVersion
+
+# Pod.kind
+# same as Binding.kind
+
+# Pod.metadata
+# same as Binding.metadata
+
+#: Pod.spec
+msgid "Specification of the desired behavior of the pod. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: Pod.status
+msgid "Most recently observed status of the pod. This data may not be up to date. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: PodAffinity
+msgid "Pod affinity is a group of inter pod affinity scheduling rules."
+msgstr ""
+
+#: PodAffinity.preferredDuringSchedulingIgnoredDuringExecution
+msgid "The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred."
+msgstr ""
+
+#: PodAffinity.requiredDuringSchedulingIgnoredDuringExecution
+msgid "If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to a pod label update), the system may or may not try to eventually evict the pod from its node. When there are multiple elements, the lists of nodes corresponding to each podAffinityTerm are intersected, i.e. all terms must be satisfied."
+msgstr ""
+
+#: PodAffinityTerm
+msgid "Defines a set of pods (namely those matching the labelSelector relative to the given namespace(s)) that this pod should be co-located (affinity) or not co-located (anti-affinity) with, where co-located is defined as running on a node whose value of the label with key <topologyKey> matches that of any node on which a pod of the set of pods is running"
+msgstr ""
+
+#: PodAffinityTerm.labelSelector
+msgid "A label query over a set of resources, in this case pods."
+msgstr ""
+
+#: PodAffinityTerm.namespaceSelector
+msgid "A label query over the set of namespaces that the term applies to. The term is applied to the union of the namespaces selected by this field and the ones listed in the namespaces field. null selector and null or empty namespaces list means \"this pod's namespace\". An empty selector ({}) matches all namespaces. This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled."
+msgstr ""
+
+#: PodAffinityTerm.namespaces
+msgid "namespaces specifies a static list of namespace names that the term applies to. The term is applied to the union of the namespaces listed in this field and the ones selected by namespaceSelector. null or empty namespaces list and null namespaceSelector means \"this pod's namespace\""
+msgstr ""
+
+#: PodAffinityTerm.topologyKey
+msgid "This pod should be co-located (affinity) or not co-located (anti-affinity) with the pods matching the labelSelector in the specified namespaces, where co-located is defined as running on a node whose value of the label with key topologyKey matches that of any node on which any of the selected pods is running. Empty topologyKey is not allowed."
+msgstr ""
+
+#: PodAntiAffinity
+msgid "Pod anti affinity is a group of inter pod anti affinity scheduling rules."
+msgstr ""
+
+#: PodAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution
+msgid "The scheduler will prefer to schedule pods to nodes that satisfy the anti-affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling anti-affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding \"weight\" to the sum if the node has pods which matches the corresponding podAffinityTerm; the node(s) with the highest sum are the most preferred."
+msgstr ""
+
+#: PodAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
+msgid "If the anti-affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the anti-affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to a pod label update), the system may or may not try to eventually evict the pod from its node. When there are multiple elements, the lists of nodes corresponding to each podAffinityTerm are intersected, i.e. all terms must be satisfied."
+msgstr ""
+
+#: PodCondition
+msgid "PodCondition contains details for the current condition of this pod."
+msgstr ""
+
+# PodCondition.lastProbeTime
+# same as PersistentVolumeClaimCondition.lastProbeTime
+
+# PodCondition.lastTransitionTime
+# same as PersistentVolumeClaimCondition.lastTransitionTime
+
+# PodCondition.message
+# same as PersistentVolumeClaimCondition.message
+
+#: PodCondition.reason
+msgid "Unique, one-word, CamelCase reason for the condition's last transition."
+msgstr ""
+
+#: PodCondition.status
+msgid "Status is the status of the condition. Can be True, False, Unknown. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions"
+msgstr ""
+
+#: PodCondition.type
+msgid "Type is the type of the condition. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions"
+msgstr ""
+
+#: PodDNSConfig
+msgid "PodDNSConfig defines the DNS parameters of a pod in addition to those generated from DNSPolicy."
+msgstr ""
+
+#: PodDNSConfig.nameservers
+msgid "A list of DNS name server IP addresses. This will be appended to the base nameservers generated from DNSPolicy. Duplicated nameservers will be removed."
+msgstr ""
+
+#: PodDNSConfig.options
+msgid "A list of DNS resolver options. This will be merged with the base options generated from DNSPolicy. Duplicated entries will be removed. Resolution options given in Options will override those that appear in the base DNSPolicy."
+msgstr ""
+
+#: PodDNSConfig.searches
+msgid "A list of DNS search domains for host-name lookup. This will be appended to the base search paths generated from DNSPolicy. Duplicated search paths will be removed."
+msgstr ""
+
+#: PodDNSConfigOption
+msgid "PodDNSConfigOption defines DNS resolver options of a pod."
+msgstr ""
+
+#: PodDNSConfigOption.name
+msgid "Required."
+msgstr ""
+
+#: PodIP
+msgid ""
+"IP address information for entries in the (plural) PodIPs field. Each entry includes:"
+"   IP: An IP address allocated to the pod. Routable at least within the cluster."
+msgstr ""
+
+#: PodIP.ip
+msgid "ip is an IP address (IPv4 or IPv6) assigned to the pod"
+msgstr ""
+
+#: PodList
+msgid "PodList is a list of Pods."
+msgstr ""
+
+# PodList.apiVersion
+# same as Binding.apiVersion
+
+#: PodList.items
+msgid "List of pods. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md"
+msgstr ""
+
+# PodList.kind
+# same as Binding.kind
+
+# PodList.metadata
+# same as ComponentStatusList.metadata
+
+#: PodReadinessGate
+msgid "PodReadinessGate contains the reference to a pod condition"
+msgstr ""
+
+#: PodReadinessGate.conditionType
+msgid "ConditionType refers to a condition in the pod's condition list with matching type."
+msgstr ""
+
+#: PodSecurityContext
+msgid "PodSecurityContext holds pod-level security attributes and common container settings. Some fields are also present in container.securityContext.  Field values of container.securityContext take precedence over field values of PodSecurityContext."
+msgstr ""
+
+#: PodSecurityContext.fsGroup
+msgid ""
+"A special supplemental group that applies to all containers in a pod. Some volume types allow the Kubelet to change the ownership of that volume to be owned by the pod:"
+""
+"1. The owning GID will be the FSGroup 2. The setgid bit is set (new files created in the volume will be owned by FSGroup) 3. The permission bits are OR'd with rw-rw----"
+""
+"If unset, the Kubelet will not modify the ownership and permissions of any volume."
+msgstr ""
+
+#: PodSecurityContext.fsGroupChangePolicy
+msgid "fsGroupChangePolicy defines behavior of changing ownership and permission of the volume before being exposed inside Pod. This field will only apply to volume types which support fsGroup based ownership(and permissions). It will have no effect on ephemeral volume types such as: secret, configmaps and emptydir. Valid values are \"OnRootMismatch\" and \"Always\". If not specified, \"Always\" is used."
+msgstr ""
+
+#: PodSecurityContext.runAsGroup
+msgid "The GID to run the entrypoint of the container process. Uses runtime default if unset. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container."
+msgstr ""
+
+#: PodSecurityContext.runAsNonRoot
+msgid "Indicates that the container must run as a non-root user. If true, the Kubelet will validate the image at runtime to ensure that it does not run as UID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: PodSecurityContext.runAsUser
+msgid "The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container."
+msgstr ""
+
+#: PodSecurityContext.seLinuxOptions
+msgid "The SELinux context to be applied to all containers. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence for that container."
+msgstr ""
+
+#: PodSecurityContext.seccompProfile
+msgid "The seccomp options to use by the containers in this pod."
+msgstr ""
+
+#: PodSecurityContext.supplementalGroups
+msgid "A list of groups applied to the first process run in each container, in addition to the container's primary GID.  If unspecified, no groups will be added to any container."
+msgstr ""
+
+#: PodSecurityContext.sysctls
+msgid "Sysctls hold a list of namespaced sysctls used for the pod. Pods with unsupported sysctls (by the container runtime) might fail to launch."
+msgstr ""
+
+#: PodSecurityContext.windowsOptions
+msgid "The Windows specific settings applied to all containers. If unspecified, the options within a container's SecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: PodSpec
+msgid "PodSpec is a description of a pod."
+msgstr ""
+
+#: PodSpec.activeDeadlineSeconds
+msgid "Optional duration in seconds the pod may be active on the node relative to StartTime before the system will actively try to mark it failed and kill associated containers. Value must be a positive integer."
+msgstr ""
+
+#: PodSpec.affinity
+msgid "If specified, the pod's scheduling constraints"
+msgstr ""
+
+#: PodSpec.automountServiceAccountToken
+msgid "AutomountServiceAccountToken indicates whether a service account token should be automatically mounted."
+msgstr ""
+
+#: PodSpec.containers
+msgid "List of containers belonging to the pod. Containers cannot currently be added or removed. There must be at least one container in a Pod. Cannot be updated."
+msgstr ""
+
+#: PodSpec.dnsConfig
+msgid "Specifies the DNS parameters of a pod. Parameters specified here will be merged to the generated DNS configuration based on DNSPolicy."
+msgstr ""
+
+#: PodSpec.dnsPolicy
+msgid "Set DNS policy for the pod. Defaults to \"ClusterFirst\". Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'. DNS parameters given in DNSConfig will be merged with the policy selected with DNSPolicy. To have DNS options set along with hostNetwork, you have to specify DNS policy explicitly to 'ClusterFirstWithHostNet'."
+msgstr ""
+
+#: PodSpec.enableServiceLinks
+msgid "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Defaults to true."
+msgstr ""
+
+#: PodSpec.ephemeralContainers
+msgid "List of ephemeral containers run in this pod. Ephemeral containers may be run in an existing pod to perform user-initiated actions such as debugging. This list cannot be specified when creating a pod, and it cannot be modified by updating the pod spec. In order to add an ephemeral container to an existing pod, use the pod's ephemeralcontainers subresource. This field is alpha-level and is only honored by servers that enable the EphemeralContainers feature."
+msgstr ""
+
+#: PodSpec.hostAliases
+msgid "HostAliases is an optional list of hosts and IPs that will be injected into the pod's hosts file if specified. This is only valid for non-hostNetwork pods."
+msgstr ""
+
+#: PodSpec.hostIPC
+msgid "Use the host's ipc namespace. Optional: Default to false."
+msgstr ""
+
+#: PodSpec.hostNetwork
+msgid "Host networking requested for this pod. Use the host's network namespace. If this option is set, the ports that will be used must be specified. Default to false."
+msgstr ""
+
+#: PodSpec.hostPID
+msgid "Use the host's pid namespace. Optional: Default to false."
+msgstr ""
+
+#: PodSpec.hostname
+msgid "Specifies the hostname of the Pod If not specified, the pod's hostname will be set to a system-defined value."
+msgstr ""
+
+#: PodSpec.imagePullSecrets
+msgid "ImagePullSecrets is an optional list of references to secrets in the same namespace to use for pulling any of the images used by this PodSpec. If specified, these secrets will be passed to individual puller implementations for them to use. For example, in the case of docker, only DockerConfig type secrets are honored. More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod"
+msgstr ""
+
+#: PodSpec.initContainers
+msgid "List of initialization containers belonging to the pod. Init containers are executed in order prior to containers being started. If any init container fails, the pod is considered to have failed and is handled according to its restartPolicy. The name for an init container or normal container must be unique among all containers. Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes. The resourceRequirements of an init container are taken into account during scheduling by finding the highest request/limit for each resource type, and then using the max of of that value or the sum of the normal containers. Limits are applied to init containers in a similar fashion. Init containers cannot currently be added or removed. Cannot be updated. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/"
+msgstr ""
+
+#: PodSpec.nodeName
+msgid "NodeName is a request to schedule this pod onto a specific node. If it is non-empty, the scheduler simply schedules this pod onto that node, assuming that it fits resource requirements."
+msgstr ""
+
+#: PodSpec.nodeSelector
+msgid "NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node. More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/"
+msgstr ""
+
+#: PodSpec.overhead
+msgid "Overhead represents the resource overhead associated with running a pod for a given RuntimeClass. This field will be autopopulated at admission time by the RuntimeClass admission controller. If the RuntimeClass admission controller is enabled, overhead must not be set in Pod create requests. The RuntimeClass admission controller will reject Pod create requests which have the overhead already set. If RuntimeClass is configured and selected in the PodSpec, Overhead will be set to the value defined in the corresponding RuntimeClass, otherwise it will remain unset and treated as zero. More info: https://git.k8s.io/enhancements/keps/sig-node/20190226-pod-overhead.md This field is alpha-level as of Kubernetes v1.16, and is only honored by servers that enable the PodOverhead feature."
+msgstr ""
+
+#: PodSpec.preemptionPolicy
+msgid "PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. This field is beta-level, gated by the NonPreemptingPriority feature-gate."
+msgstr ""
+
+#: PodSpec.priority
+msgid "The priority value. Various system components use this field to find the priority of the pod. When Priority Admission Controller is enabled, it prevents users from setting this field. The admission controller populates this field from PriorityClassName. The higher the value, the higher the priority."
+msgstr ""
+
+#: PodSpec.priorityClassName
+msgid "If specified, indicates the pod's priority. \"system-node-critical\" and \"system-cluster-critical\" are two special keywords which indicate the highest priorities with the former being the highest priority. Any other name must be defined by creating a PriorityClass object with that name. If not specified, the pod priority will be default or zero if there is no default."
+msgstr ""
+
+#: PodSpec.readinessGates
+msgid "If specified, all readiness gates will be evaluated for pod readiness. A pod is ready when all its containers are ready AND all conditions specified in the readiness gates have status equal to \"True\" More info: https://git.k8s.io/enhancements/keps/sig-network/0007-pod-ready%2B%2B.md"
+msgstr ""
+
+#: PodSpec.restartPolicy
+msgid "Restart policy for all containers within the pod. One of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy"
+msgstr ""
+
+#: PodSpec.runtimeClassName
+msgid "RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run. If unset or empty, the \"legacy\" RuntimeClass will be used, which is an implicit class with an empty definition that uses the default runtime handler. More info: https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md This is a beta feature as of Kubernetes v1.14."
+msgstr ""
+
+#: PodSpec.schedulerName
+msgid "If specified, the pod will be dispatched by specified scheduler. If not specified, the pod will be dispatched by default scheduler."
+msgstr ""
+
+#: PodSpec.securityContext
+msgid "SecurityContext holds pod-level security attributes and common container settings. Optional: Defaults to empty.  See type description for default values of each field."
+msgstr ""
+
+#: PodSpec.serviceAccount
+msgid "DeprecatedServiceAccount is a depreciated alias for ServiceAccountName. Deprecated: Use serviceAccountName instead."
+msgstr ""
+
+#: PodSpec.serviceAccountName
+msgid "ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/"
+msgstr ""
+
+#: PodSpec.setHostnameAsFQDN
+msgid "If true the pod's hostname will be configured as the pod's FQDN, rather than the leaf name (the default). In Linux containers, this means setting the FQDN in the hostname field of the kernel (the nodename field of struct utsname). In Windows containers, this means setting the registry value of hostname for the registry key HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters to FQDN. If a pod does not have FQDN, this has no effect. Default to false."
+msgstr ""
+
+#: PodSpec.shareProcessNamespace
+msgid "Share a single process namespace between all of the containers in a pod. When this is set containers will be able to view and signal processes from other containers in the same pod, and the first process in each container will not be assigned PID 1. HostPID and ShareProcessNamespace cannot both be set. Optional: Default to false."
+msgstr ""
+
+#: PodSpec.subdomain
+msgid "If specified, the fully qualified Pod hostname will be \"<hostname>.<subdomain>.<pod namespace>.svc.<cluster domain>\". If not specified, the pod will not have a domainname at all."
+msgstr ""
+
+#: PodSpec.terminationGracePeriodSeconds
+msgid "Optional duration in seconds the pod needs to terminate gracefully. May be decreased in delete request. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). If this value is nil, the default grace period will be used instead. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. Defaults to 30 seconds."
+msgstr ""
+
+#: PodSpec.tolerations
+msgid "If specified, the pod's tolerations."
+msgstr ""
+
+#: PodSpec.topologySpreadConstraints
+msgid "TopologySpreadConstraints describes how a group of pods ought to spread across topology domains. Scheduler will schedule pods in a way which abides by the constraints. All topologySpreadConstraints are ANDed."
+msgstr ""
+
+#: PodSpec.volumes
+msgid "List of volumes that can be mounted by containers belonging to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes"
+msgstr ""
+
+#: PodStatus
+msgid "PodStatus represents information about the status of a pod. Status may trail the actual state of a system, especially if the node that hosts the pod cannot contact the control plane."
+msgstr ""
+
+#: PodStatus.conditions
+msgid "Current service state of pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions"
+msgstr ""
+
+#: PodStatus.containerStatuses
+msgid "The list has one entry per container in the manifest. Each entry is currently the output of `docker inspect`. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status"
+msgstr ""
+
+#: PodStatus.ephemeralContainerStatuses
+msgid "Status for any ephemeral containers that have run in this pod. This field is alpha-level and is only populated by servers that enable the EphemeralContainers feature."
+msgstr ""
+
+#: PodStatus.hostIP
+msgid "IP address of the host to which the pod is assigned. Empty if not yet scheduled."
+msgstr ""
+
+#: PodStatus.initContainerStatuses
+msgid "The list has one entry per init container in the manifest. The most recent successful init container will have ready = true, the most recently started container will have startTime set. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status"
+msgstr ""
+
+#: PodStatus.message
+msgid "A human readable message indicating details about why the pod is in this condition."
+msgstr ""
+
+#: PodStatus.nominatedNodeName
+msgid "nominatedNodeName is set only when this pod preempts other pods on the node, but it cannot be scheduled right away as preemption victims receive their graceful termination periods. This field does not guarantee that the pod will be scheduled on this node. Scheduler may decide to place the pod elsewhere if other nodes become available sooner. Scheduler may also decide to give the resources on this node to a higher priority pod that is created after preemption. As a result, this field may be different than PodSpec.nodeName when the pod is scheduled."
+msgstr ""
+
+#: PodStatus.phase
+msgid ""
+"The phase of a Pod is a simple, high-level summary of where the Pod is in its lifecycle. The conditions array, the reason and message fields, and the individual container status arrays contain more detail about the pod's status. There are five possible phase values:"
+""
+"Pending: The pod has been accepted by the Kubernetes system, but one or more of the container images has not been created. This includes time before being scheduled as well as time spent downloading images over the network, which could take a while. Running: The pod has been bound to a node, and all of the containers have been created. At least one container is still running, or is in the process of starting or restarting. Succeeded: All containers in the pod have terminated in success, and will not be restarted. Failed: All containers in the pod have terminated, and at least one container has terminated in failure. The container either exited with non-zero status or was terminated by the system. Unknown: For some reason the state of the pod could not be obtained, typically due to an error in communicating with the host of the pod."
+""
+"More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-phase"
+msgstr ""
+
+#: PodStatus.podIP
+msgid "IP address allocated to the pod. Routable at least within the cluster. Empty if not yet allocated."
+msgstr ""
+
+#: PodStatus.podIPs
+msgid "podIPs holds the IP addresses allocated to the pod. If this field is specified, the 0th entry must match the podIP field. Pods may be allocated at most 1 value for each of IPv4 and IPv6. This list is empty if no IPs have been allocated yet."
+msgstr ""
+
+#: PodStatus.qosClass
+msgid "The Quality of Service (QOS) classification assigned to the pod based on resource requirements See PodQOSClass type for available QOS classes More info: https://git.k8s.io/community/contributors/design-proposals/node/resource-qos.md"
+msgstr ""
+
+#: PodStatus.reason
+msgid "A brief CamelCase message indicating details about why the pod is in this state. e.g. 'Evicted'"
+msgstr ""
+
+#: PodStatus.startTime
+msgid "RFC 3339 date and time at which the object was acknowledged by the Kubelet. This is before the Kubelet pulled the container image(s) for the pod."
+msgstr ""
+
+#: PodTemplate
+msgid "PodTemplate describes a template for creating copies of a predefined pod."
+msgstr ""
+
+# PodTemplate.apiVersion
+# same as Binding.apiVersion
+
+# PodTemplate.kind
+# same as Binding.kind
+
+# PodTemplate.metadata
+# same as Binding.metadata
+
+#: PodTemplate.template
+msgid "Template defines the pods that will be created from this pod template. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: PodTemplateList
+msgid "PodTemplateList is a list of PodTemplates."
+msgstr ""
+
+# PodTemplateList.apiVersion
+# same as Binding.apiVersion
+
+#: PodTemplateList.items
+msgid "List of pod templates"
+msgstr ""
+
+# PodTemplateList.kind
+# same as Binding.kind
+
+# PodTemplateList.metadata
+# same as ComponentStatusList.metadata
+
+#: PodTemplateSpec
+msgid "PodTemplateSpec describes the data a pod should have when created from a template"
+msgstr ""
+
+# PodTemplateSpec.metadata
+# same as Binding.metadata
+
+# PodTemplateSpec.spec
+# same as Pod.spec
+
+#: PortStatus
+msgid ""
+msgstr ""
+
+#: PortStatus.error
+msgid ""
+"Error is to record the problem with the service port The format of the error shall comply with the following rules: - built-in error values shall be specified in this file and those shall use"
+"  CamelCase names"
+"- cloud provider specific error values must have names that comply with the"
+"  format foo.example.com/CamelCase."
+msgstr ""
+
+#: PortStatus.port
+msgid "Port is the port number of the service port of which status is recorded here"
+msgstr ""
+
+#: PortStatus.protocol
+msgid "Protocol is the protocol of the service port of which status is recorded here The supported values are: \"TCP\", \"UDP\", \"SCTP\""
+msgstr ""
+
+#: PortworxVolumeSource
+msgid "PortworxVolumeSource represents a Portworx volume resource."
+msgstr ""
+
+#: PortworxVolumeSource.fsType
+msgid "FSType represents the filesystem type to mount Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\". Implicitly inferred to be \"ext4\" if unspecified."
+msgstr ""
+
+# PortworxVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+#: PortworxVolumeSource.volumeID
+msgid "VolumeID uniquely identifies a Portworx volume"
+msgstr ""
+
+#: PreferredSchedulingTerm
+msgid "An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op)."
+msgstr ""
+
+#: PreferredSchedulingTerm.preference
+msgid "A node selector term, associated with the corresponding weight."
+msgstr ""
+
+#: PreferredSchedulingTerm.weight
+msgid "Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100."
+msgstr ""
+
+#: Probe
+msgid "Probe describes a health check to be performed against a container to determine whether it is alive or ready to receive traffic."
+msgstr ""
+
+# Probe.exec
+# same as Handler.exec
+
+#: Probe.failureThreshold
+msgid "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3. Minimum value is 1."
+msgstr ""
+
+# Probe.httpGet
+# same as Handler.httpGet
+
+#: Probe.initialDelaySeconds
+msgid "Number of seconds after the container has started before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+msgstr ""
+
+#: Probe.periodSeconds
+msgid "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1."
+msgstr ""
+
+#: Probe.successThreshold
+msgid "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1. Must be 1 for liveness and startup. Minimum value is 1."
+msgstr ""
+
+# Probe.tcpSocket
+# same as Handler.tcpSocket
+
+#: Probe.terminationGracePeriodSeconds
+msgid "Optional duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. If this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this value overrides the value provided by the pod spec. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down). This is an alpha field and requires enabling ProbeTerminationGracePeriod feature gate."
+msgstr ""
+
+#: Probe.timeoutSeconds
+msgid "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes"
+msgstr ""
+
+#: ProjectedVolumeSource
+msgid "Represents a projected volume source"
+msgstr ""
+
+#: ProjectedVolumeSource.defaultMode
+msgid "Mode bits used to set permissions on created files by default. Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511. YAML accepts both octal and decimal values, JSON requires decimal values for mode bits. Directories within the path are not affected by this setting. This might be in conflict with other options that affect the file mode, like fsGroup, and the result can be other mode bits set."
+msgstr ""
+
+#: ProjectedVolumeSource.sources
+msgid "list of volume projections"
+msgstr ""
+
+#: QuobyteVolumeSource
+msgid "Represents a Quobyte mount that lasts the lifetime of a pod. Quobyte volumes do not support ownership management or SELinux relabeling."
+msgstr ""
+
+#: QuobyteVolumeSource.group
+msgid "Group to map volume access to Default is no group"
+msgstr ""
+
+#: QuobyteVolumeSource.readOnly
+msgid "ReadOnly here will force the Quobyte volume to be mounted with read-only permissions. Defaults to false."
+msgstr ""
+
+#: QuobyteVolumeSource.registry
+msgid "Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes"
+msgstr ""
+
+#: QuobyteVolumeSource.tenant
+msgid "Tenant owning the given Quobyte volume in the Backend Used with dynamically provisioned Quobyte volumes, value is set by the plugin"
+msgstr ""
+
+#: QuobyteVolumeSource.user
+msgid "User to map volume access to Defaults to serivceaccount user"
+msgstr ""
+
+#: QuobyteVolumeSource.volume
+msgid "Volume is a string that references an already created Quobyte volume by name."
+msgstr ""
+
+#: RBDPersistentVolumeSource
+msgid "Represents a Rados Block Device mount that lasts the lifetime of a pod. RBD volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+#: RBDPersistentVolumeSource.fsType
+msgid "Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: \"ext4\", \"xfs\", \"ntfs\". Implicitly inferred to be \"ext4\" if unspecified. More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd"
+msgstr ""
+
+#: RBDPersistentVolumeSource.image
+msgid "The rados image name. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.keyring
+msgid "Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.monitors
+msgid "A collection of Ceph monitors. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.pool
+msgid "The rados pool name. Default is rbd. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.readOnly
+msgid "ReadOnly here will force the ReadOnly setting in VolumeMounts. Defaults to false. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.secretRef
+msgid "SecretRef is name of the authentication secret for RBDUser. If provided overrides keyring. Default is nil. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+#: RBDPersistentVolumeSource.user
+msgid "The rados user name. Default is admin. More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it"
+msgstr ""
+
+# RBDVolumeSource
+# same as RBDPersistentVolumeSource
+
+# RBDVolumeSource.fsType
+# same as RBDPersistentVolumeSource.fsType
+
+# RBDVolumeSource.image
+# same as RBDPersistentVolumeSource.image
+
+# RBDVolumeSource.keyring
+# same as RBDPersistentVolumeSource.keyring
+
+# RBDVolumeSource.monitors
+# same as RBDPersistentVolumeSource.monitors
+
+# RBDVolumeSource.pool
+# same as RBDPersistentVolumeSource.pool
+
+# RBDVolumeSource.readOnly
+# same as RBDPersistentVolumeSource.readOnly
+
+# RBDVolumeSource.secretRef
+# same as RBDPersistentVolumeSource.secretRef
+
+# RBDVolumeSource.user
+# same as RBDPersistentVolumeSource.user
+
+#: ReplicationController
+msgid "ReplicationController represents the configuration of a replication controller."
+msgstr ""
+
+# ReplicationController.apiVersion
+# same as Binding.apiVersion
+
+# ReplicationController.kind
+# same as Binding.kind
+
+#: ReplicationController.metadata
+msgid "If the Labels of a ReplicationController are empty, they are defaulted to be the same as the Pod(s) that the replication controller manages. Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: ReplicationController.spec
+msgid "Spec defines the specification of the desired behavior of the replication controller. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: ReplicationController.status
+msgid "Status is the most recently observed status of the replication controller. This data may be out of date by some window of time. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: ReplicationControllerCondition
+msgid "ReplicationControllerCondition describes the state of a replication controller at a certain point."
+msgstr ""
+
+#: ReplicationControllerCondition.lastTransitionTime
+msgid "The last time the condition transitioned from one status to another."
+msgstr ""
+
+#: ReplicationControllerCondition.message
+msgid "A human readable message indicating details about the transition."
+msgstr ""
+
+#: ReplicationControllerCondition.reason
+msgid "The reason for the condition's last transition."
+msgstr ""
+
+# ReplicationControllerCondition.status
+# same as NamespaceCondition.status
+
+#: ReplicationControllerCondition.type
+msgid "Type of replication controller condition."
+msgstr ""
+
+#: ReplicationControllerList
+msgid "ReplicationControllerList is a collection of replication controllers."
+msgstr ""
+
+# ReplicationControllerList.apiVersion
+# same as Binding.apiVersion
+
+#: ReplicationControllerList.items
+msgid "List of replication controllers. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller"
+msgstr ""
+
+# ReplicationControllerList.kind
+# same as Binding.kind
+
+# ReplicationControllerList.metadata
+# same as ComponentStatusList.metadata
+
+#: ReplicationControllerSpec
+msgid "ReplicationControllerSpec is the specification of a replication controller."
+msgstr ""
+
+#: ReplicationControllerSpec.minReadySeconds
+msgid "Minimum number of seconds for which a newly created pod should be ready without any of its container crashing, for it to be considered available. Defaults to 0 (pod will be considered available as soon as it is ready)"
+msgstr ""
+
+#: ReplicationControllerSpec.replicas
+msgid "Replicas is the number of desired replicas. This is a pointer to distinguish between explicit zero and unspecified. Defaults to 1. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#what-is-a-replicationcontroller"
+msgstr ""
+
+#: ReplicationControllerSpec.selector
+msgid "Selector is a label query over pods that should match the Replicas count. If Selector is empty, it is defaulted to the labels present on the Pod template. Label keys and values that must match in order to be controlled by this replication controller, if empty defaulted to labels on Pod template. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors"
+msgstr ""
+
+#: ReplicationControllerSpec.template
+msgid "Template is the object that describes the pod that will be created if insufficient replicas are detected. This takes precedence over a TemplateRef. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template"
+msgstr ""
+
+#: ReplicationControllerStatus
+msgid "ReplicationControllerStatus represents the current status of a replication controller."
+msgstr ""
+
+#: ReplicationControllerStatus.availableReplicas
+msgid "The number of available replicas (ready for at least minReadySeconds) for this replication controller."
+msgstr ""
+
+#: ReplicationControllerStatus.conditions
+msgid "Represents the latest available observations of a replication controller's current state."
+msgstr ""
+
+#: ReplicationControllerStatus.fullyLabeledReplicas
+msgid "The number of pods that have labels matching the labels of the pod template of the replication controller."
+msgstr ""
+
+#: ReplicationControllerStatus.observedGeneration
+msgid "ObservedGeneration reflects the generation of the most recently observed replication controller."
+msgstr ""
+
+#: ReplicationControllerStatus.readyReplicas
+msgid "The number of ready replicas for this replication controller."
+msgstr ""
+
+#: ReplicationControllerStatus.replicas
+msgid "Replicas is the most recently oberved number of replicas. More info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#what-is-a-replicationcontroller"
+msgstr ""
+
+#: ResourceFieldSelector
+msgid "ResourceFieldSelector represents container resources (cpu, memory) and their output format"
+msgstr ""
+
+#: ResourceFieldSelector.containerName
+msgid "Container name: required for volumes, optional for env vars"
+msgstr ""
+
+#: ResourceFieldSelector.divisor
+msgid "Specifies the output format of the exposed resources, defaults to \"1\""
+msgstr ""
+
+#: ResourceFieldSelector.resource
+msgid "Required: resource to select"
+msgstr ""
+
+#: ResourceQuota
+msgid "ResourceQuota sets aggregate quota restrictions enforced per namespace"
+msgstr ""
+
+# ResourceQuota.apiVersion
+# same as Binding.apiVersion
+
+# ResourceQuota.kind
+# same as Binding.kind
+
+# ResourceQuota.metadata
+# same as Binding.metadata
+
+#: ResourceQuota.spec
+msgid "Spec defines the desired quota. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: ResourceQuota.status
+msgid "Status defines the actual enforced quota and its current usage. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: ResourceQuotaList
+msgid "ResourceQuotaList is a list of ResourceQuota items."
+msgstr ""
+
+# ResourceQuotaList.apiVersion
+# same as Binding.apiVersion
+
+#: ResourceQuotaList.items
+msgid "Items is a list of ResourceQuota objects. More info: https://kubernetes.io/docs/concepts/policy/resource-quotas/"
+msgstr ""
+
+# ResourceQuotaList.kind
+# same as Binding.kind
+
+# ResourceQuotaList.metadata
+# same as ComponentStatusList.metadata
+
+#: ResourceQuotaSpec
+msgid "ResourceQuotaSpec defines the desired hard limits to enforce for Quota."
+msgstr ""
+
+#: ResourceQuotaSpec.hard
+msgid "hard is the set of desired hard limits for each named resource. More info: https://kubernetes.io/docs/concepts/policy/resource-quotas/"
+msgstr ""
+
+#: ResourceQuotaSpec.scopeSelector
+msgid "scopeSelector is also a collection of filters like scopes that must match each object tracked by a quota but expressed using ScopeSelectorOperator in combination with possible values. For a resource to match, both scopes AND scopeSelector (if specified in spec), must be matched."
+msgstr ""
+
+#: ResourceQuotaSpec.scopes
+msgid "A collection of filters that must match each object tracked by a quota. If not specified, the quota matches all objects."
+msgstr ""
+
+#: ResourceQuotaStatus
+msgid "ResourceQuotaStatus defines the enforced hard limits and observed use."
+msgstr ""
+
+#: ResourceQuotaStatus.hard
+msgid "Hard is the set of enforced hard limits for each named resource. More info: https://kubernetes.io/docs/concepts/policy/resource-quotas/"
+msgstr ""
+
+#: ResourceQuotaStatus.used
+msgid "Used is the current observed total usage of the resource in the namespace."
+msgstr ""
+
+#: ResourceRequirements
+msgid "ResourceRequirements describes the compute resource requirements."
+msgstr ""
+
+#: ResourceRequirements.limits
+msgid "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+msgstr ""
+
+#: ResourceRequirements.requests
+msgid "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+msgstr ""
+
+#: SELinuxOptions
+msgid "SELinuxOptions are the labels to be applied to the container"
+msgstr ""
+
+#: SELinuxOptions.level
+msgid "Level is SELinux level label that applies to the container."
+msgstr ""
+
+#: SELinuxOptions.role
+msgid "Role is a SELinux role label that applies to the container."
+msgstr ""
+
+#: SELinuxOptions.type
+msgid "Type is a SELinux type label that applies to the container."
+msgstr ""
+
+#: SELinuxOptions.user
+msgid "User is a SELinux user label that applies to the container."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource
+msgid "ScaleIOPersistentVolumeSource represents a persistent ScaleIO volume"
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Default is \"xfs\""
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.gateway
+msgid "The host address of the ScaleIO API Gateway."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.protectionDomain
+msgid "The name of the ScaleIO Protection Domain for the configured storage."
+msgstr ""
+
+# ScaleIOPersistentVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+#: ScaleIOPersistentVolumeSource.secretRef
+msgid "SecretRef references to the secret for ScaleIO user and other sensitive information. If this is not provided, Login operation will fail."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.sslEnabled
+msgid "Flag to enable/disable SSL communication with Gateway, default false"
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.storageMode
+msgid "Indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned. Default is ThinProvisioned."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.storagePool
+msgid "The ScaleIO Storage Pool associated with the protection domain."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.system
+msgid "The name of the storage system as configured in ScaleIO."
+msgstr ""
+
+#: ScaleIOPersistentVolumeSource.volumeName
+msgid "The name of a volume already created in the ScaleIO system that is associated with this volume source."
+msgstr ""
+
+#: ScaleIOVolumeSource
+msgid "ScaleIOVolumeSource represents a persistent ScaleIO volume"
+msgstr ""
+
+#: ScaleIOVolumeSource.fsType
+msgid "Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. \"ext4\", \"xfs\", \"ntfs\". Default is \"xfs\"."
+msgstr ""
+
+# ScaleIOVolumeSource.gateway
+# same as ScaleIOPersistentVolumeSource.gateway
+
+# ScaleIOVolumeSource.protectionDomain
+# same as ScaleIOPersistentVolumeSource.protectionDomain
+
+# ScaleIOVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+# ScaleIOVolumeSource.secretRef
+# same as ScaleIOPersistentVolumeSource.secretRef
+
+# ScaleIOVolumeSource.sslEnabled
+# same as ScaleIOPersistentVolumeSource.sslEnabled
+
+# ScaleIOVolumeSource.storageMode
+# same as ScaleIOPersistentVolumeSource.storageMode
+
+# ScaleIOVolumeSource.storagePool
+# same as ScaleIOPersistentVolumeSource.storagePool
+
+# ScaleIOVolumeSource.system
+# same as ScaleIOPersistentVolumeSource.system
+
+# ScaleIOVolumeSource.volumeName
+# same as ScaleIOPersistentVolumeSource.volumeName
+
+#: ScopeSelector
+msgid "A scope selector represents the AND of the selectors represented by the scoped-resource selector requirements."
+msgstr ""
+
+#: ScopeSelector.matchExpressions
+msgid "A list of scope selector requirements by scope of the resources."
+msgstr ""
+
+#: ScopedResourceSelectorRequirement
+msgid "A scoped-resource selector requirement is a selector that contains values, a scope name, and an operator that relates the scope name and values."
+msgstr ""
+
+#: ScopedResourceSelectorRequirement.operator
+msgid "Represents a scope's relationship to a set of values. Valid operators are In, NotIn, Exists, DoesNotExist."
+msgstr ""
+
+#: ScopedResourceSelectorRequirement.scopeName
+msgid "The name of the scope that the selector applies to."
+msgstr ""
+
+#: ScopedResourceSelectorRequirement.values
+msgid "An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch."
+msgstr ""
+
+#: SeccompProfile
+msgid "SeccompProfile defines a pod/container's seccomp profile settings. Only one profile source may be set."
+msgstr ""
+
+#: SeccompProfile.localhostProfile
+msgid "localhostProfile indicates a profile defined in a file on the node should be used. The profile must be preconfigured on the node to work. Must be a descending path, relative to the kubelet's configured seccomp profile location. Must only be set if type is \"Localhost\"."
+msgstr ""
+
+#: SeccompProfile.type
+msgid ""
+"type indicates which kind of seccomp profile will be applied. Valid options are:"
+""
+"Localhost - a profile defined in a file on the node should be used. RuntimeDefault - the container runtime default profile should be used. Unconfined - no profile should be applied."
+msgstr ""
+
+#: Secret
+msgid "Secret holds secret data of a certain type. The total bytes of the values in the Data field must be less than MaxSecretSize bytes."
+msgstr ""
+
+# Secret.apiVersion
+# same as Binding.apiVersion
+
+#: Secret.data
+msgid "Data contains the secret data. Each key must consist of alphanumeric characters, '-', '_' or '.'. The serialized form of the secret data is a base64 encoded string, representing the arbitrary (possibly non-string) data value here. Described in https://tools.ietf.org/html/rfc4648#section-4"
+msgstr ""
+
+#: Secret.immutable
+msgid "Immutable, if set to true, ensures that data stored in the Secret cannot be updated (only object metadata can be modified). If not set to true, the field can be modified at any time. Defaulted to nil."
+msgstr ""
+
+# Secret.kind
+# same as Binding.kind
+
+# Secret.metadata
+# same as Binding.metadata
+
+#: Secret.stringData
+msgid "stringData allows specifying non-binary secret data in string form. It is provided as a write-only input field for convenience. All keys and values are merged into the data field on write, overwriting any existing values. The stringData field is never output when reading from the API."
+msgstr ""
+
+#: Secret.type
+msgid "Used to facilitate programmatic handling of secret data."
+msgstr ""
+
+#: SecretEnvSource
+msgid ""
+"SecretEnvSource selects a Secret to populate the environment variables with."
+""
+"The contents of the target Secret's Data field will represent the key-value pairs as environment variables."
+msgstr ""
+
+# SecretEnvSource.name
+# same as ConfigMapEnvSource.name
+
+#: SecretEnvSource.optional
+msgid "Specify whether the Secret must be defined"
+msgstr ""
+
+#: SecretKeySelector
+msgid "SecretKeySelector selects a key of a Secret."
+msgstr ""
+
+#: SecretKeySelector.key
+msgid "The key of the secret to select from.  Must be a valid secret key."
+msgstr ""
+
+# SecretKeySelector.name
+# same as ConfigMapEnvSource.name
+
+#: SecretKeySelector.optional
+msgid "Specify whether the Secret or its key must be defined"
+msgstr ""
+
+#: SecretList
+msgid "SecretList is a list of Secret."
+msgstr ""
+
+# SecretList.apiVersion
+# same as Binding.apiVersion
+
+#: SecretList.items
+msgid "Items is a list of secret objects. More info: https://kubernetes.io/docs/concepts/configuration/secret"
+msgstr ""
+
+# SecretList.kind
+# same as Binding.kind
+
+# SecretList.metadata
+# same as ComponentStatusList.metadata
+
+#: SecretProjection
+msgid ""
+"Adapts a secret into a projected volume."
+""
+"The contents of the target Secret's Data field will be presented in a projected volume as files using the keys in the Data field as the file names. Note that this is identical to a secret volume source without the default mode."
+msgstr ""
+
+#: SecretProjection.items
+msgid "If unspecified, each key-value pair in the Data field of the referenced Secret will be projected into the volume as a file whose name is the key and content is the value. If specified, the listed keys will be projected into the specified paths, and unlisted keys will not be present. If a key is specified which is not present in the Secret, the volume setup will error unless it is marked optional. Paths must be relative and may not contain the '..' path or start with '..'."
+msgstr ""
+
+# SecretProjection.name
+# same as ConfigMapEnvSource.name
+
+# SecretProjection.optional
+# same as SecretKeySelector.optional
+
+#: SecretReference
+msgid "SecretReference represents a Secret Reference. It has enough information to retrieve secret in any namespace"
+msgstr ""
+
+#: SecretReference.name
+msgid "Name is unique within a namespace to reference a secret resource."
+msgstr ""
+
+#: SecretReference.namespace
+msgid "Namespace defines the space within which the secret name must be unique."
+msgstr ""
+
+#: SecretVolumeSource
+msgid ""
+"Adapts a Secret into a volume."
+""
+"The contents of the target Secret's Data field will be presented in a volume as files using the keys in the Data field as the file names. Secret volumes support ownership management and SELinux relabeling."
+msgstr ""
+
+# SecretVolumeSource.defaultMode
+# same as ConfigMapVolumeSource.defaultMode
+
+# SecretVolumeSource.items
+# same as SecretProjection.items
+
+#: SecretVolumeSource.optional
+msgid "Specify whether the Secret or its keys must be defined"
+msgstr ""
+
+#: SecretVolumeSource.secretName
+msgid "Name of the secret in the pod's namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret"
+msgstr ""
+
+#: SecurityContext
+msgid "SecurityContext holds security configuration that will be applied to a container. Some fields are present in both SecurityContext and PodSecurityContext.  When both are set, the values in SecurityContext take precedence."
+msgstr ""
+
+#: SecurityContext.allowPrivilegeEscalation
+msgid "AllowPrivilegeEscalation controls whether a process can gain more privileges than its parent process. This bool directly controls if the no_new_privs flag will be set on the container process. AllowPrivilegeEscalation is true always when the container is: 1) run as Privileged 2) has CAP_SYS_ADMIN"
+msgstr ""
+
+#: SecurityContext.capabilities
+msgid "The capabilities to add/drop when running containers. Defaults to the default set of capabilities granted by the container runtime."
+msgstr ""
+
+#: SecurityContext.privileged
+msgid "Run container in privileged mode. Processes in privileged containers are essentially equivalent to root on the host. Defaults to false."
+msgstr ""
+
+#: SecurityContext.procMount
+msgid "procMount denotes the type of proc mount to use for the containers. The default is DefaultProcMount which uses the container runtime defaults for readonly paths and masked paths. This requires the ProcMountType feature flag to be enabled."
+msgstr ""
+
+#: SecurityContext.readOnlyRootFilesystem
+msgid "Whether this container has a read-only root filesystem. Default is false."
+msgstr ""
+
+#: SecurityContext.runAsGroup
+msgid "The GID to run the entrypoint of the container process. Uses runtime default if unset. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: SecurityContext.runAsNonRoot
+msgid "Indicates that the container must run as a non-root user. If true, the Kubelet will validate the image at runtime to ensure that it does not run as UID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: SecurityContext.runAsUser
+msgid "The UID to run the entrypoint of the container process. Defaults to user specified in image metadata if unspecified. May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: SecurityContext.seLinuxOptions
+msgid "The SELinux context to be applied to the container. If unspecified, the container runtime will allocate a random SELinux context for each container.  May also be set in PodSecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: SecurityContext.seccompProfile
+msgid "The seccomp options to use by this container. If seccomp options are provided at both the pod & container level, the container options override the pod options."
+msgstr ""
+
+#: SecurityContext.windowsOptions
+msgid "The Windows specific settings applied to all containers. If unspecified, the options from the PodSecurityContext will be used. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""
+
+#: Service
+msgid "Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy."
+msgstr ""
+
+# Service.apiVersion
+# same as Binding.apiVersion
+
+# Service.kind
+# same as Binding.kind
+
+# Service.metadata
+# same as Binding.metadata
+
+#: Service.spec
+msgid "Spec defines the behavior of a service. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: Service.status
+msgid "Most recently observed status of the service. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+msgstr ""
+
+#: ServiceAccount
+msgid "ServiceAccount binds together: * a name, understood by users, and perhaps by peripheral systems, for an identity * a principal that can be authenticated and authorized * a set of secrets"
+msgstr ""
+
+# ServiceAccount.apiVersion
+# same as Binding.apiVersion
+
+#: ServiceAccount.automountServiceAccountToken
+msgid "AutomountServiceAccountToken indicates whether pods running as this service account should have an API token automatically mounted. Can be overridden at the pod level."
+msgstr ""
+
+#: ServiceAccount.imagePullSecrets
+msgid "ImagePullSecrets is a list of references to secrets in the same namespace to use for pulling any images in pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in the pod, but ImagePullSecrets are only accessed by the kubelet. More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod"
+msgstr ""
+
+# ServiceAccount.kind
+# same as Binding.kind
+
+# ServiceAccount.metadata
+# same as Binding.metadata
+
+#: ServiceAccount.secrets
+msgid "Secrets is the list of secrets allowed to be used by pods running using this ServiceAccount. More info: https://kubernetes.io/docs/concepts/configuration/secret"
+msgstr ""
+
+#: ServiceAccountList
+msgid "ServiceAccountList is a list of ServiceAccount objects"
+msgstr ""
+
+# ServiceAccountList.apiVersion
+# same as Binding.apiVersion
+
+#: ServiceAccountList.items
+msgid "List of ServiceAccounts. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/"
+msgstr ""
+
+# ServiceAccountList.kind
+# same as Binding.kind
+
+# ServiceAccountList.metadata
+# same as ComponentStatusList.metadata
+
+#: ServiceAccountTokenProjection
+msgid "ServiceAccountTokenProjection represents a projected service account token volume. This projection can be used to insert a service account token into the pods runtime filesystem for use against APIs (Kubernetes API Server or otherwise)."
+msgstr ""
+
+#: ServiceAccountTokenProjection.audience
+msgid "Audience is the intended audience of the token. A recipient of a token must identify itself with an identifier specified in the audience of the token, and otherwise should reject the token. The audience defaults to the identifier of the apiserver."
+msgstr ""
+
+#: ServiceAccountTokenProjection.expirationSeconds
+msgid "ExpirationSeconds is the requested duration of validity of the service account token. As the token approaches expiration, the kubelet volume plugin will proactively rotate the service account token. The kubelet will start trying to rotate the token if the token is older than 80 percent of its time to live or if the token is older than 24 hours.Defaults to 1 hour and must be at least 10 minutes."
+msgstr ""
+
+#: ServiceAccountTokenProjection.path
+msgid "Path is the path relative to the mount point of the file to project the token into."
+msgstr ""
+
+#: ServiceList
+msgid "ServiceList holds a list of services."
+msgstr ""
+
+# ServiceList.apiVersion
+# same as Binding.apiVersion
+
+#: ServiceList.items
+msgid "List of services"
+msgstr ""
+
+# ServiceList.kind
+# same as Binding.kind
+
+# ServiceList.metadata
+# same as ComponentStatusList.metadata
+
+#: ServicePort
+msgid "ServicePort contains information on service's port."
+msgstr ""
+
+# ServicePort.appProtocol
+# same as EndpointPort.appProtocol
+
+#: ServicePort.name
+msgid "The name of this port within the service. This must be a DNS_LABEL. All ports within a ServiceSpec must have unique names. When considering the endpoints for a Service, this must match the 'name' field in the EndpointPort. Optional if only one ServicePort is defined on this service."
+msgstr ""
+
+#: ServicePort.nodePort
+msgid "The port on each node on which this service is exposed when type is NodePort or LoadBalancer.  Usually assigned by the system. If a value is specified, in-range, and not in use it will be used, otherwise the operation will fail.  If not specified, a port will be allocated if this Service requires one.  If this field is specified when creating a Service which does not need it, creation will fail. This field will be wiped when updating a Service to no longer need it (e.g. changing type from NodePort to ClusterIP). More info: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport"
+msgstr ""
+
+#: ServicePort.port
+msgid "The port that will be exposed by this service."
+msgstr ""
+
+#: ServicePort.protocol
+msgid "The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\". Default is TCP."
+msgstr ""
+
+#: ServicePort.targetPort
+msgid "Number or name of the port to access on the pods targeted by the service. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME. If this is a string, it will be looked up as a named port in the target Pod's container ports. If this is not specified, the value of the 'port' field is used (an identity map). This field is ignored for services with clusterIP=None, and should be omitted or set equal to the 'port' field. More info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service"
+msgstr ""
+
+#: ServiceSpec
+msgid "ServiceSpec describes the attributes that a user creates on a service."
+msgstr ""
+
+#: ServiceSpec.allocateLoadBalancerNodePorts
+msgid "allocateLoadBalancerNodePorts defines if NodePorts will be automatically allocated for services with type LoadBalancer.  Default is \"true\". It may be set to \"false\" if the cluster load-balancer does not rely on NodePorts. allocateLoadBalancerNodePorts may only be set for services with type LoadBalancer and will be cleared if the type is changed to any other type. This field is alpha-level and is only honored by servers that enable the ServiceLBNodePortControl feature."
+msgstr ""
+
+#: ServiceSpec.clusterIP
+msgid "clusterIP is the IP address of the service and is usually assigned randomly. If an address is specified manually, is in-range (as per system configuration), and is not in use, it will be allocated to the service; otherwise creation of the service will fail. This field may not be changed through updates unless the type field is also being changed to ExternalName (which requires this field to be blank) or the type field is being changed from ExternalName (in which case this field may optionally be specified, as describe above).  Valid values are \"None\", empty string (\"\"), or a valid IP address. Setting this to \"None\" makes a \"headless service\" (no virtual IP), which is useful when direct endpoint connections are preferred and proxying is not required.  Only applies to types ClusterIP, NodePort, and LoadBalancer. If this field is specified when creating a Service of type ExternalName, creation will fail. This field will be wiped when updating a Service to type ExternalName. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+msgstr ""
+
+#: ServiceSpec.clusterIPs
+msgid ""
+"ClusterIPs is a list of IP addresses assigned to this service, and are usually assigned randomly.  If an address is specified manually, is in-range (as per system configuration), and is not in use, it will be allocated to the service; otherwise creation of the service will fail. This field may not be changed through updates unless the type field is also being changed to ExternalName (which requires this field to be empty) or the type field is being changed from ExternalName (in which case this field may optionally be specified, as describe above).  Valid values are \"None\", empty string (\"\"), or a valid IP address.  Setting this to \"None\" makes a \"headless service\" (no virtual IP), which is useful when direct endpoint connections are preferred and proxying is not required.  Only applies to types ClusterIP, NodePort, and LoadBalancer. If this field is specified when creating a Service of type ExternalName, creation will fail. This field will be wiped when updating a Service to type ExternalName.  If this field is not specified, it will be initialized from the clusterIP field.  If this field is specified, clients must ensure that clusterIPs[0] and clusterIP have the same value."
+""
+"Unless the \"IPv6DualStack\" feature gate is enabled, this field is limited to one value, which must be the same as the clusterIP field.  If the feature gate is enabled, this field may hold a maximum of two entries (dual-stack IPs, in either order).  These IPs must correspond to the values of the ipFamilies field. Both clusterIPs and ipFamilies are governed by the ipFamilyPolicy field. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+msgstr ""
+
+#: ServiceSpec.externalIPs
+msgid "externalIPs is a list of IP addresses for which nodes in the cluster will also accept traffic for this service.  These IPs are not managed by Kubernetes.  The user is responsible for ensuring that traffic arrives at a node with this IP.  A common example is external load-balancers that are not part of the Kubernetes system."
+msgstr ""
+
+#: ServiceSpec.externalName
+msgid "externalName is the external reference that discovery mechanisms will return as an alias for this service (e.g. a DNS CNAME record). No proxying will be involved.  Must be a lowercase RFC-1123 hostname (https://tools.ietf.org/html/rfc1123) and requires `type` to be \"ExternalName\"."
+msgstr ""
+
+#: ServiceSpec.externalTrafficPolicy
+msgid "externalTrafficPolicy denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints. \"Local\" preserves the client source IP and avoids a second hop for LoadBalancer and Nodeport type services, but risks potentially imbalanced traffic spreading. \"Cluster\" obscures the client source IP and may cause a second hop to another node, but should have good overall load-spreading."
+msgstr ""
+
+#: ServiceSpec.healthCheckNodePort
+msgid "healthCheckNodePort specifies the healthcheck nodePort for the service. This only applies when type is set to LoadBalancer and externalTrafficPolicy is set to Local. If a value is specified, is in-range, and is not in use, it will be used.  If not specified, a value will be automatically allocated.  External systems (e.g. load-balancers) can use this port to determine if a given node holds endpoints for this service or not.  If this field is specified when creating a Service which does not need it, creation will fail. This field will be wiped when updating a Service to no longer need it (e.g. changing type)."
+msgstr ""
+
+#: ServiceSpec.internalTrafficPolicy
+msgid "InternalTrafficPolicy specifies if the cluster internal traffic should be routed to all endpoints or node-local endpoints only. \"Cluster\" routes internal traffic to a Service to all endpoints. \"Local\" routes traffic to node-local endpoints only, traffic is dropped if no node-local endpoints are ready. The default value is \"Cluster\"."
+msgstr ""
+
+#: ServiceSpec.ipFamilies
+msgid ""
+"IPFamilies is a list of IP families (e.g. IPv4, IPv6) assigned to this service, and is gated by the \"IPv6DualStack\" feature gate.  This field is usually assigned automatically based on cluster configuration and the ipFamilyPolicy field. If this field is specified manually, the requested family is available in the cluster, and ipFamilyPolicy allows it, it will be used; otherwise creation of the service will fail.  This field is conditionally mutable: it allows for adding or removing a secondary IP family, but it does not allow changing the primary IP family of the Service.  Valid values are \"IPv4\" and \"IPv6\".  This field only applies to Services of types ClusterIP, NodePort, and LoadBalancer, and does apply to \"headless\" services.  This field will be wiped when updating a Service to type ExternalName."
+""
+"This field may hold a maximum of two entries (dual-stack families, in either order).  These families must correspond to the values of the clusterIPs field, if specified. Both clusterIPs and ipFamilies are governed by the ipFamilyPolicy field."
+msgstr ""
+
+#: ServiceSpec.ipFamilyPolicy
+msgid "IPFamilyPolicy represents the dual-stack-ness requested or required by this Service, and is gated by the \"IPv6DualStack\" feature gate.  If there is no value provided, then this field will be set to SingleStack. Services can be \"SingleStack\" (a single IP family), \"PreferDualStack\" (two IP families on dual-stack configured clusters or a single IP family on single-stack clusters), or \"RequireDualStack\" (two IP families on dual-stack configured clusters, otherwise fail). The ipFamilies and clusterIPs fields depend on the value of this field.  This field will be wiped when updating a service to type ExternalName."
+msgstr ""
+
+#: ServiceSpec.loadBalancerClass
+msgid "loadBalancerClass is the class of the load balancer implementation this Service belongs to. If specified, the value of this field must be a label-style identifier, with an optional prefix, e.g. \"internal-vip\" or \"example.com/internal-vip\". Unprefixed names are reserved for end-users. This field can only be set when the Service type is 'LoadBalancer'. If not set, the default load balancer implementation is used, today this is typically done through the cloud provider integration, but should apply for any default implementation. If set, it is assumed that a load balancer implementation is watching for Services with a matching class. Any default load balancer implementation (e.g. cloud providers) should ignore Services that set this field. This field can only be set when creating or updating a Service to type 'LoadBalancer'. Once set, it can not be changed. This field will be wiped when a service is updated to a non 'LoadBalancer' type."
+msgstr ""
+
+#: ServiceSpec.loadBalancerIP
+msgid "Only applies to Service Type: LoadBalancer LoadBalancer will get created with the IP specified in this field. This feature depends on whether the underlying cloud-provider supports specifying the loadBalancerIP when a load balancer is created. This field will be ignored if the cloud-provider does not support the feature."
+msgstr ""
+
+#: ServiceSpec.loadBalancerSourceRanges
+msgid "If specified and supported by the platform, this will restrict traffic through the cloud-provider load-balancer will be restricted to the specified client IPs. This field will be ignored if the cloud-provider does not support the feature.\" More info: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/"
+msgstr ""
+
+#: ServiceSpec.ports
+msgid "The list of ports that are exposed by this service. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+msgstr ""
+
+#: ServiceSpec.publishNotReadyAddresses
+msgid "publishNotReadyAddresses indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready. The primary use case for setting this field is for a StatefulSet's Headless Service to propagate SRV DNS records for its Pods for the purpose of peer discovery. The Kubernetes controllers that generate Endpoints and EndpointSlice resources for Services interpret this to mean that all endpoints are considered \"ready\" even if the Pods themselves are not. Agents which consume only Kubernetes generated endpoints through the Endpoints or EndpointSlice resources can safely assume this behavior."
+msgstr ""
+
+#: ServiceSpec.selector
+msgid "Route service traffic to pods with label keys and values matching this selector. If empty or not present, the service is assumed to have an external process managing its endpoints, which Kubernetes will not modify. Only applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if type is ExternalName. More info: https://kubernetes.io/docs/concepts/services-networking/service/"
+msgstr ""
+
+#: ServiceSpec.sessionAffinity
+msgid "Supports \"ClientIP\" and \"None\". Used to maintain session affinity. Enable client IP based session affinity. Must be ClientIP or None. Defaults to None. More info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies"
+msgstr ""
+
+#: ServiceSpec.sessionAffinityConfig
+msgid "sessionAffinityConfig contains the configurations of session affinity."
+msgstr ""
+
+#: ServiceSpec.topologyKeys
+msgid "topologyKeys is a preference-order list of topology keys which implementations of services should use to preferentially sort endpoints when accessing this Service, it can not be used at the same time as externalTrafficPolicy=Local. Topology keys must be valid label keys and at most 16 keys may be specified. Endpoints are chosen based on the first topology key with available backends. If this field is specified and all entries have no backends that match the topology of the client, the service has no backends for that client and connections should fail. The special value \"*\" may be used to mean \"any topology\". This catch-all value, if used, only makes sense as the last value in the list. If this is not specified or empty, no topology constraints will be applied. This field is alpha-level and is only honored by servers that enable the ServiceTopology feature. This field is deprecated and will be removed in a future version."
+msgstr ""
+
+#: ServiceSpec.type
+msgid "type determines how the Service is exposed. Defaults to ClusterIP. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer. \"ClusterIP\" allocates a cluster-internal IP address for load-balancing to endpoints. Endpoints are determined by the selector or if that is not specified, by manual construction of an Endpoints object or EndpointSlice objects. If clusterIP is \"None\", no virtual IP is allocated and the endpoints are published as a set of endpoints rather than a virtual IP. \"NodePort\" builds on ClusterIP and allocates a port on every node which routes to the same endpoints as the clusterIP. \"LoadBalancer\" builds on NodePort and creates an external load-balancer (if supported in the current cloud) which routes to the same endpoints as the clusterIP. \"ExternalName\" aliases this service to the specified externalName. Several other fields do not apply to ExternalName services. More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types"
+msgstr ""
+
+#: ServiceStatus
+msgid "ServiceStatus represents the current status of a service."
+msgstr ""
+
+#: ServiceStatus.conditions
+msgid "Current service state"
+msgstr ""
+
+#: ServiceStatus.loadBalancer
+msgid "LoadBalancer contains the current status of the load-balancer, if one is present."
+msgstr ""
+
+#: SessionAffinityConfig
+msgid "SessionAffinityConfig represents the configurations of session affinity."
+msgstr ""
+
+#: SessionAffinityConfig.clientIP
+msgid "clientIP contains the configurations of Client IP based session affinity."
+msgstr ""
+
+#: StorageOSPersistentVolumeSource
+msgid "Represents a StorageOS persistent volume resource."
+msgstr ""
+
+# StorageOSPersistentVolumeSource.fsType
+# same as AzureDiskVolumeSource.fsType
+
+# StorageOSPersistentVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+#: StorageOSPersistentVolumeSource.secretRef
+msgid "SecretRef specifies the secret to use for obtaining the StorageOS API credentials.  If not specified, default values will be attempted."
+msgstr ""
+
+#: StorageOSPersistentVolumeSource.volumeName
+msgid "VolumeName is the human-readable name of the StorageOS volume.  Volume names are only unique within a namespace."
+msgstr ""
+
+#: StorageOSPersistentVolumeSource.volumeNamespace
+msgid "VolumeNamespace specifies the scope of the volume within StorageOS.  If no namespace is specified then the Pod's namespace will be used.  This allows the Kubernetes name scoping to be mirrored within StorageOS for tighter integration. Set VolumeName to any name to override the default behaviour. Set to \"default\" if you are not using namespaces within StorageOS. Namespaces that do not pre-exist within StorageOS will be created."
+msgstr ""
+
+# StorageOSVolumeSource
+# same as StorageOSPersistentVolumeSource
+
+# StorageOSVolumeSource.fsType
+# same as AzureDiskVolumeSource.fsType
+
+# StorageOSVolumeSource.readOnly
+# same as AzureDiskVolumeSource.readOnly
+
+# StorageOSVolumeSource.secretRef
+# same as StorageOSPersistentVolumeSource.secretRef
+
+# StorageOSVolumeSource.volumeName
+# same as StorageOSPersistentVolumeSource.volumeName
+
+# StorageOSVolumeSource.volumeNamespace
+# same as StorageOSPersistentVolumeSource.volumeNamespace
+
+#: Sysctl
+msgid "Sysctl defines a kernel parameter to be set"
+msgstr ""
+
+#: Sysctl.name
+msgid "Name of a property to set"
+msgstr ""
+
+#: Sysctl.value
+msgid "Value of a property to set"
+msgstr ""
+
+#: TCPSocketAction
+msgid "TCPSocketAction describes an action based on opening a socket"
+msgstr ""
+
+#: TCPSocketAction.host
+msgid "Optional: Host name to connect to, defaults to the pod IP."
+msgstr ""
+
+#: TCPSocketAction.port
+msgid "Number or name of the port to access on the container. Number must be in the range 1 to 65535. Name must be an IANA_SVC_NAME."
+msgstr ""
+
+#: Taint
+msgid "The node this Taint is attached to has the \"effect\" on any pod that does not tolerate the Taint."
+msgstr ""
+
+#: Taint.effect
+msgid "Required. The effect of the taint on pods that do not tolerate the taint. Valid effects are NoSchedule, PreferNoSchedule and NoExecute."
+msgstr ""
+
+#: Taint.key
+msgid "Required. The taint key to be applied to a node."
+msgstr ""
+
+#: Taint.timeAdded
+msgid "TimeAdded represents the time at which the taint was added. It is only written for NoExecute taints."
+msgstr ""
+
+#: Taint.value
+msgid "The taint value corresponding to the taint key."
+msgstr ""
+
+#: Toleration
+msgid "The pod this Toleration is attached to tolerates any taint that matches the triple <key,value,effect> using the matching operator <operator>."
+msgstr ""
+
+#: Toleration.effect
+msgid "Effect indicates the taint effect to match. Empty means match all taint effects. When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute."
+msgstr ""
+
+#: Toleration.key
+msgid "Key is the taint key that the toleration applies to. Empty means match all taint keys. If the key is empty, operator must be Exists; this combination means to match all values and all keys."
+msgstr ""
+
+#: Toleration.operator
+msgid "Operator represents a key's relationship to the value. Valid operators are Exists and Equal. Defaults to Equal. Exists is equivalent to wildcard for value, so that a pod can tolerate all taints of a particular category."
+msgstr ""
+
+#: Toleration.tolerationSeconds
+msgid "TolerationSeconds represents the period of time the toleration (which must be of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default, it is not set, which means tolerate the taint forever (do not evict). Zero and negative values will be treated as 0 (evict immediately) by the system."
+msgstr ""
+
+#: Toleration.value
+msgid "Value is the taint value the toleration matches to. If the operator is Exists, the value should be empty, otherwise just a regular string."
+msgstr ""
+
+#: TopologySelectorLabelRequirement
+msgid "A topology selector requirement is a selector that matches given label. This is an alpha feature and may change in the future."
+msgstr ""
+
+# TopologySelectorLabelRequirement.key
+# same as NodeSelectorRequirement.key
+
+#: TopologySelectorLabelRequirement.values
+msgid "An array of string values. One value must match the label to be selected. Each entry in Values is ORed."
+msgstr ""
+
+#: TopologySelectorTerm
+msgid "A topology selector term represents the result of label queries. A null or empty topology selector term matches no objects. The requirements of them are ANDed. It provides a subset of functionality as NodeSelectorTerm. This is an alpha feature and may change in the future."
+msgstr ""
+
+#: TopologySelectorTerm.matchLabelExpressions
+msgid "A list of topology selector requirements by labels."
+msgstr ""
+
+#: TopologySpreadConstraint
+msgid "TopologySpreadConstraint specifies how to spread matching pods among the given topology."
+msgstr ""
+
+#: TopologySpreadConstraint.labelSelector
+msgid "LabelSelector is used to find matching pods. Pods that match this label selector are counted to determine the number of pods in their corresponding topology domain."
+msgstr ""
+
+#: TopologySpreadConstraint.maxSkew
+msgid "MaxSkew describes the degree to which pods may be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`, it is the maximum permitted difference between the number of matching pods in the target topology and the global minimum. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       | - if MaxSkew is 1, incoming pod can only be scheduled to zone3 to become 1/1/1; scheduling it onto zone1(zone2) would make the ActualSkew(2-0) on zone1(zone2) violate MaxSkew(1). - if MaxSkew is 2, incoming pod can be scheduled onto any zone. When `whenUnsatisfiable=ScheduleAnyway`, it is used to give higher precedence to topologies that satisfy it. It's a required field. Default value is 1 and 0 is not allowed."
+msgstr ""
+
+#: TopologySpreadConstraint.topologyKey
+msgid "TopologyKey is the key of node labels. Nodes that have a label with this key and identical values are considered to be in the same topology. We consider each <key, value> as a \"bucket\", and try to put balanced number of pods into each bucket. It's a required field."
+msgstr ""
+
+#: TopologySpreadConstraint.whenUnsatisfiable
+msgid ""
+"WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy the spread constraint. - DoNotSchedule (default) tells the scheduler not to schedule it. - ScheduleAnyway tells the scheduler to schedule the pod in any location,"
+"  but giving higher precedence to topologies that would help reduce the"
+"  skew."
+"A constraint is considered \"Unsatisfiable\" for an incoming pod if and only if every possible node assigment for that pod would violate \"MaxSkew\" on some topology. For example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same labelSelector spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   | If WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled to zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies MaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler won't make it *more* imbalanced. It's a required field."
+msgstr ""
+
+#: TypedLocalObjectReference
+msgid "TypedLocalObjectReference contains enough information to let you locate the typed referenced object inside the same namespace."
+msgstr ""
+
+#: TypedLocalObjectReference.apiGroup
+msgid "APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required."
+msgstr ""
+
+#: TypedLocalObjectReference.kind
+msgid "Kind is the type of resource being referenced"
+msgstr ""
+
+#: TypedLocalObjectReference.name
+msgid "Name is the name of resource being referenced"
+msgstr ""
+
+#: Volume
+msgid "Volume represents a named volume in a pod that may be accessed by any container in the pod."
+msgstr ""
+
+# Volume.awsElasticBlockStore
+# same as PersistentVolumeSpec.awsElasticBlockStore
+
+# Volume.azureDisk
+# same as AzureDiskVolumeSource
+
+# Volume.azureFile
+# same as AzureFilePersistentVolumeSource
+
+# Volume.cephfs
+# same as PersistentVolumeSpec.cephfs
+
+# Volume.cinder
+# same as PersistentVolumeSpec.cinder
+
+#: Volume.configMap
+msgid "ConfigMap represents a configMap that should populate this volume"
+msgstr ""
+
+#: Volume.csi
+msgid "CSI (Container Storage Interface) represents ephemeral storage that is handled by certain external CSI drivers (Beta feature)."
+msgstr ""
+
+#: Volume.downwardAPI
+msgid "DownwardAPI represents downward API about the pod that should populate this volume"
+msgstr ""
+
+#: Volume.emptyDir
+msgid "EmptyDir represents a temporary directory that shares a pod's lifetime. More info: https://kubernetes.io/docs/concepts/storage/volumes#emptydir"
+msgstr ""
+
+#: Volume.ephemeral
+msgid ""
+"Ephemeral represents a volume that is handled by a cluster storage driver. The volume's lifecycle is tied to the pod that defines it - it will be created before the pod starts, and deleted when the pod is removed."
+""
+"Use this if: a) the volume is only needed while the pod runs, b) features of normal volumes like restoring from snapshot or capacity"
+"   tracking are needed,"
+"c) the storage driver is specified through a storage class, and d) the storage driver supports dynamic volume provisioning through"
+"   a PersistentVolumeClaim (see EphemeralVolumeSource for more"
+"   information on the connection between this volume type"
+"   and PersistentVolumeClaim)."
+""
+"Use PersistentVolumeClaim or one of the vendor-specific APIs for volumes that persist for longer than the lifecycle of an individual pod."
+""
+"Use CSI for light-weight local ephemeral volumes if the CSI driver is meant to be used that way - see the documentation of the driver for more information."
+""
+"A pod can use both types of ephemeral volumes and persistent volumes at the same time."
+""
+"This is a beta feature and only available when the GenericEphemeralVolume feature gate is enabled."
+msgstr ""
+
+# Volume.fc
+# same as PersistentVolumeSpec.fc
+
+# Volume.flexVolume
+# same as FlexVolumeSource
+
+#: Volume.flocker
+msgid "Flocker represents a Flocker volume attached to a kubelet's host machine. This depends on the Flocker control service being running"
+msgstr ""
+
+#: Volume.gcePersistentDisk
+msgid "GCEPersistentDisk represents a GCE Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk"
+msgstr ""
+
+#: Volume.gitRepo
+msgid "GitRepo represents a git repository at a particular revision. DEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an EmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir into the Pod's container."
+msgstr ""
+
+#: Volume.glusterfs
+msgid "Glusterfs represents a Glusterfs mount on the host that shares a pod's lifetime. More info: https://examples.k8s.io/volumes/glusterfs/README.md"
+msgstr ""
+
+#: Volume.hostPath
+msgid "HostPath represents a pre-existing file or directory on the host machine that is directly exposed to the container. This is generally used for system agents or other privileged things that are allowed to see the host machine. Most containers will NOT need this. More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath"
+msgstr ""
+
+#: Volume.iscsi
+msgid "ISCSI represents an ISCSI Disk resource that is attached to a kubelet's host machine and then exposed to the pod. More info: https://examples.k8s.io/volumes/iscsi/README.md"
+msgstr ""
+
+#: Volume.name
+msgid "Volume's name. Must be a DNS_LABEL and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+msgstr ""
+
+#: Volume.nfs
+msgid "NFS represents an NFS mount on the host that shares a pod's lifetime More info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+msgstr ""
+
+#: Volume.persistentVolumeClaim
+msgid "PersistentVolumeClaimVolumeSource represents a reference to a PersistentVolumeClaim in the same namespace. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims"
+msgstr ""
+
+# Volume.photonPersistentDisk
+# same as PersistentVolumeSpec.photonPersistentDisk
+
+# Volume.portworxVolume
+# same as PersistentVolumeSpec.portworxVolume
+
+#: Volume.projected
+msgid "Items for all in one resources secrets, configmaps, and downward API"
+msgstr ""
+
+# Volume.quobyte
+# same as PersistentVolumeSpec.quobyte
+
+# Volume.rbd
+# same as PersistentVolumeSpec.rbd
+
+# Volume.scaleIO
+# same as PersistentVolumeSpec.scaleIO
+
+#: Volume.secret
+msgid "Secret represents a secret that should populate this volume. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret"
+msgstr ""
+
+#: Volume.storageos
+msgid "StorageOS represents a StorageOS volume attached and mounted on Kubernetes nodes."
+msgstr ""
+
+# Volume.vsphereVolume
+# same as PersistentVolumeSpec.vsphereVolume
+
+#: VolumeDevice
+msgid "volumeDevice describes a mapping of a raw block device within a container."
+msgstr ""
+
+#: VolumeDevice.devicePath
+msgid "devicePath is the path inside of the container that the device will be mapped to."
+msgstr ""
+
+#: VolumeDevice.name
+msgid "name must match the name of a persistentVolumeClaim in the pod"
+msgstr ""
+
+#: VolumeMount
+msgid "VolumeMount describes a mounting of a Volume within a container."
+msgstr ""
+
+#: VolumeMount.mountPath
+msgid "Path within the container at which the volume should be mounted.  Must not contain ':'."
+msgstr ""
+
+#: VolumeMount.mountPropagation
+msgid "mountPropagation determines how mounts are propagated from the host to container and the other way around. When not set, MountPropagationNone is used. This field is beta in 1.10."
+msgstr ""
+
+#: VolumeMount.name
+msgid "This must match the Name of a Volume."
+msgstr ""
+
+#: VolumeMount.readOnly
+msgid "Mounted read-only if true, read-write otherwise (false or unspecified). Defaults to false."
+msgstr ""
+
+#: VolumeMount.subPath
+msgid "Path within the volume from which the container's volume should be mounted. Defaults to \"\" (volume's root)."
+msgstr ""
+
+#: VolumeMount.subPathExpr
+msgid "Expanded path within the volume from which the container's volume should be mounted. Behaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment. Defaults to \"\" (volume's root). SubPathExpr and SubPath are mutually exclusive."
+msgstr ""
+
+#: VolumeNodeAffinity
+msgid "VolumeNodeAffinity defines constraints that limit what nodes this volume can be accessed from."
+msgstr ""
+
+#: VolumeNodeAffinity.required
+msgid "Required specifies hard node constraints that must be met."
+msgstr ""
+
+#: VolumeProjection
+msgid "Projection that may be projected along with other supported volume types"
+msgstr ""
+
+#: VolumeProjection.configMap
+msgid "information about the configMap data to project"
+msgstr ""
+
+#: VolumeProjection.downwardAPI
+msgid "information about the downwardAPI data to project"
+msgstr ""
+
+#: VolumeProjection.secret
+msgid "information about the secret data to project"
+msgstr ""
+
+#: VolumeProjection.serviceAccountToken
+msgid "information about the serviceAccountToken data to project"
+msgstr ""
+
+#: VsphereVirtualDiskVolumeSource
+msgid "Represents a vSphere volume resource."
+msgstr ""
+
+# VsphereVirtualDiskVolumeSource.fsType
+# same as AzureDiskVolumeSource.fsType
+
+#: VsphereVirtualDiskVolumeSource.storagePolicyID
+msgid "Storage Policy Based Management (SPBM) profile ID associated with the StoragePolicyName."
+msgstr ""
+
+#: VsphereVirtualDiskVolumeSource.storagePolicyName
+msgid "Storage Policy Based Management (SPBM) profile name."
+msgstr ""
+
+#: VsphereVirtualDiskVolumeSource.volumePath
+msgid "Path that identifies vSphere volume vmdk"
+msgstr ""
+
+#: WeightedPodAffinityTerm
+msgid "The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)"
+msgstr ""
+
+#: WeightedPodAffinityTerm.podAffinityTerm
+msgid "Required. A pod affinity term, associated with the corresponding weight."
+msgstr ""
+
+#: WeightedPodAffinityTerm.weight
+msgid "weight associated with matching the corresponding podAffinityTerm, in the range 1-100."
+msgstr ""
+
+#: WindowsSecurityContextOptions
+msgid "WindowsSecurityContextOptions contain Windows-specific options and credentials."
+msgstr ""
+
+#: WindowsSecurityContextOptions.gmsaCredentialSpec
+msgid "GMSACredentialSpec is where the GMSA admission webhook (https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the GMSA credential spec named by the GMSACredentialSpecName field."
+msgstr ""
+
+#: WindowsSecurityContextOptions.gmsaCredentialSpecName
+msgid "GMSACredentialSpecName is the name of the GMSA credential spec to use."
+msgstr ""
+
+#: WindowsSecurityContextOptions.runAsUserName
+msgid "The UserName in Windows to run the entrypoint of the container process. Defaults to the user specified in image metadata if unspecified. May also be set in PodSecurityContext. If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence."
+msgstr ""

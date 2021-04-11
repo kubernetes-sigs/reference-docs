@@ -1,0 +1,109 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.apiserverinternal.v1alpha1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ServerStorageVersion
+msgid "An API server instance reports the version it can decode and the version it encodes objects to when persisting objects in the backend."
+msgstr ""
+
+#: ServerStorageVersion.apiServerID
+msgid "The ID of the reporting API server."
+msgstr ""
+
+#: ServerStorageVersion.decodableVersions
+msgid "The API server can decode objects encoded in these versions. The encodingVersion must be included in the decodableVersions."
+msgstr ""
+
+#: ServerStorageVersion.encodingVersion
+msgid "The API server encodes the object to this version when persisting it in the backend (e.g., etcd)."
+msgstr ""
+
+#: StorageVersion
+msgid " Storage version of a specific resource."
+msgstr ""
+
+#: StorageVersion.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: StorageVersion.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: StorageVersion.metadata
+msgid "The name is <group>.<resource>."
+msgstr ""
+
+#: StorageVersion.spec
+msgid "Spec is an empty spec. It is here to comply with Kubernetes API style."
+msgstr ""
+
+#: StorageVersion.status
+msgid "API server instances report the version they can decode and the version they encode objects to when persisting objects in the backend."
+msgstr ""
+
+#: StorageVersionCondition
+msgid "Describes the state of the storageVersion at a certain point."
+msgstr ""
+
+#: StorageVersionCondition.lastTransitionTime
+msgid "Last time the condition transitioned from one status to another."
+msgstr ""
+
+#: StorageVersionCondition.message
+msgid "A human readable message indicating details about the transition."
+msgstr ""
+
+#: StorageVersionCondition.observedGeneration
+msgid "If set, this represents the .metadata.generation that the condition was set based upon."
+msgstr ""
+
+#: StorageVersionCondition.reason
+msgid "The reason for the condition's last transition."
+msgstr ""
+
+#: StorageVersionCondition.status
+msgid "Status of the condition, one of True, False, Unknown."
+msgstr ""
+
+#: StorageVersionCondition.type
+msgid "Type of the condition."
+msgstr ""
+
+#: StorageVersionList
+msgid "A list of StorageVersions."
+msgstr ""
+
+# StorageVersionList.apiVersion
+# same as StorageVersion.apiVersion
+# StorageVersionList.kind
+# same as StorageVersion.kind
+#: StorageVersionSpec
+msgid "StorageVersionSpec is an empty spec."
+msgstr ""
+
+#: StorageVersionStatus
+msgid "API server instances report the versions they can decode and the version they encode objects to when persisting objects in the backend."
+msgstr ""
+
+#: StorageVersionStatus.commonEncodingVersion
+msgid "If all API server instances agree on the same encoding storage version, then this field is set to that version. Otherwise this field is left empty. API servers should finish updating its storageVersionStatus entry before serving write operations, so that this field will be in sync with the reality."
+msgstr ""
+
+#: StorageVersionStatus.conditions
+msgid "The latest available observations of the storageVersion's state."
+msgstr ""
+
+#: StorageVersionStatus.storageVersions
+msgid "The reported versions per API server instance."
+msgstr ""

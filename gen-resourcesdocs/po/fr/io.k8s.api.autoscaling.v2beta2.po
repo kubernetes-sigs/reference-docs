@@ -1,0 +1,379 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.autoscaling.v2beta2\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ContainerResourceMetricSource
+msgid "ContainerResourceMetricSource indicates how to scale on a resource metric known to Kubernetes, as specified in requests and limits, describing each pod in the current scale target (e.g. CPU or memory).  The values will be averaged together before being compared to the target.  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source.  Only one \"target\" type should be set."
+msgstr ""
+
+#: ContainerResourceMetricSource.container
+msgid "container is the name of the container in the pods of the scaling target"
+msgstr ""
+
+#: ContainerResourceMetricSource.name
+msgid "name is the name of the resource in question."
+msgstr ""
+
+#: ContainerResourceMetricSource.target
+msgid "target specifies the target value for the given metric"
+msgstr ""
+
+#: ContainerResourceMetricStatus
+msgid "ContainerResourceMetricStatus indicates the current value of a resource metric known to Kubernetes, as specified in requests and limits, describing a single container in each pod in the current scale target (e.g. CPU or memory).  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source."
+msgstr ""
+
+#: ContainerResourceMetricStatus.container
+msgid "Container is the name of the container in the pods of the scaling target"
+msgstr ""
+
+#: ContainerResourceMetricStatus.current
+msgid "current contains the current value for the given metric"
+msgstr ""
+
+#: ContainerResourceMetricStatus.name
+msgid "Name is the name of the resource in question."
+msgstr ""
+
+#: CrossVersionObjectReference
+msgid "CrossVersionObjectReference contains enough information to let you identify the referred resource."
+msgstr ""
+
+#: CrossVersionObjectReference.apiVersion
+msgid "API version of the referent"
+msgstr ""
+
+#: CrossVersionObjectReference.kind
+msgid "Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\""
+msgstr ""
+
+#: CrossVersionObjectReference.name
+msgid "Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names"
+msgstr ""
+
+#: ExternalMetricSource
+msgid "ExternalMetricSource indicates how to scale on a metric not associated with any Kubernetes object (for example length of queue in cloud messaging service, or QPS from loadbalancer running outside of cluster)."
+msgstr ""
+
+#: ExternalMetricSource.metric
+msgid "metric identifies the target metric by name and selector"
+msgstr ""
+
+# ExternalMetricSource.target
+# same as ContainerResourceMetricSource.target
+#: ExternalMetricStatus
+msgid "ExternalMetricStatus indicates the current value of a global metric not associated with any Kubernetes object."
+msgstr ""
+
+# ExternalMetricStatus.current
+# same as ContainerResourceMetricStatus.current
+# ExternalMetricStatus.metric
+# same as ExternalMetricSource.metric
+#: HPAScalingPolicy
+msgid "HPAScalingPolicy is a single policy which must hold true for a specified past interval."
+msgstr ""
+
+#: HPAScalingPolicy.periodSeconds
+msgid "PeriodSeconds specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min)."
+msgstr ""
+
+#: HPAScalingPolicy.type
+msgid "Type is used to specify the scaling policy."
+msgstr ""
+
+#: HPAScalingPolicy.value
+msgid "Value contains the amount of change which is permitted by the policy. It must be greater than zero"
+msgstr ""
+
+#: HPAScalingRules
+msgid "HPAScalingRules configures the scaling behavior for one direction. These Rules are applied after calculating DesiredReplicas from metrics for the HPA. They can limit the scaling velocity by specifying scaling policies. They can prevent flapping by specifying the stabilization window, so that the number of replicas is not set instantly, instead, the safest value from the stabilization window is chosen."
+msgstr ""
+
+#: HPAScalingRules.policies
+msgid "policies is a list of potential scaling polices which can be used during scaling. At least one policy must be specified, otherwise the HPAScalingRules will be discarded as invalid"
+msgstr ""
+
+#: HPAScalingRules.selectPolicy
+msgid "selectPolicy is used to specify which policy should be used. If not set, the default value MaxPolicySelect is used."
+msgstr ""
+
+#: HPAScalingRules.stabilizationWindowSeconds
+msgid "StabilizationWindowSeconds is the number of seconds for which past recommendations should be considered while scaling up or scaling down. StabilizationWindowSeconds must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long)."
+msgstr ""
+
+#: HorizontalPodAutoscaler
+msgid "HorizontalPodAutoscaler is the configuration for a horizontal pod autoscaler, which automatically manages the replica count of any resource implementing the scale subresource based on the metrics specified."
+msgstr ""
+
+#: HorizontalPodAutoscaler.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: HorizontalPodAutoscaler.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: HorizontalPodAutoscaler.metadata
+msgid "metadata is the standard object metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: HorizontalPodAutoscaler.spec
+msgid "spec is the specification for the behaviour of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status."
+msgstr ""
+
+#: HorizontalPodAutoscaler.status
+msgid "status is the current information about the autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerBehavior
+msgid "HorizontalPodAutoscalerBehavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively)."
+msgstr ""
+
+#: HorizontalPodAutoscalerBehavior.scaleDown
+msgid "scaleDown is scaling policy for scaling Down. If not set, the default value is to allow to scale down to minReplicas pods, with a 300 second stabilization window (i.e., the highest recommendation for the last 300sec is used)."
+msgstr ""
+
+#: HorizontalPodAutoscalerBehavior.scaleUp
+msgid "scaleUp is scaling policy for scaling Up. If not set, the default value is the higher of:  * increase no more than 4 pods per 60 seconds  * double the number of pods per 60 secondsNo stabilization is used."
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition
+msgid "HorizontalPodAutoscalerCondition describes the state of a HorizontalPodAutoscaler at a certain point."
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition.lastTransitionTime
+msgid "lastTransitionTime is the last time the condition transitioned from one status to another"
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition.message
+msgid "message is a human-readable explanation containing details about the transition"
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition.reason
+msgid "reason is the reason for the condition's last transition."
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition.status
+msgid "status is the status of the condition (True, False, Unknown)"
+msgstr ""
+
+#: HorizontalPodAutoscalerCondition.type
+msgid "type describes the current condition"
+msgstr ""
+
+#: HorizontalPodAutoscalerList
+msgid "HorizontalPodAutoscalerList is a list of horizontal pod autoscaler objects."
+msgstr ""
+
+# HorizontalPodAutoscalerList.apiVersion
+# same as HorizontalPodAutoscaler.apiVersion
+#: HorizontalPodAutoscalerList.items
+msgid "items is the list of horizontal pod autoscaler objects."
+msgstr ""
+
+# HorizontalPodAutoscalerList.kind
+# same as HorizontalPodAutoscaler.kind
+#: HorizontalPodAutoscalerList.metadata
+msgid "metadata is the standard list metadata."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec
+msgid "HorizontalPodAutoscalerSpec describes the desired functionality of the HorizontalPodAutoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.behavior
+msgid "behavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively). If not set, the default HPAScalingRules for scale up and scale down are used."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.maxReplicas
+msgid "maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up. It cannot be less that minReplicas."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.metrics
+msgid "metrics contains the specifications for which to use to calculate the desired replica count (the maximum replica count across all metrics will be used).  The desired replica count is calculated multiplying the ratio between the target value and the current value by the current number of pods.  Ergo, metrics used must decrease as the pod count is increased, and vice-versa.  See the individual metric source types for more information about how each type of metric must respond. If not set, the default metric will be set to 80% average CPU utilization."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.minReplicas
+msgid "minReplicas is the lower limit for the number of replicas to which the autoscaler can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the alpha feature gate HPAScaleToZero is enabled and at least one Object or External metric is configured.  Scaling is active as long as at least one metric value is available."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.scaleTargetRef
+msgid "scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics should be collected, as well as to actually change the replica count."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus
+msgid "HorizontalPodAutoscalerStatus describes the current status of a horizontal pod autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.conditions
+msgid "conditions is the set of conditions required for this autoscaler to scale its target, and indicates whether or not those conditions are met."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.currentMetrics
+msgid "currentMetrics is the last read state of the metrics used by this autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.currentReplicas
+msgid "currentReplicas is current number of replicas of pods managed by this autoscaler, as last seen by the autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.desiredReplicas
+msgid "desiredReplicas is the desired number of replicas of pods managed by this autoscaler, as last calculated by the autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.lastScaleTime
+msgid "lastScaleTime is the last time the HorizontalPodAutoscaler scaled the number of pods, used by the autoscaler to control how often the number of pods is changed."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.observedGeneration
+msgid "observedGeneration is the most recent generation observed by this autoscaler."
+msgstr ""
+
+#: MetricIdentifier
+msgid "MetricIdentifier defines the name and optionally selector for a metric"
+msgstr ""
+
+#: MetricIdentifier.name
+msgid "name is the name of the given metric"
+msgstr ""
+
+#: MetricIdentifier.selector
+msgid "selector is the string-encoded form of a standard kubernetes label selector for the given metric When set, it is passed as an additional parameter to the metrics server for more specific metrics scoping. When unset, just the metricName will be used to gather metrics."
+msgstr ""
+
+#: MetricSpec
+msgid "MetricSpec specifies how to scale based on a single metric (only `type` and one other matching field should be set at once)."
+msgstr ""
+
+#: MetricSpec.containerResource
+msgid "container resource refers to a resource metric (such as those specified in requests and limits) known to Kubernetes describing a single container in each pod of the current scale target (e.g. CPU or memory). Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source. This is an alpha feature and can be enabled by the HPAContainerMetrics feature flag."
+msgstr ""
+
+#: MetricSpec.external
+msgid "external refers to a global metric that is not associated with any Kubernetes object. It allows autoscaling based on information coming from components running outside of cluster (for example length of queue in cloud messaging service, or QPS from loadbalancer running outside of cluster)."
+msgstr ""
+
+#: MetricSpec.object
+msgid "object refers to a metric describing a single kubernetes object (for example, hits-per-second on an Ingress object)."
+msgstr ""
+
+#: MetricSpec.pods
+msgid "pods refers to a metric describing each pod in the current scale target (for example, transactions-processed-per-second).  The values will be averaged together before being compared to the target value."
+msgstr ""
+
+#: MetricSpec.resource
+msgid "resource refers to a resource metric (such as those specified in requests and limits) known to Kubernetes describing each pod in the current scale target (e.g. CPU or memory). Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source."
+msgstr ""
+
+#: MetricSpec.type
+msgid "type is the type of metric source.  It should be one of \"ContainerResource\", \"External\", \"Object\", \"Pods\" or \"Resource\", each mapping to a matching field in the object. Note: \"ContainerResource\" type is available on when the feature-gate HPAContainerMetrics is enabled"
+msgstr ""
+
+#: MetricStatus
+msgid "MetricStatus describes the last-read state of a single metric."
+msgstr ""
+
+#: MetricStatus.containerResource
+msgid "container resource refers to a resource metric (such as those specified in requests and limits) known to Kubernetes describing a single container in each pod in the current scale target (e.g. CPU or memory). Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source."
+msgstr ""
+
+# MetricStatus.external
+# same as MetricSpec.external
+# MetricStatus.object
+# same as MetricSpec.object
+# MetricStatus.pods
+# same as MetricSpec.pods
+# MetricStatus.resource
+# same as MetricSpec.resource
+#: MetricStatus.type
+msgid "type is the type of metric source.  It will be one of \"ContainerResource\", \"External\", \"Object\", \"Pods\" or \"Resource\", each corresponds to a matching field in the object. Note: \"ContainerResource\" type is available on when the feature-gate HPAContainerMetrics is enabled"
+msgstr ""
+
+#: MetricTarget
+msgid "MetricTarget defines the target value, average value, or average utilization of a specific metric"
+msgstr ""
+
+#: MetricTarget.averageUtilization
+msgid "averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type"
+msgstr ""
+
+#: MetricTarget.averageValue
+msgid "averageValue is the target value of the average of the metric across all relevant pods (as a quantity)"
+msgstr ""
+
+#: MetricTarget.type
+msgid "type represents whether the metric type is Utilization, Value, or AverageValue"
+msgstr ""
+
+#: MetricTarget.value
+msgid "value is the target value of the metric (as a quantity)."
+msgstr ""
+
+#: MetricValueStatus
+msgid "MetricValueStatus holds the current value for a metric"
+msgstr ""
+
+#: MetricValueStatus.averageUtilization
+msgid "currentAverageUtilization is the current value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods."
+msgstr ""
+
+#: MetricValueStatus.averageValue
+msgid "averageValue is the current value of the average of the metric across all relevant pods (as a quantity)"
+msgstr ""
+
+#: MetricValueStatus.value
+msgid "value is the current value of the metric (as a quantity)."
+msgstr ""
+
+#: ObjectMetricSource
+msgid "ObjectMetricSource indicates how to scale on a metric describing a kubernetes object (for example, hits-per-second on an Ingress object)."
+msgstr ""
+
+# ObjectMetricSource.metric
+# same as ExternalMetricSource.metric
+# ObjectMetricSource.target
+# same as ContainerResourceMetricSource.target
+#: ObjectMetricStatus
+msgid "ObjectMetricStatus indicates the current value of a metric describing a kubernetes object (for example, hits-per-second on an Ingress object)."
+msgstr ""
+
+# ObjectMetricStatus.current
+# same as ContainerResourceMetricStatus.current
+# ObjectMetricStatus.metric
+# same as ExternalMetricSource.metric
+#: PodsMetricSource
+msgid "PodsMetricSource indicates how to scale on a metric describing each pod in the current scale target (for example, transactions-processed-per-second). The values will be averaged together before being compared to the target value."
+msgstr ""
+
+# PodsMetricSource.metric
+# same as ExternalMetricSource.metric
+# PodsMetricSource.target
+# same as ContainerResourceMetricSource.target
+#: PodsMetricStatus
+msgid "PodsMetricStatus indicates the current value of a metric describing each pod in the current scale target (for example, transactions-processed-per-second)."
+msgstr ""
+
+# PodsMetricStatus.current
+# same as ContainerResourceMetricStatus.current
+# PodsMetricStatus.metric
+# same as ExternalMetricSource.metric
+#: ResourceMetricSource
+msgid "ResourceMetricSource indicates how to scale on a resource metric known to Kubernetes, as specified in requests and limits, describing each pod in the current scale target (e.g. CPU or memory).  The values will be averaged together before being compared to the target.  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source.  Only one \"target\" type should be set."
+msgstr ""
+
+# ResourceMetricSource.name
+# same as ContainerResourceMetricSource.name
+# ResourceMetricSource.target
+# same as ContainerResourceMetricSource.target
+#: ResourceMetricStatus
+msgid "ResourceMetricStatus indicates the current value of a resource metric known to Kubernetes, as specified in requests and limits, describing each pod in the current scale target (e.g. CPU or memory).  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the \"pods\" source."
+msgstr ""

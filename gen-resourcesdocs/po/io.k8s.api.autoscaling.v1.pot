@@ -1,0 +1,155 @@
+# Translations for Kubernetes API specifications.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.autoscaling.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CrossVersionObjectReference
+msgid "CrossVersionObjectReference contains enough information to let you identify the referred resource."
+msgstr ""
+
+#: CrossVersionObjectReference.apiVersion
+msgid "API version of the referent"
+msgstr ""
+
+#: CrossVersionObjectReference.kind
+msgid "Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\""
+msgstr ""
+
+#: CrossVersionObjectReference.name
+msgid "Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names"
+msgstr ""
+
+#: HorizontalPodAutoscaler
+msgid "configuration of a horizontal pod autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscaler.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: HorizontalPodAutoscaler.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: HorizontalPodAutoscaler.metadata
+msgid "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: HorizontalPodAutoscaler.spec
+msgid "behaviour of autoscaler. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status."
+msgstr ""
+
+#: HorizontalPodAutoscaler.status
+msgid "current information about the autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerList
+msgid "list of horizontal pod autoscaler objects."
+msgstr ""
+
+# HorizontalPodAutoscalerList.apiVersion
+# same as HorizontalPodAutoscaler.apiVersion
+
+# HorizontalPodAutoscalerList.items
+# same as HorizontalPodAutoscalerList
+
+# HorizontalPodAutoscalerList.kind
+# same as HorizontalPodAutoscaler.kind
+
+#: HorizontalPodAutoscalerList.metadata
+msgid "Standard list metadata."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec
+msgid "specification of a horizontal pod autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.maxReplicas
+msgid "upper limit for the number of pods that can be set by the autoscaler; cannot be smaller than MinReplicas."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.minReplicas
+msgid "minReplicas is the lower limit for the number of replicas to which the autoscaler can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the alpha feature gate HPAScaleToZero is enabled and at least one Object or External metric is configured.  Scaling is active as long as at least one metric value is available."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.scaleTargetRef
+msgid "reference to scaled resource; horizontal pod autoscaler will learn the current resource consumption and will set the desired number of pods by using its Scale subresource."
+msgstr ""
+
+#: HorizontalPodAutoscalerSpec.targetCPUUtilizationPercentage
+msgid "target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus
+msgid "current status of a horizontal pod autoscaler"
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.currentCPUUtilizationPercentage
+msgid "current average CPU utilization over all pods, represented as a percentage of requested CPU, e.g. 70 means that an average pod is using now 70% of its requested CPU."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.currentReplicas
+msgid "current number of replicas of pods managed by this autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.desiredReplicas
+msgid "desired number of replicas of pods managed by this autoscaler."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.lastScaleTime
+msgid "last time the HorizontalPodAutoscaler scaled the number of pods; used by the autoscaler to control how often the number of pods is changed."
+msgstr ""
+
+#: HorizontalPodAutoscalerStatus.observedGeneration
+msgid "most recent generation observed by this autoscaler."
+msgstr ""
+
+#: Scale
+msgid "Scale represents a scaling request for a resource."
+msgstr ""
+
+# Scale.apiVersion
+# same as HorizontalPodAutoscaler.apiVersion
+
+# Scale.kind
+# same as HorizontalPodAutoscaler.kind
+
+#: Scale.metadata
+msgid "Standard object metadata; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata."
+msgstr ""
+
+#: Scale.spec
+msgid "defines the behavior of the scale. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status."
+msgstr ""
+
+#: Scale.status
+msgid "current status of the scale. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status. Read-only."
+msgstr ""
+
+#: ScaleSpec
+msgid "ScaleSpec describes the attributes of a scale subresource."
+msgstr ""
+
+#: ScaleSpec.replicas
+msgid "desired number of instances for the scaled object."
+msgstr ""
+
+#: ScaleStatus
+msgid "ScaleStatus represents the current status of a scale subresource."
+msgstr ""
+
+#: ScaleStatus.replicas
+msgid "actual number of observed instances of the scaled object."
+msgstr ""
+
+#: ScaleStatus.selector
+msgid "label query over pods that should match the replicas count. This is same as the label selector but in the string format to avoid introspection by clients. The string will be in the same format as the query-param syntax. More info about label selectors: http://kubernetes.io/docs/user-guide/labels#label-selectors"
+msgstr ""

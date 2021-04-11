@@ -2,7 +2,9 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/leonelquinteros/gotext"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +17,8 @@ func KWebsite() *cobra.Command {
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			gotext.Configure(os.Getenv("PWD")+"/mo", os.Getenv("LANG"), "")
+
 			toc, err := prepareTOC(cmd)
 			if err != nil {
 				return fmt.Errorf("Unable to load specs and/or toc config: %v", err)

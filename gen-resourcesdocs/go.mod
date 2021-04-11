@@ -12,6 +12,7 @@ require (
 	github.com/go-openapi/spec v0.20.0
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
+	github.com/leonelquinteros/gotext v1.4.0
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/smartystreets/assertions v1.0.0 // indirect

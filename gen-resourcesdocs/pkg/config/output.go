@@ -54,7 +54,7 @@ func (o *TOC) OutputChapter(i int, chapter *Chapter, outputPart outputs.Part) er
 	if chapter.Group != nil && chapter.Version != nil {
 		gv = GetGV(*chapter.Group, *chapter.Version)
 	}
-	outputChapter, err := outputPart.AddChapter(i, chapter.Name, gv, chapter.Version, description, chapter.Key.GoImportPrefix())
+	outputChapter, err := outputPart.AddChapter(i, chapter.Name, gv, chapter.Version, description, chapter.Key.GoImportPrefix(), chapter.Key.RemoveResourceName())
 	if err != nil {
 		return err
 	}
@@ -272,7 +272,7 @@ func (o *TOC) OutputCommonParameters(i int, output outputs.Output) error {
 		return err
 	}
 
-	outputChapter, err := outputPart.AddChapter(i, "Common Parameters", "", nil, "", "")
+	outputChapter, err := outputPart.AddChapter(i, "Common Parameters", "", nil, "", "", "") // TODO?
 
 	params := make([]string, len(kubernetes.ParametersAnnex))
 	j := 0

@@ -1,0 +1,85 @@
+# Translations for Kubernetes API specifications.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.authentication.v1beta1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: TokenReview
+msgid "TokenReview attempts to authenticate a token to a known user. Note: TokenReview requests may be cached by the webhook token authenticator plugin in the kube-apiserver."
+msgstr ""
+
+#: TokenReview.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: TokenReview.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: TokenReview.spec
+msgid "Spec holds information about the request being evaluated"
+msgstr ""
+
+#: TokenReview.status
+msgid "Status is filled in by the server and indicates whether the request can be authenticated."
+msgstr ""
+
+#: TokenReviewSpec
+msgid "TokenReviewSpec is a description of the token authentication request."
+msgstr ""
+
+#: TokenReviewSpec.audiences
+msgid "Audiences is a list of the identifiers that the resource server presented with the token identifies as. Audience-aware token authenticators will verify that the token was intended for at least one of the audiences in this list. If no audiences are provided, the audience will default to the audience of the Kubernetes apiserver."
+msgstr ""
+
+#: TokenReviewSpec.token
+msgid "Token is the opaque bearer token."
+msgstr ""
+
+#: TokenReviewStatus
+msgid "TokenReviewStatus is the result of the token authentication request."
+msgstr ""
+
+#: TokenReviewStatus.audiences
+msgid "Audiences are audience identifiers chosen by the authenticator that are compatible with both the TokenReview and token. An identifier is any identifier in the intersection of the TokenReviewSpec audiences and the token's audiences. A client of the TokenReview API that sets the spec.audiences field should validate that a compatible audience identifier is returned in the status.audiences field to ensure that the TokenReview server is audience aware. If a TokenReview returns an empty status.audience field where status.authenticated is \"true\", the token is valid against the audience of the Kubernetes API server."
+msgstr ""
+
+#: TokenReviewStatus.authenticated
+msgid "Authenticated indicates that the token was associated with a known user."
+msgstr ""
+
+#: TokenReviewStatus.error
+msgid "Error indicates that the token couldn't be checked"
+msgstr ""
+
+#: TokenReviewStatus.user
+msgid "User is the UserInfo associated with the provided token."
+msgstr ""
+
+#: UserInfo
+msgid "UserInfo holds the information about the user needed to implement the user.Info interface."
+msgstr ""
+
+#: UserInfo.extra
+msgid "Any additional information provided by the authenticator."
+msgstr ""
+
+#: UserInfo.groups
+msgid "The names of groups this user is a part of."
+msgstr ""
+
+#: UserInfo.uid
+msgid "A unique value that identifies this user across time. If this user is deleted and another user by the same name is added, they will have different UIDs."
+msgstr ""
+
+#: UserInfo.username
+msgid "The name that uniquely identifies this user among all active users."
+msgstr ""

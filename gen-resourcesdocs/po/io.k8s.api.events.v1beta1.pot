@@ -1,0 +1,114 @@
+# Translations for Kubernetes API specifications.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.events.v1beta1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Event
+msgid "Event is a report of an event somewhere in the cluster. It generally denotes some state change in the system. Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data."
+msgstr ""
+
+#: Event.action
+msgid "action is what action was taken/failed regarding to the regarding object. It is machine-readable. This field can have at most 128 characters."
+msgstr ""
+
+#: Event.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: Event.deprecatedCount
+msgid "deprecatedCount is the deprecated field assuring backward compatibility with core.v1 Event type."
+msgstr ""
+
+#: Event.deprecatedFirstTimestamp
+msgid "deprecatedFirstTimestamp is the deprecated field assuring backward compatibility with core.v1 Event type."
+msgstr ""
+
+#: Event.deprecatedLastTimestamp
+msgid "deprecatedLastTimestamp is the deprecated field assuring backward compatibility with core.v1 Event type."
+msgstr ""
+
+#: Event.deprecatedSource
+msgid "deprecatedSource is the deprecated field assuring backward compatibility with core.v1 Event type."
+msgstr ""
+
+#: Event.eventTime
+msgid "eventTime is the time when this Event was first observed. It is required."
+msgstr ""
+
+#: Event.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: Event.metadata
+msgid "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: Event.note
+msgid "note is a human-readable description of the status of this operation. Maximal length of the note is 1kB, but libraries should be prepared to handle values up to 64kB."
+msgstr ""
+
+#: Event.reason
+msgid "reason is why the action was taken. It is human-readable. This field can have at most 128 characters."
+msgstr ""
+
+#: Event.regarding
+msgid "regarding contains the object this Event is about. In most cases it's an Object reporting controller implements, e.g. ReplicaSetController implements ReplicaSets and this event is emitted because it acts on some changes in a ReplicaSet object."
+msgstr ""
+
+#: Event.related
+msgid "related is the optional secondary object for more complex actions. E.g. when regarding object triggers a creation or deletion of related object."
+msgstr ""
+
+#: Event.reportingController
+msgid "reportingController is the name of the controller that emitted this Event, e.g. `kubernetes.io/kubelet`. This field cannot be empty for new Events."
+msgstr ""
+
+#: Event.reportingInstance
+msgid "reportingInstance is the ID of the controller instance, e.g. `kubelet-xyzf`. This field cannot be empty for new Events and it can have at most 128 characters."
+msgstr ""
+
+#: Event.series
+msgid "series is data about the Event series this event represents or nil if it's a singleton Event."
+msgstr ""
+
+#: Event.type
+msgid "type is the type of this event (Normal, Warning), new types could be added in the future. It is machine-readable."
+msgstr ""
+
+#: EventList
+msgid "EventList is a list of Event objects."
+msgstr ""
+
+# EventList.apiVersion
+# same as Event.apiVersion
+
+#: EventList.items
+msgid "items is a list of schema objects."
+msgstr ""
+
+# EventList.kind
+# same as Event.kind
+
+#: EventList.metadata
+msgid "Standard list metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+msgstr ""
+
+#: EventSeries
+msgid "EventSeries contain information on series of events, i.e. thing that was/is happening continuously for some time."
+msgstr ""
+
+#: EventSeries.count
+msgid "count is the number of occurrences in this series up to the last heartbeat time."
+msgstr ""
+
+#: EventSeries.lastObservedTime
+msgid "lastObservedTime is the time when last Event from the series was seen before last heartbeat."
+msgstr ""

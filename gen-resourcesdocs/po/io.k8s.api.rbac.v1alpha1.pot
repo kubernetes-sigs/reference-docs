@@ -1,0 +1,230 @@
+# Translations for Kubernetes API specifications.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.rbac.v1alpha1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: AggregationRule
+msgid "AggregationRule describes how to locate ClusterRoles to aggregate into the ClusterRole"
+msgstr ""
+
+#: AggregationRule.clusterRoleSelectors
+msgid "ClusterRoleSelectors holds a list of selectors which will be used to find ClusterRoles and create the rules. If any of the selectors match, then the ClusterRole's permissions will be added"
+msgstr ""
+
+#: ClusterRole
+msgid "ClusterRole is a cluster level, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding or ClusterRoleBinding. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 ClusterRole, and will no longer be served in v1.22."
+msgstr ""
+
+#: ClusterRole.aggregationRule
+msgid "AggregationRule is an optional field that describes how to build the Rules for this ClusterRole. If AggregationRule is set, then the Rules are controller managed and direct changes to Rules will be stomped by the controller."
+msgstr ""
+
+#: ClusterRole.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: ClusterRole.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: ClusterRole.metadata
+msgid "Standard object's metadata."
+msgstr ""
+
+#: ClusterRole.rules
+msgid "Rules holds all the PolicyRules for this ClusterRole"
+msgstr ""
+
+#: ClusterRoleBinding
+msgid "ClusterRoleBinding references a ClusterRole, but not contain it.  It can reference a ClusterRole in the global namespace, and adds who information via Subject. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 ClusterRoleBinding, and will no longer be served in v1.22."
+msgstr ""
+
+# ClusterRoleBinding.apiVersion
+# same as ClusterRole.apiVersion
+
+# ClusterRoleBinding.kind
+# same as ClusterRole.kind
+
+# ClusterRoleBinding.metadata
+# same as ClusterRole.metadata
+
+#: ClusterRoleBinding.roleRef
+msgid "RoleRef can only reference a ClusterRole in the global namespace. If the RoleRef cannot be resolved, the Authorizer must return an error."
+msgstr ""
+
+#: ClusterRoleBinding.subjects
+msgid "Subjects holds references to the objects the role applies to."
+msgstr ""
+
+#: ClusterRoleBindingList
+msgid "ClusterRoleBindingList is a collection of ClusterRoleBindings. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 ClusterRoleBindings, and will no longer be served in v1.22."
+msgstr ""
+
+# ClusterRoleBindingList.apiVersion
+# same as ClusterRole.apiVersion
+
+#: ClusterRoleBindingList.items
+msgid "Items is a list of ClusterRoleBindings"
+msgstr ""
+
+# ClusterRoleBindingList.kind
+# same as ClusterRole.kind
+
+# ClusterRoleBindingList.metadata
+# same as ClusterRole.metadata
+
+#: ClusterRoleList
+msgid "ClusterRoleList is a collection of ClusterRoles. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 ClusterRoles, and will no longer be served in v1.22."
+msgstr ""
+
+# ClusterRoleList.apiVersion
+# same as ClusterRole.apiVersion
+
+#: ClusterRoleList.items
+msgid "Items is a list of ClusterRoles"
+msgstr ""
+
+# ClusterRoleList.kind
+# same as ClusterRole.kind
+
+# ClusterRoleList.metadata
+# same as ClusterRole.metadata
+
+#: PolicyRule
+msgid "PolicyRule holds information that describes a policy rule, but does not contain information about who the rule applies to or which namespace the rule applies to."
+msgstr ""
+
+#: PolicyRule.apiGroups
+msgid "APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed."
+msgstr ""
+
+#: PolicyRule.nonResourceURLs
+msgid "NonResourceURLs is a set of partial urls that a user should have access to.  *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as \"pods\" or \"secrets\") or non-resource URL paths (such as \"/api\"),  but not both."
+msgstr ""
+
+#: PolicyRule.resourceNames
+msgid "ResourceNames is an optional white list of names that the rule applies to.  An empty set means that everything is allowed."
+msgstr ""
+
+#: PolicyRule.resources
+msgid "Resources is a list of resources this rule applies to.  ResourceAll represents all resources."
+msgstr ""
+
+#: PolicyRule.verbs
+msgid "Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds."
+msgstr ""
+
+#: Role
+msgid "Role is a namespaced, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 Role, and will no longer be served in v1.22."
+msgstr ""
+
+# Role.apiVersion
+# same as ClusterRole.apiVersion
+
+# Role.kind
+# same as ClusterRole.kind
+
+# Role.metadata
+# same as ClusterRole.metadata
+
+#: Role.rules
+msgid "Rules holds all the PolicyRules for this Role"
+msgstr ""
+
+#: RoleBinding
+msgid "RoleBinding references a role, but does not contain it.  It can reference a Role in the same namespace or a ClusterRole in the global namespace. It adds who information via Subjects and namespace information by which namespace it exists in.  RoleBindings in a given namespace only have effect in that namespace. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 RoleBinding, and will no longer be served in v1.22."
+msgstr ""
+
+# RoleBinding.apiVersion
+# same as ClusterRole.apiVersion
+
+# RoleBinding.kind
+# same as ClusterRole.kind
+
+# RoleBinding.metadata
+# same as ClusterRole.metadata
+
+#: RoleBinding.roleRef
+msgid "RoleRef can reference a Role in the current namespace or a ClusterRole in the global namespace. If the RoleRef cannot be resolved, the Authorizer must return an error."
+msgstr ""
+
+# RoleBinding.subjects
+# same as ClusterRoleBinding.subjects
+
+#: RoleBindingList
+msgid "RoleBindingList is a collection of RoleBindings Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 RoleBindingList, and will no longer be served in v1.22."
+msgstr ""
+
+# RoleBindingList.apiVersion
+# same as ClusterRole.apiVersion
+
+#: RoleBindingList.items
+msgid "Items is a list of RoleBindings"
+msgstr ""
+
+# RoleBindingList.kind
+# same as ClusterRole.kind
+
+# RoleBindingList.metadata
+# same as ClusterRole.metadata
+
+#: RoleList
+msgid "RoleList is a collection of Roles. Deprecated in v1.17 in favor of rbac.authorization.k8s.io/v1 RoleList, and will no longer be served in v1.22."
+msgstr ""
+
+# RoleList.apiVersion
+# same as ClusterRole.apiVersion
+
+#: RoleList.items
+msgid "Items is a list of Roles"
+msgstr ""
+
+# RoleList.kind
+# same as ClusterRole.kind
+
+# RoleList.metadata
+# same as ClusterRole.metadata
+
+#: RoleRef
+msgid "RoleRef contains information that points to the role being used"
+msgstr ""
+
+#: RoleRef.apiGroup
+msgid "APIGroup is the group for the resource being referenced"
+msgstr ""
+
+#: RoleRef.kind
+msgid "Kind is the type of resource being referenced"
+msgstr ""
+
+#: RoleRef.name
+msgid "Name is the name of resource being referenced"
+msgstr ""
+
+#: Subject
+msgid "Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference, or a value for non-objects such as user and group names."
+msgstr ""
+
+#: Subject.apiVersion
+msgid "APIVersion holds the API group and version of the referenced subject. Defaults to \"v1\" for ServiceAccount subjects. Defaults to \"rbac.authorization.k8s.io/v1alpha1\" for User and Group subjects."
+msgstr ""
+
+#: Subject.kind
+msgid "Kind of object being referenced. Values defined by this API group are \"User\", \"Group\", and \"ServiceAccount\". If the Authorizer does not recognized the kind value, the Authorizer should report an error."
+msgstr ""
+
+#: Subject.name
+msgid "Name of the object being referenced."
+msgstr ""
+
+#: Subject.namespace
+msgid "Namespace of the referenced object.  If the object kind is non-namespace, such as \"User\" or \"Group\", and this value is not empty the Authorizer should report an error."
+msgstr ""

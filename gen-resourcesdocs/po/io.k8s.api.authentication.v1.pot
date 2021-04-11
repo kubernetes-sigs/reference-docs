@@ -1,0 +1,141 @@
+# Translations for Kubernetes API specifications.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.k8s.api.authentication.v1\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: BoundObjectReference
+msgid "BoundObjectReference is a reference to an object that a token is bound to."
+msgstr ""
+
+#: BoundObjectReference.apiVersion
+msgid "API version of the referent."
+msgstr ""
+
+#: BoundObjectReference.kind
+msgid "Kind of the referent. Valid kinds are 'Pod' and 'Secret'."
+msgstr ""
+
+#: BoundObjectReference.name
+msgid "Name of the referent."
+msgstr ""
+
+#: BoundObjectReference.uid
+msgid "UID of the referent."
+msgstr ""
+
+#: TokenRequest
+msgid "TokenRequest requests a token for a given service account."
+msgstr ""
+
+#: TokenRequest.apiVersion
+msgid "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
+msgstr ""
+
+#: TokenRequest.kind
+msgid "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
+msgstr ""
+
+#: TokenRequestSpec
+msgid "TokenRequestSpec contains client provided parameters of a token request."
+msgstr ""
+
+#: TokenRequestSpec.audiences
+msgid "Audiences are the intendend audiences of the token. A recipient of a token must identitfy themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences."
+msgstr ""
+
+#: TokenRequestSpec.boundObjectRef
+msgid "BoundObjectRef is a reference to an object that the token will be bound to. The token will only be valid for as long as the bound object exists. NOTE: The API server's TokenReview endpoint will validate the BoundObjectRef, but other audiences may not. Keep ExpirationSeconds small if you want prompt revocation."
+msgstr ""
+
+#: TokenRequestSpec.expirationSeconds
+msgid "ExpirationSeconds is the requested duration of validity of the request. The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response."
+msgstr ""
+
+#: TokenRequestStatus
+msgid "TokenRequestStatus is the result of a token request."
+msgstr ""
+
+#: TokenRequestStatus.expirationTimestamp
+msgid "ExpirationTimestamp is the time of expiration of the returned token."
+msgstr ""
+
+#: TokenRequestStatus.token
+msgid "Token is the opaque bearer token."
+msgstr ""
+
+#: TokenReview
+msgid "TokenReview attempts to authenticate a token to a known user. Note: TokenReview requests may be cached by the webhook token authenticator plugin in the kube-apiserver."
+msgstr ""
+
+# TokenReview.apiVersion
+# same as TokenRequest.apiVersion
+
+# TokenReview.kind
+# same as TokenRequest.kind
+
+#: TokenReview.spec
+msgid "Spec holds information about the request being evaluated"
+msgstr ""
+
+#: TokenReview.status
+msgid "Status is filled in by the server and indicates whether the request can be authenticated."
+msgstr ""
+
+#: TokenReviewSpec
+msgid "TokenReviewSpec is a description of the token authentication request."
+msgstr ""
+
+#: TokenReviewSpec.audiences
+msgid "Audiences is a list of the identifiers that the resource server presented with the token identifies as. Audience-aware token authenticators will verify that the token was intended for at least one of the audiences in this list. If no audiences are provided, the audience will default to the audience of the Kubernetes apiserver."
+msgstr ""
+
+# TokenReviewSpec.token
+# same as TokenRequestStatus.token
+
+#: TokenReviewStatus
+msgid "TokenReviewStatus is the result of the token authentication request."
+msgstr ""
+
+#: TokenReviewStatus.audiences
+msgid "Audiences are audience identifiers chosen by the authenticator that are compatible with both the TokenReview and token. An identifier is any identifier in the intersection of the TokenReviewSpec audiences and the token's audiences. A client of the TokenReview API that sets the spec.audiences field should validate that a compatible audience identifier is returned in the status.audiences field to ensure that the TokenReview server is audience aware. If a TokenReview returns an empty status.audience field where status.authenticated is \"true\", the token is valid against the audience of the Kubernetes API server."
+msgstr ""
+
+#: TokenReviewStatus.authenticated
+msgid "Authenticated indicates that the token was associated with a known user."
+msgstr ""
+
+#: TokenReviewStatus.error
+msgid "Error indicates that the token couldn't be checked"
+msgstr ""
+
+#: TokenReviewStatus.user
+msgid "User is the UserInfo associated with the provided token."
+msgstr ""
+
+#: UserInfo
+msgid "UserInfo holds the information about the user needed to implement the user.Info interface."
+msgstr ""
+
+#: UserInfo.extra
+msgid "Any additional information provided by the authenticator."
+msgstr ""
+
+#: UserInfo.groups
+msgid "The names of groups this user is a part of."
+msgstr ""
+
+#: UserInfo.uid
+msgid "A unique value that identifies this user across time. If this user is deleted and another user by the same name is added, they will have different UIDs."
+msgstr ""
+
+#: UserInfo.username
+msgid "The name that uniquely identifies this user among all active users."
+msgstr ""
