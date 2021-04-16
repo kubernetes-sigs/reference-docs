@@ -6,15 +6,14 @@
 # K8S_WEBROOT=~/src/github.com/kubernetes/website
 # K8S_ROOT=~/k8s/src/k8s.io/kubernetes
 # K8S_RELEASE=1.17.0, 1.17.5, 1.17.0-rc.2
+#
 
-
-RCNUM=${RC_NUM}
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
 
-ifeq ($(origin K8SRELEASE), undefined)
-K8SRELEASE=1.20.0
+ifeq ($(K8SRELEASE),)
+  $(error Please define K8S_RELEASE, e.g. 'export K8S_RELEASE=1.21.0')
 endif
 
 K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut -c 1-4)
@@ -22,16 +21,13 @@ K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut -c 1-4)
 # create a directory name from release string, e.g. 1.17 -> 1_17
 K8SRELEASEDIR=$(shell echo "$(K8SRELEASE_PREFIX)" | sed "s/\./_/g")
 
-APISRC=gen-apidocs
-APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE_PREFIX)
-
 CLISRC=gen-kubectldocs/generators/build
 CLIDST=$(WEBROOT)/static/docs/reference/generated/kubectl
 CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 all:
-	@echo "Supported targets:\n\tcli api comp copycli copyapi createversiondirs updateapispec"
+	@echo "Supported targets:\n\tcli api comp copycli copyapi createversiondirs genresources updateapispec configapi"
 
 # create directories for new release
 createversiondirs:
@@ -72,14 +68,17 @@ comp: cleancomp
 	mkdir -p gen-compdocs/build
 	make -C gen-compdocs
 
-# Build api docs
+# Build API docs
+APISRC=gen-apidocs
+APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE_PREFIX)
+
 updateapispec: createversiondirs
 	CURDIR=$(shell pwd)
 	@echo "Updating swagger.json for release v$(K8SRELEASE)"
 	cd $(K8SROOT) && git show "v$(K8SRELEASE):api/openapi-spec/swagger.json" > $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json
 
 api: cleanapi
-	pushd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=.
+	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=.
 
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build
@@ -91,5 +90,22 @@ copyapi: api
 	mkdir -p $(APIDST)/js
 	cp $(APISRC)/build/navData.js $(APIDST)/js/
 
+# Build resource reference
 genresources:
 	make -C gen-resourcesdocs kwebsite 
+
+
+# Build config API reference
+CONFIGSRC=genref/output/md
+CONFIGDST=$(WEBROOT)/content/en/docs/reference/config-api/
+configapi:
+	make -C genref
+
+copy-configapi: config-api
+	cp $(CONFIGSRC)/apiserver-audit.v1.md $(CONFGDST)
+	cp $(CONFIGSRC)/apiserver-webhookadmission.v1.md $(CONFGDST)
+	cp $(CONFIGSRC)/client-authentication.v1beta1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kube-proxy-config.v1alpha1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kube-scheduler-config.v1beta1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kube-scheduler-policy-config.v1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kubelet-config.v1beta1.md $(CONFGDST)

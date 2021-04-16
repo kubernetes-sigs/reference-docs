@@ -1,6 +1,6 @@
 env:
   global:
-    - KUBE_VERSION: 1.21
+    - K8S_RELEASE: 1.21.0
     - BUILD_PATH: /home/travis/gopath
 language: go
 go:
@@ -8,13 +8,13 @@ go:
 
 install:
 - mkdir -p ${BUILD_PATH}/src/k8s.io
-- wget https://github.com/kubernetes/kubernetes/archive/v${KUBE_VERSION}.0.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
-- pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${KUBE_VERSION}.0 kubernetes && popd
+- wget https://github.com/kubernetes/kubernetes/archive/v${K8S_RELEASE}.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
+- pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${K8S_RELEASE} kubernetes && popd
 - pushd ${BUILD_PATH}/src/k8s.io/kubernetes && make generated_files && popd
 
 script:
 - make comp
 - make genresources
-# TODO: uncomment the following to make other docs
-# - make api
+- make api
+- make configapi
 # - make cli
