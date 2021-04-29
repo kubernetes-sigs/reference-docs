@@ -12,9 +12,13 @@ kwebsite: clean
 copy_files: kwebsite
 	cp -r kwebsite/content/en/docs/* ../docsy-example/content/en/docs/Reference/
 
+# Create english PO files from swagger and sources
 pofiles:
 	mkdir -p po
 	go run cmd/main.go po -f api/$(VERSION)/swagger.json -p po/
+	# go install github.com/leonelquinteros/gotext/cli/xgotext
+	xgotext -default gen-resourcesdocs -in pkg/outputs/kwebsite -out po
 
+# Initialize translation files for a new language, using LANG env variable
 initlang:
 	scripts/initlang.sh
