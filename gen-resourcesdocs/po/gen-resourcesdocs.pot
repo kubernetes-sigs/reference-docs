@@ -7,34 +7,34 @@ msgstr ""
 "Language: \n"
 "X-Generator: xgotext\n"
 
-#: section.go:83
+#: section.go:84
 msgid ", required"
 msgstr ""
 
-#: section.go:95
+#: section.go:96
 msgid "Atomic: will be replaced during a merge"
 msgstr ""
 
-#: section.go:100
+#: section.go:101
 msgid "Map: unique values on key %s will be kept during a merge"
 msgstr ""
 
-#: section.go:102
+#: section.go:103
 msgid "Map: unique values on keys `%s` will be kept during a merge"
 msgstr ""
 
-#: section.go:112
+#: section.go:113
 msgid "Patch strategies: retainKeys, merge on key `%s`"
 msgstr ""
 
-#: section.go:114
+#: section.go:115
 msgid "Patch strategy: merge on key `%s`"
 msgstr ""
 
-#: section.go:116
+#: section.go:117
 msgid "Patch strategy: retainKeys"
 msgstr ""
 
-#: section.go:97
+#: section.go:98
 msgid "Set: unique values will be kept during a merge"
 msgstr ""
