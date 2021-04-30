@@ -13,7 +13,7 @@ copy_files: kwebsite
 	cp -r kwebsite/content/en/docs/* ../docsy-example/content/en/docs/Reference/
 
 # Create english PO files from swagger and sources
-pofiles:
+potfiles:
 	mkdir -p po
 	go run cmd/main.go po -f api/$(VERSION)/swagger.json -p po/
 	# go install github.com/leonelquinteros/gotext/cli/xgotext

@@ -126,3 +126,25 @@ This way, a composite type can be documented in three places:
 - inline where this composite type is used (by default),
 - in a specific chapter, if the Definition is listed in `otherDefinitions`,
 - in the **Common Definitions** part.
+
+## Translations
+
+Translations for the API reference documentation use the `gettext` file format.
+
+Template files (`POT` files) are created from swagger file and program sources and reside in the `po/` directory.
+
+When sources (swagger and program source) change, you can use this command to update the POT files:
+
+```
+make potfiles
+```
+
+Translations files (`PO` files) for different languages reside in `po/` subdirectories, i.e. in `po/fr/` for french translations.
+
+When starting the translations or a new language, you can use the command (here an example for the spanish language):
+
+```
+LANG=es make initlang
+```
+
+Generated translations files (`MO` files) for different languages reside in `mo/` subdirectories, i.e. in `mo/fr/` for french translations.
