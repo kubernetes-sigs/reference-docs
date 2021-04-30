@@ -3,13 +3,12 @@ module github.com/kubernetes-sigs/reference-docs/gen-compdocs
 go 1.16
 
 require (
-	github.com/codegangsta/negroni v1.0.0 // indirect
-	github.com/golangplus/bytes v1.0.0 // indirect
-	github.com/gorilla/context v1.1.1 // indirect
-	github.com/spf13/cobra v1.1.1
+	github.com/golangplus/testing v1.0.0 // indirect
+	github.com/spf13/cobra v1.1.3
 	github.com/spf13/pflag v1.0.5
 	github.com/yuin/goldmark v1.2.1
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691
+	k8s.io/component-base v0.21.0
 	k8s.io/kubectl v0.0.0
 	k8s.io/kubernetes v0.0.0
 )
