@@ -17,11 +17,12 @@ limitations under the License.
 package generators
 
 import (
+	goflag "flag"
 	"fmt"
 	"os"
 
 	"github.com/spf13/pflag"
-	//ccmapp "k8s.io/kubernetes/cmd/cloud-controller-manager/app"
+	cliflag "k8s.io/component-base/cli/flag"
 	kubectlcmd "k8s.io/kubectl/pkg/cmd"
 	"k8s.io/kubernetes/cmd/genutils"
 	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
@@ -42,10 +43,12 @@ func GenerateFiles(path, module string) {
 
 	switch module {
 	case "kube-apiserver":
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		apiserver := apiservapp.NewAPIServerCommand()
 		GenMarkdownTree(apiserver, outDir, true)
 
 	case "kube-controller-manager":
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		controllermanager := cmapp.NewControllerManagerCommand()
 		GenMarkdownTree(controllermanager, outDir, true)
 
@@ -55,9 +58,12 @@ func GenerateFiles(path, module string) {
 
 	case "kube-proxy":
 		proxy := proxyapp.NewProxyCommand()
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
+		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 		GenMarkdownTree(proxy, outDir, true)
 
 	case "kube-scheduler":
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		scheduler := schapp.NewSchedulerCommand()
 		GenMarkdownTree(scheduler, outDir, true)
 
@@ -66,11 +72,20 @@ func GenerateFiles(path, module string) {
 		GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
-		// resets global flags created by kubelet or other commands e.g.
-		// --azure-container-registry-config from pkg/credentialprovider/azure
-		// --google-json-key from pkg/credentialprovider/gcp
-		// --version pkg/version/verflag
-		pflag.CommandLine = pflag.NewFlagSet(os.Args[0], pflag.ExitOnError)
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
+		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+
+		pflag.Set("logtostderr", "true")
+		// We do not want these flags to show up in --help
+		// These MarkHidden calls must be after the lines above
+		pflag.CommandLine.MarkHidden("version")
+		pflag.CommandLine.MarkHidden("log-flush-frequency")
+		pflag.CommandLine.MarkHidden("alsologtostderr")
+		pflag.CommandLine.MarkHidden("log-backtrace-at")
+		pflag.CommandLine.MarkHidden("log-dir")
+		pflag.CommandLine.MarkHidden("logtostderr")
+		pflag.CommandLine.MarkHidden("stderrthreshold")
+		pflag.CommandLine.MarkHidden("vmodule")
 
 		// generate docs for kubeadm
 		kubeadm := kubeadmapp.NewKubeadmCommand(os.Stdin, os.Stdout, os.Stderr)
@@ -81,6 +96,9 @@ func GenerateFiles(path, module string) {
 
 	case "kubectl":
 		kubectl := kubectlcmd.NewDefaultKubectlCommand()
+		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
+		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+
 		GenMarkdownTree(kubectl, outDir, true)
 
 	default:
