@@ -6,7 +6,7 @@ require (
 	github.com/golangplus/testing v1.0.0 // indirect
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/pflag v1.0.5
-	github.com/yuin/goldmark v1.2.1
+	github.com/yuin/goldmark v1.3.5
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691
 	k8s.io/component-base v0.21.0
 	k8s.io/kubectl v0.0.0
