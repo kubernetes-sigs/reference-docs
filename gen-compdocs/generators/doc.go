@@ -454,6 +454,8 @@ func unquoteUsage(flag *pflag.Flag) (name string, usage string) {
 func processUsage(usage string) string {
 	var buf bytes.Buffer
 	var result string
+	usage = strings.Replace(usage, "<", "&lt;", -1)
+	usage = strings.Replace(usage, ">", "&gt;", -1)
 	md := goldmark.New(goldmark.WithExtensions(highlighting.Highlighting))
 	if err := md.Convert([]byte(usage), &buf); err != nil {
 		result = usage
