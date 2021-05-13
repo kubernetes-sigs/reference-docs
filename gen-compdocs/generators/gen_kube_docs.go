@@ -52,10 +52,6 @@ func GenerateFiles(path, module string) {
 		controllermanager := cmapp.NewControllerManagerCommand()
 		GenMarkdownTree(controllermanager, outDir, true)
 
-	//case "cloud-controller-manager":
-	//	cloudcontrollermanager := ccmapp.NewCloudControllerManagerCommand()
-	//	GenMarkdownTree(cloudcontrollermanager, outDir, true)
-
 	case "kube-proxy":
 		proxy := proxyapp.NewProxyCommand()
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
@@ -72,8 +68,10 @@ func GenerateFiles(path, module string) {
 		GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
+		pflag.CommandLine = pflag.NewFlagSet(os.Args[0], pflag.ExitOnError)
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
-		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+		// Ignore irrelevant flags
+		// pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 
 		pflag.Set("logtostderr", "true")
 		// We do not want these flags to show up in --help
