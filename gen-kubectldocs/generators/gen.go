@@ -33,7 +33,7 @@ var KubernetesVersion = flag.String("kubernetes-version", "", "Version of Kubern
 
 const JsonOutputFile = "manifest.json"
 
-var GenKubectlDir = flag.String("gen-kubectl-dir", "gen-kubectldocs/generators", "Directory containing kubectl files")
+var GenKubectlDir = flag.String("gen-kubectl-dir", "generators", "Directory containing kubectl files")
 
 func getTocFile() string {
 	return filepath.Join(*GenKubectlDir, *KubernetesVersion, "toc.yaml")

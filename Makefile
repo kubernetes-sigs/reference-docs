@@ -43,7 +43,7 @@ cleancli:
 	sudo rm -rf $(shell pwd)/gen-kubectldocs/generators/manifest.json
 
 cli: cleancli
-	go run gen-kubectldocs/main.go --kubernetes-version v$(K8SRELEASEDIR)
+	pushd gen-kubectldocs && go run main.go --kubernetes-version v$(K8SRELEASEDIR) && popd
 	mkdir -p $(CLISRC)
 	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest brianpursley/brodocs:latest
 
