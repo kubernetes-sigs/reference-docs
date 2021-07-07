@@ -164,19 +164,19 @@ bootstrapTokens:
     groups:
       - system:bootstrappers:kubeadm:default-node-token
 nodeRegistration:
-	 name: "ec2-10-100-0-1"
-	 criSocket: "/var/run/dockershim.sock"
-	 taints:
-	   - key: "kubeadmNode"
-	     value: "master"
-	     effect: "NoSchedule"
-	 kubeletExtraArgs:
-	   cgroup-driver: "cgroupfs"
-	 ignorePreflightErrors:
-	   - IsPrivilegedUser
+  name: "ec2-10-100-0-1"
+  criSocket: "/var/run/dockershim.sock"
+  taints:
+    - key: "kubeadmNode"
+      value: "master"
+      effect: "NoSchedule"
+  kubeletExtraArgs:
+    cgroup-driver: "cgroupfs"
+  ignorePreflightErrors:
+    - IsPrivilegedUser
 localAPIEndpoint:
-	 advertiseAddress: "10.100.0.1"
-	 bindPort: 6443
+  advertiseAddress: "10.100.0.1"
+  bindPort: 6443
 certificateKey: "e6a2eb8581237ab72a4f494f30285ec12a9694d750b9785706a83bfcbbbd2204"
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
@@ -184,59 +184,59 @@ kind: ClusterConfiguration
 etcd:
   # one of local or external
   local:
-	   imageRepository: "k8s.gcr.io"
-	   imageTag: "3.2.24"
-	   dataDir: "/var/lib/etcd"
-	   extraArgs:
-	     listen-client-urls: "http://10.100.0.1:2379"
-	   serverCertSANs:
-	     -  "ec2-10-100-0-1.compute-1.amazonaws.com"
-	   peerCertSANs:
-	     - "10.100.0.1"
-	 # external:
-	   # endpoints:
-	   # - "10.100.0.1:2379"
-	   # - "10.100.0.2:2379"
-	   # caFile: "/etcd/kubernetes/pki/etcd/etcd-ca.crt"
-	   # certFile: "/etcd/kubernetes/pki/etcd/etcd.crt"
-	   # keyFile: "/etcd/kubernetes/pki/etcd/etcd.key"
-	networking:
-	  serviceSubnet: "10.96.0.0/12"
-	  podSubnet: "10.100.0.1/24"
-	  dnsDomain: "cluster.local"
-	kubernetesVersion: "v1.12.0"
-	controlPlaneEndpoint: "10.100.0.1:6443"
-	apiServer:
-	  extraArgs:
-	    authorization-mode: "Node,RBAC"
-	  extraVolumes:
-	  - name: "some-volume"
-	    hostPath: "/etc/some-path"
-	    mountPath: "/etc/some-pod-path"
-	    readOnly: false
-	    pathType: File
-	  certSANs:
-	  - "10.100.1.1"
-	  - "ec2-10-100-0-1.compute-1.amazonaws.com"
-	  timeoutForControlPlane: 4m0s
-	controllerManager:
-	  extraArgs:
-	    "node-cidr-mask-size": "20"
-	  extraVolumes:
-	  - name: "some-volume"
-	    hostPath: "/etc/some-path"
-	    mountPath: "/etc/some-pod-path"
-	    readOnly: false
-	    pathType: File
-	scheduler:
-	  extraArgs:
-	    address: "10.100.0.1"
-	  extraVolumes:
-	  - name: "some-volume"
-	    hostPath: "/etc/some-path"
-	    mountPath: "/etc/some-pod-path"
-	    readOnly: false
-	    pathType: File
+    imageRepository: "k8s.gcr.io"
+    imageTag: "3.2.24"
+    dataDir: "/var/lib/etcd"
+    extraArgs:
+      listen-client-urls: "http://10.100.0.1:2379"
+    serverCertSANs:
+      - "ec2-10-100-0-1.compute-1.amazonaws.com"
+    peerCertSANs:
+      - "10.100.0.1"
+  # external:
+    # endpoints:
+    # - "10.100.0.1:2379"
+    # - "10.100.0.2:2379"
+    # caFile: "/etcd/kubernetes/pki/etcd/etcd-ca.crt"
+    # certFile: "/etcd/kubernetes/pki/etcd/etcd.crt"
+    # keyFile: "/etcd/kubernetes/pki/etcd/etcd.key"
+ networking:
+   serviceSubnet: "10.96.0.0/12"
+   podSubnet: "10.100.0.1/24"
+   dnsDomain: "cluster.local"
+ kubernetesVersion: "v1.12.0"
+ controlPlaneEndpoint: "10.100.0.1:6443"
+ apiServer:
+   extraArgs:
+     authorization-mode: "Node,RBAC"
+   extraVolumes:
+     - name: "some-volume"
+       hostPath: "/etc/some-path"
+       mountPath: "/etc/some-pod-path"
+       readOnly: false
+       pathType: File
+   certSANs:
+     - "10.100.1.1"
+     - "ec2-10-100-0-1.compute-1.amazonaws.com"
+   timeoutForControlPlane: 4m0s
+ controllerManager:
+   extraArgs:
+     "node-cidr-mask-size": "20"
+   extraVolumes:
+     - name: "some-volume"
+       hostPath: "/etc/some-path"
+       mountPath: "/etc/some-pod-path"
+       readOnly: false
+       pathType: File
+ scheduler:
+   extraArgs:
+     address: "10.100.0.1"
+   extraVolumes:
+     - name: "some-volume"
+       hostPath: "/etc/some-path"
+       mountPath: "/etc/some-pod-path"
+       readOnly: false
+       pathType: File
 certificatesDir: "/etc/kubernetes/pki"
 imageRepository: "k8s.gcr.io"
 useHyperKubeImage: false
