@@ -25,6 +25,9 @@ markdownDisabled: false
 stripPrefix:
   - k8s.io/api/
   - k8s.io/apimachinery/pkg/apis/
+  - github.com/tengqm/kubeconfig/config/kubeadm/v1beta2.
+  - github.com/tengqm/kubeconfig/config/kubeadm/v1beta3.
+  - github.com/tengqm/kubeconfig/config/bootstraptoken/v1.
 
 apis:
   - name: kubelet-config
@@ -42,12 +45,13 @@ apis:
     skip: true
 
   - name: kube-scheduler-config
-    title: kube-scheduler Configuration (v1beta1)
+    title: kube-scheduler Configuration (v1beta2)
     package: k8s.io/kube-scheduler
-    path: config/v1beta1
+    path: config/v1beta2
     includes:
       - k8s.io/kube-scheduler/config/v1
       - k8s.io/component-base/config/v1alpha1
+
   - name: kube-scheduler-policy-config
     title: kube-scheduler Policy Configuration (v1)
     package: k8s.io/kube-scheduler
@@ -170,12 +174,6 @@ apis:
 
   # This is for testing
   - name: kubeadm-config
-    title: kubeadm Configuration (v1beta1)
-    package: github.com/tengqm/kubeconfig
-    path: config/kubeadm/v1beta1
-
-  # This is for testing
-  - name: kubeadm-config
     title: kubeadm Configuration (v1beta2)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta2
@@ -185,3 +183,5 @@ apis:
     title: kubeadm Configuration (v1beta3)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta3
+    includes:
+      - github.com/tengqm/kubeconfig/config/bootstraptoken/v1
