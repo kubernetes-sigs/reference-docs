@@ -148,6 +148,7 @@ func (t *apiType) isHidden() bool {
 
 // typeId returns the type Identifier in the format of PackagePath.Name
 func (t *apiType) typeId() string {
+	klog.Errorf("TYPE: %r Elem: %r", t, t.Elem)
 	t = t.deref()
 	return t.Name.String()
 }
