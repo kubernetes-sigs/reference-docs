@@ -663,7 +663,7 @@ APIServer holds settings necessary for API server deployments in the cluster
     
   
 <tr><td><code>timeoutForControlPlane</code> <B>[Required]</B><br/>
-<code>invalid type</code>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
 </td>
 <td>
    `timeoutForControlPlane` controls the timeout that we use for API server to appear</td>
@@ -712,7 +712,7 @@ for, so other administrators can know its purpose.</td>
     
   
 <tr><td><code>ttl</code> <B>[Required]</B><br/>
-<code>invalid type</code>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
 </td>
 <td>
    `ttl` defines the time to live for this token. Defaults to "24h".
@@ -721,7 +721,7 @@ for, so other administrators can know its purpose.</td>
     
   
 <tr><td><code>expires</code> <B>[Required]</B><br/>
-<code>invalid type</code>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    `expires` specifies the timestamp when this token expires. Defaults to being set
@@ -1004,7 +1004,7 @@ not contain any other authentication information</td>
     
   
 <tr><td><code>timeout</code> <B>[Required]</B><br/>
-<code>invalid type</code>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
 </td>
 <td>
    `timeout` modifies the discovery timeout.</td>
@@ -1199,7 +1199,7 @@ HostPathMount contains elements describing volumes that are mounted from the hos
     
   
 <tr><td><code>pathType</code> <B>[Required]</B><br/>
-<code>invalid type</code>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#hostpathtype-v1-core"><code>core/v1.HostPathType</code></a>
 </td>
 <td>
    `pathType` is the type of the `hostPath` volume.</td>
@@ -1451,7 +1451,7 @@ annotated to the Node API object, for later re-use.</td>
     
   
 <tr><td><code>taints</code> <B>[Required]</B><br/>
-<code>[]invalid type</code>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#taint-v1-core"><code>[]core/v1.Taint</code></a>
 </td>
 <td>
    `taints` specifies the taints the Node API object should be registered with. If
