@@ -101,8 +101,6 @@ apis:
     title: kube-apiserver Configuration (v1alpha1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1alpha1
-    # skipped in favor of v1beta1 and v1
-    skip: true
 
   - name: apiserver-config
     title: kube-apiserver Configuration (v1beta1)
