@@ -54,6 +54,14 @@ func (g ApiGroup) LessThan(other ApiGroup) bool {
 		return false
 	}
 
+	// "events" group APIs are newer than "core" group APIs
+	if g.String() == "events" && other.String() == "core" {
+		return true
+	}
+	if other.String() == "events" && g.String() == "core" {
+		return false
+	}
+
 	return strings.Compare(g.String(), other.String()) < 0
 }
 

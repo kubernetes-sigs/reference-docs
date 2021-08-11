@@ -114,7 +114,7 @@ resource_categories:
       group: apiextensions
     - name: Event
       version: v1
-      group: core
+      group: events
     - name: LimitRange
       version: v1
       group: core
