@@ -7,9 +7,7 @@ reviewers:
 # No need for approvers to also be listed as reviewers
 approvers:
 - feloy
-- irvifa
 - jimangel
-- kbarnard10
 - kbhawkey
 - onlydole
 - sftim
