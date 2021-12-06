@@ -33,7 +33,7 @@ resource_categories:
       group: core
       description_warning: "Containers are only ever created within the context of a <a href=\"#pod-v1-core\">Pod</a>.  This is usually done using a Controller.  See Controllers: <a href=\"#deployment-v1-apps\">Deployment</a>, <a href=\"#job-v1-batch\">Job</a>, or <a href=\"#statefulset-v1-apps\">StatefulSet</a>"
     - name: CronJob
-      version: v1
+      version: v1beta1
       group: batch
     - name: DaemonSet
       version: v1
@@ -66,7 +66,7 @@ resource_categories:
       version: v1
       group: core
     - name: EndpointSlice
-      version: v1
+      version: v1beta1
       group: discovery
     - name: Ingress
       version: v1
@@ -99,9 +99,6 @@ resource_categories:
     - name: StorageClass
       version: v1
       group: storage
-    - name: CSIStorageCapacity
-      version: v1beta1
-      group: storage
     - name: Volume
       version: v1
       group: core
@@ -119,7 +116,7 @@ resource_categories:
       group: apiextensions
     - name: Event
       version: v1
-      group: events
+      group: core
     - name: LimitRange
       version: v1
       group: core
@@ -136,7 +133,7 @@ resource_categories:
       version: v1
       group: core
     - name: PodDisruptionBudget
-      version: v1
+      version: v1beta1
       group: policy
     - name: PriorityClass
       version: v1
