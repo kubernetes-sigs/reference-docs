@@ -124,7 +124,7 @@ resource_categories:
       version: v1
       group: core
     - name: HorizontalPodAutoscaler
-      version: v1
+      version: v2
       group: autoscaling
     - name: MutatingWebhookConfiguration
       version: v1
@@ -166,7 +166,7 @@ resource_categories:
       version: v1
       group: core
     - name: FlowSchema
-      version: v1beta1
+      version: v1beta2
       group: flowcontrol
     - name: Lease
       version: v1
@@ -185,7 +185,7 @@ resource_categories:
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
     - name: PriorityLevelConfiguration
-      version: v1beta1
+      version: v1beta2
       group: flowcontrol
     - name: ResourceQuota
       version: v1
