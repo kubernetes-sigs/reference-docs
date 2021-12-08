@@ -8,13 +8,14 @@ externalPackages:
     target: https://godoc.org/k8s.io/apimachinery/pkg/types#UID
   - match: ^k8s\.io/apimachinery/pkg/runtime\.RawExtension$
     target: https://godoc.org/k8s.io/apimachinery/pkg/runtime/#RawExtension
-
+  - match: ^k8s\.io/apimachinery/pkg/api/resource\.QuantityValue$
+    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue
   - match: ^k8s\.io/apimachinery/pkg/runtime\.Unknown$
     target: https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown
   - match: ^time\.Duration$
     target: https://godoc.org/time#Duration
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -44,18 +45,29 @@ apis:
     # Skip this because not referenced anywhere and it has no group name
     skip: true
 
+  - name: kubelet-credentialprovider
+    title: Kubelet CredentialProvider (v1alpha1)
+    package: k8s.io/kubelet
+    path: pkg/apis/credentialprovider/v1alpha1
+
   - name: kube-scheduler-config
     title: kube-scheduler Configuration (v1beta2)
     package: k8s.io/kube-scheduler
     path: config/v1beta2
     includes:
-      - k8s.io/kube-scheduler/config/v1
       - k8s.io/component-base/config/v1alpha1
 
-  - name: kube-scheduler-policy-config
-    title: kube-scheduler Policy Configuration (v1)
+  - name: kube-scheduler-config
+    title: kube-scheduler Configuration (v1beta3)
     package: k8s.io/kube-scheduler
-    path: config/v1
+    path: config/v1beta3
+    includes:
+      - k8s.io/component-base/config/v1alpha1
+
+  - name: kube-scheduler-extender
+    title: kube-scheduler Extender (v1)
+    package: k8s.io/kube-scheduler
+    path: extender/v1
 
   - name: kube-controller-manager-config
     title: kube-controller-manager Configuration (v1alpha1)
@@ -74,39 +86,17 @@ apis:
       - k8s.io/component-base/config/v1alpha1
 
   - name: metrics
-    title: Kubernetes Metrics (v1alpha1)
-    package: k8s.io/metrics
-    path: pkg/apis/metrics/v1alpha1
-    # superceded by v1beta1 version
-    skip: true
-
-  - name: metrics
-    title: Kubernetes Metrics (v1alpha1)
+    title: Kubernetes Metrics (v1beta1)
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1beta1
 
+  # v1alpha1 and v1beta1 are skipped
   - name: client-authentication
-    title: Client Authentication (v1alpha1)
+    title: Client Authentication (v1)
     package: k8s.io/client-go
-    path: pkg/apis/clientauthentication/v1alpha1
-    # superceded by v1beta1
-    skip: true
+    path: pkg/apis/clientauthentication/v1
 
-  - name: client-authentication
-    title: Client Authentication (v1beta1)
-    package: k8s.io/client-go
-    path: pkg/apis/clientauthentication/v1beta1
-
-  - name: apiserver-config
-    title: kube-apiserver Configuration (v1alpha1)
-    package: k8s.io/apiserver
-    path: pkg/apis/apiserver/v1alpha1
-
-  - name: apiserver-config
-    title: kube-apiserver Configuration (v1beta1)
-    package: k8s.io/apiserver
-    path: pkg/apis/apiserver/v1beta1
-
+  # v1alpha1 and v1beta1 are skipped
   - name: apiserver-config
     title: kube-apiserver Configuration (v1)
     package: k8s.io/apiserver
@@ -130,13 +120,6 @@ apis:
     title: kube-apiserver ResourceQuota Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/admission/plugin/resourcequota/apis/resourcequota/v1
-
-  - name: apiserver-webhookadmission
-    title: WebhookAdmission Configuration (v1alpha1)
-    package: k8s.io/apiserver
-    path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1alpha1
-    # Skip this in favor of v1
-    skip: true
 
   - name: apiserver-webhookadmission
     title: WebhookAdmission Configuration (v1)
