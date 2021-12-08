@@ -101,7 +101,7 @@ CONFIGDST=$(WEBROOT)/content/en/docs/reference/config-api/
 configapi:
 	make -C genref
 
-copy-configapi: config-api
+copy-configapi: configapi
 	cp $(CONFIGSRC)/apiserver-audit.v1.md $(CONFGDST)
 	cp $(CONFIGSRC)/apiserver-webhookadmission.v1.md $(CONFGDST)
 	cp $(CONFIGSRC)/client-authentication.v1beta1.md $(CONFGDST)
