@@ -101,7 +101,7 @@ with any storage class, the list would include
     
   
 <tr><td><code>matchScopes</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#scopedresourceselectorrequirement-v1-core"><code>[]core/v1.ScopedResourceSelectorRequirement</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#scopedresourceselectorrequirement-v1-core"><code>[]core/v1.ScopedResourceSelectorRequirement</code></a>
 </td>
 <td>
    For each intercepted request, the quota system will figure out if the input object

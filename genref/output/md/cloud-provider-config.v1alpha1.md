@@ -13,6 +13,41 @@ auto_generated: true
   
     
 
+## `ServiceControllerConfiguration`     {#ServiceControllerConfiguration}
+    
+
+
+
+**Appears in:**
+
+- [CloudControllerManagerConfiguration](#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration)
+
+- [KubeControllerManagerConfiguration](#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration)
+
+
+ServiceControllerConfiguration contains elements describing ServiceController.
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+
+  
+<tr><td><code>ConcurrentServiceSyncs</code> <B>[Required]</B><br/>
+<code>int32</code>
+</td>
+<td>
+   concurrentServiceSyncs is the number of services that are
+allowed to sync concurrently. Larger number = more responsive service
+management, but more CPU (and network) load.</td>
+</tr>
+    
+  
+</tbody>
+</table>
+  
+    
+
 
 ## `CloudControllerManagerConfiguration`     {#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration}
     
@@ -273,7 +308,8 @@ E.g. service-controller, route-controller, cloud-node-controller, etc</td>
 </td>
 <td>
    Component is the name of the component in which the controller should be running.
-E.g. kube-controller-manager, cloud-controller-manager, etc</td>
+E.g. kube-controller-manager, cloud-controller-manager, etc
+Or '&lowast;' meaning the controller can be run under any component that participates in the migration</td>
 </tr>
     
   
@@ -372,6 +408,22 @@ first item for a particular name wins</td>
 </tr>
     
   
+<tr><td><code>LeaderMigrationEnabled</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   LeaderMigrationEnabled indicates whether Leader Migration should be enabled for the controller manager.</td>
+</tr>
+    
+  
+<tr><td><code>LeaderMigration</code> <B>[Required]</B><br/>
+<a href="#controllermanager-config-k8s-io-v1alpha1-LeaderMigrationConfiguration"><code>LeaderMigrationConfiguration</code></a>
+</td>
+<td>
+   LeaderMigration holds the configuration for Leader Migration.</td>
+</tr>
+    
+  
 </tbody>
 </table>
     
@@ -381,6 +433,10 @@ first item for a particular name wins</td>
     
 
 
+
+**Appears in:**
+
+- [GenericControllerManagerConfiguration](#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration)
 
 
 LeaderMigrationConfiguration provides versioned configuration for all migrating leader locks.
@@ -422,38 +478,3 @@ Should be "leases" or "endpoints"</td>
 </table>
     
   
-  
-    
-
-## `ServiceControllerConfiguration`     {#ServiceControllerConfiguration}
-    
-
-
-
-**Appears in:**
-
-- [CloudControllerManagerConfiguration](#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration)
-
-- [KubeControllerManagerConfiguration](#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration)
-
-
-ServiceControllerConfiguration contains elements describing ServiceController.
-
-<table class="table">
-<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
-<tbody>
-    
-
-  
-<tr><td><code>ConcurrentServiceSyncs</code> <B>[Required]</B><br/>
-<code>int32</code>
-</td>
-<td>
-   concurrentServiceSyncs is the number of services that are
-allowed to sync concurrently. Larger number = more responsive service
-management, but more CPU (and network) load.</td>
-</tr>
-    
-  
-</tbody>
-</table>

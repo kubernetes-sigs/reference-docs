@@ -81,7 +81,7 @@ For non-resource requests, this is the lower-cased HTTP method.</td>
     
   
 <tr><td><code>user</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication"><code>authentication/v1.UserInfo</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#userinfo-v1-authentication"><code>authentication/v1.UserInfo</code></a>
 </td>
 <td>
    Authenticated user information.</td>
@@ -89,7 +89,7 @@ For non-resource requests, this is the lower-cased HTTP method.</td>
     
   
 <tr><td><code>impersonatedUser</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication"><code>authentication/v1.UserInfo</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#userinfo-v1-authentication"><code>authentication/v1.UserInfo</code></a>
 </td>
 <td>
    Impersonated user information.</td>
@@ -123,7 +123,7 @@ Does not apply for List-type requests, or non-resource requests.</td>
     
   
 <tr><td><code>responseStatus</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#status-v1-meta"><code>meta/v1.Status</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#status-v1-meta"><code>meta/v1.Status</code></a>
 </td>
 <td>
    The response status, populated even when the ResponseObject is not a Status type.
@@ -154,7 +154,7 @@ at Response Level.</td>
     
   
 <tr><td><code>requestReceivedTimestamp</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta"><code>meta/v1.MicroTime</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#microtime-v1-meta"><code>meta/v1.MicroTime</code></a>
 </td>
 <td>
    Time the request reached the apiserver.</td>
@@ -162,7 +162,7 @@ at Response Level.</td>
     
   
 <tr><td><code>stageTimestamp</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta"><code>meta/v1.MicroTime</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#microtime-v1-meta"><code>meta/v1.MicroTime</code></a>
 </td>
 <td>
    Time the request reached current audit stage.</td>
@@ -206,7 +206,7 @@ EventList is a list of audit Events.
   
   
 <tr><td><code>metadata</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span>
@@ -252,7 +252,7 @@ categories are logged.
   
   
 <tr><td><code>metadata</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
 </td>
 <td>
    ObjectMeta is included for interoperability with API infrastructure.Refer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.</td>
@@ -276,6 +276,19 @@ PolicyRules are strictly ordered.</td>
 <td>
    OmitStages is a list of stages for which no events are created. Note that this can also
 be specified per rule in which case the union of both are omitted.</td>
+</tr>
+    
+  
+<tr><td><code>omitManagedFields</code><br/>
+<code>bool</code>
+</td>
+<td>
+   OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.
+This is used as a global default - a value of 'true' will omit the managed fileds,
+otherwise the managed fields will be included in the API audit log.
+Note that this can also be specified per rule in which case the value specified
+in a rule will override the global default.</td>
 </tr>
     
   
@@ -303,7 +316,7 @@ PolicyList is a list of audit Policies.
   
   
 <tr><td><code>metadata</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span>
@@ -591,6 +604,21 @@ Examples:
    OmitStages is a list of stages for which no events are created. Note that this can also
 be specified policy wide in which case the union of both are omitted.
 An empty list means no restrictions will apply.</td>
+</tr>
+    
+  
+<tr><td><code>omitManagedFields</code><br/>
+<code>bool</code>
+</td>
+<td>
+   OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.
+- a value of 'true' will drop the managed fields from the API audit log
+- a value of 'false' indicates that the managed fileds should be included
+  in the API audit log
+Note that the value, if specified, in this rule will override the global default
+If a value is not specified then the global default specified in
+Policy.OmitManagedFields will stand.</td>
 </tr>
     
   

@@ -1,7 +1,7 @@
 ---
-title: Client Authentication (v1beta1)
+title: Client Authentication (v1)
 content_type: tool-reference
-package: client.authentication.k8s.io/v1beta1
+package: client.authentication.k8s.io/v1
 auto_generated: true
 ---
 
@@ -9,12 +9,12 @@ auto_generated: true
 ## Resource Types 
 
 
-- [ExecCredential](#client-authentication-k8s-io-v1beta1-ExecCredential)
+- [ExecCredential](#client-authentication-k8s-io-v1-ExecCredential)
   
     
 
 
-## `ExecCredential`     {#client-authentication-k8s-io-v1beta1-ExecCredential}
+## `ExecCredential`     {#client-authentication-k8s-io-v1-ExecCredential}
     
 
 
@@ -27,14 +27,14 @@ HTTP transports.
 <thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
 <tbody>
     
-<tr><td><code>apiVersion</code><br/>string</td><td><code>client.authentication.k8s.io/v1beta1</code></td></tr>
+<tr><td><code>apiVersion</code><br/>string</td><td><code>client.authentication.k8s.io/v1</code></td></tr>
 <tr><td><code>kind</code><br/>string</td><td><code>ExecCredential</code></td></tr>
     
 
   
   
 <tr><td><code>spec</code> <B>[Required]</B><br/>
-<a href="#client-authentication-k8s-io-v1beta1-ExecCredentialSpec"><code>ExecCredentialSpec</code></a>
+<a href="#client-authentication-k8s-io-v1-ExecCredentialSpec"><code>ExecCredentialSpec</code></a>
 </td>
 <td>
    Spec holds information passed to the plugin by the transport.</td>
@@ -42,7 +42,7 @@ HTTP transports.
     
   
 <tr><td><code>status</code><br/>
-<a href="#client-authentication-k8s-io-v1beta1-ExecCredentialStatus"><code>ExecCredentialStatus</code></a>
+<a href="#client-authentication-k8s-io-v1-ExecCredentialStatus"><code>ExecCredentialStatus</code></a>
 </td>
 <td>
    Status is filled in by the plugin and holds the credentials that the transport
@@ -55,14 +55,14 @@ should use to contact the API.</td>
     
 
 
-## `Cluster`     {#client-authentication-k8s-io-v1beta1-Cluster}
+## `Cluster`     {#client-authentication-k8s-io-v1-Cluster}
     
 
 
 
 **Appears in:**
 
-- [ExecCredentialSpec](#client-authentication-k8s-io-v1beta1-ExecCredentialSpec)
+- [ExecCredentialSpec](#client-authentication-k8s-io-v1-ExecCredentialSpec)
 
 
 Cluster contains information to allow an exec plugin to communicate
@@ -157,14 +157,14 @@ to be stored directly in the kubeconfig.</td>
     
 
 
-## `ExecCredentialSpec`     {#client-authentication-k8s-io-v1beta1-ExecCredentialSpec}
+## `ExecCredentialSpec`     {#client-authentication-k8s-io-v1-ExecCredentialSpec}
     
 
 
 
 **Appears in:**
 
-- [ExecCredential](#client-authentication-k8s-io-v1beta1-ExecCredential)
+- [ExecCredential](#client-authentication-k8s-io-v1-ExecCredential)
 
 
 ExecCredentialSpec holds request and runtime specific information provided by
@@ -177,7 +177,7 @@ the transport.
 
   
 <tr><td><code>cluster</code><br/>
-<a href="#client-authentication-k8s-io-v1beta1-Cluster"><code>Cluster</code></a>
+<a href="#client-authentication-k8s-io-v1-Cluster"><code>Cluster</code></a>
 </td>
 <td>
    Cluster contains information to allow an exec plugin to communicate with the
@@ -187,19 +187,27 @@ ExecConfig.ProvideClusterInfo).</td>
 </tr>
     
   
+<tr><td><code>interactive</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   Interactive declares whether stdin has been passed to this exec plugin.</td>
+</tr>
+    
+  
 </tbody>
 </table>
     
 
 
-## `ExecCredentialStatus`     {#client-authentication-k8s-io-v1beta1-ExecCredentialStatus}
+## `ExecCredentialStatus`     {#client-authentication-k8s-io-v1-ExecCredentialStatus}
     
 
 
 
 **Appears in:**
 
-- [ExecCredential](#client-authentication-k8s-io-v1beta1-ExecCredential)
+- [ExecCredential](#client-authentication-k8s-io-v1-ExecCredential)
 
 
 ExecCredentialStatus holds credentials for the transport to use.
@@ -215,7 +223,7 @@ itself should at least be protected via file permissions.
 
   
 <tr><td><code>expirationTimestamp</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    ExpirationTimestamp indicates a time when the provided credentials expire.</td>
