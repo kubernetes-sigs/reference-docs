@@ -1,5 +1,5 @@
 ---
-title: Kubernetes Metrics (v1alpha1)
+title: Kubernetes Metrics (v1beta1)
 content_type: tool-reference
 package: metrics.k8s.io/v1beta1
 auto_generated: true
@@ -39,17 +39,17 @@ NodeMetrics sets resource usage metrics of a node.
 
   
   
-<tr><td><code>metadata</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
+<tr><td><code>metadata</code><br/>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
 </td>
 <td>
-   <span class="text-muted">No description provided.</span>
-   Refer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.</td>
+   Standard object's metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadataRefer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.</td>
 </tr>
     
   
 <tr><td><code>timestamp</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    The following fields define time interval from which metrics were
@@ -67,7 +67,7 @@ collected from the interval [Timestamp-Window, Timestamp].</td>
     
   
 <tr><td><code>usage</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
    The memory usage is the memory working set.</td>
@@ -98,7 +98,7 @@ NodeMetricsList is a list of NodeMetrics.
   
   
 <tr><td><code>metadata</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
    Standard list metadata.
@@ -141,17 +141,17 @@ PodMetrics sets resource usage metrics of a pod.
 
   
   
-<tr><td><code>metadata</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
+<tr><td><code>metadata</code><br/>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta"><code>meta/v1.ObjectMeta</code></a>
 </td>
 <td>
-   <span class="text-muted">No description provided.</span>
-   Refer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.</td>
+   Standard object's metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadataRefer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.</td>
 </tr>
     
   
 <tr><td><code>timestamp</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    The following fields define time interval from which metrics were
@@ -200,7 +200,7 @@ PodMetricsList is a list of PodMetrics.
   
   
 <tr><td><code>metadata</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta"><code>meta/v1.ListMeta</code></a>
 </td>
 <td>
    Standard list metadata.
@@ -248,7 +248,7 @@ ContainerMetrics sets resource usage metrics of a container.
     
   
 <tr><td><code>usage</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
    The memory usage is the memory working set.</td>
