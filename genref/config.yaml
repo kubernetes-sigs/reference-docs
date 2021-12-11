@@ -31,6 +31,15 @@ stripPrefix:
   - github.com/tengqm/kubeconfig/config/bootstraptoken/v1.
 
 apis:
+  # v1alpha1 is included for CredentialProvider, CredentialProviderConfig
+  # types which are only in v1alpha1
+  - name: kubelet-config
+    title: Kubelet Configuration (v1alpha1)
+    package: k8s.io/kubelet
+    path: config/v1alpha1
+    includes:
+      - k8s.io/component-base/config/v1alpha1
+
   - name: kubelet-config
     title: Kubelet Configuration (v1beta1)
     package: k8s.io/kubelet
