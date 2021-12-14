@@ -9,9 +9,11 @@
       (<em>Appears in:</em>
       {{- $prev := "" -}}
       {{- range . -}}
+        {{- if or .Referenced .IsExported -}}
         {{- if $prev -}}, {{ end -}}
         {{ $prev = . }}
         <a href="{{ .Link }}">{{ .DisplayName }}</a>
+        {{- end }}
       {{- end -}}
       )
     </p>
