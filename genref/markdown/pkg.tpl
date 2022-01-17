@@ -31,7 +31,9 @@ auto_generated: true
      
     {{/* For package with a group name, list all type definitions in it. */}}
     {{ range .VisibleTypes }}
+      {{- if or .Referenced .IsExported -}}
 {{ template "type" . }}
+      {{- end -}}
     {{ end }}
   {{ else }}
     {{/* For package w/o group name, list only types referenced. */}}

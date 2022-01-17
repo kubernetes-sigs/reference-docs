@@ -1,5 +1,4 @@
 {{ define "members" }}
-
   {{/* . is a apiType */}}
   {{- range .GetMembers -}}
     {{/* . is a apiMember */}}
@@ -24,12 +23,12 @@
    {{ .GetComment }}
    {{- else -}}
    <span class="text-muted">No description provided.</span>
-   {{ end }}
+   {{- end }}
    {{- if and (eq (.GetType.Name.Name) "ObjectMeta") -}}
 Refer to the Kubernetes API documentation for the fields of the <code>metadata</code> field.
    {{- end -}}
 </td>
 </tr>
-    {{ end }}
-  {{ end }}
+    {{- end }}
+  {{- end }}
 {{ end }}

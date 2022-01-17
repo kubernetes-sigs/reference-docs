@@ -410,7 +410,7 @@ func renderComments(comments []string) template.HTML {
 			res = buf.String()
 		}
 		// replace '*' by '&lowast;'
-		res = strings.Replace(doc, "*", "&lowast;", -1)
+		res = strings.Replace(res, "*", "&lowast;", -1)
 	} else {
 		res = strings.Replace(doc, "\n\n", string(template.HTML("<br/><br/>")), -1)
 	}

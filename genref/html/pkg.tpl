@@ -16,25 +16,15 @@
     </head>
     <body>
       <div class="container">
-        <!--
-        <H2>Packages:</H2>
-        <ul>
-          {{ range .packages }}
-            {{/* Skip package which doesn't have a group name defined */}}
-            {{ if ne .GroupName ""}}
-              <li>
-                <a href="#{{- .Anchor -}}">{{ .DisplayName }}</a>
-              </li>
-            {{ end }}
-          {{ end }}
-        </ul>
-        -->
         {{ range .packages }}
           {{/* Only display package that has a group name */}}
           {{ if ne .GroupName "" }}
             <H2 id="{{- .Anchor -}}">Package: <span style="font-family: monospace">{{- .DisplayName -}}</span></H2>
             <p>{{ .GetComment }}</p>
-
+          {{ end }}
+        {{ end }}
+        {{ range .packages }}
+          {{ if ne .GroupName "" }}
             {{/* TODO: Make the following line conditional */}}
             <H3>Resource Types:</H3>
             <ul>
@@ -49,23 +39,24 @@
 
             {{/* For package with a group name, list all type definitions in it. */}}
             {{ range .VisibleTypes }}
-              {{ template "type" .  }}
+              {{- if or .Referenced .IsExported -}}
+                {{ template "type" .  }}
+              {{- end -}}
             {{ end }}
           {{ else }}
             {{/* For package without a group name, list only type definitions that are referenced. */}}
             {{ range .VisibleTypes }}
               {{ if .Referenced }}
-                {{ template "type" .  }}
+                {{ template "type" . }}
               {{ end }}
             {{ end }}
           {{ end }}
-
           <HR />
         {{ end }}
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code>{{ with .gitCommit }} on git commit <code>{{ . }}</code>{{end}}</em></p>
+        <p><em>Generated with <code>genref</code>{{ with .gitCommit }} on git commit <code>{{ . }}</code>{{end}}</em></p>
       </div>
     </body>
   </html>

@@ -4,19 +4,20 @@
     
 {{ if eq .Kind "Alias" -}}
 (Alias of `{{ .Underlying }}`)
-{{- end }}
+{{ end }}
 
-{{ with .References }}
+{{- with .References }}
 **Appears in:**
 {{ range . }}
+{{ if or .Referenced .IsExported -}}
 - [{{ .DisplayName }}]({{ .Link }})
-{{ end }}
+{{ end -}}
+{{- end -}}
 {{- end }}
 
 {{ if .GetComment -}}
 {{ .GetComment }}
-{{- end }}
-
+{{ end }}
 {{ if .GetMembers -}}
 <table class="table">
 <thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
