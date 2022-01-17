@@ -91,7 +91,7 @@ this field to null if no valid credentials can be returned for the requested ima
 Globs can be used in the domain, but not in the port or the path. Globs are supported
 as subdomains like '<em>.k8s.io' or 'k8s.</em>.io', and top-level-domains such as 'k8s.<em>'.
 Matching partial subdomains like 'app</em>.k8s.io' is also supported. Each glob can only match
-a single subdomain segment, so &lowast;.io does not match &lowast;.k8s.io.</p>
+a single subdomain segment, so *.io does not match *.k8s.io.</p>
 <p>The kubelet will match images against the key when all of the below are true:</p>
 <ul>
 <li>Both contain the same number of domain parts and each part matches.</li>
@@ -108,7 +108,7 @@ stopping after the first successfully authenticated pull.</p>
 <p>Example keys:</p>
 <ul>
 <li>123456789.dkr.ecr.us-east-1.amazonaws.com</li>
-<li>&lowast;.azurecr.io</li>
+<li>*.azurecr.io</li>
 <li>gcr.io</li>
 <li><em>.</em>.registry.io</li>
 <li>registry.io:8080/path</li>

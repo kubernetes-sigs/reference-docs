@@ -13,83 +13,6 @@ auto_generated: true
   
     
 
-## `FormatOptions`     {#FormatOptions}
-    
-
-**Appears in:**
-
-
-
-<p>FormatOptions contains options for the different logging formats.</p>
-
-
-<table class="table">
-<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
-<tbody>
-    
-  
-<tr><td><code>json</code> <B>[Required]</B><br/>
-<a href="#JSONOptions"><code>JSONOptions</code></a>
-</td>
-<td>
-   <p>[Experimental] JSON contains options for logging format &quot;json&quot;.</p>
-</td>
-</tr>
-</tbody>
-</table>
-
-## `JSONOptions`     {#JSONOptions}
-    
-
-**Appears in:**
-
-- [FormatOptions](#FormatOptions)
-
-
-<p>JSONOptions contains options for logging format &quot;json&quot;.</p>
-
-
-<table class="table">
-<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
-<tbody>
-    
-  
-<tr><td><code>splitStream</code> <B>[Required]</B><br/>
-<code>bool</code>
-</td>
-<td>
-   <p>[Experimental] SplitStream redirects error messages to stderr while
-info messages go to stdout, with buffering. The default is to write
-both to stdout, without buffering.</p>
-</td>
-</tr>
-<tr><td><code>infoBufferSize</code> <B>[Required]</B><br/>
-<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue"><code>k8s.io/apimachinery/pkg/api/resource.QuantityValue</code></a>
-</td>
-<td>
-   <p>[Experimental] InfoBufferSize sets the size of the info stream when
-using split streams. The default is zero, which disables buffering.</p>
-</td>
-</tr>
-</tbody>
-</table>
-
-## `VModuleConfiguration`     {#VModuleConfiguration}
-    
-(Alias of `[]k8s.io/component-base/config/v1alpha1.VModuleItem`)
-
-**Appears in:**
-
-
-
-<p>VModuleConfiguration is a collection of individual file names or patterns
-and the corresponding verbosity threshold.</p>
-
-
-
-  
-    
-
 ## `CredentialProviderConfig`     {#kubelet-config-k8s-io-v1alpha1-CredentialProviderConfig}
     
 
@@ -160,7 +83,7 @@ and URL path.</p>
 Globs can be used in the domain, but not in the port or the path. Globs are supported
 as subdomains like '<em>.k8s.io' or 'k8s.</em>.io', and top-level-domains such as 'k8s.<em>'.
 Matching partial subdomains like 'app</em>.k8s.io' is also supported. Each glob can only match
-a single subdomain segment, so &lowast;.io does not match &lowast;.k8s.io.</p>
+a single subdomain segment, so *.io does not match *.k8s.io.</p>
 <p>A match exists between an image and a matchImage when all of the below are true:</p>
 <ul>
 <li>Both contain the same number of domain parts and each part matches.</li>
@@ -170,7 +93,7 @@ a single subdomain segment, so &lowast;.io does not match &lowast;.k8s.io.</p>
 <p>Example values of matchImages:</p>
 <ul>
 <li>123456789.dkr.ecr.us-east-1.amazonaws.com</li>
-<li>&lowast;.azurecr.io</li>
+<li>*.azurecr.io</li>
 <li>gcr.io</li>
 <li><em>.</em>.registry.io</li>
 <li>registry.io:8080/path</li>
@@ -247,3 +170,80 @@ credential plugin.</p>
 </tbody>
 </table>
   
+  
+    
+
+## `FormatOptions`     {#FormatOptions}
+    
+
+**Appears in:**
+
+
+
+<p>FormatOptions contains options for the different logging formats.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>json</code> <B>[Required]</B><br/>
+<a href="#JSONOptions"><code>JSONOptions</code></a>
+</td>
+<td>
+   <p>[Experimental] JSON contains options for logging format &quot;json&quot;.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `JSONOptions`     {#JSONOptions}
+    
+
+**Appears in:**
+
+- [FormatOptions](#FormatOptions)
+
+
+<p>JSONOptions contains options for logging format &quot;json&quot;.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>splitStream</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   <p>[Experimental] SplitStream redirects error messages to stderr while
+info messages go to stdout, with buffering. The default is to write
+both to stdout, without buffering.</p>
+</td>
+</tr>
+<tr><td><code>infoBufferSize</code> <B>[Required]</B><br/>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue"><code>k8s.io/apimachinery/pkg/api/resource.QuantityValue</code></a>
+</td>
+<td>
+   <p>[Experimental] InfoBufferSize sets the size of the info stream when
+using split streams. The default is zero, which disables buffering.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `VModuleConfiguration`     {#VModuleConfiguration}
+    
+(Alias of `[]k8s.io/component-base/config/v1alpha1.VModuleItem`)
+
+**Appears in:**
+
+
+
+<p>VModuleConfiguration is a collection of individual file names or patterns
+and the corresponding verbosity threshold.</p>
+
+
+

@@ -53,7 +53,7 @@ unspecified.</p>
    <p>MinCandidateNodesAbsolute is the absolute minimum number of candidates to
 shortlist. The likely number of candidates enumerated for dry running
 preemption is given by the formula:
-numCandidates = max(numNodes &lowast; minCandidateNodesPercentage, minCandidateNodesAbsolute)
+numCandidates = max(numNodes * minCandidateNodesPercentage, minCandidateNodesAbsolute)
 We say &quot;likely&quot; because there are other factors such as PDB violations
 that play a role in the number of candidates shortlisted. Must be at least
 0 nodes. Defaults to 100 nodes if unspecified.</p>
@@ -306,7 +306,7 @@ The default strategy is LeastAllocated with an equal &quot;cpu&quot; and &quot;m
 <td>
    <p>DefaultConstraints defines topology spread constraints to be applied to
 Pods that don't define any in <code>pod.spec.topologySpreadConstraints</code>.
-<code>.defaultConstraints[&lowast;].labelSelectors</code> must be empty, as they are
+<code>.defaultConstraints[*].labelSelectors</code> must be empty, as they are
 deduced from the Pod's membership to Services, ReplicationControllers,
 ReplicaSets or StatefulSets.
 When not empty, .defaultingType must be &quot;List&quot;.</p>
@@ -762,7 +762,7 @@ These are called after default plugins and in the same order specified here.</p>
 </td>
 <td>
    <p>Disabled specifies default plugins that should be disabled.
-When all default plugins need to be disabled, an array containing only one &quot;&lowast;&quot; should be provided.</p>
+When all default plugins need to be disabled, an array containing only one &quot;*&quot; should be provided.</p>
 </td>
 </tr>
 </tbody>
@@ -874,7 +874,7 @@ The scheduler call these plugins in order. Scheduler skips the rest of these plu
    <p>MultiPoint is a simplified config section to enable plugins for all valid extension points.
 Plugins enabled through MultiPoint will automatically register for every individual extension
 point the plugin has implemented. Disabling a plugin through MultiPoint disables that behavior.
-The same is true for disabling &quot;&lowast;&quot; through MultiPoint (no default plugins will be automatically registered).
+The same is true for disabling &quot;*&quot; through MultiPoint (no default plugins will be automatically registered).
 Plugins can still be disabled through their individual extension points.</p>
 <p>In terms of precedence, plugin config follows this basic hierarchy</p>
 <ol>
@@ -885,7 +885,7 @@ This implies that a higher precedence plugin will run first and overwrite any se
 Explicitly user-configured plugins also take a higher precedence over default plugins.
 Within this hierarchy, an Enabled setting takes precedence over Disabled. For example, if a plugin is
 set in both <code>multiPoint.Enabled</code> and <code>multiPoint.Disabled</code>, the plugin will be enabled. Similarly,
-including <code>multiPoint.Disabled = '&lowast;'</code> and <code>multiPoint.Enabled = pluginA</code> will still register that specific
+including <code>multiPoint.Disabled = '*'</code> and <code>multiPoint.Enabled = pluginA</code> will still register that specific
 plugin through MultiPoint. This follows the same behavior as all other extension point configurations.</li>
 </ol>
 </td>
@@ -1069,9 +1069,9 @@ Weight defaults to 1 if not specified or explicitly set to 0.</p>
 
 **Appears in:**
 
-- [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration)
-
 - [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration)
+
+- [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration)
 
 
 <p>ClientConnectionConfiguration contains details for constructing a client.</p>
@@ -1127,9 +1127,9 @@ client.</p>
 
 **Appears in:**
 
-- [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration)
-
 - [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration)
+
+- [KubeSchedulerConfiguration](#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration)
 
 
 <p>DebuggingConfiguration holds configuration for Debugging related features.</p>

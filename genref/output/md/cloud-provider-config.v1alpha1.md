@@ -237,7 +237,7 @@ E.g. service-controller, route-controller, cloud-node-controller, etc</p>
 <td>
    <p>Component is the name of the component in which the controller should be running.
 E.g. kube-controller-manager, cloud-controller-manager, etc
-Or '&lowast;' meaning the controller can be run under any component that participates in the migration</p>
+Or '*' meaning the controller can be run under any component that participates in the migration</p>
 </td>
 </tr>
 </tbody>
@@ -280,7 +280,7 @@ Or '&lowast;' meaning the controller can be run under any component that partici
 </td>
 <td>
    <p>minResyncPeriod is the resync period in reflectors; will be random between
-minResyncPeriod and 2&lowast;minResyncPeriod.</p>
+minResyncPeriod and 2*minResyncPeriod.</p>
 </td>
 </tr>
 <tr><td><code>ClientConnection</code> <B>[Required]</B><br/>
@@ -310,7 +310,7 @@ settings for the proxy server to use when communicating with the apiserver.</p>
 </td>
 <td>
    <p>Controllers is the list of controllers to enable or disable
-'&lowast;' means &quot;all enabled by default controllers&quot;
+'*' means &quot;all enabled by default controllers&quot;
 'foo' means &quot;enable 'foo'&quot;
 '-foo' means &quot;disable 'foo'&quot;
 first item for a particular name wins</p>
