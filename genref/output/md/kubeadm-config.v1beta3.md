@@ -23,8 +23,8 @@ The value must be one of &quot;Always&quot;, &quot;Never&quot; or &quot;IfNotPre
 &quot;IfNotPresent&quot; is the default, which has been the existing behavior prior to this addition.</li>
 <li>Add &quot;InitConfiguration.Patches.Directory&quot;, &quot;JoinConfiguration.Patches.Directory&quot; to allow
 the user to configure a directory from which to take patches for components deployed by kubeadm.</li>
-<li>Move the BootstrapToken&lowast; API and related utilities out of the &quot;kubeadm&quot; API group to a new group
-&quot;bootstraptoken&quot;. The kubeadm API version v1beta3 no longer contains the BootstrapToken&lowast; structures.</li>
+<li>Move the BootstrapToken* API and related utilities out of the &quot;kubeadm&quot; API group to a new group
+&quot;bootstraptoken&quot;. The kubeadm API version v1beta3 no longer contains the BootstrapToken* structures.</li>
 </ul>
 <p>Migration from old kubeadm config versions</p>
 <ul>

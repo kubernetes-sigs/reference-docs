@@ -53,7 +53,7 @@ unspecified.</p>
    <p>MinCandidateNodesAbsolute is the absolute minimum number of candidates to
 shortlist. The likely number of candidates enumerated for dry running
 preemption is given by the formula:
-numCandidates = max(numNodes &lowast; minCandidateNodesPercentage, minCandidateNodesAbsolute)
+numCandidates = max(numNodes * minCandidateNodesPercentage, minCandidateNodesAbsolute)
 We say &quot;likely&quot; because there are other factors such as PDB violations
 that play a role in the number of candidates shortlisted. Must be at least
 0 nodes. Defaults to 100 nodes if unspecified.</p>
@@ -322,7 +322,7 @@ The default strategy is LeastAllocated with an equal &quot;cpu&quot; and &quot;m
 <td>
    <p>DefaultConstraints defines topology spread constraints to be applied to
 Pods that don't define any in <code>pod.spec.topologySpreadConstraints</code>.
-<code>.defaultConstraints[&lowast;].labelSelectors</code> must be empty, as they are
+<code>.defaultConstraints[*].labelSelectors</code> must be empty, as they are
 deduced from the Pod's membership to Services, ReplicationControllers,
 ReplicaSets or StatefulSets.
 When not empty, .defaultingType must be &quot;List&quot;.</p>
@@ -778,7 +778,7 @@ These are called after default plugins and in the same order specified here.</p>
 </td>
 <td>
    <p>Disabled specifies default plugins that should be disabled.
-When all default plugins need to be disabled, an array containing only one &quot;&lowast;&quot; should be provided.</p>
+When all default plugins need to be disabled, an array containing only one &quot;*&quot; should be provided.</p>
 </td>
 </tr>
 </tbody>

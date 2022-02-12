@@ -319,7 +319,7 @@ The empty string represents the core API group.</p>
 'pods/log' matches the log subresource of pods.
 '<em>' matches all resources and their subresources.
 'pods/</em>' matches all subresources of pods.
-'&lowast;/scale' matches all scale subresources.</p>
+'*/scale' matches all scale subresources.</p>
 <p>If wildcard is present, the validation rule will ensure resources do not
 overlap with each other.</p>
 <p>An empty list implies all resources and subresources in this API groups apply.</p>

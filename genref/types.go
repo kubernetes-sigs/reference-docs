@@ -394,6 +394,9 @@ func renderComments(comments []string) template.HTML {
 		}
 	}
 	doc := strings.Join(list, "\n")
+
+	// replace '*' by '&lowast;', we do this before parsing the comment as markdown
+	// doc = strings.Replace(doc, "*", "\\*", -1)
 	if !config.MarkdownDisabled {
 		// This is for blackfriday
 		// res = string(blackfriday.Run([]byte(doc)))
@@ -409,8 +412,6 @@ func renderComments(comments []string) template.HTML {
 		} else {
 			res = buf.String()
 		}
-		// replace '*' by '&lowast;'
-		res = strings.Replace(res, "*", "&lowast;", -1)
 	} else {
 		res = strings.Replace(doc, "\n\n", string(template.HTML("<br/><br/>")), -1)
 	}
