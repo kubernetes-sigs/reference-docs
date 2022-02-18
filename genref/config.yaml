@@ -99,13 +99,24 @@ apis:
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1beta1
 
-  # v1alpha1 and v1beta1 are skipped
+  # v1alpha1 is skipped
+  # v1beta1 is preserved because it is still referenced.
+  - name: client-authentication
+    title: Client Authentication (v1beta1)
+    package: k8s.io/client-go
+    path: pkg/apis/clientauthentication/v1beta1
+
   - name: client-authentication
     title: Client Authentication (v1)
     package: k8s.io/client-go
     path: pkg/apis/clientauthentication/v1
 
-  # v1alpha1 is skipped
+  # v1alpha1 is preserved because TracingConfiguration is referenced.
+  - name: apiserver-config
+    title: kube-apiserver Configuration (v1alpha1)
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1alpha1
+
   # v1beta1 is preserved because it has different types exposed.
   - name: apiserver-config
     title: kube-apiserver Configuration (v1beta1)
