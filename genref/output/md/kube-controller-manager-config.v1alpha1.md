@@ -468,13 +468,6 @@ allowed to sync concurrently. Larger number = more responsive deployments,
 but more CPU (and network) load.</p>
 </td>
 </tr>
-<tr><td><code>DeploymentControllerSyncPeriod</code> <B>[Required]</B><br/>
-<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
-</td>
-<td>
-   <p>deploymentControllerSyncPeriod is the period for syncing the deployments.</p>
-</td>
-</tr>
 </tbody>
 </table>
 
