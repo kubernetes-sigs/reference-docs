@@ -59,6 +59,11 @@ apis:
     package: k8s.io/kubelet
     path: pkg/apis/credentialprovider/v1alpha1
 
+  - name: kubelet-credentialprovider
+    title: Kubelet CredentialProvider (v1beta1)
+    package: k8s.io/kubelet
+    path: pkg/apis/credentialprovider/v1beta1
+
   - name: kube-scheduler-config
     title: kube-scheduler Configuration (v1beta2)
     package: k8s.io/kube-scheduler
