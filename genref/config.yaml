@@ -159,10 +159,9 @@ apis:
 
   - name: apiserver-eventratelimit
     title: Event Rate Limit Configuration (v1alpha1)
-    package: k8s.io/kubernetes
-    path: plugin/pkg/admission/eventratelimit/apis/eventratelimit/v1alpha1
-    # Skipped because k8s.io/kubernetes cannot be imported
-    skip: true
+    package: github.com/tengqm/kubeconfig
+    path: config/admission/eventratelimit/apis/v1alpha1
+    skip: false
 
   - name: apiserver-podtolerationrestriction
     title: Pod Toleration Restriction (v1alpha1)
