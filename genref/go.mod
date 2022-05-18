@@ -14,6 +14,7 @@ require (
 	golang.org/x/tools v0.1.10-0.20220218145154-897bd77cd717 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	k8s.io/api v0.24.0 // indirect
 	k8s.io/apiserver v0.24.0
 	k8s.io/client-go v0.24.0
 	k8s.io/cloud-provider v0.24.0

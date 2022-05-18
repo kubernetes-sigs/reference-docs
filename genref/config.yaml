@@ -183,6 +183,11 @@ apis:
     package: k8s.io/cloud-provider
     path: controllers/service/config/v1alpha1
 
+  - name: imagepolicy
+    title: Image Policy API (v1alpha1)
+    package: k8s.io/api
+    path: imagepolicy/v1alpha1
+
   # This is for testing
   - name: kubeadm-config
     title: kubeadm Configuration (v1beta2)
