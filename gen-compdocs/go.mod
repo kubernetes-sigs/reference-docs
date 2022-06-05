@@ -3,12 +3,14 @@ module github.com/kubernetes-sigs/reference-docs/gen-compdocs
 go 1.16
 
 require (
+	github.com/container-storage-interface/spec v1.5.0 // indirect
 	github.com/golangplus/testing v0.0.0 // indirect
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/pflag v1.0.5
 	github.com/yuin/goldmark v1.4.1
 	github.com/yuin/goldmark-highlighting v0.0.0-20200307114337-60d527fdb691
 	k8s.io/component-base v0.24.0
+	k8s.io/klog/v2 v2.60.1
 	k8s.io/kubectl v0.0.0
 	k8s.io/kubernetes v0.0.0-00010101000000-000000000000
 )
@@ -30,6 +32,7 @@ replace (
 	k8s.io/controller-manager => k8s.io/controller-manager v0.24.0
 	k8s.io/cri-api => k8s.io/cri-api v0.24.0
 	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.24.0
+	k8s.io/klog/v2 => k8s.io/klog/v2 v2.60.1
 	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.24.0
 	k8s.io/kube-controller-manager => k8s.io/kube-controller-manager v0.24.0
 	k8s.io/kube-proxy => k8s.io/kube-proxy v0.24.0

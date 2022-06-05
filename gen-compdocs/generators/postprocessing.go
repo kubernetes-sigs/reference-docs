@@ -49,10 +49,10 @@ func MarkdownPostProcessing(cmd *cobra.Command, dir string, processor func(strin
 	return ioutil.WriteFile(filename, []byte(processedMarkDown), 0644)
 }
 
-// cleanupForInclude parts of markdown that will make difficult to use it as include in the website:
+// CleanupForInclude parts of markdown that will make difficult to use it as include in the website:
 // - The title of the document (this allow more flexibility for include, e.g. include in tabs)
 // - The sections see also, that assumes file will be used as a main page
-func cleanupForInclude(md string) string {
+func CleanupForInclude(md string) string {
 	lines := strings.Split(md, "\n")
 
 	cleanMd := ""

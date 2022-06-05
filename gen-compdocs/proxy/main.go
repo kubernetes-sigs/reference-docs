@@ -20,20 +20,36 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/comps"
+	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/generators"
+	"k8s.io/klog/v2"
+	"k8s.io/kubernetes/cmd/genutils"
+	proxyapp "k8s.io/kubernetes/cmd/kube-proxy/app"
 )
+
+func init() {
+	klog.InitFlags(nil)
+}
 
 func main() {
 	// use os.Args instead of "flags" because "flags" will mess up the man pages!
 	path := ""
-	module := ""
-	if len(os.Args) == 3 {
+	if len(os.Args) == 2 {
 		path = os.Args[1]
-		module = os.Args[2]
 	} else {
-		fmt.Fprintf(os.Stderr, "usage: %s [output-dir] [module] \n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "usage: %s [output-dir]\n", os.Args[0])
 		os.Exit(1)
 	}
 
-	comps.GenerateFiles(path, module)
+	GenKubeProxy(path)
+}
+
+func GenKubeProxy(path string) {
+	outDir, err := genutils.OutDir(path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get output directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	proxy := proxyapp.NewProxyCommand()
+	generators.GenMarkdownTree(proxy, outDir, true)
 }
