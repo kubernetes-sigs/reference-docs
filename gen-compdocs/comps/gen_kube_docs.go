@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package generators
+package comps
 
 import (
 	goflag "flag"
 	"fmt"
 	"os"
 
+	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/generators"
 	"github.com/spf13/pflag"
 	cliflag "k8s.io/component-base/cli/flag"
 	kubectlcmd "k8s.io/kubectl/pkg/cmd"
 	"k8s.io/kubernetes/cmd/genutils"
 	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
 	cmapp "k8s.io/kubernetes/cmd/kube-controller-manager/app"
-	proxyapp "k8s.io/kubernetes/cmd/kube-proxy/app"
 	schapp "k8s.io/kubernetes/cmd/kube-scheduler/app"
 	kubeadmapp "k8s.io/kubernetes/cmd/kubeadm/app/cmd"
 	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
@@ -45,27 +45,21 @@ func GenerateFiles(path, module string) {
 	case "kube-apiserver":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		apiserver := apiservapp.NewAPIServerCommand()
-		GenMarkdownTree(apiserver, outDir, true)
+		generators.GenMarkdownTree(apiserver, outDir, true)
 
 	case "kube-controller-manager":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		controllermanager := cmapp.NewControllerManagerCommand()
-		GenMarkdownTree(controllermanager, outDir, true)
-
-	case "kube-proxy":
-		proxy := proxyapp.NewProxyCommand()
-		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
-		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
-		GenMarkdownTree(proxy, outDir, true)
+		generators.GenMarkdownTree(controllermanager, outDir, true)
 
 	case "kube-scheduler":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		scheduler := schapp.NewSchedulerCommand()
-		GenMarkdownTree(scheduler, outDir, true)
+		generators.GenMarkdownTree(scheduler, outDir, true)
 
 	case "kubelet":
 		kubelet := kubeletapp.NewKubeletCommand()
-		GenMarkdownTree(kubelet, outDir, true)
+		generators.GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
 		pflag.CommandLine = pflag.NewFlagSet(os.Args[0], pflag.ExitOnError)
@@ -87,17 +81,17 @@ func GenerateFiles(path, module string) {
 
 		// generate docs for kubeadm
 		kubeadm := kubeadmapp.NewKubeadmCommand(os.Stdin, os.Stdout, os.Stderr)
-		GenMarkdownTree(kubeadm, outDir, false)
+		generators.GenMarkdownTree(kubeadm, outDir, false)
 
 		// cleanup generated code for usage as include in the website
-		MarkdownPostProcessing(kubeadm, outDir, cleanupForInclude)
+		generators.MarkdownPostProcessing(kubeadm, outDir, generators.CleanupForInclude)
 
 	case "kubectl":
 		kubectl := kubectlcmd.NewDefaultKubectlCommand()
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 
-		GenMarkdownTree(kubectl, outDir, true)
+		generators.GenMarkdownTree(kubectl, outDir, true)
 
 	default:
 		fmt.Fprintf(os.Stderr, "Module %s is not supported", module)
