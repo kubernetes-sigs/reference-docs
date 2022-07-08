@@ -455,6 +455,8 @@ github.com/tengqm/kubeconfig v0.0.0-20220519223338-dea4d154bef9 h1:SPV//WvuuKTTK
 github.com/tengqm/kubeconfig v0.0.0-20220519223338-dea4d154bef9/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
 github.com/tengqm/kubeconfig v0.0.0-20220603092633-c5d4a54dfe74 h1:+K0BmQgPsmY1lp/a05+bzZBni9lwWqWWqfhvlbfhzkA=
 github.com/tengqm/kubeconfig v0.0.0-20220603092633-c5d4a54dfe74/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
+github.com/tengqm/kubeconfig v0.0.0-20220707123054-dd00a506fbd1 h1:mf0YXytQuvJhM1TsFt+lyFCTdCMkoS+PqR1nS909Eh8=
+github.com/tengqm/kubeconfig v0.0.0-20220707123054-dd00a506fbd1/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20201229170055-e5319fda7802/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
