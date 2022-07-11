@@ -7,7 +7,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pkg/errors v0.9.1
-	github.com/tengqm/kubeconfig v0.0.0-20220708134523-a4b352bcb4fd // indirect
+	github.com/tengqm/kubeconfig v0.0.0-20220711003733-751b7a9086c7 // indirect
 	github.com/yuin/goldmark v1.4.1
 	github.com/yuin/goldmark-highlighting v0.0.0-20210516132338-9216f9c5aa01
 	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
