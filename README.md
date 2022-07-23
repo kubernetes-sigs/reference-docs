@@ -6,7 +6,7 @@ See [Generating Reference Documentation for kubectl Commands](https://kubernetes
 
 ## Community, discussion, contribution, and support
 
-Learn how to engage with the Kubernetes community on the [community page](http://kubernetes.io/community/).
+Learn how to engage with the Kubernetes community on the [community page](https://kubernetes.io/community/).
 Instructions on how to contribute can be found [here](CONTRIBUTING.md).
 
 You can reach the maintainers of this project at:
