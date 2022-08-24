@@ -196,6 +196,10 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/tengqm/kubeconfig v0.0.0-20220711003733-751b7a9086c7 h1:BK5BfwLX4yAW3mKfuT1ahsqazMA7A77LQu1oQ5tb6OY=
 github.com/tengqm/kubeconfig v0.0.0-20220711003733-751b7a9086c7/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
+github.com/tengqm/kubeconfig v0.0.0-20220824063953-3c961d704804 h1:lCufw84CCBYvbLXdLV0+kmNEmiS/5La/pErhO/wHuDI=
+github.com/tengqm/kubeconfig v0.0.0-20220824063953-3c961d704804/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
+github.com/tengqm/kubeconfig v0.0.0-20220824065243-6ca881ae0f4f h1:EPqAOS0oCLBWaKuehqPUUPW0lp97uct4yDpaWqc+TdY=
+github.com/tengqm/kubeconfig v0.0.0-20220824065243-6ca881ae0f4f/go.mod h1:H3x+n9qoLCGiQVYvcB37lX4si43EGMfAnAyYVus2mBk=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
