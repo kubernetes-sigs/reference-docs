@@ -45,7 +45,8 @@ apis:
     package: k8s.io/kubelet
     path: config/v1beta1
     includes:
-      - k8s.io/component-base/config/v1alpha1
+      - k8s.io/component-base/logs/api/v1
+      - k8s.io/component-base/tracing/api/v1
 
   - name: kubelet-stats
     title: Kubelet Stats (v1alpha1)
@@ -75,6 +76,13 @@ apis:
     title: kube-scheduler Configuration (v1beta3)
     package: k8s.io/kube-scheduler
     path: config/v1beta3
+    includes:
+      - k8s.io/component-base/config/v1alpha1
+
+  - name: kube-scheduler-config
+    title: kube-scheduler Configuration (v1)
+    package: k8s.io/kube-scheduler
+    path: config/v1
     includes:
       - k8s.io/component-base/config/v1alpha1
 
@@ -161,7 +169,6 @@ apis:
     title: Event Rate Limit Configuration (v1alpha1)
     package: github.com/tengqm/kubeconfig
     path: config/admission/eventratelimit/apis/v1alpha1
-    skip: false
 
   - name: apiserver-podtolerationrestriction
     title: Pod Toleration Restriction (v1alpha1)
