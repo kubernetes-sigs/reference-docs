@@ -482,37 +482,7 @@ but more CPU (and network) load.</p>
 <p>DeprecatedControllerConfiguration contains elements be deprecated.</p>
 
 
-<table class="table">
-<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
-<tbody>
-    
-  
-<tr><td><code>DeletingPodsQPS</code> <B>[Required]</B><br/>
-<code>float32</code>
-</td>
-<td>
-   <p>DEPRECATED: deletingPodsQps is the number of nodes per second on which pods are deleted in
-case of node failure.</p>
-</td>
-</tr>
-<tr><td><code>DeletingPodsBurst</code> <B>[Required]</B><br/>
-<code>int32</code>
-</td>
-<td>
-   <p>DEPRECATED: deletingPodsBurst is the number of nodes on which pods are bursty deleted in
-case of node failure. For more details look into RateLimiter.</p>
-</td>
-</tr>
-<tr><td><code>RegisterRetryCount</code> <B>[Required]</B><br/>
-<code>int32</code>
-</td>
-<td>
-   <p>registerRetryCount is the number of retries for initial node registration.
-Retry interval equals node-sync-period.</p>
-</td>
-</tr>
-</tbody>
-</table>
+
 
 ## `EndpointControllerConfiguration`     {#kubecontrollermanager-config-k8s-io-v1alpha1-EndpointControllerConfiguration}
     
