@@ -56,9 +56,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -99,7 +99,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -385,9 +385,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -436,7 +436,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: timeout
         default_value: 0s
         usage: Only relevant during a force apply. The length of time to wait before
@@ -666,9 +666,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -693,7 +693,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -1181,9 +1181,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -1218,7 +1218,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -2405,9 +2405,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -3080,9 +3080,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -3104,7 +3104,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -3206,9 +3206,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'Output the formatted object with the given group version (for ex:
           ''extensions/v1beta1'').)'
@@ -3236,7 +3236,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -3508,9 +3508,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -3552,7 +3552,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -3656,9 +3656,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -3693,7 +3693,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -3807,9 +3807,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -3840,7 +3840,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: user
         default_value: '[]'
         usage: usernames to bind to the role
@@ -3957,9 +3957,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -3987,7 +3987,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4094,9 +4094,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4124,7 +4124,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4220,9 +4220,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4250,7 +4250,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4351,9 +4351,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4384,7 +4384,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4488,9 +4488,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4521,7 +4521,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4616,9 +4616,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4653,7 +4653,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -4764,9 +4764,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -4799,7 +4799,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: user
         default_value: '[]'
         usage: usernames to bind to the role
@@ -4993,9 +4993,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5023,7 +5023,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -5140,9 +5140,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5170,7 +5170,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: type
         usage: The type of secret to create
       - name: validate
@@ -5281,9 +5281,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5311,7 +5311,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -5483,9 +5483,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5516,7 +5516,7 @@ toplevelcommandgroups:
         usage: Port pairs can be specified as '<port>:<targetPort>'.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -5617,9 +5617,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5650,7 +5650,7 @@ toplevelcommandgroups:
         usage: Port pairs can be specified as '<port>:<targetPort>'.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -5746,9 +5746,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5779,7 +5779,7 @@ toplevelcommandgroups:
         usage: Port pairs can be specified as '<port>:<targetPort>'.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -5878,9 +5878,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -5911,7 +5911,7 @@ toplevelcommandgroups:
         usage: Port pairs can be specified as '<port>:<targetPort>'.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -6011,9 +6011,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -6041,7 +6041,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
@@ -6393,7 +6393,7 @@ toplevelcommandgroups:
       synopsis: Drain node in preparation for maintenance
       description: "Drain node in preparation for maintenance. \n\nThe given node
         will be marked unschedulable to prevent new pods from arriving. 'drain' evicts
-        the pods if the APIServer supports eviction (http://kubernetes.io/docs/admin/disruptions/).
+        the pods if the APIServer supports eviction (https://kubernetes.io/docs/admin/disruptions/).
         Otherwise, it will use normal DELETE to delete the pods. The 'drain' evicts
         or deletes all pods except mirror pods (which cannot be deleted through the
         API server).  If there are DaemonSet-managed pods, drain will not proceed
@@ -6406,7 +6406,7 @@ toplevelcommandgroups:
         pods is missing. \n\n'drain' waits for graceful termination. You should not
         operate on the machine until the command completes. \n\nWhen you are ready
         to put the node back into service, use kubectl uncordon, which will make the
-        node schedulable again. \n\n! http://kubernetes.io/images/docs/kubectl_drain.svg"
+        node schedulable again. \n\n! https://kubernetes.io/images/docs/kubectl_drain.svg"
       options:
       - name: delete-local-data
         default_value: "false"
@@ -6891,9 +6891,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -6947,7 +6947,7 @@ toplevelcommandgroups:
           direct traffic to. Optional.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: type
         usage: 'Type for this service: ClusterIP, NodePort, or LoadBalancer. Default
           is ''ClusterIP''.'
@@ -7102,9 +7102,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -7141,7 +7141,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: watch
         shorthand: w
         default_value: "false"
@@ -7271,9 +7271,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -7313,7 +7313,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -7626,9 +7626,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -7661,7 +7661,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: type
         default_value: strategic
         usage: The type of patch being provided; one of [json merge strategic]
@@ -8291,7 +8291,7 @@ toplevelcommandgroups:
         the specified replication controller with a new replication controller by
         updating one pod at a time to use the new PodTemplate. The new-controller.json
         must specify the same namespace as the existing replication controller and
-        overwrite at least one (common) label in its replicaSelector. \n\n! http://kubernetes.io/images/docs/kubectl_rollingupdate.svg"
+        overwrite at least one (common) label in its replicaSelector. \n\n! https://kubernetes.io/images/docs/kubectl_rollingupdate.svg"
       options:
       - name: allow-missing-template-keys
         default_value: "true"
@@ -8332,9 +8332,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -8365,7 +8365,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: timeout
         default_value: 5m0s
         usage: Max time to wait for a replication controller to update before giving
@@ -8462,7 +8462,7 @@ toplevelcommandgroups:
         the specified replication controller with a new replication controller by
         updating one pod at a time to use the new PodTemplate. The new-controller.json
         must specify the same namespace as the existing replication controller and
-        overwrite at least one (common) label in its replicaSelector. \n\n! http://kubernetes.io/images/docs/kubectl_rollingupdate.svg"
+        overwrite at least one (common) label in its replicaSelector. \n\n! https://kubernetes.io/images/docs/kubectl_rollingupdate.svg"
       options:
       - name: allow-missing-template-keys
         default_value: "true"
@@ -8503,9 +8503,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -8536,7 +8536,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: timeout
         default_value: 5m0s
         usage: Max time to wait for a replication controller to update before giving
@@ -9201,7 +9201,7 @@ toplevelcommandgroups:
         usage: If true, a public, external service is created for the container(s)
           which are run
       - name: generator
-        usage: The name of the API generator to use, see http://kubernetes.io/docs/user-guide/kubectl-conventions/#generators
+        usage: The name of the API generator to use, see https://kubernetes.io/docs/user-guide/kubectl-conventions/#generators
           for a list.
       - name: hostport
         default_value: "-1"
@@ -9235,9 +9235,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -9313,7 +9313,7 @@ toplevelcommandgroups:
           attached.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: tty
         shorthand: t
         default_value: "false"
@@ -9440,7 +9440,7 @@ toplevelcommandgroups:
         usage: If true, a public, external service is created for the container(s)
           which are run
       - name: generator
-        usage: The name of the API generator to use, see http://kubernetes.io/docs/user-guide/kubectl-conventions/#generators
+        usage: The name of the API generator to use, see https://kubernetes.io/docs/user-guide/kubectl-conventions/#generators
           for a list.
       - name: hostport
         default_value: "-1"
@@ -9474,9 +9474,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -9552,7 +9552,7 @@ toplevelcommandgroups:
           attached.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: tty
         shorthand: t
         default_value: "false"
@@ -9876,9 +9876,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -9911,7 +9911,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -10033,9 +10033,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -10072,7 +10072,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -10184,9 +10184,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -10220,7 +10220,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       inherited_options:
       - name: alsologtostderr
         default_value: "false"
@@ -10324,9 +10324,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -10356,7 +10356,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: user
         default_value: '[]'
         usage: usernames to bind to the role
@@ -10572,9 +10572,9 @@ toplevelcommandgroups:
       - name: output
         shorthand: o
         usage: 'Output format. One of: json|yaml|wide|name|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...
-          See custom columns [http://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
-          golang template [http://golang.org/pkg/text/template/#pkg-overview] and
-          jsonpath template [http://kubernetes.io/docs/user-guide/jsonpath].'
+          See custom columns [https://kubernetes.io/docs/user-guide/kubectl-overview/#custom-columns],
+          golang template [https://golang.org/pkg/text/template/#pkg-overview] and
+          jsonpath template [https://kubernetes.io/docs/user-guide/jsonpath].'
       - name: output-version
         usage: 'DEPRECATED: To use a specific API version, fully-qualify the resource,
           version, and group (for example: ''jobs.v1.batch/myjob'').'
@@ -10604,7 +10604,7 @@ toplevelcommandgroups:
           be an integer or a string.
       - name: template
         usage: Template string or path to template file to use when -o=go-template,
-          -o=go-template-file. The template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+          -o=go-template-file. The template format is golang templates [https://golang.org/pkg/text/template/#pkg-overview].
       - name: validate
         default_value: "true"
         usage: If true, use a schema to validate the input before sending it
