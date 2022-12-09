@@ -69,16 +69,4 @@ func PrintInfo(config *api.Config) {
 			}
 		}
 	}
-
-	//fmt.Printf("Old definitions:\n")
-	//for name, d := range definitions.All {
-	//	if !d.InToc && len(d.OperationCategories) > 0 && d.IsOldVersion && !d.IsInlined {
-	//		fmt.Printf("[%s]\n", name)
-	//		for _, oc := range d.OperationCategories {
-	//			for _, o := range oc.Operations {
-	//				fmt.Printf("\t [%s]\n", o.ID)
-	//			}
-	//		}
-	//	}
-	//}
 }
