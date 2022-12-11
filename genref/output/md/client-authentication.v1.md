@@ -108,6 +108,15 @@ If empty, system roots should be used.</p>
 cluster.</p>
 </td>
 </tr>
+<tr><td><code>disable-compression</code><br/>
+<code>bool</code>
+</td>
+<td>
+   <p>DisableCompression allows client to opt-out of response compression for all requests to the server. This is useful
+to speed up requests (specifically lists) when client-server network bandwidth is ample, by saving time on
+compression (server-side) and decompression (client-side): https://github.com/kubernetes/kubernetes/issues/112296.</p>
+</td>
+</tr>
 <tr><td><code>config</code><br/>
 <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension"><code>k8s.io/apimachinery/pkg/runtime.RawExtension</code></a>
 </td>

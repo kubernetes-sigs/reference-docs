@@ -787,6 +787,13 @@ be invoked before default plugins, default plugins must be disabled and re-enabl
 <tbody>
     
   
+<tr><td><code>preEnqueue</code> <B>[Required]</B><br/>
+<a href="#kubescheduler-config-k8s-io-v1beta3-PluginSet"><code>PluginSet</code></a>
+</td>
+<td>
+   <p>PreEnqueue is a list of plugins that should be invoked before adding pods to the scheduling queue.</p>
+</td>
+</tr>
 <tr><td><code>queueSort</code> <B>[Required]</B><br/>
 <a href="#kubescheduler-config-k8s-io-v1beta3-PluginSet"><code>PluginSet</code></a>
 </td>
