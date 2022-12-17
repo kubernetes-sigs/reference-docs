@@ -168,6 +168,16 @@ apis:
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
 
+  - name: apiserver-admission
+    title: kube-apiserver Admission (v1)
+    package: k8s.io/api
+    path: admission/v1
+
+  - name: apiserver-admission
+    title: kube-apiserver Admission (v1beta1)
+    package: k8s.io/api
+    path: admission/v1beta1
+
   - name: apiserver-resourcequota
     title: kube-apiserver ResourceQuota Configuration (v1)
     package: k8s.io/apiserver
