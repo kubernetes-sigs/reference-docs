@@ -737,6 +737,14 @@ allowed to sync concurrently.</p>
 <tbody>
     
   
+<tr><td><code>ConcurrentHorizontalPodAutoscalerSyncs</code> <B>[Required]</B><br/>
+<code>int32</code>
+</td>
+<td>
+   <p>ConcurrentHorizontalPodAutoscalerSyncs is the number of HPA objects that are allowed to sync concurrently.
+Larger number = more responsive HPA processing, but more CPU (and network) load.</p>
+</td>
+</tr>
 <tr><td><code>HorizontalPodAutoscalerSyncPeriod</code> <B>[Required]</B><br/>
 <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
 </td>
