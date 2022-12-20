@@ -2,7 +2,16 @@
 
 {{ $grpname := "" -}}
 {{- range $idx, $val := .packages -}}
-{{- if and (ne .GroupName "") (eq $grpname "") -}}
+{{/* Special handling for kubeconfig */}}
+{{- if eq .Title "kubeconfig (v1)" -}}
+---
+title: {{ .Title }}
+content_type: tool-reference
+package: v1
+auto_generated: true
+---
+{{- else -}}
+  {{- if and (ne .GroupName "") (eq $grpname "") -}}
 ---
 title: {{ .Title }}
 content_type: tool-reference
@@ -11,19 +20,20 @@ auto_generated: true
 ---
 {{ .GetComment -}}
 {{ $grpname = .GroupName }}
+  {{- end -}}
 {{- end -}}
 {{- end }}
 
 ## Resource Types 
 
 {{ range .packages -}}
-  {{- if ne .GroupName "" -}}
+  {{/*- if ne .GroupName "" -*/}}
     {{- range .VisibleTypes -}}
       {{- if .IsExported }}
 - [{{ .DisplayName }}]({{ .Link }})
       {{- end -}}
     {{- end -}}
-  {{ end -}}
+  {{/* end -*/}}
 {{- end -}}
 
 {{ range .packages }}
