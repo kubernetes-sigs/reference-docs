@@ -180,6 +180,18 @@ func (t *apiType) IsExported() bool {
 	if strings.Contains(comments, "+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object") {
 		return true
 	}
+
+	// There are cases where this comment is not the "second closest".
+	// Check this again.
+	comments = strings.Join(t.CommentLines, "\n")
+	if strings.Contains(comments, "+genclient") {
+		return true
+	}
+
+	if strings.Contains(comments, "+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object") {
+		return true
+	}
+
 	return false
 }
 
