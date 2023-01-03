@@ -31,7 +31,7 @@ var CommandTemplate = `
 
 ### Usage
 
-` + "`" + `$ kubectl {{.MainCommand.Usage}}` + "`" + `
+` + "`" + `$ {{.MainCommand.Usage}}` + "`" + `
 
 {{if .MainCommand.Options}}
 
@@ -53,7 +53,7 @@ Name | Shorthand | Default | Usage
 
 ### Usage
 
-` + "`" + `$ kubectl {{$mainCommandName}} {{$sub.Usage}}` + "`" + `
+` + "`" + `$ {{$sub.Usage}}` + "`" + `
 
 {{if $sub.Options}}
 

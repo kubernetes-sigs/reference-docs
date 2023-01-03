@@ -87,7 +87,7 @@ func NewSubCommands(c *cobra.Command, path string) Commands {
 }
 
 func NewCommand(c *cobra.Command, path string) *Command {
-	return &Command{
+	command := &Command{
 		Name:             c.Name(),
 		Path:             path,
 		Description:      c.Long,
@@ -97,6 +97,13 @@ func NewCommand(c *cobra.Command, path string) *Command {
 		InheritedOptions: NewOptions(c.InheritedFlags()),
 		Usage:            c.Use,
 	}
+
+	parent := c.Parent()
+	if parent != nil {
+		command.Usage = parent.CommandPath() + " " + c.Use
+	}
+
+	return command
 }
 
 func (a Options) Len() int      { return len(a) }
