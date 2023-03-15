@@ -17,12 +17,15 @@
     <body>
       <div class="container">
         
-        
           
           
             <H2 id="metrics-k8s-io-v1beta1">Package: <span style="font-family: monospace">metrics.k8s.io/v1beta1</span></H2>
-            <p>Package v1beta1 is the v1beta1 version of the metrics API.</p>
-
+            <p><p>Package v1beta1 is the v1beta1 version of the metrics API.</p>
+</p>
+          
+        
+        
+          
             
             <H3>Resource Types:</H3>
             <ul><li>
@@ -37,7 +40,6 @@
 
             
             
-              
   <H3 id="metrics-k8s-io-v1beta1-NodeMetrics">NodeMetrics
     </H3>
 
@@ -48,7 +50,8 @@
     </p>
   
 
-  <p>NodeMetrics sets resource usage metrics of a node.</p>
+  <p><p>NodeMetrics sets resource usage metrics of a node.</p>
+</p>
 
   
     <table class="table">
@@ -85,14 +88,12 @@
       <tr>
         <td><code>metadata</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#objectmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ObjectMeta</span>
               </a>
             
@@ -101,7 +102,9 @@
         <td>
           
 
-          
+          <p>Standard object's metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata</p>
+
 
           
             Refer to the Kubernetes API documentation for the fields of the
@@ -125,7 +128,7 @@
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#time-v1-meta">
                 <span style="font-family: monospace">meta/v1.Time</span>
               </a>
             
@@ -134,8 +137,9 @@
         <td>
           
 
-          The following fields define time interval from which metrics were
-collected from the interval [Timestamp-Window, Timestamp].
+          <p>The following fields define time interval from which metrics were
+collected from the interval [Timestamp-Window, Timestamp].</p>
+
 
           
 
@@ -156,7 +160,7 @@ collected from the interval [Timestamp-Window, Timestamp].
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -186,7 +190,7 @@ collected from the interval [Timestamp-Window, Timestamp].
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#resourcelist-v1-core">
                 <span style="font-family: monospace">core/v1.ResourceList</span>
               </a>
             
@@ -195,7 +199,8 @@ collected from the interval [Timestamp-Window, Timestamp].
         <td>
           
 
-          The memory usage is the memory working set.
+          <p>The memory usage is the memory working set.</p>
+
 
           
 
@@ -210,14 +215,13 @@ collected from the interval [Timestamp-Window, Timestamp].
     </table>
   
 
-            
-              
   <H3 id="metrics-k8s-io-v1beta1-NodeMetricsList">NodeMetricsList
     </H3>
 
   
 
-  <p>NodeMetricsList is a list of NodeMetrics.</p>
+  <p><p>NodeMetricsList is a list of NodeMetrics.</p>
+</p>
 
   
     <table class="table">
@@ -261,7 +265,7 @@ collected from the interval [Timestamp-Window, Timestamp].
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#listmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ListMeta</span>
               </a>
             
@@ -270,8 +274,9 @@ collected from the interval [Timestamp-Window, Timestamp].
         <td>
           
 
-          Standard list metadata.
-More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          <p>Standard list metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</p>
+
 
           
 
@@ -301,7 +306,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          List of node metrics.
+          <p>List of node metrics.</p>
+
 
           
 
@@ -316,8 +322,6 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
     </table>
   
 
-            
-              
   <H3 id="metrics-k8s-io-v1beta1-PodMetrics">PodMetrics
     </H3>
 
@@ -328,7 +332,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
     </p>
   
 
-  <p>PodMetrics sets resource usage metrics of a pod.</p>
+  <p><p>PodMetrics sets resource usage metrics of a pod.</p>
+</p>
 
   
     <table class="table">
@@ -365,14 +370,12 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
       <tr>
         <td><code>metadata</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#objectmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ObjectMeta</span>
               </a>
             
@@ -381,7 +384,9 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          
+          <p>Standard object's metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata</p>
+
 
           
             Refer to the Kubernetes API documentation for the fields of the
@@ -405,7 +410,7 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#time-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#time-v1-meta">
                 <span style="font-family: monospace">meta/v1.Time</span>
               </a>
             
@@ -414,8 +419,9 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          The following fields define time interval from which metrics were
-collected from the interval [Timestamp-Window, Timestamp].
+          <p>The following fields define time interval from which metrics were
+collected from the interval [Timestamp-Window, Timestamp].</p>
+
 
           
 
@@ -436,7 +442,7 @@ collected from the interval [Timestamp-Window, Timestamp].
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -475,7 +481,8 @@ collected from the interval [Timestamp-Window, Timestamp].
         <td>
           
 
-          Metrics for all containers are collected within the same time window.
+          <p>Metrics for all containers are collected within the same time window.</p>
+
 
           
 
@@ -490,14 +497,13 @@ collected from the interval [Timestamp-Window, Timestamp].
     </table>
   
 
-            
-              
   <H3 id="metrics-k8s-io-v1beta1-PodMetricsList">PodMetricsList
     </H3>
 
   
 
-  <p>PodMetricsList is a list of PodMetrics.</p>
+  <p><p>PodMetricsList is a list of PodMetrics.</p>
+</p>
 
   
     <table class="table">
@@ -541,7 +547,7 @@ collected from the interval [Timestamp-Window, Timestamp].
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#listmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ListMeta</span>
               </a>
             
@@ -550,8 +556,9 @@ collected from the interval [Timestamp-Window, Timestamp].
         <td>
           
 
-          Standard list metadata.
-More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+          <p>Standard list metadata.
+More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds</p>
+
 
           
 
@@ -581,7 +588,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          List of pod metrics.
+          <p>List of pod metrics.</p>
+
 
           
 
@@ -596,8 +604,6 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
     </table>
   
 
-            
-              
   <H3 id="metrics-k8s-io-v1beta1-ContainerMetrics">ContainerMetrics
     </H3>
 
@@ -608,7 +614,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
     </p>
   
 
-  <p>ContainerMetrics sets resource usage metrics of a container.</p>
+  <p><p>ContainerMetrics sets resource usage metrics of a container.</p>
+</p>
 
   
     <table class="table">
@@ -646,7 +653,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          Container name corresponding to the one from pod.spec.containers.
+          <p>Container name corresponding to the one from pod.spec.containers.</p>
+
 
           
 
@@ -667,7 +675,7 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcelist-v1-core">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#resourcelist-v1-core">
                 <span style="font-family: monospace">core/v1.ResourceList</span>
               </a>
             
@@ -676,7 +684,8 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
         <td>
           
 
-          The memory usage is the memory working set.
+          <p>The memory usage is the memory working set.</p>
+
 
           
 
@@ -691,15 +700,13 @@ More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-
     </table>
   
 
-            
           
-
           <HR />
         
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
       </div>
     </body>
   </html>

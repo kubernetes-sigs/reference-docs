@@ -17,12 +17,15 @@
     <body>
       <div class="container">
         
-        
           
           
             <H2 id="apiserver-config-k8s-io-v1">Package: <span style="font-family: monospace">apiserver.config.k8s.io/v1</span></H2>
-            <p>Package v1 is the v1 version of the API.</p>
-
+            <p><p>Package v1 is the v1 version of the API.</p>
+</p>
+          
+        
+        
+          
             
             <H3>Resource Types:</H3>
             <ul><li>
@@ -31,13 +34,13 @@
 
             
             
-              
   <H3 id="apiserver-config-k8s-io-v1-AdmissionConfiguration">AdmissionConfiguration
     </H3>
 
   
 
-  <p>AdmissionConfiguration provides versioned configuration for admission controllers.</p>
+  <p><p>AdmissionConfiguration provides versioned configuration for admission controllers.</p>
+</p>
 
   
     <table class="table">
@@ -88,7 +91,8 @@
         <td>
           
 
-          Plugins allows specifying a configuration per admission control plugin.
+          <p>Plugins allows specifying a configuration per admission control plugin.</p>
+
 
           
 
@@ -103,8 +107,6 @@
     </table>
   
 
-            
-              
   <H3 id="apiserver-config-k8s-io-v1-AdmissionPluginConfiguration">AdmissionPluginConfiguration
     </H3>
 
@@ -115,7 +117,8 @@
     </p>
   
 
-  <p>AdmissionPluginConfiguration provides the configuration for a single plug-in.</p>
+  <p><p>AdmissionPluginConfiguration provides the configuration for a single plug-in.</p>
+</p>
 
   
     <table class="table">
@@ -153,8 +156,9 @@
         <td>
           
 
-          Name is the name of the admission controller.
-It must match the registered admission plugin name.
+          <p>Name is the name of the admission controller.
+It must match the registered admission plugin name.</p>
+
 
           
 
@@ -180,8 +184,9 @@ It must match the registered admission plugin name.
         <td>
           
 
-          Path is the path to a configuration file that contains the plugin's
-configuration
+          <p>Path is the path to a configuration file that contains the plugin's
+configuration</p>
+
 
           
 
@@ -200,7 +205,7 @@ configuration
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown">
                 <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
               </a>
             
@@ -209,8 +214,9 @@ configuration
         <td>
           
 
-          Configuration is an embedded configuration object to be used as the plugin's
-configuration. If present, it will be used instead of the path to the configuration file.
+          <p>Configuration is an embedded configuration object to be used as the plugin's
+configuration. If present, it will be used instead of the path to the configuration file.</p>
+
 
           
 
@@ -225,15 +231,13 @@ configuration. If present, it will be used instead of the path to the configurat
     </table>
   
 
-            
           
-
           <HR />
         
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
       </div>
     </body>
   </html>

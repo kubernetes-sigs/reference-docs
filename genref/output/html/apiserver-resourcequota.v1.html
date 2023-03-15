@@ -17,12 +17,15 @@
     <body>
       <div class="container">
         
-        
           
           
             <H2 id="apiserver-config-k8s-io-v1">Package: <span style="font-family: monospace">apiserver.config.k8s.io/v1</span></H2>
-            <p>Package v1 is the v1 version of the API.</p>
-
+            <p><p>Package v1 is the v1 version of the API.</p>
+</p>
+          
+        
+        
+          
             
             <H3>Resource Types:</H3>
             <ul><li>
@@ -31,13 +34,13 @@
 
             
             
-              
   <H3 id="apiserver-config-k8s-io-v1-Configuration">Configuration
     </H3>
 
   
 
-  <p>Configuration provides configuration for the ResourceQuota admission controller.</p>
+  <p><p>Configuration provides configuration for the ResourceQuota admission controller.</p>
+</p>
 
   
     <table class="table">
@@ -88,7 +91,8 @@
         <td>
           
 
-          LimitedResources whose consumption is limited by default.
+          <p>LimitedResources whose consumption is limited by default.</p>
+
 
           
 
@@ -103,8 +107,6 @@
     </table>
   
 
-            
-              
   <H3 id="apiserver-config-k8s-io-v1-LimitedResource">LimitedResource
     </H3>
 
@@ -115,9 +117,10 @@
     </p>
   
 
-  <p>LimitedResource matches a resource whose consumption is limited by default.
+  <p><p>LimitedResource matches a resource whose consumption is limited by default.
 To consume the resource, there must exist an associated quota that limits
 its consumption.</p>
+</p>
 
   
     <table class="table">
@@ -153,7 +156,8 @@ its consumption.</p>
         <td>
           
 
-          APIGroup is the name of the APIGroup that contains the limited resource.
+          <p>APIGroup is the name of the APIGroup that contains the limited resource.</p>
+
 
           
 
@@ -181,10 +185,11 @@ its consumption.</p>
         <td>
           
 
-          Resource is the name of the resource this rule applies to.
+          <p>Resource is the name of the resource this rule applies to.
 For example, if the administrator wants to limit consumption
 of a storage resource associated with persistent volume claims,
-the value would be "persistentvolumeclaims".
+the value would be &quot;persistentvolumeclaims&quot;.</p>
+
 
           
 
@@ -212,7 +217,7 @@ the value would be "persistentvolumeclaims".
         <td>
           
 
-          For each intercepted request, the quota system will evaluate
+          <p>For each intercepted request, the quota system will evaluate
 its resource usage.  It will iterate through each resource consumed
 and if the resource contains any substring in this listing, the
 quota system will ensure that there is a covering quota.  In the
@@ -220,7 +225,8 @@ absence of a covering quota, the quota system will deny the request.
 For example, if an administrator wants to globally enforce that
 that a quota must exist to consume persistent volume claims associated
 with any storage class, the list would include
-".storageclass.storage.k8s.io/requests.storage"
+&quot;.storageclass.storage.k8s.io/requests.storage&quot;</p>
+
 
           
 
@@ -239,7 +245,7 @@ with any storage class, the list would include
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#scopedresourceselectorrequirement-v1-core">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#scopedresourceselectorrequirement-v1-core">
                 <span style="font-family: monospace">[]core/v1.ScopedResourceSelectorRequirement</span>
               </a>
             
@@ -248,13 +254,14 @@ with any storage class, the list would include
         <td>
           
 
-          For each intercepted request, the quota system will figure out if the input object
+          <p>For each intercepted request, the quota system will figure out if the input object
 satisfies a scope which is present in this listing, then
 quota system will ensure that there is a covering quota.  In the
 absence of a covering quota, the quota system will deny the request.
 For example, if an administrator wants to globally enforce that
-a quota must exist to create a pod with "cluster-services" priorityclass
-the list would include "scopeName=PriorityClass, Operator=In, Value=cluster-services"
+a quota must exist to create a pod with &quot;cluster-services&quot; priorityclass
+the list would include &quot;scopeName=PriorityClass, Operator=In, Value=cluster-services&quot;</p>
+
 
           
 
@@ -269,15 +276,13 @@ the list would include "scopeName=PriorityClass, Operator=In, Value=cluster-serv
     </table>
   
 
-            
           
-
           <HR />
         
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
       </div>
     </body>
   </html>

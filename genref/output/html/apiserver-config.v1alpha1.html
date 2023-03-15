@@ -19,8 +19,8 @@
         
           
           
-            <H2 id="apiserver-k8s-io-v1beta1">Package: <span style="font-family: monospace">apiserver.k8s.io/v1beta1</span></H2>
-            <p><p>Package v1beta1 is the v1beta1 version of the API.</p>
+            <H2 id="apiserver-k8s-io-v1alpha1">Package: <span style="font-family: monospace">apiserver.k8s.io/v1alpha1</span></H2>
+            <p><p>Package v1alpha1 is the v1alpha1 version of the API.</p>
 </p>
           
         
@@ -29,12 +29,89 @@
             
             <H3>Resource Types:</H3>
             <ul><li>
-                    <a href="#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration">EgressSelectorConfiguration</a>
+                    <a href="#apiserver-k8s-io-v1alpha1-AdmissionConfiguration">AdmissionConfiguration</a>
+                  </li><li>
+                    <a href="#apiserver-k8s-io-v1alpha1-EgressSelectorConfiguration">EgressSelectorConfiguration</a>
+                  </li><li>
+                    <a href="#apiserver-k8s-io-v1alpha1-TracingConfiguration">TracingConfiguration</a>
                   </li></ul>
 
             
             
-  <H3 id="apiserver-k8s-io-v1beta1-EgressSelectorConfiguration">EgressSelectorConfiguration
+  <H3 id="apiserver-k8s-io-v1alpha1-AdmissionConfiguration">AdmissionConfiguration
+    </H3>
+
+  
+
+  <p><p>AdmissionConfiguration provides versioned configuration for admission controllers.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>apiserver.k8s.io/v1alpha1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>AdmissionConfiguration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>plugins</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#apiserver-k8s-io-v1alpha1-AdmissionPluginConfiguration">
+                <span style="font-family: monospace">[]AdmissionPluginConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Plugins allows specifying a configuration per admission control plugin.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+  <H3 id="apiserver-k8s-io-v1alpha1-EgressSelectorConfiguration">EgressSelectorConfiguration
     </H3>
 
   
@@ -56,7 +133,7 @@
           
           <tr>
             <td><code>apiVersion</code></br>string</td>
-            <td><code>apiserver.k8s.io/v1beta1</code></td>
+            <td><code>apiserver.k8s.io/v1alpha1</code></td>
           </tr>
           <tr>
             <td><code>kind</code></br>string</td>
@@ -84,7 +161,7 @@
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-EgressSelection">
+              <a href="#apiserver-k8s-io-v1alpha1-EgressSelection">
                 <span style="font-family: monospace">[]EgressSelection</span>
               </a>
             
@@ -109,13 +186,240 @@
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-Connection">Connection
+  <H3 id="apiserver-k8s-io-v1alpha1-TracingConfiguration">TracingConfiguration
+    </H3>
+
+  
+
+  <p><p>TracingConfiguration provides versioned configuration for tracing clients.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>apiserver.k8s.io/v1alpha1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>TracingConfiguration</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>endpoint</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Endpoint of the collector that's running on the control-plane node.
+The APIServer uses the egressType ControlPlane when sending data to the collector.
+The syntax is defined in https://github.com/grpc/grpc/blob/master/doc/naming.md.
+Defaults to the otlpgrpc default, localhost:4317
+The connection is insecure, and does not support TLS.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>samplingRatePerMillion</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>SamplingRatePerMillion is the number of samples to collect per million spans.
+Defaults to 0.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+  <H3 id="apiserver-k8s-io-v1alpha1-AdmissionPluginConfiguration">AdmissionPluginConfiguration
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-EgressSelection">EgressSelection</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-AdmissionConfiguration">AdmissionConfiguration</a>)
+    </p>
+  
+
+  <p><p>AdmissionPluginConfiguration provides the configuration for a single plug-in.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Name is the name of the admission controller.
+It must match the registered admission plugin name.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>path</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Path is the path to a configuration file that contains the plugin's
+configuration</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>configuration</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Configuration is an embedded configuration object to be used as the plugin's
+configuration. If present, it will be used instead of the path to the configuration file.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+  <H3 id="apiserver-k8s-io-v1alpha1-Connection">Connection
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#apiserver-k8s-io-v1alpha1-EgressSelection">EgressSelection</a>)
     </p>
   
 
@@ -151,7 +455,7 @@
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-ProtocolType">
+              <a href="#apiserver-k8s-io-v1alpha1-ProtocolType">
                 <span style="font-family: monospace">ProtocolType</span>
               </a>
             
@@ -180,7 +484,7 @@
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-Transport">
+              <a href="#apiserver-k8s-io-v1alpha1-Transport">
                 <span style="font-family: monospace">Transport</span>
               </a>
             
@@ -206,13 +510,13 @@ This is required if ProxyProtocol is HTTPConnect or GRPC.</p>
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-EgressSelection">EgressSelection
+  <H3 id="apiserver-k8s-io-v1alpha1-EgressSelection">EgressSelection
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-EgressSelectorConfiguration">EgressSelectorConfiguration</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-EgressSelectorConfiguration">EgressSelectorConfiguration</a>)
     </p>
   
 
@@ -279,7 +583,7 @@ The &quot;master&quot; egress selector is deprecated in favor of &quot;controlpl
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-Connection">
+              <a href="#apiserver-k8s-io-v1alpha1-Connection">
                 <span style="font-family: monospace">Connection</span>
               </a>
             
@@ -304,13 +608,13 @@ The &quot;master&quot; egress selector is deprecated in favor of &quot;controlpl
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-ProtocolType">ProtocolType
+  <H3 id="apiserver-k8s-io-v1alpha1-ProtocolType">ProtocolType
     (<code>string</code> alias)</p></H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-Connection">Connection</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-Connection">Connection</a>)
     </p>
   
 
@@ -319,13 +623,13 @@ The &quot;master&quot; egress selector is deprecated in favor of &quot;controlpl
 
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-TCPTransport">TCPTransport
+  <H3 id="apiserver-k8s-io-v1alpha1-TCPTransport">TCPTransport
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-Transport">Transport</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-Transport">Transport</a>)
     </p>
   
 
@@ -389,7 +693,7 @@ As an example it might be &quot;https://127.0.0.1:8131&quot;</p>
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-TLSConfig">
+              <a href="#apiserver-k8s-io-v1alpha1-TLSConfig">
                 <span style="font-family: monospace">TLSConfig</span>
               </a>
             
@@ -414,13 +718,13 @@ As an example it might be &quot;https://127.0.0.1:8131&quot;</p>
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-TLSConfig">TLSConfig
+  <H3 id="apiserver-k8s-io-v1alpha1-TLSConfig">TLSConfig
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-TCPTransport">TCPTransport</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-TCPTransport">TCPTransport</a>)
     </p>
   
 
@@ -538,13 +842,13 @@ Must be configured if TCPTransport.URL is prefixed with https://</p>
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-Transport">Transport
+  <H3 id="apiserver-k8s-io-v1alpha1-Transport">Transport
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-Connection">Connection</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-Connection">Connection</a>)
     </p>
   
 
@@ -578,7 +882,7 @@ Must be configured if TCPTransport.URL is prefixed with https://</p>
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-TCPTransport">
+              <a href="#apiserver-k8s-io-v1alpha1-TCPTransport">
                 <span style="font-family: monospace">TCPTransport</span>
               </a>
             
@@ -609,7 +913,7 @@ Requires at least one of TCP or UDS to be set</p>
           
           
             
-              <a href="#apiserver-k8s-io-v1beta1-UDSTransport">
+              <a href="#apiserver-k8s-io-v1alpha1-UDSTransport">
                 <span style="font-family: monospace">UDSTransport</span>
               </a>
             
@@ -635,13 +939,13 @@ Requires at least one of TCP or UDS to be set</p>
     </table>
   
 
-  <H3 id="apiserver-k8s-io-v1beta1-UDSTransport">UDSTransport
+  <H3 id="apiserver-k8s-io-v1alpha1-UDSTransport">UDSTransport
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#apiserver-k8s-io-v1beta1-Transport">Transport</a>)
+        <a href="#apiserver-k8s-io-v1alpha1-Transport">Transport</a>)
     </p>
   
 

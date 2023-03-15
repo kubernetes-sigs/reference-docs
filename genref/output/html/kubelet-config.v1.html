@@ -1,0 +1,1005 @@
+
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+      <style type="text/css">
+        td p {
+          margin-bottom: 0
+        }
+        code {
+          color: #802060;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          
+          
+            <H2 id="kubelet-config-k8s-io-v1">Package: <span style="font-family: monospace">kubelet.config.k8s.io/v1</span></H2>
+            <p></p>
+          
+        
+          
+          
+        
+        
+          
+            
+            <H3>Resource Types:</H3>
+            <ul><li>
+                    <a href="#kubelet-config-k8s-io-v1-CredentialProviderConfig">CredentialProviderConfig</a>
+                  </li></ul>
+
+            
+            
+  <H3 id="kubelet-config-k8s-io-v1-CredentialProviderConfig">CredentialProviderConfig
+    </H3>
+
+  
+
+  <p><p>CredentialProviderConfig is the configuration containing information about
+each exec credential provider. Kubelet reads this configuration from disk and enables
+each provider as specified by the CredentialProvider type.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+          
+          <tr>
+            <td><code>apiVersion</code></br>string</td>
+            <td><code>kubelet.config.k8s.io/v1</code></td>
+          </tr>
+          <tr>
+            <td><code>kind</code></br>string</td>
+            <td><code>CredentialProviderConfig</code></td>
+          </tr>
+        
+
+        
+        
+
+  
+  
+    
+    
+  
+    
+    
+      <tr>
+        <td><code>providers</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubelet-config-k8s-io-v1-CredentialProvider">
+                <span style="font-family: monospace">[]CredentialProvider</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>providers is a list of credential provider plugins that will be enabled by the kubelet.
+Multiple providers may match against a single image, in which case credentials
+from all providers will be returned to the kubelet. If multiple providers are called
+for a single image, the results are combined. If providers return overlapping
+auth keys, the value from the provider earlier in this list is used.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+  <H3 id="kubelet-config-k8s-io-v1-CredentialProvider">CredentialProvider
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubelet-config-k8s-io-v1-CredentialProviderConfig">CredentialProviderConfig</a>)
+    </p>
+  
+
+  <p><p>CredentialProvider represents an exec plugin to be invoked by the kubelet. The plugin is only
+invoked when an image being pulled matches the images handled by the plugin (see matchImages).</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>name is the required name of the credential provider. It must match the name of the
+provider executable as seen by the kubelet. The executable must be in the kubelet's
+bin directory (set by the --image-credential-provider-bin-dir flag).</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>matchImages</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>matchImages is a required list of strings used to match against images in order to
+determine if this provider should be invoked. If one of the strings matches the
+requested image from the kubelet, the plugin will be invoked and given a chance
+to provide credentials. Images are expected to contain the registry domain
+and URL path.</p>
+<p>Each entry in matchImages is a pattern which can optionally contain a port and a path.
+Globs can be used in the domain, but not in the port or the path. Globs are supported
+as subdomains like '<em>.k8s.io' or 'k8s.</em>.io', and top-level-domains such as 'k8s.<em>'.
+Matching partial subdomains like 'app</em>.k8s.io' is also supported. Each glob can only match
+a single subdomain segment, so *.io does not match *.k8s.io.</p>
+<p>A match exists between an image and a matchImage when all of the below are true:</p>
+<ul>
+<li>Both contain the same number of domain parts and each part matches.</li>
+<li>The URL path of an imageMatch must be a prefix of the target image URL path.</li>
+<li>If the imageMatch contains a port, then the port must match in the image as well.</li>
+</ul>
+<p>Example values of matchImages:</p>
+<ul>
+<li>123456789.dkr.ecr.us-east-1.amazonaws.com</li>
+<li>*.azurecr.io</li>
+<li>gcr.io</li>
+<li><em>.</em>.registry.io</li>
+<li>registry.io:8080/path</li>
+</ul>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>defaultCacheDuration</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>defaultCacheDuration is the default duration the plugin will cache credentials in-memory
+if a cache duration is not provided in the plugin response. This field is required.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>apiVersion</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Required input version of the exec CredentialProviderRequest. The returned CredentialProviderResponse
+MUST use the same encoding version as the input. Current supported values are:</p>
+<ul>
+<li>credentialprovider.kubelet.k8s.io/v1</li>
+</ul>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>args</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Arguments to pass to the command when executing it.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>env</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubelet-config-k8s-io-v1-ExecEnvVar">
+                <span style="font-family: monospace">[]ExecEnvVar</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Env defines additional environment variables to expose to the process. These
+are unioned with the host's environment, as well as variables client-go uses
+to pass argument to the plugin.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+  <H3 id="kubelet-config-k8s-io-v1-ExecEnvVar">ExecEnvVar
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubelet-config-k8s-io-v1-CredentialProvider">CredentialProvider</a>)
+    </p>
+  
+
+  <p><p>ExecEnvVar is used for setting environment variables when executing an exec-based
+credential plugin.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>name</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>value</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+          
+          <HR />
+        
+          
+            
+            
+              
+                
+  <H3 id="FormatOptions">FormatOptions
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#LoggingConfiguration">LoggingConfiguration</a>)
+    </p>
+  
+
+  <p><p>FormatOptions contains options for the different logging formats.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>json</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#JSONOptions">
+                <span style="font-family: monospace">JSONOptions</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>[Alpha] JSON contains options for logging format &quot;json&quot;.
+Only available when the LoggingAlphaOptions feature gate is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="JSONOptions">JSONOptions
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#FormatOptions">FormatOptions</a>)
+    </p>
+  
+
+  <p><p>JSONOptions contains options for logging format &quot;json&quot;.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>splitStream</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>[Alpha] SplitStream redirects error messages to stderr while
+info messages go to stdout, with buffering. The default is to write
+both to stdout, without buffering. Only available when
+the LoggingAlphaOptions feature gate is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>infoBufferSize</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue">
+                <span style="font-family: monospace">k8s.io/apimachinery/pkg/api/resource.QuantityValue</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>[Alpha] InfoBufferSize sets the size of the info stream when
+using split streams. The default is zero, which disables buffering.
+Only available when the LoggingAlphaOptions feature gate is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="LogFormatFactory">LogFormatFactory
+    </H3>
+
+  
+
+  <p><p>LogFormatFactory provides support for a certain additional,
+non-default log format.</p>
+</p>
+
+  
+
+              
+            
+              
+                
+  <H3 id="LoggingConfiguration">LoggingConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a>)
+    </p>
+  
+
+  <p><p>LoggingConfiguration contains logging options.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>format</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Format Flag specifies the structure of log messages.
+default value of format is <code>text</code></p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>flushFrequency</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/time#Duration">
+                <span style="font-family: monospace">time.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Maximum number of nanoseconds (i.e. 1s = 1000000000) between log
+flushes. Ignored if the selected logging backend writes log
+messages without buffering.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>verbosity</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#VerbosityLevel">
+                <span style="font-family: monospace">VerbosityLevel</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Verbosity is the threshold that determines which log messages are
+logged. Default is zero which logs only the most important
+messages. Higher values enable additional messages. Error messages
+are always logged.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>vmodule</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#VModuleConfiguration">
+                <span style="font-family: monospace">VModuleConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>VModule overrides the verbosity threshold for individual files.
+Only supported for &quot;text&quot; log format.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>options</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#FormatOptions">
+                <span style="font-family: monospace">FormatOptions</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>[Alpha] Options holds additional parameters that are specific
+to the different logging formats. Only the options for the selected
+format get used, but all of them get validated.
+Only available when the LoggingAlphaOptions feature gate is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="TracingConfiguration">TracingConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubelet-config-k8s-io-v1beta1-KubeletConfiguration">KubeletConfiguration</a>)
+    </p>
+  
+
+  <p><p>TracingConfiguration provides versioned configuration for OpenTelemetry tracing clients.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>endpoint</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>Endpoint of the collector this component will report traces to.
+The connection is insecure, and does not currently support TLS.
+Recommended is unset, and endpoint is the otlp grpc default, localhost:4317.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>samplingRatePerMillion</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">int32</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>SamplingRatePerMillion is the number of samples to collect per million spans.
+Recommended is unset. If unset, sampler respects its parent span's sampling
+rate, but otherwise never samples.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="VModuleConfiguration">VModuleConfiguration
+    (<code>[]k8s.io/component-base/logs/api/v1.VModuleItem</code> alias)</p></H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#LoggingConfiguration">LoggingConfiguration</a>)
+    </p>
+  
+
+  <p><p>VModuleConfiguration is a collection of individual file names or patterns
+and the corresponding verbosity threshold.</p>
+</p>
+
+  
+
+              
+            
+              
+            
+              
+                
+  <H3 id="VerbosityLevel">VerbosityLevel
+    (<code>uint32</code> alias)</p></H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#LoggingConfiguration">LoggingConfiguration</a>)
+    </p>
+  
+
+  <p><p>VerbosityLevel represents a klog or logr verbosity threshold.</p>
+</p>
+
+  
+
+              
+            
+          
+          <HR />
+        
+      </div>
+
+      <div class="container">
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
+      </div>
+    </body>
+  </html>
