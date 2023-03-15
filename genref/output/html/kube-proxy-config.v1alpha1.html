@@ -17,12 +17,17 @@
     <body>
       <div class="container">
         
-        
           
           
             <H2 id="kubeproxy-config-k8s-io-v1alpha1">Package: <span style="font-family: monospace">kubeproxy.config.k8s.io/v1alpha1</span></H2>
             <p></p>
-
+          
+        
+          
+          
+        
+        
+          
             
             <H3>Resource Types:</H3>
             <ul><li>
@@ -31,14 +36,14 @@
 
             
             
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-KubeProxyConfiguration">KubeProxyConfiguration
     </H3>
 
   
 
-  <p>KubeProxyConfiguration contains everything necessary to configure the
+  <p><p>KubeProxyConfiguration contains everything necessary to configure the
 Kubernetes proxy server.</p>
+</p>
 
   
     <table class="table">
@@ -89,7 +94,8 @@ Kubernetes proxy server.</p>
         <td>
           
 
-          featureGates is a map of feature names to bools that enable or disable alpha/experimental features.
+          <p>featureGates is a map of feature names to bools that enable or disable alpha/experimental features.</p>
+
 
           
 
@@ -117,8 +123,9 @@ Kubernetes proxy server.</p>
         <td>
           
 
-          bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
-for all interfaces)
+          <p>bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
+for all interfaces)</p>
+
 
           
 
@@ -146,8 +153,9 @@ for all interfaces)
         <td>
           
 
-          healthzBindAddress is the IP address and port for the health check server to serve on,
-defaulting to 0.0.0.0:10256
+          <p>healthzBindAddress is the IP address and port for the health check server to serve on,
+defaulting to 0.0.0.0:10256</p>
+
 
           
 
@@ -175,8 +183,9 @@ defaulting to 0.0.0.0:10256
         <td>
           
 
-          metricsBindAddress is the IP address and port for the metrics server to serve on,
-defaulting to 127.0.0.1:10249 (set to 0.0.0.0 for all interfaces)
+          <p>metricsBindAddress is the IP address and port for the metrics server to serve on,
+defaulting to 127.0.0.1:10249 (set to 0.0.0.0 for all interfaces)</p>
+
 
           
 
@@ -204,7 +213,8 @@ defaulting to 127.0.0.1:10249 (set to 0.0.0.0 for all interfaces)
         <td>
           
 
-          bindAddressHardFail, if true, kube-proxy will treat failure to bind to a port as fatal and exit
+          <p>bindAddressHardFail, if true, kube-proxy will treat failure to bind to a port as fatal and exit</p>
+
 
           
 
@@ -232,8 +242,9 @@ defaulting to 127.0.0.1:10249 (set to 0.0.0.0 for all interfaces)
         <td>
           
 
-          enableProfiling enables profiling via web interface on /debug/pprof handler.
-Profiling handlers will be handled by metrics server.
+          <p>enableProfiling enables profiling via web interface on /debug/pprof handler.
+Profiling handlers will be handled by metrics server.</p>
+
 
           
 
@@ -261,9 +272,10 @@ Profiling handlers will be handled by metrics server.
         <td>
           
 
-          clusterCIDR is the CIDR range of the pods in the cluster. It is used to
+          <p>clusterCIDR is the CIDR range of the pods in the cluster. It is used to
 bridge traffic coming from outside of the cluster. If not provided,
-no off-cluster bridging will be performed.
+no off-cluster bridging will be performed.</p>
+
 
           
 
@@ -291,7 +303,8 @@ no off-cluster bridging will be performed.
         <td>
           
 
-          hostnameOverride, if non-empty, will be used as the identity instead of the actual hostname.
+          <p>hostnameOverride, if non-empty, will be used as the identity instead of the actual hostname.</p>
+
 
           
 
@@ -321,8 +334,9 @@ no off-cluster bridging will be performed.
         <td>
           
 
-          clientConnection specifies the kubeconfig file and client connection settings for the proxy
-server to use when communicating with the apiserver.
+          <p>clientConnection specifies the kubeconfig file and client connection settings for the proxy
+server to use when communicating with the apiserver.</p>
+
 
           
 
@@ -352,7 +366,8 @@ server to use when communicating with the apiserver.
         <td>
           
 
-          iptables contains iptables-related configuration options.
+          <p>iptables contains iptables-related configuration options.</p>
+
 
           
 
@@ -382,7 +397,8 @@ server to use when communicating with the apiserver.
         <td>
           
 
-          ipvs contains ipvs-related configuration options.
+          <p>ipvs contains ipvs-related configuration options.</p>
+
 
           
 
@@ -410,8 +426,9 @@ server to use when communicating with the apiserver.
         <td>
           
 
-          oomScoreAdj is the oom-score-adj value for kube-proxy process. Values must be within
-the range [-1000, 1000]
+          <p>oomScoreAdj is the oom-score-adj value for kube-proxy process. Values must be within
+the range [-1000, 1000]</p>
+
 
           
 
@@ -441,7 +458,8 @@ the range [-1000, 1000]
         <td>
           
 
-          mode specifies which proxy mode to use.
+          <p>mode specifies which proxy mode to use.</p>
+
 
           
 
@@ -469,39 +487,9 @@ the range [-1000, 1000]
         <td>
           
 
-          portRange is the range of host ports (beginPort-endPort, inclusive) that may be consumed
-in order to proxy service traffic. If unspecified (0-0) then ports will be randomly chosen.
+          <p>portRange is the range of host ports (beginPort-endPort, inclusive) that may be consumed
+in order to proxy service traffic. If unspecified (0-0) then ports will be randomly chosen.</p>
 
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>udpIdleTimeout</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
-                <span style="font-family: monospace">meta/v1.Duration</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          udpIdleTimeout is how long an idle UDP connection will be kept open (e.g. '250ms', '2s').
-Must be greater than 0. Only applicable for proxyMode=userspace.
 
           
 
@@ -531,7 +519,8 @@ Must be greater than 0. Only applicable for proxyMode=userspace.
         <td>
           
 
-          conntrack contains conntrack-related configuration options.
+          <p>conntrack contains conntrack-related configuration options.</p>
+
 
           
 
@@ -552,7 +541,7 @@ Must be greater than 0. Only applicable for proxyMode=userspace.
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -561,8 +550,9 @@ Must be greater than 0. Only applicable for proxyMode=userspace.
         <td>
           
 
-          configSyncPeriod is how often configuration from the apiserver is refreshed. Must be greater
-than 0.
+          <p>configSyncPeriod is how often configuration from the apiserver is refreshed. Must be greater
+than 0.</p>
+
 
           
 
@@ -590,13 +580,14 @@ than 0.
         <td>
           
 
-          nodePortAddresses is the --nodeport-addresses value for kube-proxy process. Values must be valid
+          <p>nodePortAddresses is the --nodeport-addresses value for kube-proxy process. Values must be valid
 IP blocks. These values are as a parameter to select the interfaces where nodeport works.
 In case someone would like to expose a service on localhost for local visit and some other interfaces for
 particular purpose, a list of IP blocks would do that.
-If set it to "127.0.0.0/8", kube-proxy will only select the loopback interface for NodePort.
+If set it to &quot;127.0.0.0/8&quot;, kube-proxy will only select the loopback interface for NodePort.
 If set it to a non-zero IP block, kube-proxy will filter that down to just the IPs that applied to the node.
-An empty string slice is meant to select all network interfaces.
+An empty string slice is meant to select all network interfaces.</p>
+
 
           
 
@@ -626,7 +617,8 @@ An empty string slice is meant to select all network interfaces.
         <td>
           
 
-          winkernel contains winkernel-related configuration options.
+          <p>winkernel contains winkernel-related configuration options.</p>
+
 
           
 
@@ -654,7 +646,8 @@ An empty string slice is meant to select all network interfaces.
         <td>
           
 
-          ShowHiddenMetricsForVersion is the version for which you want to show hidden metrics.
+          <p>ShowHiddenMetricsForVersion is the version for which you want to show hidden metrics.</p>
+
 
           
 
@@ -684,7 +677,39 @@ An empty string slice is meant to select all network interfaces.
         <td>
           
 
-          DetectLocalMode determines mode to use for detecting local traffic, defaults to LocalModeClusterCIDR
+          <p>DetectLocalMode determines mode to use for detecting local traffic, defaults to LocalModeClusterCIDR</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>detectLocal</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubeproxy-config-k8s-io-v1alpha1-DetectLocalConfiguration">
+                <span style="font-family: monospace">DetectLocalConfiguration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>DetectLocal contains optional configuration settings related to DetectLocalMode.</p>
+
 
           
 
@@ -699,8 +724,104 @@ An empty string slice is meant to select all network interfaces.
     </table>
   
 
+  <H3 id="kubeproxy-config-k8s-io-v1alpha1-DetectLocalConfiguration">DetectLocalConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubeproxy-config-k8s-io-v1alpha1-KubeProxyConfiguration">KubeProxyConfiguration</a>)
+    </p>
+  
+
+  <p><p>DetectLocalConfiguration contains optional settings related to DetectLocalMode option</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>bridgeInterface</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
             
-              
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>BridgeInterface is a string argument which represents a single bridge interface name.
+Kube-proxy considers traffic as local if originating from this given bridge.
+This argument should be set if DetectLocalMode is set to LocalModeBridgeInterface.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>interfaceNamePrefix</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>InterfaceNamePrefix is a string argument which represents a single interface prefix name.
+Kube-proxy considers traffic as local if originating from one or more interfaces which match
+the given prefix. This argument should be set if DetectLocalMode is set to LocalModeInterfaceNamePrefix.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-KubeProxyConntrackConfiguration">KubeProxyConntrackConfiguration
     </H3>
 
@@ -711,8 +832,9 @@ An empty string slice is meant to select all network interfaces.
     </p>
   
 
-  <p>KubeProxyConntrackConfiguration contains conntrack settings for
+  <p><p>KubeProxyConntrackConfiguration contains conntrack settings for
 the Kubernetes proxy server.</p>
+</p>
 
   
     <table class="table">
@@ -750,8 +872,9 @@ the Kubernetes proxy server.</p>
         <td>
           
 
-          maxPerCore is the maximum number of NAT connections to track
-per CPU core (0 to leave the limit as-is and ignore min).
+          <p>maxPerCore is the maximum number of NAT connections to track
+per CPU core (0 to leave the limit as-is and ignore min).</p>
+
 
           
 
@@ -779,8 +902,9 @@ per CPU core (0 to leave the limit as-is and ignore min).
         <td>
           
 
-          min is the minimum value of connect-tracking records to allocate,
-regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).
+          <p>min is the minimum value of connect-tracking records to allocate,
+regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).</p>
+
 
           
 
@@ -801,7 +925,7 @@ regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -810,8 +934,9 @@ regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).
         <td>
           
 
-          tcpEstablishedTimeout is how long an idle TCP connection will be kept open
-(e.g. '2s').  Must be greater than 0 to set.
+          <p>tcpEstablishedTimeout is how long an idle TCP connection will be kept open
+(e.g. '2s').  Must be greater than 0 to set.</p>
+
 
           
 
@@ -832,7 +957,7 @@ regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -841,9 +966,10 @@ regardless of conntrackMaxPerCore (set maxPerCore=0 to leave the limit as-is).
         <td>
           
 
-          tcpCloseWaitTimeout is how long an idle conntrack entry
+          <p>tcpCloseWaitTimeout is how long an idle conntrack entry
 in CLOSE_WAIT state will remain in the conntrack
-table. (e.g. '60s'). Must be greater than 0 to set.
+table. (e.g. '60s'). Must be greater than 0 to set.</p>
+
 
           
 
@@ -858,8 +984,6 @@ table. (e.g. '60s'). Must be greater than 0 to set.
     </table>
   
 
-            
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-KubeProxyIPTablesConfiguration">KubeProxyIPTablesConfiguration
     </H3>
 
@@ -870,8 +994,9 @@ table. (e.g. '60s'). Must be greater than 0 to set.
     </p>
   
 
-  <p>KubeProxyIPTablesConfiguration contains iptables-related configuration
+  <p><p>KubeProxyIPTablesConfiguration contains iptables-related configuration
 details for the Kubernetes proxy server.</p>
+</p>
 
   
     <table class="table">
@@ -909,8 +1034,9 @@ details for the Kubernetes proxy server.</p>
         <td>
           
 
-          masqueradeBit is the bit of the iptables fwmark space to use for SNAT if using
-the pure iptables proxy mode. Values must be within the range [0, 31].
+          <p>masqueradeBit is the bit of the iptables fwmark space to use for SNAT if using
+the pure iptables proxy mode. Values must be within the range [0, 31].</p>
+
 
           
 
@@ -938,7 +1064,38 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
         <td>
           
 
-          masqueradeAll tells kube-proxy to SNAT everything if using the pure iptables proxy mode.
+          <p>masqueradeAll tells kube-proxy to SNAT everything if using the pure iptables proxy mode.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>localhostNodePorts</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>LocalhostNodePorts tells kube-proxy to allow service NodePorts to be accessed via
+localhost (iptables mode only)</p>
+
 
           
 
@@ -959,7 +1116,7 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -968,8 +1125,9 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
         <td>
           
 
-          syncPeriod is the period that iptables rules are refreshed (e.g. '5s', '1m',
-'2h22m').  Must be greater than 0.
+          <p>syncPeriod is the period that iptables rules are refreshed (e.g. '5s', '1m',
+'2h22m').  Must be greater than 0.</p>
+
 
           
 
@@ -990,7 +1148,7 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -999,8 +1157,9 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
         <td>
           
 
-          minSyncPeriod is the minimum period that iptables rules are refreshed (e.g. '5s', '1m',
-'2h22m').
+          <p>minSyncPeriod is the minimum period that iptables rules are refreshed (e.g. '5s', '1m',
+'2h22m').</p>
+
 
           
 
@@ -1015,8 +1174,6 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
     </table>
   
 
-            
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-KubeProxyIPVSConfiguration">KubeProxyIPVSConfiguration
     </H3>
 
@@ -1027,8 +1184,9 @@ the pure iptables proxy mode. Values must be within the range [0, 31].
     </p>
   
 
-  <p>KubeProxyIPVSConfiguration contains ipvs-related configuration
+  <p><p>KubeProxyIPVSConfiguration contains ipvs-related configuration
 details for the Kubernetes proxy server.</p>
+</p>
 
   
     <table class="table">
@@ -1059,7 +1217,7 @@ details for the Kubernetes proxy server.</p>
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -1068,8 +1226,9 @@ details for the Kubernetes proxy server.</p>
         <td>
           
 
-          syncPeriod is the period that ipvs rules are refreshed (e.g. '5s', '1m',
-'2h22m').  Must be greater than 0.
+          <p>syncPeriod is the period that ipvs rules are refreshed (e.g. '5s', '1m',
+'2h22m').  Must be greater than 0.</p>
+
 
           
 
@@ -1090,7 +1249,7 @@ details for the Kubernetes proxy server.</p>
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -1099,8 +1258,9 @@ details for the Kubernetes proxy server.</p>
         <td>
           
 
-          minSyncPeriod is the minimum period that ipvs rules are refreshed (e.g. '5s', '1m',
-'2h22m').
+          <p>minSyncPeriod is the minimum period that ipvs rules are refreshed (e.g. '5s', '1m',
+'2h22m').</p>
+
 
           
 
@@ -1128,7 +1288,8 @@ details for the Kubernetes proxy server.</p>
         <td>
           
 
-          ipvs scheduler
+          <p>ipvs scheduler</p>
+
 
           
 
@@ -1156,8 +1317,9 @@ details for the Kubernetes proxy server.</p>
         <td>
           
 
-          excludeCIDRs is a list of CIDR's which the ipvs proxier should not touch
-when cleaning up ipvs services.
+          <p>excludeCIDRs is a list of CIDR's which the ipvs proxier should not touch
+when cleaning up ipvs services.</p>
+
 
           
 
@@ -1185,8 +1347,9 @@ when cleaning up ipvs services.
         <td>
           
 
-          strict ARP configure arp_ignore and arp_announce to avoid answering ARP queries
-from kube-ipvs0 interface
+          <p>strict ARP configure arp_ignore and arp_announce to avoid answering ARP queries
+from kube-ipvs0 interface</p>
+
 
           
 
@@ -1207,7 +1370,7 @@ from kube-ipvs0 interface
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -1216,8 +1379,9 @@ from kube-ipvs0 interface
         <td>
           
 
-          tcpTimeout is the timeout value used for idle IPVS TCP sessions.
-The default value is 0, which preserves the current timeout value on the system.
+          <p>tcpTimeout is the timeout value used for idle IPVS TCP sessions.
+The default value is 0, which preserves the current timeout value on the system.</p>
+
 
           
 
@@ -1238,7 +1402,7 @@ The default value is 0, which preserves the current timeout value on the system.
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -1247,8 +1411,9 @@ The default value is 0, which preserves the current timeout value on the system.
         <td>
           
 
-          tcpFinTimeout is the timeout value used for IPVS TCP sessions after receiving a FIN.
-The default value is 0, which preserves the current timeout value on the system.
+          <p>tcpFinTimeout is the timeout value used for IPVS TCP sessions after receiving a FIN.
+The default value is 0, which preserves the current timeout value on the system.</p>
+
 
           
 
@@ -1269,7 +1434,7 @@ The default value is 0, which preserves the current timeout value on the system.
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
                 <span style="font-family: monospace">meta/v1.Duration</span>
               </a>
             
@@ -1278,8 +1443,9 @@ The default value is 0, which preserves the current timeout value on the system.
         <td>
           
 
-          udpTimeout is the timeout value used for IPVS UDP packets.
-The default value is 0, which preserves the current timeout value on the system.
+          <p>udpTimeout is the timeout value used for IPVS UDP packets.
+The default value is 0, which preserves the current timeout value on the system.</p>
+
 
           
 
@@ -1294,8 +1460,6 @@ The default value is 0, which preserves the current timeout value on the system.
     </table>
   
 
-            
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-KubeProxyWinkernelConfiguration">KubeProxyWinkernelConfiguration
     </H3>
 
@@ -1306,8 +1470,9 @@ The default value is 0, which preserves the current timeout value on the system.
     </p>
   
 
-  <p>KubeProxyWinkernelConfiguration contains Windows/HNS settings for
+  <p><p>KubeProxyWinkernelConfiguration contains Windows/HNS settings for
 the Kubernetes proxy server.</p>
+</p>
 
   
     <table class="table">
@@ -1345,8 +1510,9 @@ the Kubernetes proxy server.</p>
         <td>
           
 
-          networkName is the name of the network kube-proxy will use
-to create endpoints and policies
+          <p>networkName is the name of the network kube-proxy will use
+to create endpoints and policies</p>
+
 
           
 
@@ -1374,8 +1540,9 @@ to create endpoints and policies
         <td>
           
 
-          sourceVip is the IP address of the source VIP endoint used for
-NAT when loadbalancing
+          <p>sourceVip is the IP address of the source VIP endoint used for
+NAT when loadbalancing</p>
+
 
           
 
@@ -1403,8 +1570,69 @@ NAT when loadbalancing
         <td>
           
 
-          enableDSR tells kube-proxy whether HNS policies should be created
-with DSR
+          <p>enableDSR tells kube-proxy whether HNS policies should be created
+with DSR</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>rootHnsEndpointName</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>RootHnsEndpointName is the name of hnsendpoint that is attached to
+l2bridge for root network namespace</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>forwardHealthCheckVip</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>ForwardHealthCheckVip forwards service VIP for health check port on
+Windows</p>
+
 
           
 
@@ -1419,8 +1647,6 @@ with DSR
     </table>
   
 
-            
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-LocalMode">LocalMode
     (<code>string</code> alias)</p></H3>
 
@@ -1431,12 +1657,11 @@ with DSR
     </p>
   
 
-  <p>LocalMode represents modes to detect local traffic from the node</p>
+  <p><p>LocalMode represents modes to detect local traffic from the node</p>
+</p>
 
   
 
-            
-              
   <H3 id="kubeproxy-config-k8s-io-v1alpha1-ProxyMode">ProxyMode
     (<code>string</code> alias)</p></H3>
 
@@ -1447,30 +1672,20 @@ with DSR
     </p>
   
 
-  <p>ProxyMode represents modes used by the Kubernetes proxy server.
-
-Currently, three modes of proxy are available in Linux platform: 'userspace' (older, going to be EOL), 'iptables'
-(newer, faster), 'ipvs'(newest, better in performance and scalability).
-
-Two modes of proxy are available in Windows platform: 'userspace'(older, stable) and 'kernelspace' (newer, faster).
-
-In Linux platform, if proxy mode is blank, use the best-available proxy (currently iptables, but may change in the
-future). If the iptables proxy is selected, regardless of how, but the system's kernel or iptables versions are
-insufficient, this always falls back to the userspace proxy. IPVS mode will be enabled when proxy mode is set to 'ipvs',
-and the fall back path is firstly iptables and then userspace.
-
-In Windows platform, if proxy mode is blank, use the best-available proxy (currently userspace, but may change in the
-future). If winkernel proxy is selected, regardless of how, but the Windows kernel can't support this mode of proxy,
-this always falls back to the userspace proxy.</p>
+  <p><p>ProxyMode represents modes used by the Kubernetes proxy server.</p>
+<p>Currently, two modes of proxy are available on Linux platforms: 'iptables' and 'ipvs'.
+One mode of proxy is available on Windows platforms: 'kernelspace'.</p>
+<p>If the proxy mode is unspecified, the best-available proxy mode will be used (currently this
+is <code>iptables</code> on Linux and <code>kernelspace</code> on Windows). If the selected proxy mode cannot be
+used (due to lack of kernel support, missing userspace components, etc) then kube-proxy
+will exit with an error.</p>
+</p>
 
   
 
-            
           
-
           <HR />
         
-          
           
             
             
@@ -1482,11 +1697,16 @@ this always falls back to the userspace proxy.</p>
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeproxy-config-k8s-io-v1alpha1-KubeProxyConfiguration">KubeProxyConfiguration</a>)
+        <a href="#kubeproxy-config-k8s-io-v1alpha1-KubeProxyConfiguration">KubeProxyConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a>)
     </p>
   
 
-  <p>ClientConnectionConfiguration contains details for constructing a client.</p>
+  <p><p>ClientConnectionConfiguration contains details for constructing a client.</p>
+</p>
 
   
     <table class="table">
@@ -1524,7 +1744,8 @@ this always falls back to the userspace proxy.</p>
         <td>
           
 
-          kubeconfig is the path to a KubeConfig file.
+          <p>kubeconfig is the path to a KubeConfig file.</p>
+
 
           
 
@@ -1552,9 +1773,10 @@ this always falls back to the userspace proxy.</p>
         <td>
           
 
-          acceptContentTypes defines the Accept header sent by clients when connecting to a server, overriding the
+          <p>acceptContentTypes defines the Accept header sent by clients when connecting to a server, overriding the
 default value of 'application/json'. This field will control all connections to the server used by a particular
-client.
+client.</p>
+
 
           
 
@@ -1582,7 +1804,8 @@ client.
         <td>
           
 
-          contentType is the content type used when sending data to the server from this client.
+          <p>contentType is the content type used when sending data to the server from this client.</p>
+
 
           
 
@@ -1610,7 +1833,8 @@ client.
         <td>
           
 
-          qps controls the number of queries per second allowed for this connection.
+          <p>qps controls the number of queries per second allowed for this connection.</p>
+
 
           
 
@@ -1638,7 +1862,8 @@ client.
         <td>
           
 
-          burst allows extra queries to accumulate when a client is exceeding its rate.
+          <p>burst allows extra queries to accumulate when a client is exceeding its rate.</p>
+
 
           
 
@@ -1656,19 +1881,382 @@ client.
               
             
               
+                
+  <H3 id="DebuggingConfiguration">DebuggingConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a>)
+    </p>
+  
+
+  <p><p>DebuggingConfiguration holds configuration for Debugging related features.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>enableProfiling</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
             
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>enableProfiling enables profiling via web interface host:port/debug/pprof/</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>enableContentionProfiling</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>enableContentionProfiling enables lock contention profiling, if
+enableProfiling is true.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
               
             
+              
+                
+  <H3 id="LeaderElectionConfiguration">LeaderElectionConfiguration
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubescheduler-config-k8s-io-v1beta2-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1beta3-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#kubescheduler-config-k8s-io-v1-KubeSchedulerConfiguration">KubeSchedulerConfiguration</a>, 
+        <a href="#controllermanager-config-k8s-io-v1alpha1-GenericControllerManagerConfiguration">GenericControllerManagerConfiguration</a>)
+    </p>
+  
+
+  <p><p>LeaderElectionConfiguration defines the configuration of leader election
+clients for components that can run with leader election enabled.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>leaderElect</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>leaderElect enables a leader election client to gain leadership
+before executing the main loop. Enable this when running replicated
+components for high availability.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>leaseDuration</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>leaseDuration is the duration that non-leader candidates will wait
+after observing a leadership renewal until attempting to acquire
+leadership of a led but unrenewed leader slot. This is effectively the
+maximum duration that a leader can be stopped before it is replaced
+by another candidate. This is only applicable if leader election is
+enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>renewDeadline</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>renewDeadline is the interval between attempts by the acting master to
+renew a leadership slot before it stops leading. This must be less
+than or equal to the lease duration. This is only applicable if leader
+election is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>retryPeriod</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>retryPeriod is the duration the clients should wait between attempting
+acquisition and renewal of a leadership. This is only applicable if
+leader election is enabled.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceLock</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>resourceLock indicates the resource object type that will be used to lock
+during leader election cycles.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceName</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>resourceName indicates the name of resource object that will be used to lock
+during leader election cycles.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>resourceNamespace</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>resourceName indicates the namespace of resource object that will be used to lock
+during leader election cycles.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
               
             
           
-
           <HR />
         
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>9f1f2474</code></em></p>
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
       </div>
     </body>
   </html>

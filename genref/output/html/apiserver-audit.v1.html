@@ -17,12 +17,14 @@
     <body>
       <div class="container">
         
-        
           
           
             <H2 id="audit-k8s-io-v1">Package: <span style="font-family: monospace">audit.k8s.io/v1</span></H2>
             <p></p>
-
+          
+        
+        
+          
             
             <H3>Resource Types:</H3>
             <ul><li>
@@ -37,7 +39,6 @@
 
             
             
-              
   <H3 id="audit-k8s-io-v1-Event">Event
     </H3>
 
@@ -48,7 +49,8 @@
     </p>
   
 
-  <p>Event captures all the information that can be included in an API audit log.</p>
+  <p><p>Event captures all the information that can be included in an API audit log.</p>
+</p>
 
   
     <table class="table">
@@ -101,7 +103,8 @@
         <td>
           
 
-          AuditLevel at which event was generated
+          <p>AuditLevel at which event was generated</p>
+
 
           
 
@@ -122,7 +125,7 @@
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/types#UID">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID">
                 <span style="font-family: monospace">k8s.io/apimachinery/pkg/types.UID</span>
               </a>
             
@@ -131,7 +134,8 @@
         <td>
           
 
-          Unique audit ID, generated for each request.
+          <p>Unique audit ID, generated for each request.</p>
+
 
           
 
@@ -161,7 +165,8 @@
         <td>
           
 
-          Stage of the request handling when this event instance was generated.
+          <p>Stage of the request handling when this event instance was generated.</p>
+
 
           
 
@@ -189,7 +194,8 @@
         <td>
           
 
-          RequestURI is the request URI as sent by the client to a server.
+          <p>RequestURI is the request URI as sent by the client to a server.</p>
+
 
           
 
@@ -217,8 +223,9 @@
         <td>
           
 
-          Verb is the kubernetes verb associated with the request.
-For non-resource requests, this is the lower-cased HTTP method.
+          <p>Verb is the kubernetes verb associated with the request.
+For non-resource requests, this is the lower-cased HTTP method.</p>
+
 
           
 
@@ -239,7 +246,7 @@ For non-resource requests, this is the lower-cased HTTP method.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#userinfo-v1-authentication">
                 <span style="font-family: monospace">authentication/v1.UserInfo</span>
               </a>
             
@@ -248,7 +255,8 @@ For non-resource requests, this is the lower-cased HTTP method.
         <td>
           
 
-          Authenticated user information.
+          <p>Authenticated user information.</p>
+
 
           
 
@@ -267,7 +275,7 @@ For non-resource requests, this is the lower-cased HTTP method.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#userinfo-v1-authentication">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#userinfo-v1-authentication">
                 <span style="font-family: monospace">authentication/v1.UserInfo</span>
               </a>
             
@@ -276,7 +284,8 @@ For non-resource requests, this is the lower-cased HTTP method.
         <td>
           
 
-          Impersonated user information.
+          <p>Impersonated user information.</p>
+
 
           
 
@@ -302,7 +311,16 @@ For non-resource requests, this is the lower-cased HTTP method.
         <td>
           
 
-          Source IPs, from where the request originated and intermediate proxies.
+          <p>Source IPs, from where the request originated and intermediate proxies.
+The source IPs are listed from (in order):</p>
+<ol>
+<li>X-Forwarded-For request header IPs</li>
+<li>X-Real-Ip header, if not present in the X-Forwarded-For list</li>
+<li>The remote address for the connection, if it doesn't match the last
+IP in the list up to here (X-Forwarded-For or X-Real-Ip).
+Note: All but the last IP can be arbitrarily set by the client.</li>
+</ol>
+
 
           
 
@@ -328,8 +346,9 @@ For non-resource requests, this is the lower-cased HTTP method.
         <td>
           
 
-          UserAgent records the user agent string reported by the client.
-Note that the UserAgent is provided by the client, and must not be trusted.
+          <p>UserAgent records the user agent string reported by the client.
+Note that the UserAgent is provided by the client, and must not be trusted.</p>
+
 
           
 
@@ -357,8 +376,9 @@ Note that the UserAgent is provided by the client, and must not be trusted.
         <td>
           
 
-          Object reference this request is targeted at.
-Does not apply for List-type requests, or non-resource requests.
+          <p>Object reference this request is targeted at.
+Does not apply for List-type requests, or non-resource requests.</p>
+
 
           
 
@@ -377,7 +397,7 @@ Does not apply for List-type requests, or non-resource requests.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#status-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#status-v1-meta">
                 <span style="font-family: monospace">meta/v1.Status</span>
               </a>
             
@@ -386,9 +406,10 @@ Does not apply for List-type requests, or non-resource requests.
         <td>
           
 
-          The response status, populated even when the ResponseObject is not a Status type.
+          <p>The response status, populated even when the ResponseObject is not a Status type.
 For successful responses, this will only include the Code and StatusSuccess.
-For non-status type error responses, this will be auto-populated with the error Message.
+For non-status type error responses, this will be auto-populated with the error Message.</p>
+
 
           
 
@@ -407,7 +428,7 @@ For non-status type error responses, this will be auto-populated with the error 
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown">
                 <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
               </a>
             
@@ -416,10 +437,11 @@ For non-status type error responses, this will be auto-populated with the error 
         <td>
           
 
-          API object from the request, in JSON format. The RequestObject is recorded as-is in the request
+          <p>API object from the request, in JSON format. The RequestObject is recorded as-is in the request
 (possibly re-encoded as JSON), prior to version conversion, defaulting, admission or
 merging. It is an external versioned object type, and may not be a valid object on its own.
-Omitted for non-resource requests.  Only logged at Request Level and higher.
+Omitted for non-resource requests.  Only logged at Request Level and higher.</p>
+
 
           
 
@@ -438,7 +460,7 @@ Omitted for non-resource requests.  Only logged at Request Level and higher.
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#Unknown">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown">
                 <span style="font-family: monospace">k8s.io/apimachinery/pkg/runtime.Unknown</span>
               </a>
             
@@ -447,9 +469,10 @@ Omitted for non-resource requests.  Only logged at Request Level and higher.
         <td>
           
 
-          API object returned in the response, in JSON. The ResponseObject is recorded after conversion
+          <p>API object returned in the response, in JSON. The ResponseObject is recorded after conversion
 to the external type, and serialized as JSON.  Omitted for non-resource requests.  Only logged
-at Response Level.
+at Response Level.</p>
+
 
           
 
@@ -468,7 +491,7 @@ at Response Level.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#microtime-v1-meta">
                 <span style="font-family: monospace">meta/v1.MicroTime</span>
               </a>
             
@@ -477,7 +500,8 @@ at Response Level.
         <td>
           
 
-          Time the request reached the apiserver.
+          <p>Time the request reached the apiserver.</p>
+
 
           
 
@@ -496,7 +520,7 @@ at Response Level.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#microtime-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#microtime-v1-meta">
                 <span style="font-family: monospace">meta/v1.MicroTime</span>
               </a>
             
@@ -505,7 +529,8 @@ at Response Level.
         <td>
           
 
-          Time the request reached current audit stage.
+          <p>Time the request reached current audit stage.</p>
+
 
           
 
@@ -531,12 +556,13 @@ at Response Level.
         <td>
           
 
-          Annotations is an unstructured key value map stored with an audit event that may be set by
+          <p>Annotations is an unstructured key value map stored with an audit event that may be set by
 plugins invoked in the request serving chain, including authentication, authorization and
 admission plugins. Note that these annotations are for the audit event, and do not correspond
 to the metadata.annotations of the submitted object. Keys should uniquely identify the informing
 component to avoid name collisions (e.g. podsecuritypolicy.admission.k8s.io/policy). Values
-should be short. Annotations are included in the Metadata level.
+should be short. Annotations are included in the Metadata level.</p>
+
 
           
 
@@ -551,14 +577,13 @@ should be short. Annotations are included in the Metadata level.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-EventList">EventList
     </H3>
 
   
 
-  <p>EventList is a list of audit Events.</p>
+  <p><p>EventList is a list of audit Events.</p>
+</p>
 
   
     <table class="table">
@@ -600,7 +625,7 @@ should be short. Annotations are included in the Metadata level.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#listmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ListMeta</span>
               </a>
             
@@ -654,8 +679,6 @@ should be short. Annotations are included in the Metadata level.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-Policy">Policy
     </H3>
 
@@ -666,8 +689,9 @@ should be short. Annotations are included in the Metadata level.
     </p>
   
 
-  <p>Policy defines the configuration of audit logging, and the rules for how different request
+  <p><p>Policy defines the configuration of audit logging, and the rules for how different request
 categories are logged.</p>
+</p>
 
   
     <table class="table">
@@ -709,7 +733,7 @@ categories are logged.</p>
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#objectmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#objectmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ObjectMeta</span>
               </a>
             
@@ -718,7 +742,8 @@ categories are logged.</p>
         <td>
           
 
-          ObjectMeta is included for interoperability with API infrastructure.
+          <p>ObjectMeta is included for interoperability with API infrastructure.</p>
+
 
           
             Refer to the Kubernetes API documentation for the fields of the
@@ -751,10 +776,11 @@ categories are logged.</p>
         <td>
           
 
-          Rules specify the audit Level a request should be recorded at.
+          <p>Rules specify the audit Level a request should be recorded at.
 A request may match multiple rules, in which case the FIRST matching rule is used.
 The default audit level is None, but can be overridden by a catch-all rule at the end of the list.
-PolicyRules are strictly ordered.
+PolicyRules are strictly ordered.</p>
+
 
           
 
@@ -782,8 +808,41 @@ PolicyRules are strictly ordered.
         <td>
           
 
-          OmitStages is a list of stages for which no events are created. Note that this can also
-be specified per rule in which case the union of both are omitted.
+          <p>OmitStages is a list of stages for which no events are created. Note that this can also
+be specified per rule in which case the union of both are omitted.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>omitManagedFields</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.
+This is used as a global default - a value of 'true' will omit the managed fileds,
+otherwise the managed fields will be included in the API audit log.
+Note that this can also be specified per rule in which case the value specified
+in a rule will override the global default.</p>
+
 
           
 
@@ -798,14 +857,13 @@ be specified per rule in which case the union of both are omitted.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-PolicyList">PolicyList
     </H3>
 
   
 
-  <p>PolicyList is a list of audit Policies.</p>
+  <p><p>PolicyList is a list of audit Policies.</p>
+</p>
 
   
     <table class="table">
@@ -847,7 +905,7 @@ be specified per rule in which case the union of both are omitted.
           
           
             
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#listmeta-v1-meta">
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#listmeta-v1-meta">
                 <span style="font-family: monospace">meta/v1.ListMeta</span>
               </a>
             
@@ -901,8 +959,6 @@ be specified per rule in which case the union of both are omitted.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-GroupResources">GroupResources
     </H3>
 
@@ -913,7 +969,8 @@ be specified per rule in which case the union of both are omitted.
     </p>
   
 
-  <p>GroupResources represents resource kinds in an API group.</p>
+  <p><p>GroupResources represents resource kinds in an API group.</p>
+</p>
 
   
     <table class="table">
@@ -949,8 +1006,9 @@ be specified per rule in which case the union of both are omitted.
         <td>
           
 
-          Group is the name of the API group that contains the resources.
-The empty string represents the core API group.
+          <p>Group is the name of the API group that contains the resources.
+The empty string represents the core API group.</p>
+
 
           
 
@@ -976,19 +1034,17 @@ The empty string represents the core API group.
         <td>
           
 
-          Resources is a list of resources this rule applies to.
-
-For example:
+          <p>Resources is a list of resources this rule applies to.</p>
+<p>For example:
 'pods' matches pods.
 'pods/log' matches the log subresource of pods.
-'&lowast;' matches all resources and their subresources.
-'pods/&lowast;' matches all subresources of pods.
-'&lowast;/scale' matches all scale subresources.
+'<em>' matches all resources and their subresources.
+'pods/</em>' matches all subresources of pods.
+'*/scale' matches all scale subresources.</p>
+<p>If wildcard is present, the validation rule will ensure resources do not
+overlap with each other.</p>
+<p>An empty list implies all resources and subresources in this API groups apply.</p>
 
-If wildcard is present, the validation rule will ensure resources do not
-overlap with each other.
-
-An empty list implies all resources and subresources in this API groups apply.
 
           
 
@@ -1014,9 +1070,10 @@ An empty list implies all resources and subresources in this API groups apply.
         <td>
           
 
-          ResourceNames is a list of resource instance names that the policy matches.
+          <p>ResourceNames is a list of resource instance names that the policy matches.
 Using this field requires Resources to be specified.
-An empty list implies that every instance of the resource is matched.
+An empty list implies that every instance of the resource is matched.</p>
+
 
           
 
@@ -1031,8 +1088,6 @@ An empty list implies that every instance of the resource is matched.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-Level">Level
     (<code>string</code> alias)</p></H3>
 
@@ -1044,12 +1099,11 @@ An empty list implies that every instance of the resource is matched.
     </p>
   
 
-  <p>Level defines the amount of information logged during auditing</p>
+  <p><p>Level defines the amount of information logged during auditing</p>
+</p>
 
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-ObjectReference">ObjectReference
     </H3>
 
@@ -1060,7 +1114,8 @@ An empty list implies that every instance of the resource is matched.
     </p>
   
 
-  <p>ObjectReference contains enough information to let you inspect or modify the referred object.</p>
+  <p><p>ObjectReference contains enough information to let you inspect or modify the referred object.</p>
+</p>
 
   
     <table class="table">
@@ -1167,7 +1222,7 @@ An empty list implies that every instance of the resource is matched.
           
           
             
-              <a href="https://godoc.org/k8s.io/apimachinery/pkg/types#UID">
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID">
                 <span style="font-family: monospace">k8s.io/apimachinery/pkg/types.UID</span>
               </a>
             
@@ -1202,8 +1257,9 @@ An empty list implies that every instance of the resource is matched.
         <td>
           
 
-          APIGroup is the name of the API group that contains the referred object.
-The empty string represents the core API group.
+          <p>APIGroup is the name of the API group that contains the referred object.
+The empty string represents the core API group.</p>
+
 
           
 
@@ -1229,7 +1285,8 @@ The empty string represents the core API group.
         <td>
           
 
-          APIVersion is the version of the API group that contains the referred object.
+          <p>APIVersion is the version of the API group that contains the referred object.</p>
+
 
           
 
@@ -1296,8 +1353,6 @@ The empty string represents the core API group.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-PolicyRule">PolicyRule
     </H3>
 
@@ -1308,8 +1363,9 @@ The empty string represents the core API group.
     </p>
   
 
-  <p>PolicyRule maps requests based off metadata to an audit Level.
+  <p><p>PolicyRule maps requests based off metadata to an audit Level.
 Requests must match the rules of every field (an intersection of rules).</p>
+</p>
 
   
     <table class="table">
@@ -1349,7 +1405,8 @@ Requests must match the rules of every field (an intersection of rules).</p>
         <td>
           
 
-          The Level that requests matching this rule are recorded at.
+          <p>The Level that requests matching this rule are recorded at.</p>
+
 
           
 
@@ -1375,8 +1432,9 @@ Requests must match the rules of every field (an intersection of rules).</p>
         <td>
           
 
-          The users (by authenticated user name) this rule applies to.
-An empty list implies every user.
+          <p>The users (by authenticated user name) this rule applies to.
+An empty list implies every user.</p>
+
 
           
 
@@ -1402,9 +1460,10 @@ An empty list implies every user.
         <td>
           
 
-          The user groups this rule applies to. A user is considered matching
+          <p>The user groups this rule applies to. A user is considered matching
 if it is a member of any of the UserGroups.
-An empty list implies every user group.
+An empty list implies every user group.</p>
+
 
           
 
@@ -1430,8 +1489,9 @@ An empty list implies every user group.
         <td>
           
 
-          The verbs that match this rule.
-An empty list implies every verb.
+          <p>The verbs that match this rule.
+An empty list implies every verb.</p>
+
 
           
 
@@ -1459,7 +1519,8 @@ An empty list implies every verb.
         <td>
           
 
-          Resources that this rule matches. An empty list implies all kinds in all API groups.
+          <p>Resources that this rule matches. An empty list implies all kinds in all API groups.</p>
+
 
           
 
@@ -1485,9 +1546,10 @@ An empty list implies every verb.
         <td>
           
 
-          Namespaces that this rule matches.
-The empty string "" matches non-namespaced resources.
-An empty list implies every namespace.
+          <p>Namespaces that this rule matches.
+The empty string &quot;&quot; matches non-namespaced resources.
+An empty list implies every namespace.</p>
+
 
           
 
@@ -1513,11 +1575,12 @@ An empty list implies every namespace.
         <td>
           
 
-          NonResourceURLs is a set of URL paths that should be audited.
-&lowast;s are allowed, but only as the full, final step in the path.
+          <p>NonResourceURLs is a set of URL paths that should be audited.
+<em>s are allowed, but only as the full, final step in the path.
 Examples:
- "/metrics" - Log requests for apiserver metrics
- "/healthz&lowast;" - Log all health checks
+&quot;/metrics&quot; - Log requests for apiserver metrics
+&quot;/healthz</em>&quot; - Log all health checks</p>
+
 
           
 
@@ -1545,9 +1608,46 @@ Examples:
         <td>
           
 
-          OmitStages is a list of stages for which no events are created. Note that this can also
+          <p>OmitStages is a list of stages for which no events are created. Note that this can also
 be specified policy wide in which case the union of both are omitted.
-An empty list means no restrictions will apply.
+An empty list means no restrictions will apply.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>omitManagedFields</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">bool</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p>OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.</p>
+<ul>
+<li>a value of 'true' will drop the managed fields from the API audit log</li>
+<li>a value of 'false' indicates that the managed fileds should be included
+in the API audit log
+Note that the value, if specified, in this rule will override the global default
+If a value is not specified then the global default specified in
+Policy.OmitManagedFields will stand.</li>
+</ul>
+
 
           
 
@@ -1562,8 +1662,6 @@ An empty list means no restrictions will apply.
     </table>
   
 
-            
-              
   <H3 id="audit-k8s-io-v1-Stage">Stage
     (<code>string</code> alias)</p></H3>
 
@@ -1576,19 +1674,18 @@ An empty list means no restrictions will apply.
     </p>
   
 
-  <p>Stage defines the stages in request handling that audit events may be generated.</p>
+  <p><p>Stage defines the stages in request handling that audit events may be generated.</p>
+</p>
 
   
 
-            
           
-
           <HR />
         
       </div>
 
       <div class="container">
-        <p><em>Generated with <code>gendoc</code> on git commit <code>5cc67040</code></em></p>
+        <p><em>Generated with <code>genref</code> on git commit <code>4247aac7</code></em></p>
       </div>
     </body>
   </html>

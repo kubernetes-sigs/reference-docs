@@ -19,37 +19,44 @@
         
           
           
-            <H2 id="kubeadm-k8s-io-v1beta2">Package: <span style="font-family: monospace">kubeadm.k8s.io/v1beta2</span></H2>
+            <H2 id="kubeadm-k8s-io-v1beta3">Package: <span style="font-family: monospace">kubeadm.k8s.io/v1beta3</span></H2>
             <p><h2>Overview</h2>
-<p>Package v1beta2 has been DEPRECATED by v1beta3.</p>
-<p>Package v1beta2 defines the v1beta2 version of the kubeadm configuration file format.
-This version improves on the v1beta1 format by fixing some minor issues and adding a few new fields.</p>
-<p>A list of changes since v1beta1:</p>
+<p>Package v1beta3 defines the v1beta3 version of the kubeadm configuration file format.
+This version improves on the v1beta2 format by fixing some minor issues and adding a few new fields.</p>
+<p>A list of changes since v1beta2:</p>
 <ul>
-<li>&quot;certificateKey&quot; field is added to InitConfiguration and JoinConfiguration.</li>
-<li>&quot;ignorePreflightErrors&quot; field is added to the NodeRegistrationOptions.</li>
-<li>The JSON &quot;omitempty&quot; tag is used in a more places where appropriate.</li>
-<li>The JSON &quot;omitempty&quot; tag of the &quot;taints&quot; field (inside NodeRegistrationOptions) is removed.</li>
+<li>The deprecated &quot;ClusterConfiguration.useHyperKubeImage&quot; field has been removed.
+Kubeadm no longer supports the hyperkube image.</li>
+<li>The &quot;ClusterConfiguration.DNS.Type&quot; field has been removed since CoreDNS is the only supported
+DNS server type by kubeadm.</li>
+<li>Include &quot;datapolicy&quot; tags on the fields that hold secrets.
+This would result in the field values to be omitted when API structures are printed with klog.</li>
+<li>Add &quot;InitConfiguration.SkipPhases&quot;, &quot;JoinConfiguration.SkipPhases&quot; to allow skipping
+a list of phases during kubeadm init/join command execution.</li>
+<li>Add &quot;InitConfiguration.NodeRegistration.ImagePullPolicy&quot; and &quot;JoinConfiguration.NodeRegistration.ImagePullPolicy&quot;
+to allow specifying the images pull policy during kubeadm &quot;init&quot; and &quot;join&quot;.
+The value must be one of &quot;Always&quot;, &quot;Never&quot; or &quot;IfNotPresent&quot;.
+&quot;IfNotPresent&quot; is the default, which has been the existing behavior prior to this addition.</li>
+<li>Add &quot;InitConfiguration.Patches.Directory&quot;, &quot;JoinConfiguration.Patches.Directory&quot; to allow
+the user to configure a directory from which to take patches for components deployed by kubeadm.</li>
+<li>Move the BootstrapToken* API and related utilities out of the &quot;kubeadm&quot; API group to a new group
+&quot;bootstraptoken&quot;. The kubeadm API version v1beta3 no longer contains the BootstrapToken* structures.</li>
 </ul>
-<p>See the Kubernetes 1.15 changelog for further details.</p>
-<h1>Migration from old kubeadm config versions</h1>
-<p>Please convert your v1beta1 configuration files to v1beta2 using the &quot;kubeadm config migrate&quot; command of kubeadm v1.15.x
-(conversion from older releases of kubeadm config files requires older release of kubeadm as well e.g.</p>
+<p>Migration from old kubeadm config versions</p>
 <ul>
-<li>kubeadm v1.11 should be used to migrate v1alpha1 to v1alpha2; kubeadm v1.12 should be used to translate v1alpha2 to v1alpha3;</li>
-<li>kubeadm v1.13 or v1.14 should be used to translate v1alpha3 to v1beta1)</li>
+<li>kubeadm v1.15.x and newer can be used to migrate from v1beta1 to v1beta2.</li>
+<li>kubeadm v1.22.x and newer no longer support v1beta1 and older APIs, but can be used to migrate v1beta2 to v1beta3.</li>
 </ul>
-<p>Nevertheless, kubeadm v1.15.x will support reading from v1beta1 version of the kubeadm config file format.</p>
 <h2>Basics</h2>
 <p>The preferred way to configure kubeadm is to pass an YAML configuration file with the <code>--config</code> option. Some of the
 configuration options defined in the kubeadm config file are also available as command line flags, but only
 the most common/simple use case are supported with this approach.</p>
 <p>A kubeadm config file could contain multiple configuration types separated using three dashes (<code>---</code>).</p>
 <p>kubeadm supports the following configuration types:</p>
-<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
@@ -58,45 +65,46 @@ the most common/simple use case are supported with this approach.</p>
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeproxy.config.k8s.io/v1alpha1<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>JoinConfiguration<span style="color:#bbb">
 </span></pre><p>To print the defaults for &quot;init&quot; and &quot;join&quot; actions use the following commands:</p>
 <pre style="background-color:#fff">kubeadm config print init-defaults
 kubeadm config print join-defaults
 </pre><p>The list of configuration types that must be included in a configuration file depends by the action you are
-performing (<code>init</code> or <code>join</code>) and by the configuration options you are going to use (defaults or advanced customization).</p>
+performing (<code>init</code> or <code>join</code>) and by the configuration options you are going to use (defaults or advanced
+customization).</p>
 <p>If some configuration types are not provided, or provided only partially, kubeadm will use default values; defaults
 provided by kubeadm includes also enforcing consistency of values across components when required (e.g.
 <code>--cluster-cidr</code> flag on controller manager and <code>clusterCIDR</code> on kube-proxy).</p>
 <p>Users are always allowed to override default values, with the only exception of a small subset of setting with
-relevance for security (e.g. enforce authorization-mode Node and RBAC on API server)</p>
+relevance for security (e.g. enforce authorization-mode Node and RBAC on api server)</p>
 <p>If the user provides a configuration types that is not expected for the action you are performing, kubeadm will
 ignore those types and print a warning.</p>
 <h2>Kubeadm init configuration types</h2>
 <p>When executing kubeadm init with the <code>--config</code> option, the following configuration types could be used:
 InitConfiguration, ClusterConfiguration, KubeProxyConfiguration, KubeletConfiguration, but only one
 between InitConfiguration and ClusterConfiguration is mandatory.</p>
-<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">bootstrapTokens</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span>...<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">nodeRegistration</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span>...<span style="color:#bbb">
-</span></pre><p>The InitConfiguration type should be used to configure runtime settings, that in case of <code>kubeadm init</code>
-are the configuration of the bootstrap token and all the setting which are specific to the node where kubeadm
-is executed, including:</p>
+</span></pre><p>The InitConfiguration type should be used to configure runtime settings, that in case of kubeadm init
+are the configuration of the bootstrap token and all the setting which are specific to the node where
+kubeadm is executed, including:</p>
 <ul>
 <li>
-<p><code>nodeRegistration</code>, that holds fields that relate to registering the new node to the cluster;
+<p>NodeRegistration, that holds fields that relate to registering the new node to the cluster;
 use it to customize the node name, the CRI socket to use or any other settings that should apply to this
 node only (e.g. the node ip).</p>
 </li>
 <li>
-<p><code>localAPIEndpoint</code>, that represents the endpoint of the instance of the API server to be deployed on this node;
+<p>LocalAPIEndpoint, that represents the endpoint of the instance of the API server to be deployed on this node;
 use it e.g. to customize the API server advertise address.</p>
 </li>
 </ul>
-<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">networking</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span>...<span style="color:#bbb">
@@ -112,11 +120,11 @@ use it e.g. to customize the API server advertise address.</p>
 including settings for:</p>
 <ul>
 <li>
-<p>Networking, that holds configuration for the networking topology of the cluster; use it e.g. to customize
-pod subnet or services subnet.</p>
+<p><code>networking</code> that holds configuration for the networking topology of the cluster; use it e.g. to customize
+Pod subnet or services subnet.</p>
 </li>
 <li>
-<p>Etcd configurations; use it e.g. to customize the local etcd or to configure the API server
+<p><code>etcd</code>: use it e.g. to customize the local etcd or to configure the API server
 for using an external etcd cluster.</p>
 </li>
 <li>
@@ -126,15 +134,15 @@ components by adding customized setting or overriding kubeadm default settings.<
 </ul>
 <pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeproxy.config.k8s.io/v1alpha1<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
-</span><span style="color:#bbb"> </span>...<span style="color:#bbb">
-</span></pre><p>The KubeProxyConfiguration type should be used to change the configuration passed to kube-proxy instances deployed
-in the cluster. If this object is not provided or provided only partially, kubeadm applies defaults.</p>
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
+</span></pre><p>The KubeProxyConfiguration type should be used to change the configuration passed to kube-proxy instances
+deployed in the cluster. If this object is not provided or provided only partially, kubeadm applies defaults.</p>
 <p>See https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/ or
 https://pkg.go.dev/k8s.io/kube-proxy/config/v1alpha1#KubeProxyConfiguration
-for kube proxy official documentation.</p>
+for kube-proxy official documentation.</p>
 <pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeletConfiguration<span style="color:#bbb">
-</span><span style="color:#bbb"> </span>...<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
 </span></pre><p>The KubeletConfiguration type should be used to change the configurations that will be passed to all kubelet instances
 deployed in the cluster. If this object is not provided or provided only partially, kubeadm applies defaults.</p>
 <p>See https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/ or
@@ -142,7 +150,7 @@ https://pkg.go.dev/k8s.io/kubelet/config/v1beta1#KubeletConfiguration
 for kubelet official documentation.</p>
 <p>Here is a fully populated example of a single YAML file containing multiple
 configuration types to be used during a <code>kubeadm init</code> run.</p>
-<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>InitConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">bootstrapTokens</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span>- <span style="color:#000;font-weight:bold">token</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;9a08jv.c0izixklcxtmnze7&#34;</span><span style="color:#bbb">
@@ -166,12 +174,15 @@ configuration types to be used during a <code>kubeadm init</code> run.</p>
 </span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">v</span>:<span style="color:#bbb"> </span><span style="color:#099">4</span><span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">ignorePreflightErrors</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">    </span>- IsPrivilegedUser<span style="color:#bbb">
+</span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">imagePullPolicy</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;IfNotPresent&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">localAPIEndpoint</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">advertiseAddress</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;10.100.0.1&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">bindPort</span>:<span style="color:#bbb"> </span><span style="color:#099">6443</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">certificateKey</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;e6a2eb8581237ab72a4f494f30285ec12a9694d750b9785706a83bfcbbbd2204&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">skipPhases</span>:<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>- addon/kube-proxy<span style="color:#bbb">
 </span><span style="color:#bbb"></span>---<span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>ClusterConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">etcd</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic"># one of local or external</span><span style="color:#bbb">
@@ -186,17 +197,17 @@ configuration types to be used during a <code>kubeadm init</code> run.</p>
 </span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">peerCertSANs</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">      </span>- <span style="color:#d14">&#34;10.100.0.1&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic"># external:</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#   endpoints:</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#     - &#34;10.100.0.1:2379&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#     - &#34;10.100.0.2:2379&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#   caFile: &#34;/etcd/kubernetes/pki/etcd/etcd-ca.crt&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#   certFile: &#34;/etcd/kubernetes/pki/etcd/etcd.crt&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb">  </span><span style="color:#998;font-style:italic">#   keyFile: &#34;/etcd/kubernetes/pki/etcd/etcd.key&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># endpoints:</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># - &#34;10.100.0.1:2379&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># - &#34;10.100.0.2:2379&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># caFile: &#34;/etcd/kubernetes/pki/etcd/etcd-ca.crt&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># certFile: &#34;/etcd/kubernetes/pki/etcd/etcd.crt&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic"># keyFile: &#34;/etcd/kubernetes/pki/etcd/etcd.key&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">networking</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">serviceSubnet</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;10.96.0.0/16&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">podSubnet</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;10.244.0.0/24&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">dnsDomain</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;cluster.local&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kubernetesVersion</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;v1.12.0&#34;</span><span style="color:#bbb">
+</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kubernetesVersion</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;v1.21.0&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">controlPlaneEndpoint</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;10.100.0.1:6443&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiServer</span>:<span style="color:#bbb">
 </span><span style="color:#bbb">  </span><span style="color:#000;font-weight:bold">extraArgs</span>:<span style="color:#bbb">
@@ -231,7 +242,6 @@ configuration types to be used during a <code>kubeadm init</code> run.</p>
 </span><span style="color:#bbb">      </span><span style="color:#000;font-weight:bold">pathType</span>:<span style="color:#bbb"> </span>File<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">certificatesDir</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;/etc/kubernetes/pki&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">imageRepository</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;registry.k8s.io&#34;</span><span style="color:#bbb">
-</span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">useHyperKubeImage</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">clusterName</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;example-cluster&#34;</span><span style="color:#bbb">
 </span><span style="color:#bbb"></span>---<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubelet.config.k8s.io/v1beta1<span style="color:#bbb">
@@ -242,10 +252,10 @@ configuration types to be used during a <code>kubeadm init</code> run.</p>
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>KubeProxyConfiguration<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#998;font-style:italic"># kube-proxy specific options here</span><span style="color:#bbb">
 </span></pre><h2>Kubeadm join configuration types</h2>
-<p>When executing kubeadm join with the <code>--config</code> option, the JoinConfiguration type should be provided.</p>
-<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta2<span style="color:#bbb">
+<p>When executing <code>kubeadm join</code> with the <code>--config</code> option, the JoinConfiguration type should be provided.</p>
+<pre style="background-color:#fff"><span style="color:#000;font-weight:bold">apiVersion</span>:<span style="color:#bbb"> </span>kubeadm.k8s.io/v1beta3<span style="color:#bbb">
 </span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">kind</span>:<span style="color:#bbb"> </span>JoinConfiguration<span style="color:#bbb">
-</span><span style="color:#bbb"> </span>...<span style="color:#bbb">
+</span><span style="color:#bbb">  </span>...<span style="color:#bbb">
 </span></pre><p>The JoinConfiguration type should be used to configure runtime settings, that in case of <code>kubeadm join</code>
 are the discovery method used for accessing the cluster info and all the setting which are specific
 to the node where kubeadm is executed, including:</p>
@@ -253,7 +263,7 @@ to the node where kubeadm is executed, including:</p>
 <li>
 <p><code>nodeRegistration</code>, that holds fields that relate to registering the new node to the cluster;
 use it to customize the node name, the CRI socket to use or any other settings that should apply to this
-node only (e.g. the node IP).</p>
+node only (e.g. the node ip).</p>
 </li>
 <li>
 <p><code>apiEndpoint</code>, that represents the endpoint of the instance of the API server to be eventually deployed on this node.</p>
@@ -262,23 +272,24 @@ node only (e.g. the node IP).</p>
 </p>
           
         
+          
+          
+        
         
           
             
             <H3>Resource Types:</H3>
             <ul><li>
-                    <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>
+                    <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>
                   </li><li>
-                    <a href="#kubeadm-k8s-io-v1beta2-ClusterStatus">ClusterStatus</a>
+                    <a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a>
                   </li><li>
-                    <a href="#kubeadm-k8s-io-v1beta2-InitConfiguration">InitConfiguration</a>
-                  </li><li>
-                    <a href="#kubeadm-k8s-io-v1beta2-JoinConfiguration">JoinConfiguration</a>
+                    <a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a>
                   </li></ul>
 
             
             
-  <H3 id="kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration
+  <H3 id="kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration
     </H3>
 
   
@@ -300,7 +311,7 @@ node only (e.g. the node IP).</p>
           
           <tr>
             <td><code>apiVersion</code></br>string</td>
-            <td><code>kubeadm.k8s.io/v1beta2</code></td>
+            <td><code>kubeadm.k8s.io/v1beta3</code></td>
           </tr>
           <tr>
             <td><code>kind</code></br>string</td>
@@ -321,14 +332,12 @@ node only (e.g. the node IP).</p>
       <tr>
         <td><code>etcd</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-Etcd">
+              <a href="#kubeadm-k8s-io-v1beta3-Etcd">
                 <span style="font-family: monospace">Etcd</span>
               </a>
             
@@ -337,7 +346,7 @@ node only (e.g. the node IP).</p>
         <td>
           
 
-          <p><code>etcd</code> holds configuration for etcd.</p>
+          <p><code>etcd</code> holds the configuration for etcd.</p>
 
 
           
@@ -352,14 +361,12 @@ node only (e.g. the node IP).</p>
       <tr>
         <td><code>networking</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-Networking">
+              <a href="#kubeadm-k8s-io-v1beta3-Networking">
                 <span style="font-family: monospace">Networking</span>
               </a>
             
@@ -382,8 +389,6 @@ node only (e.g. the node IP).</p>
     
       <tr>
         <td><code>kubernetesVersion</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -412,8 +417,6 @@ node only (e.g. the node IP).</p>
       <tr>
         <td><code>controlPlaneEndpoint</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -426,8 +429,8 @@ node only (e.g. the node IP).</p>
         <td>
           
 
-          <p><code>controlPlaneEndpoint</code> sets a stable IP address or DNS name for the control plane; it
-can be a valid IP address or a RFC-1123 DNS subdomain, both with optional TCP port.
+          <p><code>controlPlaneEndpoint</code> sets a stable IP address or DNS name for the control plane.
+It can be a valid IP address or a RFC-1123 DNS subdomain, both with optional TCP port.
 In case the <code>controlPlaneEndpoint</code> is not specified, the <code>advertiseAddress</code> + <code>bindPort</code>
 are used; in case the <code>controlPlaneEndpoint</code> is specified but without a TCP port,
 the <code>bindPort</code> is used.
@@ -436,8 +439,8 @@ Possible usages are:</p>
 <li>In a cluster with more than one control plane instances, this field should be
 assigned the address of the external load balancer in front of the
 control plane instances.</li>
-<li>In environments with enforced node recycling, the <code>controlPlaneEndpoint</code>
-could be used for assigning a stable DNS to the control plane.</li>
+<li>In environments with enforced node recycling, the <code>controlPlaneEndpoint</code> could
+be used for assigning a stable DNS to the control plane.</li>
 </ul>
 
 
@@ -453,14 +456,12 @@ could be used for assigning a stable DNS to the control plane.</li>
       <tr>
         <td><code>apiServer</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-APIServer">
+              <a href="#kubeadm-k8s-io-v1beta3-APIServer">
                 <span style="font-family: monospace">APIServer</span>
               </a>
             
@@ -484,14 +485,12 @@ could be used for assigning a stable DNS to the control plane.</li>
       <tr>
         <td><code>controllerManager</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ControlPlaneComponent">
+              <a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent">
                 <span style="font-family: monospace">ControlPlaneComponent</span>
               </a>
             
@@ -515,14 +514,12 @@ could be used for assigning a stable DNS to the control plane.</li>
       <tr>
         <td><code>scheduler</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ControlPlaneComponent">
+              <a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent">
                 <span style="font-family: monospace">ControlPlaneComponent</span>
               </a>
             
@@ -546,14 +543,12 @@ could be used for assigning a stable DNS to the control plane.</li>
       <tr>
         <td><code>dns</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-DNS">
+              <a href="#kubeadm-k8s-io-v1beta3-DNS">
                 <span style="font-family: monospace">DNS</span>
               </a>
             
@@ -576,8 +571,6 @@ could be used for assigning a stable DNS to the control plane.</li>
     
       <tr>
         <td><code>certificatesDir</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -606,8 +599,6 @@ could be used for assigning a stable DNS to the control plane.</li>
       <tr>
         <td><code>imageRepository</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -621,43 +612,10 @@ could be used for assigning a stable DNS to the control plane.</li>
           
 
           <p><code>imageRepository</code> sets the container registry to pull images from.
-If empty, <code>registry.k8s.io</code> will be used by default; in case of kubernetes version is
-a CI build (kubernetes version starts with <code>ci/</code>) <code>gcr.io/k8s-staging-ci-images</code>
-is used as a default for control plane components and for kube-proxy, while
-<code>registry.k8s.io</code> will be used for all the other images.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>useHyperKubeImage</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">bool</span>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>useHyperKubeImage</code> controls if hyperkube should be used for Kubernetes components
-instead of their respective separate images.
-DEPRECATED: As <code>hyperkube</code> is itself deprecated, this fields is too. It will be
-removed in future kubeadm config versions, kubeadm will print multiple warnings
-when this set to true, and at some point it may become ignored.</p>
+If empty, <code>registry.k8s.io</code> will be used by default.
+In case of kubernetes version is a CI build (kubernetes version starts with <code>ci/</code>)
+<code>gcr.io/k8s-staging-ci-images</code> will be used as a default for control plane components
+and for kube-proxy, while <code>registry.k8s.io</code> will be used for all the other images.</p>
 
 
           
@@ -671,8 +629,6 @@ when this set to true, and at some point it may become ignored.</p>
     
       <tr>
         <td><code>featureGates</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -700,8 +656,6 @@ when this set to true, and at some point it may become ignored.</p>
     
       <tr>
         <td><code>clusterName</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -731,92 +685,16 @@ when this set to true, and at some point it may become ignored.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-ClusterStatus">ClusterStatus
-    </H3>
-
-  
-
-  <p><p>ClusterStatus contains the cluster status. The ClusterStatus will be stored in
-the kubeadm-config ConfigMap in the cluster, and then updated by kubeadm when
-additional control plane instance joins or leaves the cluster.</p>
-</p>
-
-  
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        
-          
-          <tr>
-            <td><code>apiVersion</code></br>string</td>
-            <td><code>kubeadm.k8s.io/v1beta2</code></td>
-          </tr>
-          <tr>
-            <td><code>kind</code></br>string</td>
-            <td><code>ClusterStatus</code></td>
-          </tr>
-        
-
-        
-        
-
-  
-  
-    
-    
-  
-    
-    
-      <tr>
-        <td><code>apiEndpoints</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="#kubeadm-k8s-io-v1beta2-APIEndpoint">
-                <span style="font-family: monospace">map[string]github.com/tengqm/kubeconfig/config/kubeadm/v1beta2.APIEndpoint</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>apiEndpoints</code> currently available in the cluster, one for each control
-plane/API server instance.
-The key of the map is the IP of the host's default interface.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-
-
-      </tbody>
-    </table>
-  
-
-  <H3 id="kubeadm-k8s-io-v1beta2-InitConfiguration">InitConfiguration
+  <H3 id="kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration
     </H3>
 
   
 
   <p><p>InitConfiguration contains a list of elements that is specific &quot;kubeadm init&quot;-only runtime
-information.</p>
+information.
+<code>kubeadm init</code>-only information. These fields are solely used the first time <code>kubeadm init</code> runs.
+After that, the information in the fields IS NOT uploaded to the <code>kubeadm-config</code> ConfigMap
+that is used by <code>kubeadm upgrade</code> for instance. These fields must be omitempty.</p>
 </p>
 
   
@@ -833,7 +711,7 @@ information.</p>
           
           <tr>
             <td><code>apiVersion</code></br>string</td>
-            <td><code>kubeadm.k8s.io/v1beta2</code></td>
+            <td><code>kubeadm.k8s.io/v1beta3</code></td>
           </tr>
           <tr>
             <td><code>kind</code></br>string</td>
@@ -854,14 +732,12 @@ information.</p>
       <tr>
         <td><code>bootstrapTokens</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-BootstrapToken">
+              <a href="#BootstrapToken">
                 <span style="font-family: monospace">[]BootstrapToken</span>
               </a>
             
@@ -870,8 +746,8 @@ information.</p>
         <td>
           
 
-          <p><code>bootstrapTokens</code> is respected at <code>kubeadm init</code> time and describes a set of bootstrap tokens to create.
-This information IS NOT uploaded to the kubeadm cluster ConfigMap, partly because of its sensitive nature.</p>
+          <p><code>bootstrapTokens</code> is respected at <code>kubeadm init</code> time and describes a set of Bootstrap Tokens to create.
+This information IS NOT uploaded to the kubeadm cluster configmap, partly because of its sensitive nature</p>
 
 
           
@@ -886,14 +762,12 @@ This information IS NOT uploaded to the kubeadm cluster ConfigMap, partly becaus
       <tr>
         <td><code>nodeRegistration</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-NodeRegistrationOptions">
+              <a href="#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions">
                 <span style="font-family: monospace">NodeRegistrationOptions</span>
               </a>
             
@@ -902,7 +776,8 @@ This information IS NOT uploaded to the kubeadm cluster ConfigMap, partly becaus
         <td>
           
 
-          <p><code>nodeRegistration</code> holds fields that relate to registering the new control-plane node to the cluster.</p>
+          <p><code>nodeRegistration</code> holds fields that relate to registering the new control-plane node
+to the cluster.</p>
 
 
           
@@ -917,14 +792,12 @@ This information IS NOT uploaded to the kubeadm cluster ConfigMap, partly becaus
       <tr>
         <td><code>localAPIEndpoint</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-APIEndpoint">
+              <a href="#kubeadm-k8s-io-v1beta3-APIEndpoint">
                 <span style="font-family: monospace">APIEndpoint</span>
               </a>
             
@@ -933,12 +806,13 @@ This information IS NOT uploaded to the kubeadm cluster ConfigMap, partly becaus
         <td>
           
 
-          <p><code>localAPIEndpoint</code> represents the endpoint of the API server instance that's deployed on this control plane node.
-In HA setups, this differs from <code>ClusterConfiguration.controlPlaneEndpoint</code> in the sense that ControlPlaneEndpoint
-is the global endpoint for the cluster, which then load-balances the requests to each individual API server. This
-configuration object lets you customize what IP/DNS name and port the local API server advertises it's accessible
-on. By default, kubeadm tries to auto-detect the IP of the default interface and use that, but in case that process
-fails you may set the desired value here.</p>
+          <p><code>localAPIEndpoint</code> represents the endpoint of the API server instance that's deployed on this
+control plane node. In HA setups, this differs from <code>ClusterConfiguration.controlPlaneEndpoint</code>
+in the sense that <code>controlPlaneEndpoint</code> is the global endpoint for the cluster, which then
+load-balances the requests to each individual API server.
+This configuration object lets you customize what IP/DNS name and port the local API server
+advertises it's accessible on. By default, kubeadm tries to auto-detect the IP of the default
+interface and use that, but in case that process fails you may set the desired value here.</p>
 
 
           
@@ -953,8 +827,6 @@ fails you may set the desired value here.</p>
       <tr>
         <td><code>certificateKey</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -967,8 +839,67 @@ fails you may set the desired value here.</p>
         <td>
           
 
-          <p><code>certificateKey</code> sets the key with which certificates and keys are encrypted prior to being uploaded in
-a secret in the cluster during the <code>uploadcerts init</code> phase.</p>
+          <p><code>certificateKey</code> sets the key with which certificates and keys are encrypted prior to being
+uploaded in a Secret in the cluster during the <code>uploadcerts init</code> phase.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>skipPhases</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>skipPhases</code> is a list of phases to skip during command execution.
+The list of phases can be obtained with the <code>kubeadm init --help</code> command.
+The flag &quot;--skip-phases&quot; takes precedence over this field.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>patches</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubeadm-k8s-io-v1beta3-Patches">
+                <span style="font-family: monospace">Patches</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>patches</code> contains options related to applying patches to components deployed by kubeadm during
+<code>kubeadm init</code>.</p>
 
 
           
@@ -984,7 +915,7 @@ a secret in the cluster during the <code>uploadcerts init</code> phase.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-JoinConfiguration">JoinConfiguration
+  <H3 id="kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration
     </H3>
 
   
@@ -1006,7 +937,7 @@ a secret in the cluster during the <code>uploadcerts init</code> phase.</p>
           
           <tr>
             <td><code>apiVersion</code></br>string</td>
-            <td><code>kubeadm.k8s.io/v1beta2</code></td>
+            <td><code>kubeadm.k8s.io/v1beta3</code></td>
           </tr>
           <tr>
             <td><code>kind</code></br>string</td>
@@ -1027,14 +958,12 @@ a secret in the cluster during the <code>uploadcerts init</code> phase.</p>
       <tr>
         <td><code>nodeRegistration</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-NodeRegistrationOptions">
+              <a href="#kubeadm-k8s-io-v1beta3-NodeRegistrationOptions">
                 <span style="font-family: monospace">NodeRegistrationOptions</span>
               </a>
             
@@ -1044,7 +973,7 @@ a secret in the cluster during the <code>uploadcerts init</code> phase.</p>
           
 
           <p><code>nodeRegistration</code> holds fields that relate to registering the new
-control-plane node to the cluster</p>
+control-plane node to the cluster.</p>
 
 
           
@@ -1059,8 +988,6 @@ control-plane node to the cluster</p>
       <tr>
         <td><code>caCertPath</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1073,8 +1000,8 @@ control-plane node to the cluster</p>
         <td>
           
 
-          <p><code>caCertPath</code> is the path to the SSL certificate authority used to
-secure comunications between a node and the control-plane.
+          <p><code>caCertPath</code> is the path to the SSL certificate authority used to secure
+comunications between a node and the control-plane.
 Defaults to &quot;/etc/kubernetes/pki/ca.crt&quot;.</p>
 
 
@@ -1097,7 +1024,7 @@ Defaults to &quot;/etc/kubernetes/pki/ca.crt&quot;.</p>
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-Discovery">
+              <a href="#kubeadm-k8s-io-v1beta3-Discovery">
                 <span style="font-family: monospace">Discovery</span>
               </a>
             
@@ -1122,14 +1049,12 @@ bootstrap process.</p>
       <tr>
         <td><code>controlPlane</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-JoinControlPlane">
+              <a href="#kubeadm-k8s-io-v1beta3-JoinControlPlane">
                 <span style="font-family: monospace">JoinControlPlane</span>
               </a>
             
@@ -1149,21 +1074,79 @@ on the joining node. If nil, no additional control plane instance will be deploy
       </tr>
     
   
+    
+    
+      <tr>
+        <td><code>skipPhases</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>skipPhases</code> is a list of phases to skip during command execution.
+The list of phases can be obtained with the <code>kubeadm join --help</code> command.
+The flag <code>--skip-phases</code> takes precedence over this field.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>patches</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="#kubeadm-k8s-io-v1beta3-Patches">
+                <span style="font-family: monospace">Patches</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>patches</code> contains options related to applying patches to components deployed
+by kubeadm during <code>kubeadm join</code>.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
 
 
       </tbody>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-APIEndpoint">APIEndpoint
+  <H3 id="kubeadm-k8s-io-v1beta3-APIEndpoint">APIEndpoint
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterStatus">ClusterStatus</a>, 
-        <a href="#kubeadm-k8s-io-v1beta2-InitConfiguration">InitConfiguration</a>, 
-        <a href="#kubeadm-k8s-io-v1beta2-JoinControlPlane">JoinControlPlane</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a>, 
+        <a href="#kubeadm-k8s-io-v1beta3-JoinControlPlane">JoinControlPlane</a>)
     </p>
   
 
@@ -1192,8 +1175,6 @@ on the joining node. If nil, no additional control plane instance will be deploy
       <tr>
         <td><code>advertiseAddress</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1220,8 +1201,6 @@ on the joining node. If nil, no additional control plane instance will be deploy
     
       <tr>
         <td><code>bindPort</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -1252,17 +1231,17 @@ Defaults to 6443.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-APIServer">APIServer
+  <H3 id="kubeadm-k8s-io-v1beta3-APIServer">APIServer
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>)
     </p>
   
 
-  <p><p>APIServer holds settings necessary for API server deployments in the cluster.</p>
+  <p><p>APIServer holds settings necessary for API server deployments in the cluster</p>
 </p>
 
   
@@ -1294,7 +1273,7 @@ Defaults to 6443.</p>
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ControlPlaneComponent">
+              <a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent">
                 <span style="font-family: monospace">ControlPlaneComponent</span>
               </a>
             
@@ -1319,8 +1298,6 @@ Defaults to 6443.</p>
       <tr>
         <td><code>certSANs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1333,8 +1310,8 @@ Defaults to 6443.</p>
         <td>
           
 
-          <p><code>certSANs</code> sets extra Subject Alternative Names (SANs) for the API Server
-signing certificate.</p>
+          <p><code>certSANs</code> sets extra Subject Alternative Names (SANs) for the API Server signing
+certificate.</p>
 
 
           
@@ -1349,8 +1326,6 @@ signing certificate.</p>
       <tr>
         <td><code>timeoutForControlPlane</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1365,8 +1340,7 @@ signing certificate.</p>
         <td>
           
 
-          <p><code>timeoutForControlPlane</code> controls the timeout that we wait for the API server
-to appear.</p>
+          <p><code>timeoutForControlPlane</code> controls the timeout that we wait for API server to appear.</p>
 
 
           
@@ -1382,235 +1356,13 @@ to appear.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-BootstrapToken">BootstrapToken
+  <H3 id="kubeadm-k8s-io-v1beta3-BootstrapTokenDiscovery">BootstrapTokenDiscovery
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-InitConfiguration">InitConfiguration</a>)
-    </p>
-  
-
-  <p><p>BootstrapToken describes one bootstrap token, stored as a Secret in the cluster</p>
-</p>
-
-  
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        
-
-        
-        
-
-  
-  
-    
-    
-      <tr>
-        <td><code>token</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="#kubeadm-k8s-io-v1beta2-BootstrapTokenString">
-                <span style="font-family: monospace">BootstrapTokenString</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>token</code> is used for establishing bidirectional trust between nodes and control-planes.
-Used for joining nodes in the cluster.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>description</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">string</span>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>description</code> sets a human-friendly message why this token exists and what it's used
-for, so other administrators can know its purpose.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>ttl</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
-                <span style="font-family: monospace">meta/v1.Duration</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>ttl</code> defines the time to live for this token. Defaults to '24h'.
-<code>expires</code> and <code>ttl</code> are mutually exclusive.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>expires</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#time-v1-meta">
-                <span style="font-family: monospace">meta/v1.Time</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>expires</code> specifies the timestamp when this token expires. Defaults to being set
-dynamically at runtime based on the <code>ttl</code>. <code>expires</code> and <code>ttl</code> are mutually exclusive.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>usages</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">[]string</span>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>usages</code> describes the ways in which this token can be used. Can by default be used
-for establishing bidirectional trust, but that can be changed here.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>groups</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">[]string</span>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>groups</code> specifies the extra groups that this token will authenticate as when/if
-used for authentication.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-
-
-      </tbody>
-    </table>
-  
-
-  <H3 id="kubeadm-k8s-io-v1beta2-BootstrapTokenDiscovery">BootstrapTokenDiscovery
-    </H3>
-
-  
-    <p>
-      (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-Discovery">Discovery</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-Discovery">Discovery</a>)
     </p>
   
 
@@ -1653,8 +1405,8 @@ used for authentication.</p>
         <td>
           
 
-          <p><code>token</code> is a token used to validate cluster information fetched from
-the control-plane.</p>
+          <p><code>token</code> is a token used to validate cluster information fetched from the
+control-plane.</p>
 
 
           
@@ -1669,8 +1421,6 @@ the control-plane.</p>
       <tr>
         <td><code>apiServerEndpoint</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1683,8 +1433,8 @@ the control-plane.</p>
         <td>
           
 
-          <p><code>apiServerEndpoint</code> is an IP or domain name to the API server from which information
-will be fetched.</p>
+          <p><code>apiServerEndpoint</code> is an IP or domain name to the API server from which
+information will be fetched.</p>
 
 
           
@@ -1698,8 +1448,6 @@ will be fetched.</p>
     
       <tr>
         <td><code>caCertHashes</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -1716,9 +1464,9 @@ will be fetched.</p>
           <p><code>caCertHashes</code> specifies a set of public key pins to verify when token-based discovery
 is used. The root CA found during discovery must match one of these values.
 Specifying an empty set disables root CA pinning, which can be unsafe.
-Each hash is specified as &quot;<!-- raw HTML omitted -->:<!-- raw HTML omitted -->&quot;, where the only currently supported type is &quot;sha256&quot;.
-This is a hex-encoded SHA-256 hash of the Subject Public Key Info (SPKI) object in
-DER-encoded ASN.1. These hashes can be calculated using, for example, OpenSSL.</p>
+Each hash is specified as <code>&lt;type&gt;:&lt;value&gt;</code>, where the only currently supported type is
+&quot;sha256&quot;. This is a hex-encoded SHA-256 hash of the Subject Public Key Info (SPKI)
+object in DER-encoded ASN.1. These hashes can be calculated using, for example, OpenSSL.</p>
 
 
           
@@ -1733,8 +1481,6 @@ DER-encoded ASN.1. These hashes can be calculated using, for example, OpenSSL.</
       <tr>
         <td><code>unsafeSkipCAVerification</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1747,8 +1493,8 @@ DER-encoded ASN.1. These hashes can be calculated using, for example, OpenSSL.</
         <td>
           
 
-          <p><code>unsafeSkipCAVerification</code> allows token-based discovery without CA verification via
-<code>caCertHashes</code>. This can weaken the security of kubeadm since other nodes can
+          <p><code>unsafeSkipCAVerification</code> allows token-based discovery without CA verification
+via <code>caCertHashes</code>. This can weaken the security of kubeadm since other nodes can
 impersonate the control-plane.</p>
 
 
@@ -1765,109 +1511,14 @@ impersonate the control-plane.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-BootstrapTokenString">BootstrapTokenString
+  <H3 id="kubeadm-k8s-io-v1beta3-ControlPlaneComponent">ControlPlaneComponent
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-BootstrapToken">BootstrapToken</a>)
-    </p>
-  
-
-  <p><p>BootstrapTokenString is a token of the format abcdef.abcdef0123456789 that is used
-for both validation of the practically of the API server from a joining node's point
-of view and as an authentication method for the node in the bootstrap phase of
-&quot;kubeadm join&quot;. This token is and should be short-lived</p>
-</p>
-
-  
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        
-
-        
-        
-
-  
-  
-    
-    
-      <tr>
-        <td><code>-</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">string</span>
-            
-          
-        </td>
-        <td>
-          
-
-          
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
-        <td><code>-</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <span style="font-family: monospace">string</span>
-            
-          
-        </td>
-        <td>
-          
-
-          
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-
-
-      </tbody>
-    </table>
-  
-
-  <H3 id="kubeadm-k8s-io-v1beta2-ControlPlaneComponent">ControlPlaneComponent
-    </H3>
-
-  
-    <p>
-      (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>, 
-        <a href="#kubeadm-k8s-io-v1beta2-APIServer">APIServer</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>, 
+        <a href="#kubeadm-k8s-io-v1beta3-APIServer">APIServer</a>)
     </p>
   
 
@@ -1896,8 +1547,6 @@ of view and as an authentication method for the node in the bootstrap phase of
       <tr>
         <td><code>extraArgs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -1910,7 +1559,7 @@ of view and as an authentication method for the node in the bootstrap phase of
         <td>
           
 
-          <p><code>extraArgs</code> is an extra set of flags to pass to a control plane component.
+          <p><code>extraArgs</code> is an extra set of flags to pass to the control plane component.
 A key in this map is the flag name as it appears on the command line except
 without leading dash(es).</p>
 
@@ -1927,14 +1576,12 @@ without leading dash(es).</p>
       <tr>
         <td><code>extraVolumes</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-HostPathMount">
+              <a href="#kubeadm-k8s-io-v1beta3-HostPathMount">
                 <span style="font-family: monospace">[]HostPathMount</span>
               </a>
             
@@ -1943,8 +1590,7 @@ without leading dash(es).</p>
         <td>
           
 
-          <p><code>extraVolumes</code> is an extra set of host volumes mounted to the control plane
-component.</p>
+          <p><code>extraVolumes</code> is an extra set of host volumes, mounted to the control plane component.</p>
 
 
           
@@ -1960,13 +1606,13 @@ component.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-DNS">DNS
+  <H3 id="kubeadm-k8s-io-v1beta3-DNS">DNS
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>)
     </p>
   
 
@@ -1993,37 +1639,6 @@ component.</p>
     
     
       <tr>
-        <td><code>type</code>
-          
-          <span style="color:blue;"> *</span>
-          
-          </br>
-
-          
-          
-            
-              <a href="#kubeadm-k8s-io-v1beta2-DNSAddOnType">
-                <span style="font-family: monospace">DNSAddOnType</span>
-              </a>
-            
-          
-        </td>
-        <td>
-          
-
-          <p><code>type</code> defines the DNS add-on to be used.</p>
-
-
-          
-
-          
-        </td>
-      </tr>
-    
-  
-    
-    
-      <tr>
         <td><code>ImageMeta</code>
           
           <span style="color:blue;"> *</span>
@@ -2033,7 +1648,7 @@ component.</p>
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ImageMeta">
+              <a href="#kubeadm-k8s-io-v1beta3-ImageMeta">
                 <span style="font-family: monospace">ImageMeta</span>
               </a>
             
@@ -2044,7 +1659,7 @@ component.</p>
             <p>(Members of <code>ImageMeta</code> are embedded into this type.)</p>
           
 
-          <p>ImageMeta allows to customize the image used for the DNS component</p>
+          <p><code>imageMeta</code> allows to customize the image used for the DNS component.</p>
 
 
           
@@ -2060,32 +1675,17 @@ component.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-DNSAddOnType">DNSAddOnType
-    (<code>string</code> alias)</p></H3>
-
-  
-    <p>
-      (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-DNS">DNS</a>)
-    </p>
-  
-
-  <p><p>DNSAddOnType defines string identifying DNS add-on types.</p>
-</p>
-
-  
-
-  <H3 id="kubeadm-k8s-io-v1beta2-Discovery">Discovery
+  <H3 id="kubeadm-k8s-io-v1beta3-Discovery">Discovery
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-JoinConfiguration">JoinConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a>)
     </p>
   
 
-  <p><p>Discovery specifies the options for the kubelet to use during the TLS Bootstrap process</p>
+  <p><p>Discovery specifies the options for the kubelet to use during the TLS Bootstrap process.</p>
 </p>
 
   
@@ -2110,14 +1710,12 @@ component.</p>
       <tr>
         <td><code>bootstrapToken</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-BootstrapTokenDiscovery">
+              <a href="#kubeadm-k8s-io-v1beta3-BootstrapTokenDiscovery">
                 <span style="font-family: monospace">BootstrapTokenDiscovery</span>
               </a>
             
@@ -2142,14 +1740,12 @@ component.</p>
       <tr>
         <td><code>file</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-FileDiscovery">
+              <a href="#kubeadm-k8s-io-v1beta3-FileDiscovery">
                 <span style="font-family: monospace">FileDiscovery</span>
               </a>
             
@@ -2175,8 +1771,6 @@ cluster information.
       <tr>
         <td><code>tlsBootstrapToken</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -2190,10 +1784,9 @@ cluster information.
           
 
           <p><code>tlsBootstrapToken</code> is a token used for TLS bootstrapping.
-If <code>bootstrapToken</code> is set, this field is defaulted to <code>.bootstrapToken.token</code>,
-but can be overridden.
-If <code>file</code> is set, this field <strong>must be set</strong> in case the KubeConfigFile does not
-contain any other authentication information.</p>
+If <code>bootstrapToken</code> is set, this field is defaulted to <code>.bootstrapToken.token</code>, but
+can be overridden. If <code>file</code> is set, this field <strong>must be set</strong> in case the KubeConfigFile
+does not contain any other authentication information</p>
 
 
           
@@ -2207,8 +1800,6 @@ contain any other authentication information.</p>
     
       <tr>
         <td><code>timeout</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -2240,13 +1831,13 @@ contain any other authentication information.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-Etcd">Etcd
+  <H3 id="kubeadm-k8s-io-v1beta3-Etcd">Etcd
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>)
     </p>
   
 
@@ -2275,14 +1866,12 @@ contain any other authentication information.</p>
       <tr>
         <td><code>local</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-LocalEtcd">
+              <a href="#kubeadm-k8s-io-v1beta3-LocalEtcd">
                 <span style="font-family: monospace">LocalEtcd</span>
               </a>
             
@@ -2307,14 +1896,12 @@ contain any other authentication information.</p>
       <tr>
         <td><code>external</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ExternalEtcd">
+              <a href="#kubeadm-k8s-io-v1beta3-ExternalEtcd">
                 <span style="font-family: monospace">ExternalEtcd</span>
               </a>
             
@@ -2340,13 +1927,13 @@ contain any other authentication information.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-ExternalEtcd">ExternalEtcd
+  <H3 id="kubeadm-k8s-io-v1beta3-ExternalEtcd">ExternalEtcd
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-Etcd">Etcd</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-Etcd">Etcd</a>)
     </p>
   
 
@@ -2390,7 +1977,7 @@ Kubeadm has no knowledge of where certificate files live and they must be suppli
         <td>
           
 
-          <p><code>endpoints</code> of etcd members. Required for external etcd.</p>
+          <p><code>endpoints</code> contains the list of etcd members.</p>
 
 
           
@@ -2496,17 +2083,18 @@ Required if using a TLS connection.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-FileDiscovery">FileDiscovery
+  <H3 id="kubeadm-k8s-io-v1beta3-FileDiscovery">FileDiscovery
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-Discovery">Discovery</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-Discovery">Discovery</a>)
     </p>
   
 
-  <p><p>FileDiscovery is used to specify a file or URL to a kubeconfig file from which to load cluster information</p>
+  <p><p>FileDiscovery is used to specify a file or URL to a kubeconfig file from which to load
+cluster information.</p>
 </p>
 
   
@@ -2545,8 +2133,8 @@ Required if using a TLS connection.</p>
         <td>
           
 
-          <p><code>kubeConfigPath</code> is used to specify the actual file path or URL to the kubeconfig file
-from which to load cluster information.</p>
+          <p><code>kubeConfigPath</code> is used to specify the actual file path or URL to the kubeconfig
+file from which to load cluster information.</p>
 
 
           
@@ -2562,13 +2150,13 @@ from which to load cluster information.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-HostPathMount">HostPathMount
+  <H3 id="kubeadm-k8s-io-v1beta3-HostPathMount">HostPathMount
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ControlPlaneComponent">ControlPlaneComponent</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ControlPlaneComponent">ControlPlaneComponent</a>)
     </p>
   
 
@@ -2611,7 +2199,7 @@ from which to load cluster information.</p>
         <td>
           
 
-          <p><code>name</code> of the volume inside the Pod template.</p>
+          <p><code>name</code> is the name of the volume inside the Pod template.</p>
 
 
           
@@ -2669,7 +2257,7 @@ from which to load cluster information.</p>
         <td>
           
 
-          <p><code>mountPath</code>is the path inside the Pod where hostPath volume will be mounted.</p>
+          <p><code>mountPath</code> is the path inside the Pod where <code>hostPath</code> will be mounted.</p>
 
 
           
@@ -2683,8 +2271,6 @@ from which to load cluster information.</p>
     
       <tr>
         <td><code>readOnly</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -2713,8 +2299,6 @@ from which to load cluster information.</p>
       <tr>
         <td><code>pathType</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -2729,7 +2313,7 @@ from which to load cluster information.</p>
         <td>
           
 
-          <p><code>pathType</code> is the type of the HostPath.</p>
+          <p><code>pathType</code> is the type of the <code>hostPath</code>.</p>
 
 
           
@@ -2745,14 +2329,14 @@ from which to load cluster information.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-ImageMeta">ImageMeta
+  <H3 id="kubeadm-k8s-io-v1beta3-ImageMeta">ImageMeta
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-DNS">DNS</a>, 
-        <a href="#kubeadm-k8s-io-v1beta2-LocalEtcd">LocalEtcd</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-DNS">DNS</a>, 
+        <a href="#kubeadm-k8s-io-v1beta3-LocalEtcd">LocalEtcd</a>)
     </p>
   
 
@@ -2782,8 +2366,6 @@ originated from the Kubernetes/Kubernetes release process</p>
       <tr>
         <td><code>imageRepository</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -2797,7 +2379,7 @@ originated from the Kubernetes/Kubernetes release process</p>
           
 
           <p><code>imageRepository</code> sets the container registry to pull images from.
-If not set, the <code>imageRepository</code> defined in ClusterConfiguration will be used.</p>
+If not set, the <code>imageRepository</code> defined in ClusterConfiguration will be used instead.</p>
 
 
           
@@ -2812,8 +2394,6 @@ If not set, the <code>imageRepository</code> defined in ClusterConfiguration wil
       <tr>
         <td><code>imageTag</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -2826,9 +2406,9 @@ If not set, the <code>imageRepository</code> defined in ClusterConfiguration wil
         <td>
           
 
-          <p><code>imageTag</code> allows for specifying a tag for the image.
-In case this value is set, kubeadm does not change automatically the
-version of the above components during upgrades.</p>
+          <p><code>imageTag</code> allows to specify a tag for the image.
+In case this value is set, kubeadm does not change automatically the version of
+the above components during upgrades.</p>
 
 
           
@@ -2844,13 +2424,13 @@ version of the above components during upgrades.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-JoinControlPlane">JoinControlPlane
+  <H3 id="kubeadm-k8s-io-v1beta3-JoinControlPlane">JoinControlPlane
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-JoinConfiguration">JoinConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a>)
     </p>
   
 
@@ -2880,14 +2460,12 @@ to be deployed on the joining node.</p>
       <tr>
         <td><code>localAPIEndpoint</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-APIEndpoint">
+              <a href="#kubeadm-k8s-io-v1beta3-APIEndpoint">
                 <span style="font-family: monospace">APIEndpoint</span>
               </a>
             
@@ -2896,8 +2474,8 @@ to be deployed on the joining node.</p>
         <td>
           
 
-          <p><code>localAPIEndpoint</code> represents the endpoint of the API server instance
-to be deployed on this node.</p>
+          <p><code>localAPIEndpoint</code> represents the endpoint of the API server instance to be
+deployed on this node.</p>
 
 
           
@@ -2911,8 +2489,6 @@ to be deployed on this node.</p>
     
       <tr>
         <td><code>certificateKey</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -2944,17 +2520,17 @@ The corresponding encryption key is in the InitConfiguration.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-LocalEtcd">LocalEtcd
+  <H3 id="kubeadm-k8s-io-v1beta3-LocalEtcd">LocalEtcd
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-Etcd">Etcd</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-Etcd">Etcd</a>)
     </p>
   
 
-  <p><p>LocalEtcd describes that kubeadm should run an etcd cluster locally.</p>
+  <p><p>LocalEtcd describes that kubeadm should run an etcd cluster locally</p>
 </p>
 
   
@@ -2986,7 +2562,7 @@ The corresponding encryption key is in the InitConfiguration.</p>
           
           
             
-              <a href="#kubeadm-k8s-io-v1beta2-ImageMeta">
+              <a href="#kubeadm-k8s-io-v1beta3-ImageMeta">
                 <span style="font-family: monospace">ImageMeta</span>
               </a>
             
@@ -3042,8 +2618,6 @@ Defaults to &quot;/var/lib/etcd&quot;.</p>
       <tr>
         <td><code>extraArgs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3057,8 +2631,7 @@ Defaults to &quot;/var/lib/etcd&quot;.</p>
           
 
           <p><code>extraArgs</code> are extra arguments provided to the etcd binary when run
-inside a static pod.
-A key in this map is the flag name as it appears on the
+inside a static Pod. A key in this map is the flag name as it appears on the
 command line except without leading dash(es).</p>
 
 
@@ -3074,8 +2647,6 @@ command line except without leading dash(es).</p>
       <tr>
         <td><code>serverCertSANs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3088,8 +2659,8 @@ command line except without leading dash(es).</p>
         <td>
           
 
-          <p><code>serverCertSANs</code> sets extra Subject Alternative Names (SANs) for the
-etcd server signing certificate.</p>
+          <p><code>serverCertSANs</code> sets extra Subject Alternative Names (SANs) for the etcd
+server signing certificate.</p>
 
 
           
@@ -3104,8 +2675,6 @@ etcd server signing certificate.</p>
       <tr>
         <td><code>peerCertSANs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3118,8 +2687,8 @@ etcd server signing certificate.</p>
         <td>
           
 
-          <p><code>peerCertSANs</code> sets extra Subject Alternative Names (SANs) for the
-etcd peer signing certificate.</p>
+          <p><code>peerCertSANs</code> sets extra Subject Alternative Names (SANs) for the etcd peer
+signing certificate.</p>
 
 
           
@@ -3135,13 +2704,13 @@ etcd peer signing certificate.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-Networking">Networking
+  <H3 id="kubeadm-k8s-io-v1beta3-Networking">Networking
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-ClusterConfiguration">ClusterConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-ClusterConfiguration">ClusterConfiguration</a>)
     </p>
   
 
@@ -3170,8 +2739,6 @@ etcd peer signing certificate.</p>
       <tr>
         <td><code>serviceSubnet</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3184,7 +2751,7 @@ etcd peer signing certificate.</p>
         <td>
           
 
-          <p><code>serviceSubnet</code> is the subnet used by kubernetes Services. Defaults to &quot;10.96.0.0/12&quot;.</p>
+          <p><code>serviceSubnet</code> is the subnet used by Kubernetes Services. Defaults to &quot;10.96.0.0/12&quot;.</p>
 
 
           
@@ -3198,8 +2765,6 @@ etcd peer signing certificate.</p>
     
       <tr>
         <td><code>podSubnet</code>
-          
-          <span style="color:blue;"> *</span>
           
           </br>
 
@@ -3228,8 +2793,6 @@ etcd peer signing certificate.</p>
       <tr>
         <td><code>dnsDomain</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3242,7 +2805,7 @@ etcd peer signing certificate.</p>
         <td>
           
 
-          <p><code>dnsDomain</code> is the DNS domain used by kubernetes Services. Defaults to &quot;cluster.local&quot;.</p>
+          <p><code>dnsDomain</code> is the DNS domain used by Kubernetes Services. Defaults to &quot;cluster.local&quot;.</p>
 
 
           
@@ -3258,19 +2821,19 @@ etcd peer signing certificate.</p>
     </table>
   
 
-  <H3 id="kubeadm-k8s-io-v1beta2-NodeRegistrationOptions">NodeRegistrationOptions
+  <H3 id="kubeadm-k8s-io-v1beta3-NodeRegistrationOptions">NodeRegistrationOptions
     </H3>
 
   
     <p>
       (<em>Appears in:</em>
-        <a href="#kubeadm-k8s-io-v1beta2-InitConfiguration">InitConfiguration</a>, 
-        <a href="#kubeadm-k8s-io-v1beta2-JoinConfiguration">JoinConfiguration</a>)
+        <a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a>, 
+        <a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a>)
     </p>
   
 
-  <p><p>NodeRegistrationOptions holds fields that relate to registering a new control-plane
-or node to the cluster, either via &quot;kubeadm init&quot; or &quot;kubeadm join&quot;.</p>
+  <p><p>NodeRegistrationOptions holds fields that relate to registering a new control-plane or
+node to the cluster, either via &quot;kubeadm init&quot; or &quot;kubeadm join&quot;</p>
 </p>
 
   
@@ -3295,8 +2858,6 @@ or node to the cluster, either via &quot;kubeadm init&quot; or &quot;kubeadm joi
       <tr>
         <td><code>name</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3309,10 +2870,10 @@ or node to the cluster, either via &quot;kubeadm init&quot; or &quot;kubeadm joi
         <td>
           
 
-          <p><code>name</code> is the <code>.Metadata.Name</code> field of the Node API object that will be created
-in this <code>kubeadm init</code> or <code>kubeadm join</code> operation.
-This field is also used in the <code>CommonName</code> field of the kubelet's client certificate
-to the API server.
+          <p><code>name</code> is the <code>.metadata.name</code> field of the Node API object that will be created in this
+<code>kubeadm init</code> or <code>kubeadm join</code> operation.
+This field is also used in the <code>CommonName</code> field of the kubelet's client certificate to
+the API server.
 Defaults to the hostname of the node if not provided.</p>
 
 
@@ -3328,8 +2889,6 @@ Defaults to the hostname of the node if not provided.</p>
       <tr>
         <td><code>criSocket</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3342,8 +2901,8 @@ Defaults to the hostname of the node if not provided.</p>
         <td>
           
 
-          <p><code>criSocket</code> is used to retrieve container runtime information. This information will
-be annotated to the Node API object, for later re-use.</p>
+          <p><code>criSocket</code> is used to retrieve container runtime info.
+This information will be annotated to the Node API object, for later re-use</p>
 
 
           
@@ -3375,10 +2934,9 @@ be annotated to the Node API object, for later re-use.</p>
           
 
           <p><code>taints</code> specifies the taints the Node API object should be registered with.
-If this field is unset, i.e. nil, in the <code>kubeadm init</code> process it will be defaulted with
-a control-plane taint for control-plane nodes. If you don't want to taint your control-plane
-node, set this field to an empty list, i.e. <code>taints: []</code>, in the YAML file. This field is
-solely used for Node registration.</p>
+If this field is unset, i.e. nil, it will be defaulted with a control-plane taint for control-plane nodes.
+If you don't want to taint your control-plane node, set this field to an empty list,
+i.e. <code>taints: []</code> in the YAML file. This field is solely used for Node registration.</p>
 
 
           
@@ -3393,8 +2951,6 @@ solely used for Node registration.</p>
       <tr>
         <td><code>kubeletExtraArgs</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3407,13 +2963,13 @@ solely used for Node registration.</p>
         <td>
           
 
-          <p><code>kubeletExtraArgs</code> passes through extra arguments to the kubelet. The arguments here are
-passed to the kubelet command line via the environment file kubeadm writes at runtime for
-the kubelet to source. This overrides the generic base-level configuration in the
-'kubelet-config-1.X' ConfigMap.
+          <p><code>kubeletExtraArgs</code> passes through extra arguments to the kubelet.
+The arguments here are passed to the kubelet command line via the environment file
+kubeadm writes at runtime for the kubelet to source.
+This overrides the generic base-level configuration in the <code>kubelet-config</code> ConfigMap.
 Flags have higher priority when parsing. These values are local and specific to the node
-kubeadm is executing on.
-A key in this map is the flag name as it appears on the command line except without leading dash(es).</p>
+kubeadm is executing on. A key in this map is the flag name as it appears on the
+command line except without leading dash(es).</p>
 
 
           
@@ -3428,8 +2984,6 @@ A key in this map is the flag name as it appears on the command line except with
       <tr>
         <td><code>ignorePreflightErrors</code>
           
-          <span style="color:blue;"> *</span>
-          
           </br>
 
           
@@ -3442,8 +2996,41 @@ A key in this map is the flag name as it appears on the command line except with
         <td>
           
 
-          <p><code>ignorePreflightErrors</code> provides a list of pre-flight errors to be ignored when the
-current node is registered.</p>
+          <p><code>ignorePreflightErrors</code> provides a list of pre-flight errors to be ignored when
+the current node is registered.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>imagePullPolicy</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#pullpolicy-v1-core">
+                <span style="font-family: monospace">core/v1.PullPolicy</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>imagePullPolicy</code> specifies the policy for image pulling during kubeadm &quot;init&quot; and
+&quot;join&quot; operations.
+The value of this field must be one of &quot;Always&quot;, &quot;IfNotPresent&quot; or &quot;Never&quot;.
+If this field is not set, kubeadm will default it to &quot;IfNotPresent&quot;, or pull the required
+images if not present on the host.</p>
 
 
           
@@ -3459,6 +3046,399 @@ current node is registered.</p>
     </table>
   
 
+  <H3 id="kubeadm-k8s-io-v1beta3-Patches">Patches
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a>, 
+        <a href="#kubeadm-k8s-io-v1beta3-JoinConfiguration">JoinConfiguration</a>)
+    </p>
+  
+
+  <p><p>Patches contains options related to applying patches to components deployed by kubeadm.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>directory</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>directory</code> is a path to a directory that contains files named
+&quot;target[suffix][+patchtype].extension&quot;.
+For example, &quot;kube-apiserver0+merge.yaml&quot; or just &quot;etcd.json&quot;. &quot;target&quot; can be one of
+&quot;kube-apiserver&quot;, &quot;kube-controller-manager&quot;, &quot;kube-scheduler&quot;, &quot;etcd&quot;. &quot;patchtype&quot; can
+be one of &quot;strategic&quot; &quot;merge&quot; or &quot;json&quot; and they match the patch formats supported by
+kubectl.
+The default &quot;patchtype&quot; is &quot;strategic&quot;. &quot;extension&quot; must be either &quot;json&quot; or &quot;yaml&quot;.
+&quot;suffix&quot; is an optional string that can be used to determine which patches are applied
+first alpha-numerically.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+          
+          <HR />
+        
+          
+            
+            
+              
+                
+  <H3 id="BootstrapToken">BootstrapToken
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#kubeadm-k8s-io-v1beta3-InitConfiguration">InitConfiguration</a>)
+    </p>
+  
+
+  <p><p>BootstrapToken describes one bootstrap token, stored as a Secret in the cluster</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>token</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <a href="#BootstrapTokenString">
+                <span style="font-family: monospace">BootstrapTokenString</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>token</code> is used for establishing bidirectional trust between nodes and control-planes.
+Used for joining nodes in the cluster.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>description</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>description</code> sets a human-friendly message why this token exists and what it's used
+for, so other administrators can know its purpose.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>ttl</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration">
+                <span style="font-family: monospace">meta/v1.Duration</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>ttl</code> defines the time to live for this token. Defaults to <code>24h</code>.
+<code>expires</code> and <code>ttl</code> are mutually exclusive.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>expires</code>
+          
+          </br>
+
+          
+          
+            
+              <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#time-v1-meta">
+                <span style="font-family: monospace">meta/v1.Time</span>
+              </a>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>expires</code> specifies the timestamp when this token expires. Defaults to being set
+dynamically at runtime based on the <code>ttl</code>. <code>expires</code> and <code>ttl</code> are mutually exclusive.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>usages</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>usages</code> describes the ways in which this token can be used. Can by default be used
+for establishing bidirectional trust, but that can be changed here.</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>groups</code>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">[]string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          <p><code>groups</code> specifies the extra groups that this token will authenticate as when/if
+used for authentication</p>
+
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
+              
+                
+  <H3 id="BootstrapTokenString">BootstrapTokenString
+    </H3>
+
+  
+    <p>
+      (<em>Appears in:</em>
+        <a href="#BootstrapToken">BootstrapToken</a>)
+    </p>
+  
+
+  <p><p>BootstrapTokenString is a token of the format <code>abcdef.abcdef0123456789</code> that is used
+for both validation of the practically of the API server from a joining node's point
+of view and as an authentication method for the node in the bootstrap phase of
+&quot;kubeadm join&quot;. This token is and should be short-lived.</p>
+</p>
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+
+        
+        
+
+  
+  
+    
+    
+      <tr>
+        <td><code>-</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+    
+    
+      <tr>
+        <td><code>-</code>
+          
+          <span style="color:blue;"> *</span>
+          
+          </br>
+
+          
+          
+            
+              <span style="font-family: monospace">string</span>
+            
+          
+        </td>
+        <td>
+          
+
+          
+
+          
+
+          
+        </td>
+      </tr>
+    
+  
+
+
+      </tbody>
+    </table>
+  
+
+              
+            
           
           <HR />
         
