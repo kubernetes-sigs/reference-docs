@@ -204,7 +204,7 @@ kind: ClusterConfiguration
 etcd:
   # one of local or external
   local:
-    imageRepository: "k8s.gcr.io"
+    imageRepository: "registry.k8s.io"
     imageTag: "3.2.24"
     dataDir: "/var/lib/etcd"
     extraArgs:
@@ -258,7 +258,7 @@ scheduler:
     readOnly: false
     pathType: File
 certificatesDir: "/etc/kubernetes/pki"
-imageRepository: "k8s.gcr.io"
+imageRepository: "registry.k8s.io"
 useHyperKubeImage: false
 clusterName: "example-cluster"
 ---
@@ -638,9 +638,9 @@ The value must be an absolute path.
           
 
           `imageRepository` specifies the container registry from which images are pulled.
-If empty, `k8s.gcr.io` will be used. If kubernetes version is a CI build (starts with `ci/` or `ci-cross/`)
+If empty, `registry.k8s.io` will be used. If kubernetes version is a CI build (starts with `ci/` or `ci-cross/`)
 `gcr.io/k8s-staging-ci-images` will be used for control plane components and
-kube-proxy, while `k8s.gcr.io` will be used for all the other images.
+kube-proxy, while `registry.k8s.io` will be used for all the other images.
 
           
 
