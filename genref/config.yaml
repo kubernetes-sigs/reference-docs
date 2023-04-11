@@ -228,6 +228,8 @@ apis:
     title: kubeadm Configuration (v1beta2)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta2
+    # Skipped because the package has been removed in v1.27
+    skip: true
 
   # This is for testing
   - name: kubeadm-config
