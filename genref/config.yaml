@@ -15,7 +15,7 @@ externalPackages:
   - match: ^time\.Duration$
     target: https://pkg.go.dev/time#Duration
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -42,14 +42,17 @@ apis:
     title: Kubelet Configuration (v1alpha1)
     package: k8s.io/kubelet
     path: config/v1alpha1
-    includes:
-      - k8s.io/component-base/config/v1alpha1
+    # XXX: Looks like not required
+    #includes:
+    #  - k8s.io/component-base/config/v1alpha1
 
   - name: kubelet-config
     title: Kubelet Configuration (v1beta1)
     package: k8s.io/kubelet
     path: config/v1beta1
     includes:
+      # XXX: Not sure if this is required
+      # - k8s.io/api/core/v1
       - k8s.io/component-base/logs/api/v1
       - k8s.io/component-base/tracing/api/v1
 
@@ -57,16 +60,18 @@ apis:
     title: Kubelet Configuration (v1)
     package: k8s.io/kubelet
     path: config/v1
-    includes:
-      - k8s.io/component-base/logs/api/v1
-      - k8s.io/component-base/tracing/api/v1
+    # XXX: Not needed any more
+    # includes:
+    #  - k8s.io/component-base/logs/api/v1
+    #  - k8s.io/component-base/tracing/api/v1
 
   - name: kubelet-stats
     title: Kubelet Stats (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/stats/v1alpha1
-    # Skip this because not referenced anywhere and it has no group name
-    skip: true
+    # XXX: Skip this because not referenced anywhere and it has no group name
+    # XXX: include this, it is useful in node-metrics
+    # skip: true
 
   - name: kubelet-credentialprovider
     title: Kubelet CredentialProvider (v1alpha1)
@@ -115,6 +120,7 @@ apis:
     path: config/v1alpha1
     includes:
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
+      - k8s.io/cloud-provider/controllers/node/config/v1alpha1
       - k8s.io/cloud-provider/config/v1alpha1
       - k8s.io/controller-manager/config/v1alpha1
 
@@ -130,7 +136,6 @@ apis:
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1beta1
 
-  # v1alpha1 is skipped
   # v1beta1 is preserved because it is still referenced.
   - name: client-authentication
     title: Client Authentication (v1beta1)
@@ -147,12 +152,16 @@ apis:
     title: kube-apiserver Configuration (v1alpha1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1alpha1
+    includes:
+      - k8s.io/component-base/tracing/api/v1
 
   # v1beta1 is preserved because it has different types exposed.
   - name: apiserver-config
     title: kube-apiserver Configuration (v1beta1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1beta1
+    includes:
+      - k8s.io/component-base/tracing/api/v1
 
   - name: apiserver-config
     title: kube-apiserver Configuration (v1)
@@ -173,15 +182,17 @@ apis:
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
 
-  - name: apiserver-admission
-    title: kube-apiserver Admission (v1)
-    package: k8s.io/api
-    path: admission/v1
-
+    # This seems deprecated.
   - name: apiserver-admission
     title: kube-apiserver Admission (v1beta1)
     package: k8s.io/api
     path: admission/v1beta1
+    skip: true
+
+  - name: apiserver-admission
+    title: kube-apiserver Admission (v1)
+    package: k8s.io/api
+    path: admission/v1
 
   - name: apiserver-resourcequota
     title: kube-apiserver ResourceQuota Configuration (v1)
@@ -212,11 +223,17 @@ apis:
     includes:
       - k8s.io/controller-manager/config/v1alpha1
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
+      - k8s.io/cloud-provider/controllers/node/config/v1alpha1
 
   - name: cloud-provider-service
     title: Cloud Provider Service Configuration (v1alpha1)
     package: k8s.io/cloud-provider
     path: controllers/service/config/v1alpha1
+
+  - name: cloud-provider-service
+    title: Cloud Provider Node Configuration (v1alpha1)
+    package: k8s.io/cloud-provider
+    path: controllers/node/config/v1alpha1
 
   - name: imagepolicy
     title: Image Policy API (v1alpha1)
@@ -228,6 +245,8 @@ apis:
     title: kubeadm Configuration (v1beta2)
     package: github.com/tengqm/kubeconfig
     path: config/kubeadm/v1beta2
+    # Skipped because the package has been removed in v1.27
+    skip: true
 
   # This is for testing
   - name: kubeadm-config

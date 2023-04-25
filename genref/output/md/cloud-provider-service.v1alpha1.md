@@ -6,17 +6,15 @@
   
     
 
-## `ServiceControllerConfiguration`     {#ServiceControllerConfiguration}
+## `NodeControllerConfiguration`     {#NodeControllerConfiguration}
     
 
 **Appears in:**
 
 - [CloudControllerManagerConfiguration](#cloudcontrollermanager-config-k8s-io-v1alpha1-CloudControllerManagerConfiguration)
 
-- [KubeControllerManagerConfiguration](#kubecontrollermanager-config-k8s-io-v1alpha1-KubeControllerManagerConfiguration)
 
-
-<p>ServiceControllerConfiguration contains elements describing ServiceController.</p>
+<p>NodeControllerConfiguration contains elements describing NodeController.</p>
 
 
 <table class="table">
@@ -24,13 +22,12 @@
 <tbody>
     
   
-<tr><td><code>ConcurrentServiceSyncs</code> <B>[Required]</B><br/>
+<tr><td><code>ConcurrentNodeSyncs</code> <B>[Required]</B><br/>
 <code>int32</code>
 </td>
 <td>
-   <p>concurrentServiceSyncs is the number of services that are
-allowed to sync concurrently. Larger number = more responsive service
-management, but more CPU (and network) load.</p>
+   <p>ConcurrentNodeSyncs is the number of workers
+concurrently synchronizing nodes</p>
 </td>
 </tr>
 </tbody>
