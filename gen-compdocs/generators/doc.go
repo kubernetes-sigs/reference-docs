@@ -191,7 +191,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		if cmd.HasParent() {
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
-			link := pname + ".md"
+			link := pname + "/"
 			link = strings.Replace(link, " ", "_", -1)
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", pname, linkHandler(link), parent.Short); err != nil {
 				return err
@@ -211,7 +211,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 				continue
 			}
 			cname := name + " " + child.Name()
-			link := cname + ".md"
+			link := cname + "/"
 			link = strings.Replace(link, " ", "_", -1)
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", cname, linkHandler(link), child.Short); err != nil {
 				return err
