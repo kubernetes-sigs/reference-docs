@@ -136,6 +136,16 @@ apis:
     package: k8s.io/metrics
     path: pkg/apis/metrics/v1beta1
 
+  - name: custom-metrics
+    title: Kubernetes Custom Metrics (v1beta2)
+    package: k8s.io/metrics
+    path: pkg/apis/custom_metrics/v1beta2
+
+  - name: external-metrics
+    title: Kubernetes External Metrics (v1beta1)
+    package: k8s.io/metrics
+    path: pkg/apis/external_metrics/v1beta1
+
   # v1beta1 is preserved because it is still referenced.
   - name: client-authentication
     title: Client Authentication (v1beta1)
