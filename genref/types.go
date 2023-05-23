@@ -242,7 +242,11 @@ func (t *apiType) Link() string {
 	}
 
 	var arrIndex = func(a []string, i int) string {
-		return a[(len(a)+i)%len(a)]
+		s := a[(len(a)+i)%len(a)]
+		if s == "authentication" {
+			s = "authentication-k8s-io"
+		}
+		return s
 	}
 
 	// types like k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta,
@@ -266,6 +270,7 @@ func (t *apiType) Link() string {
 					"lower":    strings.ToLower,
 					"arrIndex": arrIndex,
 				}).Parse(v.Target)
+
 				if err != nil {
 					klog.Errorf("Failed to parse the 'target': %s", v.Target)
 					return ""
