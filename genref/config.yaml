@@ -4,6 +4,10 @@ hiddenMemberFields:
 externalPackages:
   - match: ^k8s\.io/apimachinery/pkg/apis/meta/v1\.Duration$
     target: https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration
+  - match: ^k8s\.io/apimachinery/pkg/apis/meta/v1\.GroupVersionKind$
+    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionKind
+  - match: ^k8s\.io/apimachinery/pkg/apis/meta/v1\.GroupVersionResource$
+    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#GroupVersionResource
   - match: ^k8s\.io/apimachinery/pkg/types\.UID$
     target: https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID
   - match: ^k8s\.io/apimachinery/pkg/runtime\.RawExtension$
