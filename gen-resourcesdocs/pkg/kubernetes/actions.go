@@ -144,7 +144,7 @@ func (a ActionInfoList) Less(i, j int) bool {
 type Actions map[string]ActionInfoList
 
 // Add an action to the collection of actions
-func (o Actions) Add(key string, operation *spec.Operation, httpMethod string, pathParameters []spec.Parameter) {
+func (o Actions) Add(specParameters map[string]spec.Parameter, key string, operation *spec.Operation, httpMethod string, pathParameters []spec.Parameter) {
 
 	desc := operation.Description
 	if strings.Contains(strings.ToLower(desc), "deprecated") {
@@ -168,10 +168,10 @@ func (o Actions) Add(key string, operation *spec.Operation, httpMethod string, p
 
 			list := new(ParametersList)
 			for _, pathParam := range pathParameters {
-				list.Add(pathParam)
+				list.Add(specParameters, pathParam)
 			}
 			for _, opParam := range operation.Parameters {
-				list.Add(opParam)
+				list.Add(specParameters, opParam)
 			}
 			sort.Sort(list)
 

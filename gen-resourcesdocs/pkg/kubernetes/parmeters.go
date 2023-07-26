@@ -37,7 +37,11 @@ func (a ParametersList) Less(i, j int) bool {
 }
 
 // Add a parameter to the list
-func (a *ParametersList) Add(parameter spec.Parameter) {
+func (a *ParametersList) Add(specParameters map[string]spec.Parameter, parameter spec.Parameter) {
+	if !parameter.Ref.GetPointer().IsEmpty() {
+		key := Key(strings.TrimPrefix(parameter.Ref.GetPointer().String(), "/parameters/"))
+		parameter = specParameters[key.String()]
+	}
 	desc := parameter.Description
 	if strings.Contains(strings.ToLower(desc), "deprecated") {
 		return
