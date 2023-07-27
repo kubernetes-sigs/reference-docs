@@ -36,7 +36,7 @@ func (o FakeSection) AddContent(s string) error                              { r
 func (o FakeSection) AddTypeDefinition(typ string, description string) error { return nil }
 func (o FakeSection) AddFieldCategory(name string) error                     { return nil }
 
-func (o FakeSection) AddProperty(name string, property *kubernetes.Property, linkend []string, indent bool, defname string, shortName string) error {
+func (o FakeSection) AddProperty(name string, property *kubernetes.Property, linkend []string, indent int, defname string, shortName string) error {
 	return nil
 }
 func (o FakeSection) EndProperty() error       { return nil }

@@ -133,25 +133,25 @@ func (o *Spec) getActions() error {
 	paths := o.Swagger.Paths.Paths
 	for key, path := range paths {
 		if path.Get != nil {
-			o.Actions.Add(key, path.Get, "GET", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Get, "GET", path.Parameters)
 		}
 		if path.Put != nil {
-			o.Actions.Add(key, path.Put, "PUT", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Put, "PUT", path.Parameters)
 		}
 		if path.Post != nil {
-			o.Actions.Add(key, path.Post, "POST", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Post, "POST", path.Parameters)
 		}
 		if path.Delete != nil {
-			o.Actions.Add(key, path.Delete, "DELETE", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Delete, "DELETE", path.Parameters)
 		}
 		if path.Options != nil {
-			o.Actions.Add(key, path.Options, "OPTIONS", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Options, "OPTIONS", path.Parameters)
 		}
 		if path.Head != nil {
-			o.Actions.Add(key, path.Head, "HEAD", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Head, "HEAD", path.Parameters)
 		}
 		if path.Patch != nil {
-			o.Actions.Add(key, path.Patch, "PATCH", path.Parameters)
+			o.Actions.Add(o.Swagger.Parameters, key, path.Patch, "PATCH", path.Parameters)
 		}
 	}
 
