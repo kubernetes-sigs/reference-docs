@@ -31,6 +31,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/go-openapi/loads"
+	"github.com/go-openapi/spec"
 )
 
 var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on errors.")
@@ -240,7 +241,7 @@ func (c *Config) initOperations(specs []*loads.Document) {
 			}
 		}
 	})
-	c.initOperationParameters()
+	c.initOperationParameters(specs)
 
 	// Clear the operations.  We still have to calculate the operations because that is how we determine
 	// the API Group for each definition.
@@ -409,34 +410,60 @@ const (
 	BODY  = "body"
 )
 
-func (c *Config) initOperationParameters() {
+func (c *Config) initOperationParameters(specs []*loads.Document) {
 	s := c.Definitions
 	for _, op := range c.Operations {
 		pathItem := op.item
 
+		location := ""
+		var param spec.Parameter
+		var found bool
 		// Path parameters
 		for _, p := range pathItem.Parameters {
-			switch p.In {
+			if p.In == "" {
+				paramID := strings.Split(p.Ref.String(), "/")[2]
+				swagger := specs[0].Spec()
+				if param, found = swagger.Parameters[paramID]; found {
+					location = param.In
+				}
+			} else {
+				location = p.In
+				param = p
+			}
+
+			switch location {
 			case PATH:
-				op.PathParams = append(op.PathParams, s.parameterToField(p))
+				op.PathParams = append(op.PathParams, s.parameterToField(param))
 			case QUERY:
-				op.QueryParams = append(op.QueryParams, s.parameterToField(p))
+				op.QueryParams = append(op.QueryParams, s.parameterToField(param))
 			case BODY:
-				op.BodyParams = append(op.BodyParams, s.parameterToField(p))
+				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
 				panic("")
 			}
 		}
 
 		// Query parameters
+		location = ""
 		for _, p := range op.op.Parameters {
-			switch p.In {
+			if p.In == "" {
+				paramID := strings.Split(p.Ref.String(), "/")[2]
+				swagger := specs[0].Spec()
+				if param, found = swagger.Parameters[paramID]; found {
+					location = param.In
+				}
+			} else {
+				location = p.In
+				param = p
+			}
+
+			switch location {
 			case PATH:
-				op.PathParams = append(op.PathParams, s.parameterToField(p))
+				op.PathParams = append(op.PathParams, s.parameterToField(param))
 			case QUERY:
-				op.QueryParams = append(op.QueryParams, s.parameterToField(p))
+				op.QueryParams = append(op.QueryParams, s.parameterToField(param))
 			case BODY:
-				op.BodyParams = append(op.BodyParams, s.parameterToField(p))
+				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
 				panic("")
 			}
