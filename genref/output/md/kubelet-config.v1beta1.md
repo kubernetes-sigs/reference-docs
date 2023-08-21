@@ -175,6 +175,7 @@ Default: &quot;&quot;</p>
 </td>
 <td>
    <p>tlsCipherSuites is the list of allowed cipher suites for the server.
+Note that TLS 1.3 ciphersuites are not configurable.
 Values are from tls package constants (https://golang.org/pkg/crypto/tls/#pkg-constants).
 Default: nil</p>
 </td>
@@ -824,10 +825,9 @@ Default: false</p>
 <code>bool</code>
 </td>
 <td>
-   <p>makeIPTablesUtilChains, if true, causes the Kubelet ensures a set of iptables rules
-are present on host.
-These rules will serve as utility rules for various components, e.g. kube-proxy.
-The rules will be created based on iptablesMasqueradeBit and iptablesDropBit.
+   <p>makeIPTablesUtilChains, if true, causes the Kubelet to create the
+KUBE-IPTABLES-HINT chain in iptables as a hint to other components about the
+configuration of iptables on the system.
 Default: true</p>
 </td>
 </tr>
@@ -835,10 +835,9 @@ Default: true</p>
 <code>int32</code>
 </td>
 <td>
-   <p>iptablesMasqueradeBit is the bit of the iptables fwmark space to mark for SNAT.
-Values must be within the range [0, 31]. Must be different from other mark bits.
-Warning: Please match the value of the corresponding parameter in kube-proxy.
-TODO: clean up IPTablesMasqueradeBit in kube-proxy.
+   <p>iptablesMasqueradeBit formerly controlled the creation of the KUBE-MARK-MASQ
+chain.
+Deprecated: no longer has any effect.
 Default: 14</p>
 </td>
 </tr>
@@ -846,8 +845,8 @@ Default: 14</p>
 <code>int32</code>
 </td>
 <td>
-   <p>iptablesDropBit is the bit of the iptables fwmark space to mark for dropping packets.
-Values must be within the range [0, 31]. Must be different from other mark bits.
+   <p>iptablesDropBit formerly controlled the creation of the KUBE-MARK-DROP chain.
+Deprecated: no longer has any effect.
 Default: 15</p>
 </td>
 </tr>
@@ -1176,7 +1175,7 @@ Default: 0.9</p>
 </td>
 </tr>
 <tr><td><code>registerWithTaints</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#taint-v1-core"><code>[]core/v1.Taint</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#taint-v1-core"><code>[]core/v1.Taint</code></a>
 </td>
 <td>
    <p>registerWithTaints are an array of taints to add to a node object when
@@ -1256,7 +1255,7 @@ It exists in the kubeletconfig API group because it is classified as a versioned
     
   
 <tr><td><code>source</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
 </td>
 <td>
    <p>source is the source that we are serializing.</p>
@@ -1617,7 +1616,7 @@ and groups corresponding to the Organization in the client certificate.</p>
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>limits</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
@@ -1802,12 +1801,13 @@ default value of format is <code>text</code></p>
 </td>
 </tr>
 <tr><td><code>flushFrequency</code> <B>[Required]</B><br/>
-<a href="https://pkg.go.dev/time#Duration"><code>time.Duration</code></a>
+<a href="#TimeOrMetaDuration"><code>TimeOrMetaDuration</code></a>
 </td>
 <td>
-   <p>Maximum number of nanoseconds (i.e. 1s = 1000000000) between log
-flushes. Ignored if the selected logging backend writes log
-messages without buffering.</p>
+   <p>Maximum time between log flushes.
+If a string, parsed as a duration (i.e. &quot;1s&quot;)
+If an int, the maximum number of nanoseconds (i.e. 1s = 1000000000).
+Ignored if the selected logging backend writes log messages without buffering.</p>
 </td>
 </tr>
 <tr><td><code>verbosity</code> <B>[Required]</B><br/>
@@ -1836,6 +1836,70 @@ Only supported for &quot;text&quot; log format.</p>
 to the different logging formats. Only the options for the selected
 format get used, but all of them get validated.
 Only available when the LoggingAlphaOptions feature gate is enabled.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `LoggingOptions`     {#LoggingOptions}
+    
+
+
+<p>LoggingOptions can be used with ValidateAndApplyWithOptions to override
+certain global defaults.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>ErrorStream</code> <B>[Required]</B><br/>
+<a href="https://pkg.go.dev/io#Writer"><code>io.Writer</code></a>
+</td>
+<td>
+   <p>ErrorStream can be used to override the os.Stderr default.</p>
+</td>
+</tr>
+<tr><td><code>InfoStream</code> <B>[Required]</B><br/>
+<a href="https://pkg.go.dev/io#Writer"><code>io.Writer</code></a>
+</td>
+<td>
+   <p>InfoStream can be used to override the os.Stdout default.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `TimeOrMetaDuration`     {#TimeOrMetaDuration}
+    
+
+**Appears in:**
+
+- [LoggingConfiguration](#LoggingConfiguration)
+
+
+<p>TimeOrMetaDuration is present only for backwards compatibility for the
+flushFrequency field, and new fields should use metav1.Duration.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>Duration</code> <B>[Required]</B><br/>
+<a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration"><code>meta/v1.Duration</code></a>
+</td>
+<td>
+   <p>Duration holds the duration</p>
+</td>
+</tr>
+<tr><td><code>-</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   <p>SerializeAsString controls whether the value is serialized as a string or an integer</p>
 </td>
 </tr>
 </tbody>

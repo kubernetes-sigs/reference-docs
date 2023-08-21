@@ -91,7 +91,7 @@ the accelerator was actively processing.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -141,7 +141,7 @@ The &quot;core&quot; unit can be interpreted as CPU core-nanoseconds per second.
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for this container was (re)started.</p>
@@ -191,6 +191,13 @@ Logs.UsedBytes is the number of bytes used for the container logs.</p>
    <p>User defined metrics that are exposed by containers in the pod. Typically, we expect only one container in the pod to be exposing user defined metrics. In the event of multiple containers exposing metrics, they will be combined here.</p>
 </td>
 </tr>
+<tr><td><code>swap</code><br/>
+<a href="#SwapStats"><code>SwapStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to swap resources. This is reported to non-windows systems only.</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -219,7 +226,7 @@ Logs.UsedBytes is the number of bytes used for the container logs.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -349,7 +356,7 @@ e.g. For ContainerStats.Rootfs, this is the inodes used only by that container, 
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -422,7 +429,7 @@ hugepages).</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -475,7 +482,7 @@ The system containers are named according to the SystemContainer* constants.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the node-scoped (i.e. aggregate) stats was (re)started.</p>
@@ -522,6 +529,13 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 </td>
 <td>
    <p>Stats about the rlimit of system.</p>
+</td>
+</tr>
+<tr><td><code>swap</code><br/>
+<a href="#SwapStats"><code>SwapStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to swap resources. This is reported to non-windows systems only.</p>
 </td>
 </tr>
 </tbody>
@@ -618,7 +632,7 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the pod-scoped (e.g. network) stats was (re)started.</p>
@@ -674,6 +688,13 @@ VolumeStats.UsedBytes is the number of bytes used by the Volume</p>
    <p>ProcessStats pertaining to processes.</p>
 </td>
 </tr>
+<tr><td><code>swap</code><br/>
+<a href="#SwapStats"><code>SwapStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to swap resources. This is reported to non-windows systems only.</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -720,7 +741,7 @@ VolumeStats.UsedBytes is the number of bytes used by the Volume</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
@@ -772,6 +793,51 @@ Usage here refers to the total number of bytes occupied by images on the filesys
 </tbody>
 </table>
 
+## `SwapStats`     {#SwapStats}
+    
+
+**Appears in:**
+
+- [ContainerStats](#ContainerStats)
+
+- [NodeStats](#NodeStats)
+
+- [PodStats](#PodStats)
+
+
+<p>SwapStats contains data about memory usage</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>time</code> <B>[Required]</B><br/>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
+</td>
+<td>
+   <p>The time at which these stats were updated.</p>
+</td>
+</tr>
+<tr><td><code>swapAvailableBytes</code><br/>
+<code>uint64</code>
+</td>
+<td>
+   <p>Available swap memory for use.  This is defined as the <!-- raw HTML omitted --> - <!-- raw HTML omitted -->.
+If swap limit is undefined, this value is omitted.</p>
+</td>
+</tr>
+<tr><td><code>swapUsageBytes</code><br/>
+<code>uint64</code>
+</td>
+<td>
+   <p>Total swap memory in use.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
 ## `UserDefinedMetric`     {#UserDefinedMetric}
     
 
@@ -795,7 +861,7 @@ Usage here refers to the total number of bytes occupied by images on the filesys
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
