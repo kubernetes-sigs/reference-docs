@@ -24,8 +24,7 @@ func NewKWebsite(dir string, templatesDir string) *KWebsite {
 func (o *KWebsite) NewPart(i int, name string) (outputs.Part, error) {
 	partname := escapeName(name)
 	dirname := filepath.Join(o.Directory, partname)
-	err := os.Mkdir(dirname, 0755)
-	if err != nil {
+	if err := os.Mkdir(dirname, 0755); err != nil {
 		return nil, err
 	}
 	return Part{
@@ -37,8 +36,7 @@ func (o *KWebsite) NewPart(i int, name string) (outputs.Part, error) {
 // AddPart adds a part to the output
 func (o *KWebsite) AddPart(i int, name string) (outputs.Part, error) {
 	partname := escapeName(name)
-	err := o.addPartIndex(partname, name, i+1)
-	if err != nil {
+	if err := o.addPartIndex(partname, name, i+1); err != nil {
 		return Part{}, fmt.Errorf("Error writing index file for part %s: %s", name, err)
 	}
 	return Part{

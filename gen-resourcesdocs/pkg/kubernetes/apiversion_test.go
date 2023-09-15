@@ -172,7 +172,9 @@ func TestUnmarshalYAML(t *testing.T) {
 	a := struct {
 		Version kubernetes.APIVersion `yaml:"version"`
 	}{}
-	yaml.Unmarshal([]byte("{ \"version\": \"v1alpha1\" }"), &a)
+	if err := yaml.Unmarshal([]byte("{ \"version\": \"v1alpha1\" }"), &a); err != nil {
+		t.Fatalf("Failed to decode YAML: %v", err)
+	}
 	expected := newAPIVersionAssert(t, "v1alpha1")
 	if a.Version.String() != expected.String() {
 		t.Errorf("Should be %#v but is %#v", expected, a.Version)

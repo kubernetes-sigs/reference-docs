@@ -22,10 +22,10 @@ func TestGetGVKExtension(t *testing.T) {
 	}
 	extension, found, err := getGVKExtension(definition.Extensions)
 	if !found {
-		t.Errorf("Extension should be found")
+		t.Fatal("Extension should be found")
 	}
 	if err != nil {
-		t.Errorf("Extension should be found without error")
+		t.Fatalf("Extension should be found without error: %v", err)
 	}
 	if extension.Group != "apps" {
 		t.Errorf("Group should be %s but is %s", "apps", extension.Group)

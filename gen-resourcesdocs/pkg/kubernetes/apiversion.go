@@ -37,7 +37,7 @@ type APIVersion struct {
 
 // NewAPIVersion creates a new APIVersion struct from the literal version (for example v1alpha1)
 func NewAPIVersion(literal string) (apiversion *APIVersion, err error) {
-	re := regexp.MustCompile("^v(\\d+)((alpha|beta|)(\\d))?$")
+	re := regexp.MustCompile(`^v(\d+)((alpha|beta|)(\d))?$`)
 	parts := re.FindStringSubmatch(literal)
 	if parts == nil || len(parts) != 5 {
 		return nil, fmt.Errorf("Error parsing %s", literal)

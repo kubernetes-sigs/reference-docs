@@ -16,8 +16,7 @@ type PartIndex struct {
 
 func (o *KWebsite) addPartIndex(subdir string, name string, weight int) error {
 	dirname := filepath.Join(o.Directory, subdir)
-	err := os.Mkdir(dirname, 0755)
-	if err != nil {
+	if err := os.Mkdir(dirname, 0755); err != nil {
 		return err
 	}
 

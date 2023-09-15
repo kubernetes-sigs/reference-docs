@@ -1,7 +1,7 @@
 package config
 
 import (
-	"io/ioutil"
+	"os"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
 	"gopkg.in/yaml.v2"
@@ -27,12 +27,11 @@ func LoadCategories(filenames []string) (Categories, error) {
 	var result Categories
 	for _, filename := range filenames {
 		var fileCats Categories
-		content, err := ioutil.ReadFile(filename)
+		content, err := os.ReadFile(filename)
 		if err != nil {
 			return result, err
 		}
-		err = yaml.Unmarshal(content, &fileCats)
-		if err != nil {
+		if err = yaml.Unmarshal(content, &fileCats); err != nil {
 			return result, err
 		}
 		result = append(result, fileCats...)

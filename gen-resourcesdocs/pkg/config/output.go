@@ -13,19 +13,16 @@ import (
 // OutputDocument outputs contents using output
 func (o *TOC) OutputDocument(output outputs.Output) error {
 	for p, tocPart := range o.Parts {
-		err := o.OutputPart(p, tocPart, output)
-		if err != nil {
+		if err := o.OutputPart(p, tocPart, output); err != nil {
 			return err
 		}
 	}
 
-	o.OutputCommonParameters(len(o.Parts), output)
-
-	err := output.Terminate()
-	if err != nil {
+	if err := o.OutputCommonParameters(len(o.Parts), output); err != nil {
 		return err
 	}
-	return nil
+
+	return output.Terminate()
 }
 
 // OutputPart outputs a Part
@@ -36,8 +33,7 @@ func (o *TOC) OutputPart(i int, part *Part, output outputs.Output) error {
 	}
 
 	for c, tocChapter := range part.Chapters {
-		err = o.OutputChapter(c, tocChapter, outputPart)
-		if err != nil {
+		if err = o.OutputChapter(c, tocChapter, outputPart); err != nil {
 			return err
 		}
 	}
@@ -60,19 +56,16 @@ func (o *TOC) OutputChapter(i int, chapter *Chapter, outputPart outputs.Part) er
 	}
 
 	if chapter.Group != nil && chapter.Version != nil {
-		err = outputChapter.SetAPIVersion(GetGV(*chapter.Group, *chapter.Version))
-		if err != nil {
+		if err = outputChapter.SetAPIVersion(GetGV(*chapter.Group, *chapter.Version)); err != nil {
 			return err
 		}
 	}
-	err = outputChapter.SetGoImport(chapter.Key.GoImportPrefix())
-	if err != nil {
+	if err = outputChapter.SetGoImport(chapter.Key.GoImportPrefix()); err != nil {
 		return err
 	}
 
 	for s, tocSection := range chapter.Sections {
-		err = o.OutputSection(s, tocSection, outputChapter)
-		if err != nil {
+		if err = o.OutputSection(s, tocSection, outputChapter); err != nil {
 			return err
 		}
 	}
@@ -81,12 +74,13 @@ func (o *TOC) OutputChapter(i int, chapter *Chapter, outputPart outputs.Part) er
 		gvkString := chapter.Group.String() + "." + chapter.Version.String() + "." + chapter.Name
 		actions := o.Actions.Get(gvkString)
 		if actions != nil {
-			o.OutputOperations(len(chapter.Sections), outputChapter, &actions)
+			if err := o.OutputOperations(len(chapter.Sections), outputChapter, &actions); err != nil {
+				return err
+			}
 		}
 	}
 
-	outputChapter.Write()
-	return nil
+	return outputChapter.Write()
 }
 
 // OutputSection outputs a section of the chapter
@@ -100,20 +94,15 @@ func (o *TOC) OutputSection(i int, section *Section, outputChapter outputs.Chapt
 	if err != nil {
 		return err
 	}
-	err = outputSection.AddDefinitionIndexEntry(section.Name)
-	if err != nil {
+
+	if err = outputSection.AddDefinitionIndexEntry(section.Name); err != nil {
 		return err
 	}
-	err = outputSection.AddContent(section.Definition.Description)
-	if err != nil {
+	if err = outputSection.AddContent(section.Definition.Description); err != nil {
 		return err
 	}
 
-	err = o.OutputProperties(section.Name, section.Definition, outputSection, []string{}, section.Group, section.Version, section.Key)
-	if err != nil {
-		return err
-	}
-	return nil
+	return o.OutputProperties(section.Name, section.Definition, outputSection, []string{}, section.Group, section.Version, section.Key)
 }
 
 // OutputProperties outputs the properties of a definition
@@ -154,10 +143,14 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 		if len(prefix) == 0 {
 			// NOTE: category names are not displayed for sub-fields (that would be a hell of a mess...)
 			if fieldCategory.Name != "" {
-				outputSection.AddFieldCategory(fieldCategory.Name)
+				if err := outputSection.AddFieldCategory(fieldCategory.Name); err != nil {
+					return err
+				}
 			}
 
-			outputSection.StartPropertyList()
+			if err := outputSection.StartPropertyList(); err != nil {
+				return err
+			}
 		}
 
 		for _, name := range fieldCategory.Fields {
@@ -168,8 +161,7 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 				} else if name == "kind" {
 					property = kubernetes.NewHardCodedValueProperty(name, defname)
 				}
-				err := outputSection.AddProperty(name, property, []string{}, 0, defname, name)
-				if err != nil {
+				if err := outputSection.AddProperty(name, property, []string{}, 0, defname, name); err != nil {
 					return err
 				}
 				continue
@@ -186,64 +178,63 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 			}
 			completeName := prefix
 			completeName = append(completeName, name)
-			err = outputSection.AddProperty(strings.Join(completeName, "."), property, linkend, len(prefix), defname, name)
-			if err != nil {
+			if err = outputSection.AddProperty(strings.Join(completeName, "."), property, linkend, len(prefix), defname, name); err != nil {
 				return err
 			}
+
 			if property.TypeKey != nil && len(linkend) == 0 {
 				// The type is documented inline
 				if target, found := (*o.Definitions)[property.TypeKey.String()]; found {
 					o.setDocumentedDefinition(property.TypeKey, defname+"/"+strings.Join(completeName, "."))
 
 					indexedType := property.Type
-					if strings.HasPrefix(indexedType, "[]") {
-						indexedType = indexedType[2:]
-					}
-					if strings.HasPrefix(indexedType, "map[string]") {
-						indexedType = indexedType[11:]
-					}
-					err = outputSection.AddDefinitionIndexEntry(indexedType)
-					if err != nil {
+					indexedType = strings.TrimPrefix(indexedType, "[]")
+					indexedType = strings.TrimPrefix(indexedType, "map[string]")
+
+					if err = outputSection.AddDefinitionIndexEntry(indexedType); err != nil {
 						return err
 					}
 
-					err = outputSection.AddTypeDefinition(property.TypeKey.ResourceName(), target.Description)
-					if err != nil {
+					if err = outputSection.AddTypeDefinition(property.TypeKey.ResourceName(), target.Description); err != nil {
 						return err
 					}
 
 					sublist := false
 					if len(prefix) == 0 {
 						sublist = true
-						outputSection.StartPropertyList()
-					} else {
-						err = outputSection.EndProperty()
+						if err := outputSection.StartPropertyList(); err != nil {
+							return err
+						}
+					} else if err = outputSection.EndProperty(); err != nil {
+						return err
 					}
 
-					o.OutputProperties(defname, target, outputSection, append(prefix, name), nil, nil, property.TypeKey)
+					if err := o.OutputProperties(defname, target, outputSection, append(prefix, name), nil, nil, property.TypeKey); err != nil {
+						return err
+					}
+
 					if sublist {
-						outputSection.EndPropertyList()
+						if err := outputSection.EndPropertyList(); err != nil {
+							return err
+						}
 					}
 				}
 			}
-			err = outputSection.EndProperty()
-			if err != nil {
+			if err = outputSection.EndProperty(); err != nil {
 				return err
 			}
 		}
 		if len(prefix) == 0 {
-			outputSection.EndPropertyList()
+			if err := outputSection.EndPropertyList(); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
 }
 
 func (o *TOC) setDocumentedDefinition(key *kubernetes.Key, from string) {
-	if _, found := o.DocumentedDefinitions[*key]; found {
-		o.DocumentedDefinitions[*key] = append(o.DocumentedDefinitions[*key], from)
-	} else {
-		o.DocumentedDefinitions[*key] = []string{from}
-	}
+	o.DocumentedDefinitions[*key] = append(o.DocumentedDefinitions[*key], from)
 }
 
 // OutputOperations outputs the Operations chapter
@@ -253,16 +244,16 @@ func (o *TOC) OutputOperations(i int, outputChapter outputs.Chapter, operations 
 		return err
 	}
 	for i, operation := range *operations {
-		o.OutputOperation(i, operationsSection, &operation)
-		_ = operation
+		if err := o.OutputOperation(i, operationsSection, &operation); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
 // OutputOperation outputs details of an Operation
 func (o *TOC) OutputOperation(i int, outputSection outputs.Section, operation *kubernetes.ActionInfo) error {
-	outputSection.AddOperation(operation, o.LinkEnds)
-	return nil
+	return outputSection.AddOperation(operation, o.LinkEnds)
 }
 
 // OutputCommonParameters outputs the parameters in common
@@ -273,6 +264,9 @@ func (o *TOC) OutputCommonParameters(i int, output outputs.Output) error {
 	}
 
 	outputChapter, err := outputPart.AddChapter(i, "Common Parameters", "", nil, "", "")
+	if err != nil {
+		return err
+	}
 
 	params := make([]string, len(kubernetes.ParametersAnnex))
 	j := 0
@@ -289,10 +283,12 @@ func (o *TOC) OutputCommonParameters(i int, output outputs.Output) error {
 		if err != nil {
 			return err
 		}
-		err = outputSection.AddContent(kubernetes.ResourcesDescriptions[param][0].Description)
+		if err = outputSection.AddContent(kubernetes.ResourcesDescriptions[param][0].Description); err != nil {
+			return err
+		}
 	}
-	outputChapter.Write()
-	return nil
+
+	return outputChapter.Write()
 }
 
 // orderedPropertyKeys returns the keys of m alphabetically ordered
