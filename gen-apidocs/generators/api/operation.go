@@ -19,11 +19,12 @@ package api
 import (
 	"flag"
 	"fmt"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/spec"
@@ -33,7 +34,7 @@ var BuildOps = flag.Bool("build-operations", true, "If true build operations in 
 
 // GetOperationId returns the ID of the operation for the given definition
 func (ot OperationType) GetOperationId(d string) string {
-	return strings.Replace(ot.Match, "${resource}", d, -1)
+	return strings.ReplaceAll(ot.Match, "${resource}", d)
 }
 
 func (o *Operation) GetExampleRequests() []ExampleText {
@@ -155,17 +156,25 @@ func (o *Operation) GetGroupVersionKindSub() (string, string, string, string) {
 }
 
 // initExample reads the example config for an operation
-func (o *Operation) initExample(config *Config) {
+func (o *Operation) initExample(config *Config) error {
 	path := o.Type.Name + ".yaml"
 	path = filepath.Join(ConfigDir, config.ExampleLocation, o.Definition.Name, path)
-	path = strings.Replace(path, " ", "_", -1)
+	path = strings.ReplaceAll(path, " ", "_")
 	path = strings.ToLower(path)
-	content, err := ioutil.ReadFile(path)
-	if err != nil {
-		return
+
+	// missing files are okay
+	if _, err := os.Stat(path); err != nil {
+		return nil
 	}
-	err = yaml.Unmarshal(content, &o.ExampleConfig)
+
+	content, err := os.ReadFile(path)
 	if err != nil {
-		panic(fmt.Sprintf("Could not Unmarshal ExampleConfig yaml: %s\n", content))
+		return err
 	}
+
+	if err = yaml.Unmarshal(content, &o.ExampleConfig); err != nil {
+		return err
+	}
+
+	return nil
 }

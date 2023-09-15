@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"strings"
 
-	"errors"
 	"github.com/go-openapi/spec"
 )
 
@@ -28,8 +27,8 @@ import (
 func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 	// Get the reference for complex types
 	if IsDefinition(s) {
-		s := fmt.Sprintf("%s", s.SchemaProps.Ref.GetPointer())
-		s = strings.Replace(s, "/definitions/", "", -1)
+		s := s.SchemaProps.Ref.GetPointer().String()
+		s = strings.ReplaceAll(s, "/definitions/", "")
 		name := strings.Split(s, ".")
 
 		var group, version, kind string
@@ -55,7 +54,7 @@ func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 			// - io.k8s.apimachinery.pkg.runtime.RawExtension
 			return "", "", ""
 		} else {
-			panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
+			panic(fmt.Sprintf("Could not locate group for %s", name))
 		}
 		return group, version, kind
 	}
@@ -80,7 +79,7 @@ func GetTypeName(s spec.Schema) string {
 	}
 	// Get the value for primitive types
 	if len(s.Type) > 0 {
-		return fmt.Sprintf("%s", s.Type[0])
+		return s.Type[0]
 	}
 	panic(fmt.Errorf("No type found for object %v", s))
 }
@@ -97,10 +96,10 @@ func IsDefinition(s spec.Schema) bool {
 
 // handle '*', 'a/*', '*/b', '*/*' cases
 func EscapeAsterisks(des string) string {
-	s := strings.Replace(des, "'*'", `'\*'`, -1)
-	s = strings.Replace(s, "/*'", `/\*'`, -1)
-	s = strings.Replace(s, "'*/", `'\*/`, -1)
-	s = strings.Replace(s, "'*/*'", `'\*/\*'`, -1)
+	s := strings.ReplaceAll(des, "'*'", `'\*'`)
+	s = strings.ReplaceAll(s, "/*'", `/\*'`)
+	s = strings.ReplaceAll(s, "'*/", `'\*/`)
+	s = strings.ReplaceAll(s, "'*/*'", `'\*/\*'`)
 	return s
 }
 

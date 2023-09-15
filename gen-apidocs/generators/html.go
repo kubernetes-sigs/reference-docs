@@ -17,10 +17,10 @@ limitations under the License.
 package generators
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -66,9 +66,12 @@ func (h *HTMLWriter) Extension() string {
 	return ".html"
 }
 
-func (h *HTMLWriter) WriteOverview() {
+func (h *HTMLWriter) WriteOverview() error {
 	fn := "_overview.html"
-	writeStaticFile("Overview", fn, h.DefaultStaticContent("Overview"))
+	if err := writeStaticFile("Overview", fn, h.DefaultStaticContent("Overview")); err != nil {
+		return err
+	}
+
 	item := TOCItem{
 		Level: 1,
 		Title: "Overview",
@@ -77,30 +80,31 @@ func (h *HTMLWriter) WriteOverview() {
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
+
+	return nil
 }
 
-func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) {
+func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) error {
 	fn := "_group_versions.html"
 	path := filepath.Join(api.IncludesDir, fn)
 	f, err := os.Create(path)
-	defer f.Close()
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
+		return err
 	}
+	defer f.Close()
 
-	fmt.Fprintf(f, h.DefaultStaticContent("API Groups"))
-	fmt.Fprintf(f, "<P>The API Groups and their versions are summarized in the following table.</P>")
-	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH></TR></THEAD>\n<TBODY>\n")
+	fmt.Fprint(f, h.DefaultStaticContent("API Groups"))
+	fmt.Fprint(f, "<P>The API Groups and their versions are summarized in the following table.</P>")
+	fmt.Fprint(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH></TR></THEAD>\n<TBODY>\n")
 
 	groups := api.ApiGroups{}
-	for group, _ := range gvs {
+	for group := range gvs {
 		groups = append(groups, api.ApiGroup(group))
 	}
 	sort.Sort(groups)
 
 	for _, group := range groups {
-		versionList, _ := gvs[group.String()]
+		versionList := gvs[group.String()]
 		sort.Sort(versionList)
 		var versions []string
 		for _, v := range versionList {
@@ -120,11 +124,16 @@ func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) {
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
+
+	return nil
 }
 
-func (h *HTMLWriter) WriteResourceCategory(name, file string) {
-	writeStaticFile(name, "_"+file+".html", h.DefaultStaticContent(name))
-	link := strings.Replace(strings.ToLower(name), " ", "-", -1)
+func (h *HTMLWriter) WriteResourceCategory(name, file string) error {
+	if err := writeStaticFile(name, "_"+file+".html", h.DefaultStaticContent(name)); err != nil {
+		return err
+	}
+
+	link := strings.ReplaceAll(strings.ToLower(name), " ", "-")
 	item := TOCItem{
 		Level: 1,
 		Title: strings.ToUpper(name),
@@ -133,10 +142,12 @@ func (h *HTMLWriter) WriteResourceCategory(name, file string) {
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
+
+	return nil
 }
 
 func (h *HTMLWriter) DefaultStaticContent(title string) string {
-	titleID := strings.ToLower(strings.Replace(title, " ", "-", -1))
+	titleID := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
 	return fmt.Sprintf("<H1 id=\"-strong-%s-strong-\"><STRONG>%s</STRONG></H1>\n", titleID, title)
 }
 
@@ -181,8 +192,11 @@ func (h *HTMLWriter) writeFields(w io.Writer, d *api.Definition) {
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 }
 
-func (h *HTMLWriter) WriteDefinitionsOverview() {
-	writeStaticFile("Definitions", "_definitions.html", h.DefaultStaticContent("Definitions"))
+func (h *HTMLWriter) WriteDefinitionsOverview() error {
+	if err := writeStaticFile("Definitions", "_definitions.html", h.DefaultStaticContent("Definitions")); err != nil {
+		return err
+	}
+
 	item := TOCItem{
 		Level: 1,
 		Title: "DEFINITIONS",
@@ -191,17 +205,19 @@ func (h *HTMLWriter) WriteDefinitionsOverview() {
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
+
+	return nil
 }
 
-func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
+func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 	fn := "_" + definitionFileName(d) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
 	f, err := os.Create(path)
-	defer f.Close()
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
+		return err
 	}
+	defer f.Close()
+
 	nvg := fmt.Sprintf("%s %s %s", d.Name, d.Version, d.GroupDisplayName())
 	linkID := getLink(nvg)
 	fmt.Fprintf(f, "<H2 id=\"%s\">%s</H2>\n", linkID, nvg)
@@ -222,6 +238,8 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) {
 		File:  fn,
 	}
 	h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &item)
+
+	return nil
 }
 
 func (h *HTMLWriter) writeSample(w io.Writer, d *api.Definition) {
@@ -350,15 +368,15 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 }
 
-func (h *HTMLWriter) WriteResource(r *api.Resource) {
+func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 	fn := "_" + conceptFileName(r.Definition) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
+
 	w, err := os.Create(path)
-	defer w.Close()
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
+		return err
 	}
+	defer w.Close()
 
 	dvg := fmt.Sprintf("%s %s %s", r.Name, r.Definition.Version, r.Definition.GroupDisplayName())
 	linkID := getLink(dvg)
@@ -403,14 +421,14 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 
 	// Operations
 	if len(r.Definition.OperationCategories) == 0 {
-		return
+		return nil
 	}
 
 	for _, c := range r.Definition.OperationCategories {
 		if len(c.Operations) == 0 {
 			continue
 		}
-		catID := strings.Replace(strings.ToLower(c.Name), " ", "-", -1) + "-" + r.Definition.LinkID()
+		catID := strings.ReplaceAll(strings.ToLower(c.Name), " ", "-") + "-" + r.Definition.LinkID()
 		catID = "-strong-" + catID + "-strong-"
 		fmt.Fprintf(w, "<H2 id=\"%s\"><STRONG>%s</STRONG></H2>\n", catID, c.Name)
 		OCItem := TOCItem{
@@ -421,7 +439,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 		h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &OCItem)
 
 		for _, o := range c.Operations {
-			opID := strings.Replace(strings.ToLower(o.Type.Name), " ", "-", -1) + "-" + r.Definition.LinkID()
+			opID := strings.ReplaceAll(strings.ToLower(o.Type.Name), " ", "-") + "-" + r.Definition.LinkID()
 			fmt.Fprintf(w, "<H2 id=\"%s\">%s</H2>\n", opID, o.Type.Name)
 			OPItem := TOCItem{
 				Level: 2,
@@ -449,10 +467,15 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) {
 			h.writeResponseParams(w, o)
 		}
 	}
+
+	return nil
 }
 
-func (h *HTMLWriter) WriteOldVersionsOverview() {
-	writeStaticFile("Old Versions", "_oldversions.html", h.DefaultStaticContent("Old Versions"))
+func (h *HTMLWriter) WriteOldVersionsOverview() error {
+	if err := writeStaticFile("Old Versions", "_oldversions.html", h.DefaultStaticContent("Old Versions")); err != nil {
+		return err
+	}
+
 	item := TOCItem{
 		Level: 1,
 		Title: "OLD API VERSIONS",
@@ -461,6 +484,8 @@ func (h *HTMLWriter) WriteOldVersionsOverview() {
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
 	h.CurrentSection = &item
+
+	return nil
 }
 
 func (h *HTMLWriter) generateNavContent() string {
@@ -532,62 +557,75 @@ func (h *HTMLWriter) generateNavContent() string {
 	return nav
 }
 
-func (h *HTMLWriter) generateNavJS() {
-	// generate NavData
-	var tmp string
-	flatToc := []string{}
-	os.MkdirAll(api.BuildDir, os.ModePerm)
-
-	navjs, err := os.Create(filepath.Join(api.BuildDir, "navData.js"))
-	defer navjs.Close()
-	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
-	}
-
-	s1 := []string{}
-	for _, sec := range h.TOC.Sections {
-		flatToc = append([]string{"\"" + sec.Link + "\""}, flatToc...)
-		s2 := []string{}
-		for _, sub := range sec.SubSections {
-			flatToc = append([]string{"\"" + sub.Link + "\""}, flatToc...)
-			s3 := []string{}
-			for _, subsub := range sub.SubSections {
-				flatToc = append([]string{"\"" + subsub.Link + "\""}, flatToc...)
-				s4 := []string{}
-				for _, subsubsub := range subsub.SubSections {
-					flatToc = append([]string{"\"" + subsubsub.Link + "\""}, flatToc...)
-					tmp = "{\"section\":\"" + subsubsub.Link + "\"}"
-					s4 = append([]string{tmp}, s4...)
-				}
-				tmp = "{\"section\":\"" + subsub.Link + "\",\"subsections\":[" + strings.Join(s4, ",") + "]}"
-				s3 = append([]string{tmp}, s3...)
-			}
-			tmp = "{\"section\":\"" + sub.Link + "\",\"subsections\":[" + strings.Join(s3, ",") + "]}"
-			s2 = append([]string{tmp}, s2...)
-		}
-
-		if strings.Contains(sec.Link, "strong") {
-			tmp = "{\"section\":\"" + sec.Link + "\",\"subsections\":[]}"
-			s2res := strings.Join(s2, ",")
-			if len(s2res) > 0 {
-				tmp = s2res + "," + tmp
-			}
-		} else {
-			tmp = "{\"section\":\"" + sec.Link + "\",\"subsections\":[" + strings.Join(s2, ",") + "]}"
-		}
-		s1 = append([]string{tmp}, s1...)
-	}
-	fmt.Fprintf(navjs, "(function(){navData={\"toc\":["+strings.Join(s1, ",")+"],\"flatToc\":["+strings.Join(flatToc, ",")+"]};})();")
+type javascriptNavdata struct {
+	TOC     []javascriptTOCItem
+	FlatTOC []string
 }
 
-func (h *HTMLWriter) generateHTML(navContent string) {
-	html, err := os.Create(filepath.Join(api.BuildDir, "index.html"))
-	defer html.Close()
-	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
+type javascriptTOCItem struct {
+	Section     string              `json:"section"`
+	Subsections []javascriptTOCItem `json:"subsections"`
+}
+
+func convertTOCItem(navdata *javascriptNavdata, item *TOCItem) javascriptTOCItem {
+	navdata.FlatTOC = append(navdata.FlatTOC, item.Link)
+
+	jsItem := javascriptTOCItem{
+		Section:     item.Link,
+		Subsections: []javascriptTOCItem{},
 	}
+
+	for _, subitem := range item.SubSections {
+		jsItem.Subsections = append(jsItem.Subsections, convertTOCItem(navdata, subitem))
+	}
+
+	return jsItem
+}
+
+func (h *HTMLWriter) generateNavJS() error {
+	if err := os.MkdirAll(api.BuildDir, os.ModePerm); err != nil {
+		return err
+	}
+
+	navjs, err := os.Create(filepath.Join(api.BuildDir, "navData.js"))
+	if err != nil {
+		return err
+	}
+	defer navjs.Close()
+
+	navdata := javascriptNavdata{
+		TOC:     []javascriptTOCItem{},
+		FlatTOC: []string{},
+	}
+
+	for _, item := range h.TOC.Sections {
+		// this recursively collects the FlatTOC along the way
+		navdata.TOC = append(navdata.TOC, convertTOCItem(&navdata, item))
+	}
+
+	fmt.Fprintf(navjs, `(function() { navData = {"toc": `)
+
+	if err := json.NewEncoder(navjs).Encode(navdata.TOC); err != nil {
+		return fmt.Errorf("failed to encode TOC: %w", err)
+	}
+
+	fmt.Fprintf(navjs, `, "flatToc": `)
+
+	if err := json.NewEncoder(navjs).Encode(navdata.FlatTOC); err != nil {
+		return fmt.Errorf("failed to encode flat TOC: %w", err)
+	}
+
+	fmt.Fprintf(navjs, `}; }());`)
+
+	return nil
+}
+
+func (h *HTMLWriter) generateHTML(navContent string) error {
+	html, err := os.Create(filepath.Join(api.BuildDir, "index.html"))
+	if err != nil {
+		return err
+	}
+	defer html.Close()
 
 	/* Make sure the following stylesheets exist in kubernetes/website repo:
 	   kubernetes/website/static/css/bootstrap-4.3.1.min.css
@@ -618,7 +656,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	const NOT_FOUND = "\033[31mNot found\033[0m"
 	for _, sec := range h.TOC.Sections {
 		fmt.Printf("Collecting %s ... ", sec.File)
-		content, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, sec.File))
+		content, err := os.ReadFile(filepath.Join(api.IncludesDir, sec.File))
 		if err == nil {
 			buf += string(content)
 			fmt.Println(OK)
@@ -628,7 +666,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 		for _, sub := range sec.SubSections {
 			if len(sub.File) > 0 {
-				subdata, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, sub.File))
+				subdata, err := os.ReadFile(filepath.Join(api.IncludesDir, sub.File))
 				fmt.Printf("Collecting %s ... ", sub.File)
 				if err == nil {
 					buf += string(subdata)
@@ -640,7 +678,7 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 
 			for _, subsub := range sub.SubSections {
 				if len(subsub.File) > 0 {
-					subsubdata, err := ioutil.ReadFile(filepath.Join(api.IncludesDir, subsub.File))
+					subsubdata, err := os.ReadFile(filepath.Join(api.IncludesDir, subsub.File))
 					fmt.Printf("Collecting %s ...", subsub.File)
 					if err == nil {
 						buf += string(subsubdata)
@@ -672,13 +710,24 @@ func (h *HTMLWriter) generateHTML(navContent string) {
 	fmt.Fprintf(html, "<SCRIPT src=\"js/navData.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/scroll-apiref.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
+
+	return nil
 }
 
-func (h *HTMLWriter) Finalize() {
-	// generate NavData
-	os.MkdirAll(api.BuildDir, os.ModePerm)
+func (h *HTMLWriter) Finalize() error {
+	if err := os.MkdirAll(api.BuildDir, os.ModePerm); err != nil {
+		return err
+	}
 
-	h.generateNavJS()
+	if err := h.generateNavJS(); err != nil {
+		return err
+	}
+
 	navContent := h.generateNavContent()
-	h.generateHTML(navContent)
+
+	if err := h.generateHTML(navContent); err != nil {
+		return err
+	}
+
+	return nil
 }

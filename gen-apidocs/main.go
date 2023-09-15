@@ -18,11 +18,14 @@ package main
 
 import (
 	"flag"
+	"log"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators"
 )
 
 func main() {
 	flag.Parse()
-	generators.GenerateFiles()
+	if err := generators.GenerateFiles(); err != nil {
+		log.Fatalf("failure: %v", err)
+	}
 }

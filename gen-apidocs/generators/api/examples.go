@@ -109,36 +109,36 @@ func (ce CurlExample) GetSampleType() string {
 func (ce CurlExample) GetRequest(o *Operation) string {
 	c := o.ExampleConfig
 	y := c.Request
-	if len(y) <= 0 && len(c.Name) <= 0 {
+	if len(y) == 0 && len(c.Name) == 0 {
 		return ""
 	}
 
 	switch o.Type.Name {
 	case "Create":
-		return fmt.Sprintf("$ kubectl proxy\n$ curl -X POST -H 'Content-Type: application/yaml' --data '\n%s' http://127.0.0.1:8001%s", y, strings.Replace(o.Path, "{namespace}", "default", -1))
+		return fmt.Sprintf("$ kubectl proxy\n$ curl -X POST -H 'Content-Type: application/yaml' --data '\n%s' http://127.0.0.1:8001%s", y, strings.ReplaceAll(o.Path, "{namespace}", "default"))
 	case "Delete":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X DELETE -H 'Content-Type: application/yaml' --data '\n%s' 'http://127.0.0.1:8001%s'", y, path)
 	case "List":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X GET 'http://127.0.0.1:8001%s'", path)
 	case "Patch":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X PATCH -H 'Content-Type: application/strategic-merge-patch+json' --data '\n%s' \\\n\t'http://127.0.0.1:8001%s'", y, path)
 	case "Read":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X GET http://127.0.0.1:8001%s", path)
 	case "Replace":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X PUT -H 'Content-Type: application/yaml' --data '\n%s' http://127.0.0.1:8001%s", y, path)
 	case "Watch":
-		path := strings.Replace(o.Path, "{namespace}", o.ExampleConfig.Namespace, -1)
-		path = strings.Replace(path, "{name}", o.ExampleConfig.Name, -1)
+		path := strings.ReplaceAll(o.Path, "{namespace}", o.ExampleConfig.Namespace)
+		path = strings.ReplaceAll(path, "{name}", o.ExampleConfig.Name)
 		return fmt.Sprintf("$ kubectl proxy\n$ curl -X GET 'http://127.0.0.1:8001%s'", path)
 	}
 	return ""
@@ -147,24 +147,24 @@ func (ce CurlExample) GetRequest(o *Operation) string {
 func (ce CurlExample) GetResponse(o *Operation) string {
 	c := o.ExampleConfig
 	j := o.ExampleConfig.Response
-	if len(j) <= 0 && len(c.Name) <= 0 {
+	if len(j) == 0 && len(c.Name) == 0 {
 		return ""
 	}
 	switch o.Type.Name {
 	case "Create":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Delete":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "List":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Patch":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Read":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Replace":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Watch":
-		return fmt.Sprintf("%s", j)
+		return j
 	}
 	return ""
 }
@@ -201,7 +201,7 @@ func (ke KubectlExample) GetRequest(o *Operation) string {
 	c := o.ExampleConfig
 	t := strings.ToLower(o.Definition.Name)
 	y := c.Request
-	if len(y) <= 0 && len(c.Name) <= 0 {
+	if len(y) == 0 && len(c.Name) == 0 {
 		return ""
 	}
 	switch o.Type.Name {
@@ -228,24 +228,24 @@ func (ke KubectlExample) GetResponse(o *Operation) string {
 	name := o.ExampleConfig.Name
 	t := strings.ToLower(o.Definition.Name)
 	j := o.ExampleConfig.Response
-	if len(j) <= 0 && len(c.Name) <= 0 {
+	if len(j) == 0 && len(c.Name) == 0 {
 		return ""
 	}
 	switch o.Type.Name {
 	case "Create":
-		return fmt.Sprintf("%s \"%s\" created", t, name)
+		return fmt.Sprintf("%s %q created", t, name)
 	case "Delete":
-		return fmt.Sprintf("%s \"%s\" deleted", t, name)
+		return fmt.Sprintf("%s %q deleted", t, name)
 	case "List":
-		return fmt.Sprintf("%s", j)
+		return j
 	case "Patch":
-		return fmt.Sprintf("\"%s\" patched", name)
+		return fmt.Sprintf("%q patched", name)
 	case "Read":
-		return string(j)
+		return j
 	case "Replace":
-		return fmt.Sprintf("%s \"%s\" replaced", t, name)
+		return fmt.Sprintf("%s %q replaced", t, name)
 	case "Watch":
-		return string(j)
+		return j
 	}
 	return ""
 }
