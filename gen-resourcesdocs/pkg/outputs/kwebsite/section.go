@@ -147,14 +147,12 @@ func (o Section) EndPropertyList() error {
 // AddOperation adds an operation
 func (o Section) AddOperation(operation *kubernetes.ActionInfo, linkends kubernetes.LinkEnds) error {
 	sentences := strings.Split(operation.Operation.Description, ".")
-
 	if len(sentences) > 1 {
 		fmt.Printf("SHOULD NOT HAPPEN, sentences: %d\n", len(sentences))
 	}
 
 	dataParams := []ParameterData{}
 	for _, param := range operation.Parameters {
-
 		required := ""
 		if param.Required {
 			required = ", required"

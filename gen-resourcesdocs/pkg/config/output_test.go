@@ -58,19 +58,20 @@ func TestOutputDocumentV120(t *testing.T) {
 func outputDocumentVersion(t *testing.T, version string) {
 	spec, err := kubernetes.NewSpec("../../api/" + version + "/swagger.json")
 	if err != nil {
-		t.Errorf("Error loding swagger file")
+		t.Fatalf("Error loding swagger file: %v", err)
 	}
 
 	toc, err := config.LoadTOC("../../config/" + version + "/toc.yaml")
 	if err != nil {
-		t.Errorf("LoadTOC should not fail")
+		t.Fatalf("LoadTOC should not fail: %v", err)
 	}
 
-	err = toc.PopulateAssociates(spec)
-	if err != nil {
+	if err = toc.PopulateAssociates(spec); err != nil {
 		t.Errorf("%s", err)
 	}
 	toc.Definitions = &spec.Swagger.Definitions
-	toc.OutputDocument(FakeOutput{})
-
+	err = toc.OutputDocument(FakeOutput{})
+	if err != nil {
+		t.Errorf("%s", err)
+	}
 }
