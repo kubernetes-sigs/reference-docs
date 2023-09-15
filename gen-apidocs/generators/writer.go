@@ -33,21 +33,28 @@ type Doc struct {
 type DocWriter interface {
 	Extension() string
 	DefaultStaticContent(title string) string
-	WriteOverview()
-	WriteAPIGroupVersions(gvs api.GroupVersions)
-	WriteResourceCategory(name, file string)
-	WriteResource(r *api.Resource)
-	WriteDefinitionsOverview()
-	WriteDefinition(d *api.Definition)
-	WriteOldVersionsOverview()
-	Finalize()
+	WriteOverview() error
+	WriteAPIGroupVersions(gvs api.GroupVersions) error
+	WriteResourceCategory(name, file string) error
+	WriteResource(r *api.Resource) error
+	WriteDefinitionsOverview() error
+	WriteDefinition(d *api.Definition) error
+	WriteOldVersionsOverview() error
+	Finalize() error
 }
 
-func GenerateFiles() {
+func GenerateFiles() error {
 	// Load the yaml config
-	config := api.NewConfig()
+	config, err := api.NewConfig()
+	if err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
+	}
+
 	PrintInfo(config)
-	ensureIncludeDir()
+
+	if err := ensureDirectories(); err != nil {
+		return err
+	}
 
 	copyright_tmpl := "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016-%s The Kubernetes Authors.</a>"
 	now := time.Now().Format("2006")
@@ -60,24 +67,35 @@ func GenerateFiles() {
 	}
 
 	writer := NewHTMLWriter(config, copyright, title)
-	writer.WriteOverview()
+	if err := writer.WriteOverview(); err != nil {
+		return err
+	}
 
 	// Write API groups
-	writer.WriteAPIGroupVersions(config.Definitions.GroupVersions)
+	if err := writer.WriteAPIGroupVersions(config.Definitions.GroupVersions); err != nil {
+		return err
+	}
 
 	// Write resource definitions
 	for _, c := range config.ResourceCategories {
-		writer.WriteResourceCategory(c.Name, c.Include)
+		if err := writer.WriteResourceCategory(c.Name, c.Include); err != nil {
+			return err
+		}
 		for _, r := range c.Resources {
 			if r.Definition == nil {
 				fmt.Printf("Warning: Missing definition for item in TOC %s\n", r.Name)
 				continue
 			}
-			writer.WriteResource(r)
+			if err := writer.WriteResource(r); err != nil {
+				return err
+			}
 		}
 	}
 
-	writer.WriteDefinitionsOverview()
+	if err := writer.WriteDefinitionsOverview(); err != nil {
+		return err
+	}
+
 	// Add other definition imports
 	definitions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
@@ -89,10 +107,15 @@ func GenerateFiles() {
 	}
 	sort.Sort(definitions)
 	for _, d := range definitions {
-		writer.WriteDefinition(d)
+		if err := writer.WriteDefinition(d); err != nil {
+			return err
+		}
 	}
 
-	writer.WriteOldVersionsOverview()
+	if err := writer.WriteOldVersionsOverview(); err != nil {
+		return err
+	}
+
 	oldversions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
 		// Don't add definitions for top level resources in the toc or inlined resources
@@ -107,61 +130,58 @@ func GenerateFiles() {
 			continue
 		}
 		r := &api.Resource{Definition: d, Name: d.Name}
-		writer.WriteResource(r)
+		if err := writer.WriteResource(r); err != nil {
+			return err
+		}
 	}
 
-	writer.Finalize()
+	if err := writer.Finalize(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func ensureIncludeDir() {
-	if _, err := os.Stat(api.BuildDir); os.IsNotExist(err) {
-		os.Mkdir(api.BuildDir, os.FileMode(0700))
+func ensureDirectories() error {
+	if err := os.MkdirAll(api.BuildDir, os.FileMode(0700)); err != nil {
+		return err
 	}
-	if _, err := os.Stat(api.IncludesDir); os.IsNotExist(err) {
-		os.Mkdir(api.IncludesDir, os.FileMode(0700))
+	if err := os.MkdirAll(api.IncludesDir, os.FileMode(0700)); err != nil {
+		return err
 	}
+
+	return nil
 }
 
 func definitionFileName(d *api.Definition) string {
-	name := "generated_" + strings.ToLower(strings.Replace(d.Name, ".", "_", 50))
+	name := "generated_" + strings.ToLower(strings.ReplaceAll(d.Name, ".", "_"))
 	return fmt.Sprintf("%s_%s_%s_definition", name, d.Version, d.Group)
 }
 
 func conceptFileName(d *api.Definition) string {
-	name := "generated_" + strings.ToLower(strings.Replace(d.Name, ".", "_", 50))
+	name := "generated_" + strings.ToLower(strings.ReplaceAll(d.Name, ".", "_"))
 	return fmt.Sprintf("%s_%s_%s_concept", name, d.Version, d.Group)
 }
 
 func getLink(s string) string {
-	tmp := strings.Replace(s, ".", "-", -1)
-	return strings.ToLower(strings.Replace(tmp, " ", "-", -1))
+	tmp := strings.ReplaceAll(s, ".", "-")
+	return strings.ToLower(strings.ReplaceAll(tmp, " ", "-"))
 }
 
-func writeStaticFile(title, location, defaultContent string) {
+func writeStaticFile(title, location, defaultContent string) error {
 	fn := filepath.Join(api.SectionsDir, location)
 	to := filepath.Join(api.IncludesDir, location)
 	_, err := os.Stat(fn)
 	if err == nil {
 		// copy the file if it exists
-		os.Link(fn, to)
-		return
+		return os.Link(fn, to)
 	}
 
 	if !os.IsNotExist(err) {
-		panic(fmt.Sprintf("Could not stat file %s %v", fn, err))
+		return fmt.Errorf("failed to stat file %s: %w", fn, err)
 	}
-	fmt.Printf("Creating file %s\n", to)
-	file, err := os.Create(to)
-	if err != nil {
-		panic(err)
-	}
-	file.Close()
 
-	file, err = os.OpenFile(to, os.O_WRONLY, 0)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Fprintf(file, defaultContent)
-	file.Close()
+	fmt.Printf("Creating file %s\n", to)
+
+	return os.WriteFile(to, []byte(defaultContent), 0644)
 }

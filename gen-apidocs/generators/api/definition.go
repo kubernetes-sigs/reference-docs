@@ -18,11 +18,12 @@ package api
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/spec"
@@ -45,16 +46,19 @@ var _INLINE_DEFINITIONS = []inlineDefinition{
 	{Name: "EventSource", Match: "${resource}EventSource"},
 }
 
-func NewDefinitions(config *Config, specs []*loads.Document) Definitions {
-	s := Definitions{
+func NewDefinitions(config *Config, specs []*loads.Document) (*Definitions, error) {
+	s := &Definitions{
 		All:           map[string]*Definition{},
 		ByKind:        map[string]SortDefinitionsByVersion{},
 		GroupVersions: map[string]ApiVersions{},
 	}
 
-	LoadDefinitions(config, specs, &s)
+	if err := LoadDefinitions(config, specs, s); err != nil {
+		return nil, err
+	}
+
 	s.initialize()
-	return s
+	return s, nil
 }
 
 func (s *Definitions) initialize() {
@@ -132,7 +136,7 @@ func (s *Definitions) initialize() {
 func (s *Definitions) getInlineDefinitionNames(parent string) []string {
 	names := []string{}
 	for _, id := range _INLINE_DEFINITIONS {
-		name := strings.Replace(id.Match, "${resource}", parent, -1)
+		name := strings.ReplaceAll(id.Match, "${resource}", parent)
 		names = append(names, name)
 	}
 	return names
@@ -160,7 +164,7 @@ func (s *Definitions) getReferences(d *Definition) []*Definition {
 func (s *Definitions) parameterToField(param spec.Parameter) *Field {
 	f := &Field{
 		Name:        param.Name,
-		Description: strings.Replace(param.Description, "\n", " ", -1),
+		Description: strings.ReplaceAll(param.Description, "\n", " "),
 	}
 	if param.Schema != nil {
 		f.Type = GetTypeName(*param.Schema)
@@ -189,7 +193,7 @@ func (s *Definitions) GetForSchema(schema spec.Schema) (*Definition, bool) {
 // Initializes the fields for a definition
 func (s *Definitions) InitializeFields(d *Definition) {
 	for fieldName, property := range d.schema.Properties {
-		des := strings.Replace(property.Description, "\n", " ", -1)
+		des := strings.ReplaceAll(property.Description, "\n", " ")
 		f := &Field{
 			Name:        fieldName,
 			Type:        GetTypeName(property),
@@ -226,29 +230,29 @@ func (d *Definition) Key() string {
 }
 
 func (d *Definition) LinkID() string {
-	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	link := fmt.Sprintf("%s-%s-%s", d.Name, d.Version, groupName)
 	return strings.ToLower(link)
 }
 
 func (d *Definition) MdLink() string {
-	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	return fmt.Sprintf("[%s](#%s-%s-%s)", d.Name, strings.ToLower(d.Name), d.Version, groupName)
 }
 
 func (d *Definition) HrefLink() string {
-	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, groupName, d.Name)
 }
 
 func (d *Definition) FullHrefLink() string {
-	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s [%s/%s]</a>", strings.ToLower(d.Name),
 		d.Version, groupName, d.Name, d.Group, d.Version)
 }
 
 func (d *Definition) VersionLink() string {
-	groupName := strings.Replace(strings.ToLower(d.GroupFullName), ".", "-", -1)
+	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	return fmt.Sprintf("<a href=\"#%s-%s-%s\">%s</a>", strings.ToLower(d.Name), d.Version, groupName, d.Version)
 }
 
@@ -267,17 +271,25 @@ func (d *Definition) GetResourceName() string {
 	return resource + "s"
 }
 
-func (d *Definition) initExample(config *Config) {
+func (d *Definition) initExample(config *Config) error {
 	path := filepath.Join(ConfigDir, config.ExampleLocation, d.Name, d.Name+".yaml")
-	file := strings.Replace(strings.ToLower(path), " ", "_", -1)
-	content, err := ioutil.ReadFile(file)
-	if err != nil || len(content) <= 0 {
-		return
+	file := strings.ReplaceAll(strings.ToLower(path), " ", "_")
+
+	// missing files are okay
+	if _, err := os.Stat(file); err != nil {
+		return nil
 	}
-	err = yaml.Unmarshal(content, &d.Sample)
+
+	content, err := os.ReadFile(file)
 	if err != nil {
-		panic(fmt.Sprintf("Could not Unmarshal SampleConfig yaml: %s\n", content))
+		return err
 	}
+
+	if err = yaml.Unmarshal(content, &d.Sample); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (d *Definition) GetSamples() []ExampleText {

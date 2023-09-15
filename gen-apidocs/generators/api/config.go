@@ -20,7 +20,6 @@ import (
 	"flag"
 	"fmt"
 	"html"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -54,7 +53,7 @@ var IncludesDir string
 // Directory for versioned configuration file and swagger.json
 var VersionedConfigDir string
 
-func NewConfig() *Config {
+func NewConfig() (*Config, error) {
 	// Initialize global directories
 	BuildDir = filepath.Join(*WorkDir, "build")
 	ConfigDir = filepath.Join(*WorkDir, "config")
@@ -66,8 +65,14 @@ func NewConfig() *Config {
 	var k8sRelease = fmt.Sprintf("%s%s", versionChar, strings.ReplaceAll(*KubernetesRelease, ".", "_"))
 	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
 
-	config := LoadConfigFromYAML()
-	specs := LoadOpenApiSpec()
+	config, err := LoadConfigFromYAML()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load config yaml: %w", err)
+	}
+	specs, err := LoadOpenApiSpec()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load openapi spec: %w", err)
+	}
 
 	// Parse spec version
 	ParseSpecInfo(specs, config)
@@ -76,17 +81,27 @@ func NewConfig() *Config {
 	config.SpecVersion = fmt.Sprintf("%s%s.%s", versionChar, *KubernetesRelease, "0")
 
 	// Initialize all of the operations
-	config.Definitions = NewDefinitions(config, specs)
+	defs, err := NewDefinitions(config, specs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to init definitions: %w", err)
+	}
+	config.Definitions = *defs
 
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
-		config.genConfigFromTags(specs)
+		if err := config.genConfigFromTags(specs); err != nil {
+			return nil, fmt.Errorf("failed to generate config from tags: %w", err)
+		}
 	} else {
 		// Initialization for ToC resources only
-		config.visitResourcesInToc()
+		if err := config.visitResourcesInToc(); err != nil {
+			return nil, fmt.Errorf("failed to visit resources in TOC: %w", err)
+		}
 	}
 
-	config.initOperations(specs)
+	if err := config.initOperations(specs); err != nil {
+		return nil, fmt.Errorf("failed to init operations: %w", err)
+	}
 
 	// replace unicode escape sequences with HTML entities.
 	config.escapeDescriptions()
@@ -113,10 +128,10 @@ func NewConfig() *Config {
 		config.ResourceCategories = categories
 	}
 
-	return config
+	return config, nil
 }
 
-func (c *Config) genConfigFromTags(specs []*loads.Document) {
+func (c *Config) genConfigFromTags(specs []*loads.Document) error {
 	log.Printf("Using OpenAPI extension tags to configure.")
 
 	// build the apis from the observed groups
@@ -132,7 +147,9 @@ func (c *Config) genConfigFromTags(specs []*loads.Document) {
 			// Don't look at deprecated types
 			continue
 		}
-		d.initExample(c)
+		if err := d.initExample(c); err != nil {
+			return fmt.Errorf("failed to init example: %w", err)
+		}
 		g := d.Group
 		groupsMap[g] = append(groupsMap[g], d)
 	}
@@ -164,9 +181,11 @@ func (c *Config) genConfigFromTags(specs []*loads.Document) {
 		}
 		c.ResourceCategories = append(c.ResourceCategories, rc)
 	}
+
+	return nil
 }
 
-func (config *Config) initOperationsFromTags(specs []*loads.Document) {
+func (config *Config) initOperationsFromTags(specs []*loads.Document) error {
 	if *UseTags {
 		ops := map[string]map[string][]*Operation{}
 		defs := map[string]*Definition{}
@@ -202,7 +221,7 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) {
 		for key, subMap := range ops {
 			def := defs[key]
 			if def == nil {
-				panic(fmt.Errorf("Unable to locate resource %s in resource map\n%v\n", key, defs))
+				return fmt.Errorf("Unable to locate resource %s in resource map\n%v\n", key, defs)
 			}
 			subs := []string{}
 			for s := range subMap {
@@ -222,17 +241,24 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) {
 			}
 		}
 	}
+
+	return nil
 }
 
 // initOperations returns all Operations found in the Documents
-func (c *Config) initOperations(specs []*loads.Document) {
+func (c *Config) initOperations(specs []*loads.Document) error {
 	c.Operations = Operations{}
 	VisitOperations(specs, func(op Operation) {
 		c.Operations[op.ID] = &op
 	})
 
-	c.mapOperationsToDefinitions()
-	c.initOperationsFromTags(specs)
+	if err := c.mapOperationsToDefinitions(); err != nil {
+		return err
+	}
+
+	if err := c.initOperationsFromTags(specs); err != nil {
+		return err
+	}
 
 	VisitOperations(specs, func(target Operation) {
 		if op, ok := c.Operations[target.ID]; !ok || op.Definition == nil {
@@ -241,7 +267,10 @@ func (c *Config) initOperations(specs []*loads.Document) {
 			}
 		}
 	})
-	c.initOperationParameters(specs)
+
+	if err := c.initOperationParameters(specs); err != nil {
+		return err
+	}
 
 	// Clear the operations.  We still have to calculate the operations because that is how we determine
 	// the API Group for each definition.
@@ -252,6 +281,8 @@ func (c *Config) initOperations(specs []*loads.Document) {
 			d.OperationCategories = []*OperationCategory{}
 		}
 	}
+
+	return nil
 }
 
 func (c *Config) opExcluded(op string) bool {
@@ -285,22 +316,17 @@ func (c *Config) CleanUp() {
 }
 
 // LoadConfigFromYAML reads the config yaml file into a struct
-func LoadConfigFromYAML() *Config {
+func LoadConfigFromYAML() (*Config, error) {
 	config := &Config{}
 
 	f := filepath.Join(VersionedConfigDir, "config.yaml")
-	contents, err := ioutil.ReadFile(f)
+	contents, err := os.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
-			fmt.Printf("\033[31mFailed to read yaml file %s: %v\033[0m", f, err)
-			os.Exit(2)
+			return nil, fmt.Errorf("failed to read yaml file %s: %w", f, err)
 		}
-	} else {
-		err = yaml.Unmarshal(contents, config)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	} else if err = yaml.Unmarshal(contents, config); err != nil {
+		return nil, err
 	}
 
 	writeCategory := OperationCategory{
@@ -401,7 +427,7 @@ func LoadConfigFromYAML() *Config {
 
 	config.OperationCategories = append([]OperationCategory{writeCategory, readCategory, statusCategory, ephemaralCategory}, config.OperationCategories...)
 
-	return config
+	return config, nil
 }
 
 const (
@@ -410,7 +436,7 @@ const (
 	BODY  = "body"
 )
 
-func (c *Config) initOperationParameters(specs []*loads.Document) {
+func (c *Config) initOperationParameters(specs []*loads.Document) error {
 	s := c.Definitions
 	for _, op := range c.Operations {
 		pathItem := op.item
@@ -439,7 +465,7 @@ func (c *Config) initOperationParameters(specs []*loads.Document) {
 			case BODY:
 				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
-				panic("")
+				return fmt.Errorf("unknown location %q", location)
 			}
 		}
 
@@ -465,7 +491,7 @@ func (c *Config) initOperationParameters(specs []*loads.Document) {
 			case BODY:
 				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
-				panic("")
+				return fmt.Errorf("unknown location %q", location)
 			}
 		}
 
@@ -475,7 +501,7 @@ func (c *Config) initOperationParameters(specs []*loads.Document) {
 			}
 			r := &HttpResponse{
 				Field: Field{
-					Description: strings.Replace(response.Description, "\n", " ", -1),
+					Description: strings.ReplaceAll(response.Description, "\n", " "),
 					Type:        GetTypeName(*response.Schema),
 					Name:        fmt.Sprintf("%d", code),
 				},
@@ -490,6 +516,8 @@ func (c *Config) initOperationParameters(specs []*loads.Document) {
 			op.HttpResponses = append(op.HttpResponses, r)
 		}
 	}
+
+	return nil
 }
 
 func (c *Config) getOperationGroupName(group string) string {
@@ -505,25 +533,26 @@ func (c *Config) getOperationId(match string, group string, version ApiVersion, 
 	ver := []rune(string(version))
 	ver[0] = unicode.ToUpper(ver[0])
 
-	match = strings.Replace(match, "${group}", group, -1)
-	match = strings.Replace(match, "${version}", string(ver), -1)
-	match = strings.Replace(match, "${resource}", kind, -1)
+	match = strings.ReplaceAll(match, "${group}", group)
+	match = strings.ReplaceAll(match, "${version}", string(ver))
+	match = strings.ReplaceAll(match, "${resource}", kind)
 	return match
 }
 
-func (c *Config) setOperation(match, namespace string, ot *OperationType, oc *OperationCategory, d *Definition) {
-
-	key := strings.Replace(match, "(Namespaced)?", namespace, -1)
+func (c *Config) setOperation(match, namespace string, ot *OperationType, oc *OperationCategory, d *Definition) error {
+	key := strings.ReplaceAll(match, "(Namespaced)?", namespace)
 	if o, ok := c.Operations[key]; ok {
 		// Each operation should have exactly 1 definition
 		if o.Definition != nil {
-			panic(fmt.Sprintf(
+			return fmt.Errorf(
 				"Found multiple matching definitions [%s/%s/%s, %s/%s/%s] for operation key: %s",
-				d.Group, d.Version, d.Name, o.Definition.Group, o.Definition.Version, o.Definition.Name, key))
+				d.Group, d.Version, d.Name, o.Definition.Group, o.Definition.Version, o.Definition.Name, key)
 		}
 		o.Type = *ot
 		o.Definition = d
-		o.initExample(c)
+		if err := o.initExample(c); err != nil {
+			return fmt.Errorf("failed to init example: %w", err)
+		}
 		oc.Operations = append(oc.Operations, o)
 
 		// When using tags for the configuration, everything with an operation goes in the ToC
@@ -531,10 +560,12 @@ func (c *Config) setOperation(match, namespace string, ot *OperationType, oc *Op
 			o.Definition.InToc = true
 		}
 	}
+
+	return nil
 }
 
 // mapOperationsToDefinitions adds operations to the definitions they operate
-func (c *Config) mapOperationsToDefinitions() {
+func (c *Config) mapOperationsToDefinitions() error {
 	for _, d := range c.Definitions.All {
 		if d.IsInlined {
 			continue
@@ -555,7 +586,9 @@ func (c *Config) mapOperationsToDefinitions() {
 
 				o.Definition = d
 				o.Definition.InToc = true
-				o.initExample(c)
+				if err := o.initExample(c); err != nil {
+					return fmt.Errorf("failed to init example: %w", err)
+				}
 				oc.Operations = append(oc.Operations, o)
 			}
 			continue
@@ -567,8 +600,12 @@ func (c *Config) mapOperationsToDefinitions() {
 				ot := oc.OperationTypes[j]
 				groupName := c.getOperationGroupName(d.Group.String())
 				operationId := c.getOperationId(ot.Match, groupName, d.Version, d.Name)
-				c.setOperation(operationId, "Namespaced", &ot, &oc, d)
-				c.setOperation(operationId, "", &ot, &oc, d)
+				if err := c.setOperation(operationId, "Namespaced", &ot, &oc, d); err != nil {
+					return err
+				}
+				if err := c.setOperation(operationId, "", &ot, &oc, d); err != nil {
+					return err
+				}
 			}
 
 			if len(oc.Operations) > 0 {
@@ -576,6 +613,8 @@ func (c *Config) mapOperationsToDefinitions() {
 			}
 		}
 	}
+
+	return nil
 }
 
 // The OpenAPI spec has escape sequences like \u003c. When the spec is unmarshaled,
@@ -609,13 +648,15 @@ func (c *Config) escapeDescriptions() {
 }
 
 // For each resource in the ToC, look up its definition and visit it.
-func (c *Config) visitResourcesInToc() {
+func (c *Config) visitResourcesInToc() error {
 	missing := false
 	for _, cat := range c.ResourceCategories {
 		for _, r := range cat.Resources {
 			if d, ok := c.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); ok {
 				d.InToc = true // Mark as in Toc
-				d.initExample(c)
+				if err := d.initExample(c); err != nil {
+					return fmt.Errorf("failed to init example: %w", err)
+				}
 				r.Definition = d
 			} else {
 				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
@@ -626,4 +667,6 @@ func (c *Config) visitResourcesInToc() {
 	if missing {
 		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
 	}
+
+	return nil
 }
