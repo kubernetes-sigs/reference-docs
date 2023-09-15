@@ -17,7 +17,7 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/comps"
@@ -31,9 +31,10 @@ func main() {
 		path = os.Args[1]
 		module = os.Args[2]
 	} else {
-		fmt.Fprintf(os.Stderr, "usage: %s [output-dir] [module] \n", os.Args[0])
-		os.Exit(1)
+		log.Fatalf("usage: %s [output-dir] [module]", os.Args[0])
 	}
 
-	comps.GenerateFiles(path, module)
+	if err := comps.GenerateFiles(path, module); err != nil {
+		log.Fatalf("failure: %v", err)
+	}
 }

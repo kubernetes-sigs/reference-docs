@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/generators"
@@ -36,20 +37,21 @@ func main() {
 	if len(os.Args) == 2 {
 		path = os.Args[1]
 	} else {
-		fmt.Fprintf(os.Stderr, "usage: %s [output-dir]\n", os.Args[0])
-		os.Exit(1)
+		log.Fatalf("usage: %s [output-dir]", os.Args[0])
 	}
 
-	GenKubeProxy(path)
+	if err := GenKubeProxy(path); err != nil {
+		log.Fatalf("failure: %v", err)
+	}
 }
 
-func GenKubeProxy(path string) {
+func GenKubeProxy(path string) error {
 	outDir, err := genutils.OutDir(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to get output directory: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to get output directory: %w", err)
 	}
 
 	proxy := proxyapp.NewProxyCommand()
-	generators.GenMarkdownTree(proxy, outDir, true)
+
+	return generators.GenMarkdownTree(proxy, outDir, true)
 }

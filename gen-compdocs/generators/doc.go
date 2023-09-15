@@ -29,7 +29,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark-highlighting"
+	highlighting "github.com/yuin/goldmark-highlighting"
 )
 
 type byName []*cobra.Command
@@ -44,7 +44,7 @@ The file is auto-generated from the Go source code of the component using a gene
 [generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
 to generate the reference documentation, please read
 [Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
-To update the reference content, please follow the 
+To update the reference content, please follow the
 [Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
 guide. You can file document formatting bugs against the
 [reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
@@ -67,7 +67,7 @@ func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHa
 		}
 	}
 
-	basename := strings.Replace(cmd.CommandPath(), " ", "_", -1) + ".md"
+	basename := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
 	filename := filepath.Join(dir, basename)
 	f, err := os.Create(filename)
 	if err != nil {
@@ -107,13 +107,13 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		// Print the "generated" warning
 		fmt.Fprintf(w, "%s\n\n", generated_warning)
 
-		if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"synopsis\" %}}"); err != nil {
+		if _, err := fmt.Fprintf(w, "%s\n\n", `## {{% heading "synopsis" %}}`); err != nil {
 			return err
 		}
 
 		// Escape any '<', '>' characters found in the long description
-		long = strings.Replace(long, "<", "&lt;", -1)
-		long = strings.Replace(long, ">", "&gt;", -1)
+		long = strings.ReplaceAll(long, "<", "&lt;")
+		long = strings.ReplaceAll(long, ">", "&gt;")
 		if _, err := fmt.Fprintf(w, "\n%s\n\n", long); err != nil {
 			return err
 		}
@@ -136,8 +136,8 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		}
 
 		// Escape any '<', '>' characters found in the long description
-		long = strings.Replace(long, "<", "&lt;", -1)
-		long = strings.Replace(long, ">", "&gt;", -1)
+		long = strings.ReplaceAll(long, "<", "&lt;")
+		long = strings.ReplaceAll(long, ">", "&gt;")
 		if _, err := fmt.Fprintf(w, "\n%s\n\n", long); err != nil {
 			return err
 		}
@@ -152,7 +152,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	/* Examples */
 	if len(cmd.Example) > 0 {
 		if withTitle {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"examples\" %}}"); err != nil {
+			if _, err := fmt.Fprintf(w, "%s\n\n", `## {{% heading "examples" %}}`); err != nil {
 				return err
 			}
 
@@ -177,9 +177,8 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 
 	/* SEE ALSO */
 	if hasSeeAlso(cmd) {
-
 		if withTitle {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"seealso\" %}}"); err != nil {
+			if _, err := fmt.Fprintf(w, "%s\n\n", `## {{% heading "seealso" %}}`); err != nil {
 				return err
 			}
 		} else {
@@ -192,7 +191,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
 			link := pname + "/"
-			link = strings.Replace(link, " ", "_", -1)
+			link = strings.ReplaceAll(link, " ", "_")
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", pname, linkHandler(link), parent.Short); err != nil {
 				return err
 			}
@@ -212,7 +211,7 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 			}
 			cname := name + " " + child.Name()
 			link := cname + "/"
-			link = strings.Replace(link, " ", "_", -1)
+			link = strings.ReplaceAll(link, " ", "_")
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", cname, linkHandler(link), child.Short); err != nil {
 				return err
 			}
@@ -231,20 +230,18 @@ func printOptions(w io.Writer, cmd *cobra.Command, name string, withTitle bool) 
 	flags.SetOutput(w)
 
 	if flags.HasFlags() {
-
 		if withTitle {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"options\" %}}"); err != nil {
+			if _, err := fmt.Fprintf(w, "%s\n\n", `## {{% heading "options" %}}`); err != nil {
 				return err
 			}
-
 		} else {
-			if _, err := fmt.Fprintf(w, "### Options\n\n"); err != nil {
+			if _, err := fmt.Fprint(w, "### Options\n\n"); err != nil {
 				return err
 			}
 		}
 		usages := flagUsages(flags)
-		fmt.Fprintf(w, usages)
-		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+		fmt.Fprint(w, usages)
+		if _, err := fmt.Fprint(w, "\n"); err != nil {
 			return err
 		}
 	}
@@ -254,18 +251,18 @@ func printOptions(w io.Writer, cmd *cobra.Command, name string, withTitle bool) 
 	if parentFlags.HasFlags() {
 
 		if withTitle {
-			if _, err := fmt.Fprintf(w, "%s\n\n", "## {{% heading \"parentoptions\" %}}"); err != nil {
+			if _, err := fmt.Fprintf(w, "%s\n\n", `## {{% heading "parentoptions" %}}`); err != nil {
 				return err
 			}
 		} else {
-			if _, err := fmt.Fprintf(w, "### Options inherited from parent commands\n\n"); err != nil {
+			if _, err := fmt.Fprint(w, "### Options inherited from parent commands\n\n"); err != nil {
 				return err
 			}
 		}
 		usages := flagUsages(parentFlags)
-		fmt.Fprintf(w, usages)
+		fmt.Fprint(w, usages)
 
-		if _, err := fmt.Fprintf(w, "\n"); err != nil {
+		if _, err := fmt.Fprint(w, "\n"); err != nil {
 			return err
 		}
 	}
@@ -330,7 +327,7 @@ func flagUsages(f *pflag.FlagSet) string {
 				// There are cases where the string is very very long, split
 				// it to mutiple lines manually
 				if len(defaultValue) > 40 {
-					defaultValue = strings.Replace(defaultValue, ",", ",<br />", -1)
+					defaultValue = strings.ReplaceAll(defaultValue, ",", ",<br />")
 				}
 				// clean up kubectl cache-dir flag value
 				if strings.Compare(flag.Name, "cache-dir") == 0 {
@@ -346,7 +343,7 @@ func flagUsages(f *pflag.FlagSet) string {
 				// For string slices, the default value should not contain '[' ]r ']'
 				defaultValue = strings.TrimPrefix(defaultValue, "[")
 				defaultValue = strings.TrimSuffix(defaultValue, "]")
-				defaultValue = strings.Replace(defaultValue, " ", "", -1)
+				defaultValue = strings.ReplaceAll(defaultValue, " ", "")
 				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: \"%s\"", defaultValue)
 			} else {
 				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: %s", defaultValue)
@@ -454,8 +451,8 @@ func unquoteUsage(flag *pflag.Flag) (name string, usage string) {
 func processUsage(usage string) string {
 	var buf bytes.Buffer
 	var result string
-	usage = strings.Replace(usage, "<", "&lt;", -1)
-	usage = strings.Replace(usage, ">", "&gt;", -1)
+	usage = strings.ReplaceAll(usage, "<", "&lt;")
+	usage = strings.ReplaceAll(usage, ">", "&gt;")
 	md := goldmark.New(goldmark.WithExtensions(highlighting.Highlighting))
 	if err := md.Convert([]byte(usage), &buf); err != nil {
 		result = usage
@@ -463,6 +460,6 @@ func processUsage(usage string) string {
 		result = buf.String()
 	}
 	result = strings.TrimSuffix(result, "\n")
-	result = strings.Replace(result, "\n", "<br/>", -1)
+	result = strings.ReplaceAll(result, "\n", "<br/>")
 	return result
 }
