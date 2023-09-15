@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,7 +14,6 @@ import (
 	"strings"
 	texttemplate "text/template"
 
-	"github.com/pkg/errors"
 	"k8s.io/gengo/parser"
 	"k8s.io/gengo/types"
 	"k8s.io/klog/v2"
@@ -113,22 +111,22 @@ func init() {
 	flag.Parse()
 
 	var path string
-	var err error
 	if *flFormat == "html" || *flFormat == "markdown" {
+		var err error
 		path, err = filepath.Abs(*flFormat)
+		if err != nil {
+			klog.Fatalf("template directory '%s' is not found: %w", path, err)
+		}
 	} else {
-		klog.Fatal("unsupported format '%s' specified", *flFormat)
+		klog.Fatalf("unsupported format '%s' specified", *flFormat)
 	}
 
-	if err != nil {
-		klog.Fatal(errors.Wrapf(err, "template directory '%s' is not found", path))
-	}
 	fi, err := os.Stat(path)
 	if err != nil {
-		klog.Fatal(errors.Wrapf(err, "cannot read the %s directory", path))
+		klog.Fatalf("cannot read the %s directory: %w", path, err)
 	}
 	if !fi.IsDir() {
-		klog.Fatal("%s path is not a directory", path)
+		klog.Fatalf("%s path is not a directory", path)
 	}
 
 	typePkgMap = make(map[string]*apiPackage)
@@ -143,7 +141,7 @@ func processAPIPath(path string, includes []string, title string) ([]*apiPackage
 		return nil, err
 	}
 	if len(gopkgs) == 0 {
-		return nil, errors.Errorf("no API packages found in %s", path)
+		return nil, fmt.Errorf("no API packages found in %s", path)
 	}
 
 	for _, p := range includes {
@@ -151,9 +149,7 @@ func processAPIPath(path string, includes []string, title string) ([]*apiPackage
 		if err != nil {
 			return nil, err
 		}
-		for _, e := range extra {
-			gopkgs = append(gopkgs, e)
-		}
+		gopkgs = append(gopkgs, extra...)
 	}
 
 	pkgs, err := combineAPIPackages(gopkgs, title)
@@ -185,7 +181,7 @@ func parseAPIPackages(dir string) ([]*types.Package, error) {
 	}
 	scan, err := b.FindTypes()
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to parse pkgs and types")
+		return nil, fmt.Errorf("failed to parse pkgs and types: %w", err)
 	}
 	var pkgNames []string
 	for p := range scan {
@@ -227,7 +223,7 @@ func combineAPIPackages(pkgs []*types.Package, title string) ([]*apiPackage, err
 		version := gopkg.Name
 
 		if !regexp.MustCompile(re).MatchString(version) {
-			return nil, errors.Errorf("cannot infer apiVersion for package %s (basename '%q' is not recognizable)", gopkg.Path, version)
+			return nil, fmt.Errorf("cannot infer apiVersion for package %s (basename '%q' is not recognizable)", gopkg.Path, version)
 		}
 
 		typeList := make([]*apiType, 0, len(gopkg.Types))
@@ -270,39 +266,45 @@ func render(w io.Writer, pkgs []*apiPackage) error {
 
 	glob := filepath.Join(*flFormat, "*.tpl")
 	if *flFormat == "html" {
-		tmpl, err := template.New("").ParseGlob(glob)
+		var tmpl *template.Template
+		tmpl, err = template.New("").ParseGlob(glob)
 		if err != nil {
-			return errors.Wrap(err, "parse error")
+			return fmt.Errorf("parse error: %w", err)
 		}
 
 		err = tmpl.ExecuteTemplate(w, "packages", params)
 	} else {
-		tmpl, err := texttemplate.New("").ParseGlob(glob)
+		var tmpl *texttemplate.Template
+		tmpl, err = texttemplate.New("").ParseGlob(glob)
 		if err != nil {
-			return errors.Wrap(err, "parse error")
+			return fmt.Errorf("parse error: %w", err)
 		}
 
 		err = tmpl.ExecuteTemplate(w, "packages", params)
 	}
 
-	return errors.Wrap(err, "template execution error")
+	if err != nil {
+		return fmt.Errorf("template execution error: %w", err)
+	}
+
+	return nil
 }
 
 // writeFile creates the output file at the specified output path.
 func writeFile(pkgs []*apiPackage, outputPath string) error {
 	dir := filepath.Dir(outputPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
-		return errors.Errorf("failed to create dir %s: %v", dir, err)
+		return fmt.Errorf("failed to create dir %s: %w", dir, err)
 	}
 	var b bytes.Buffer
 	if err := render(&b, pkgs); err != nil {
-		return errors.Wrap(err, "failed to render the result")
+		return fmt.Errorf("failed to render the result: %w", err)
 	}
 	// s := regexp.MustCompile(`(?m)^\s+`).ReplaceAllString(b.String(), "")
 	s := b.String()
 
-	if err := ioutil.WriteFile(outputPath, []byte(s), 0644); err != nil {
-		return errors.Errorf(CRED+"Failed to write output file: %v"+CEND, err)
+	if err := os.WriteFile(outputPath, []byte(s), 0644); err != nil {
+		return fmt.Errorf(CRED+"Failed to write output file: %w"+CEND, err)
 	}
 
 	klog.Infof(CGREEN+"Output written to %s"+CEND, outputPath)
@@ -310,15 +312,13 @@ func writeFile(pkgs []*apiPackage, outputPath string) error {
 }
 
 func main() {
-	f, err := ioutil.ReadFile(*flConfig)
+	f, err := os.ReadFile(*flConfig)
 	if err != nil {
-		klog.Fatal("Failed to open config file: %+v", err)
-		os.Exit(-1)
+		klog.Fatalf("Failed to open config file: %v", err)
 	}
 
 	if err = yaml.UnmarshalStrict(f, &config); err != nil {
-		klog.Fatal("Failed to parse config file: %+v", err)
-		os.Exit(-1)
+		klog.Fatalf("Failed to parse config file: %v", err)
 	}
 
 	pkgInclude := []string{}
