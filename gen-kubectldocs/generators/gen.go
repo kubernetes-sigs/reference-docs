@@ -18,22 +18,24 @@ package generators
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
 
 	"gopkg.in/yaml.v2"
+	"k8s.io/apimachinery/pkg/util/sets"
 )
-
-var KubernetesVersion = flag.String("kubernetes-version", "", "Version of Kubernetes to generate docs for.")
 
 const JsonOutputFile = "manifest.json"
 
-var GenKubectlDir = flag.String("gen-kubectl-dir", "generators", "Directory containing kubectl files")
+var (
+	KubernetesVersion = flag.String("kubernetes-version", "", "Version of Kubernetes to generate docs for.")
+	GenKubectlDir     = flag.String("gen-kubectl-dir", "generators", "Directory containing kubectl files")
+)
 
 func getTocFile() string {
 	return filepath.Join(*GenKubectlDir, *KubernetesVersion, "toc.yaml")
@@ -43,24 +45,21 @@ func getStaticIncludesDir() string {
 	return filepath.Join(*GenKubectlDir, *KubernetesVersion, "static_includes")
 }
 
-func GenerateFiles() {
+func GenerateFiles() error {
+	if *KubernetesVersion == "" {
+		return errors.New("must specify --kubernetes-version")
+	}
+
 	spec := GetSpec()
 
+	contents, err := os.ReadFile(getTocFile())
+	if err != nil {
+		return fmt.Errorf("failed to read TOC file %s: %w", getTocFile(), err)
+	}
+
 	toc := ToC{}
-	if len(getTocFile()) < 1 {
-		fmt.Printf("Must specify --toc-file.\n")
-		os.Exit(2)
-	}
-
-	contents, err := ioutil.ReadFile(getTocFile())
-	if err != nil {
-		fmt.Printf("Failed to read yaml file %s: %v", getTocFile(), err)
-	}
-
-	err = yaml.Unmarshal(contents, &toc)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+	if err = yaml.Unmarshal(contents, &toc); err != nil {
+		return fmt.Errorf("failed to unmarshal %s: %w", getTocFile(), err)
 	}
 
 	manifest := &Manifest{}
@@ -69,12 +68,19 @@ func GenerateFiles() {
 
 	NormalizeSpec(&spec)
 
-	if _, err := os.Stat(*GenKubectlDir + "/includes"); os.IsNotExist(err) {
-		os.Mkdir(*GenKubectlDir+"/includes", os.FileMode(0700))
+	if err := os.MkdirAll(*GenKubectlDir+"/includes", os.FileMode(0700)); err != nil {
+		return err
 	}
 
-	WriteCommandFiles(manifest, toc, spec)
-	WriteManifest(manifest)
+	if err := WriteCommandFiles(manifest, toc, spec); err != nil {
+		return fmt.Errorf("failed to write command files: %w", err)
+	}
+
+	if err := WriteManifest(manifest); err != nil {
+		return fmt.Errorf("failed to write manifest: %w", err)
+	}
+
+	return nil
 }
 
 func NormalizeSpec(spec *KubectlSpec) {
@@ -149,36 +155,36 @@ func FormatExample(input string) string {
 	return result
 }
 
-func WriteManifest(manifest *Manifest) {
+func WriteManifest(manifest *Manifest) error {
 	jsonbytes, err := json.MarshalIndent(manifest, "", "  ")
 	if err != nil {
-		fmt.Printf("Could not Marshal manfiest %+v due to error: %v.\n", manifest, err)
-	} else {
-		jsonfile, err := os.Create(*GenKubectlDir + "/" + JsonOutputFile)
-		if err != nil {
-			fmt.Printf("Could not create file %s due to error: %v.\n", JsonOutputFile, err)
-		} else {
-			defer jsonfile.Close()
-			_, err := jsonfile.Write(jsonbytes)
-			if err != nil {
-				fmt.Printf("Failed to write bytes %s to file %s: %v.\n", jsonbytes, JsonOutputFile, err)
-			}
-		}
+		return fmt.Errorf("failed to marshal manifest %+v: %w", manifest, err)
 	}
 
+	jsonfile, err := os.Create(*GenKubectlDir + "/" + JsonOutputFile)
+	if err != nil {
+		return fmt.Errorf("failed to create manifest file %s: %w", JsonOutputFile, err)
+	}
+	defer jsonfile.Close()
+
+	_, err = jsonfile.Write(jsonbytes)
+	if err != nil {
+		return fmt.Errorf("failed to write to file %s: %w", JsonOutputFile, err)
+	}
+
+	return nil
 }
 
-func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
+func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) error {
 	t, err := template.New("command.template").Parse(CommandTemplate)
 	if err != nil {
-		fmt.Printf("Failed to parse template: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to parse template: %w", err)
 	}
 
-	m := map[string]TopLevelCommand{}
+	missingCommands := map[string]TopLevelCommand{}
 	for _, g := range params.TopLevelCommandGroups {
 		for _, tlc := range g.Commands {
-			m[tlc.MainCommand.Name] = tlc
+			missingCommands[tlc.MainCommand.Name] = tlc
 		}
 	}
 
@@ -190,8 +196,7 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 		return nil
 	})
 	if err != nil {
-		fmt.Printf("Failed to copy includes %v.\n", err)
-		return
+		return fmt.Errorf("failed to copy includes %w", err)
 	}
 
 	for _, c := range toc.Categories {
@@ -200,52 +205,55 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) {
 			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(c.Include)})
 		} else {
 			// Write a general category include
-			fn := strings.Replace(c.Name, " ", "_", -1)
+			fn := strings.ReplaceAll(c.Name, " ", "_")
 			manifest.Docs = append(manifest.Docs, Doc{strings.ToLower(fmt.Sprintf("_generated_category_%s.md", fn))})
-			WriteCategoryFile(c)
+			if err := WriteCategoryFile(c); err != nil {
+				return fmt.Errorf("failed to write category file: %w", err)
+			}
 		}
 
 		// Write each of the commands in this category
 		for _, cm := range c.Commands {
-			if tlc, found := m[cm]; !found {
-				fmt.Printf("Could not find top level command %s\n", cm)
-				os.Exit(1)
+			if tlc, found := missingCommands[cm]; !found {
+				return fmt.Errorf("could not find top level command %s", cm)
 			} else {
-				WriteCommandFile(manifest, t, tlc)
-				delete(m, cm)
+				if err := WriteCommandFile(manifest, t, tlc); err != nil {
+					return fmt.Errorf("failed to write command file: %w", err)
+				}
+				delete(missingCommands, cm)
 			}
 		}
 	}
-	if len(m) > 0 {
-		for k := range m {
-			fmt.Printf("Kubectl command %s missing from table of contents\n", k)
-		}
-		os.Exit(1)
+
+	if len(missingCommands) > 0 {
+		return fmt.Errorf("kubectl commands %v are missing from table of contents", sets.List(sets.KeySet(missingCommands)))
 	}
+
+	return nil
 }
 
-func WriteCategoryFile(c Category) {
+func WriteCategoryFile(c Category) error {
 	ct, err := template.New("category.template").Parse(CategoryTemplate)
 	if err != nil {
-		fmt.Printf("Failed to parse template: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to parse template: %w", err)
 	}
 
-	fn := strings.Replace(c.Name, " ", "_", -1)
+	fn := strings.ReplaceAll(c.Name, " ", "_")
 	f, err := os.Create(*GenKubectlDir + "/includes/_generated_category_" + strings.ToLower(fmt.Sprintf("%s.md", fn)))
 	if err != nil {
-		fmt.Printf("Failed to open index: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to open index: %w", err)
 	}
 	defer f.Close()
+
 	err = ct.Execute(f, c)
 	if err != nil {
-		fmt.Printf("Failed to execute template: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to execute template: %w", err)
 	}
+
+	return nil
 }
 
-func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) {
+func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelCommand) error {
 	replacer := strings.NewReplacer(
 		"|", "&#124;",
 		"<", "&lt;",
@@ -266,15 +274,16 @@ func WriteCommandFile(manifest *Manifest, t *template.Template, params TopLevelC
 	}
 	f, err := os.Create(*GenKubectlDir + "/includes/_generated_" + strings.ToLower(params.MainCommand.Name) + ".md")
 	if err != nil {
-		fmt.Printf("Failed to open index: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to open index: %w", err)
 	}
 	defer f.Close()
 
 	err = t.Execute(f, params)
 	if err != nil {
-		fmt.Printf("Failed to execute template: %v", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to execute template: %w", err)
 	}
+
 	manifest.Docs = append(manifest.Docs, Doc{"_generated_" + strings.ToLower(params.MainCommand.Name) + ".md"})
+
+	return nil
 }

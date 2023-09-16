@@ -18,10 +18,15 @@ package main
 
 import (
 	"flag"
+	"log"
+
 	"github.com/kubernetes-sigs/reference-docs/gen-kubectldocs/generators"
 )
 
 func main() {
 	flag.Parse()
-	generators.GenerateFiles()
+
+	if err := generators.GenerateFiles(); err != nil {
+		log.Fatalf("Failed to generate files: %v", err)
+	}
 }
