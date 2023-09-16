@@ -33,33 +33,31 @@ import (
 	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
 )
 
-func GenerateFiles(path, module string) {
-
+func GenerateFiles(path, module string) error {
 	outDir, err := genutils.OutDir(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to get output directory: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to get output directory: %w", err)
 	}
 
 	switch module {
 	case "kube-apiserver":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		apiserver := apiservapp.NewAPIServerCommand()
-		generators.GenMarkdownTree(apiserver, outDir, true)
+		return generators.GenMarkdownTree(apiserver, outDir, true)
 
 	case "kube-controller-manager":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		controllermanager := cmapp.NewControllerManagerCommand()
-		generators.GenMarkdownTree(controllermanager, outDir, true)
+		return generators.GenMarkdownTree(controllermanager, outDir, true)
 
 	case "kube-scheduler":
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		scheduler := schapp.NewSchedulerCommand()
-		generators.GenMarkdownTree(scheduler, outDir, true)
+		return generators.GenMarkdownTree(scheduler, outDir, true)
 
 	case "kubelet":
 		kubelet := kubeletapp.NewKubeletCommand()
-		generators.GenMarkdownTree(kubelet, outDir, true)
+		return generators.GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
 		pflag.CommandLine = pflag.NewFlagSet(os.Args[0], pflag.ExitOnError)
@@ -81,20 +79,21 @@ func GenerateFiles(path, module string) {
 
 		// generate docs for kubeadm
 		kubeadm := kubeadmapp.NewKubeadmCommand(os.Stdin, os.Stdout, os.Stderr)
-		generators.GenMarkdownTree(kubeadm, outDir, false)
+		if err := generators.GenMarkdownTree(kubeadm, outDir, false); err != nil {
+			return fmt.Errorf("failed to generate markdown tree: %w", err)
+		}
 
 		// cleanup generated code for usage as include in the website
-		generators.MarkdownPostProcessing(kubeadm, outDir, generators.CleanupForInclude)
+		return generators.MarkdownPostProcessing(kubeadm, outDir, generators.CleanupForInclude)
 
 	case "kubectl":
 		kubectl := kubectlcmd.NewDefaultKubectlCommand()
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 
-		generators.GenMarkdownTree(kubectl, outDir, true)
+		return generators.GenMarkdownTree(kubectl, outDir, true)
 
 	default:
-		fmt.Fprintf(os.Stderr, "Module %s is not supported", module)
-		os.Exit(1)
+		return fmt.Errorf("module %s is not supported", module)
 	}
 }
