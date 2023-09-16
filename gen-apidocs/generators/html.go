@@ -17,7 +17,6 @@ limitations under the License.
 package generators
 
 import (
-	"encoding/json"
 	"fmt"
 	"html"
 	"io"
@@ -38,6 +37,29 @@ type TOCItem struct {
 	SubSections []*TOCItem
 }
 
+func (ti *TOCItem) ToHTML() string {
+	nav := ""
+	nav += fmt.Sprintf("<LI class=\"nav-level-%d\" data-level=\"%d\">\n", ti.Level, ti.Level)
+	nav += fmt.Sprintf("  <A href=\"#%s\" class=\"nav-item\">%s</A>", ti.Link, ti.Title)
+
+	if len(ti.SubSections) > 0 {
+		nav += "\n"
+		nav += fmt.Sprintf("  <UL id=\"%s-nav\">\n", ti.Link)
+
+		for _, subItem := range ti.SubSections {
+			nav += subItem.ToHTML()
+			nav += "\n"
+		}
+
+		nav += "  </UL>"
+	}
+
+	nav += "\n"
+	nav += "</LI>"
+
+	return nav
+}
+
 type TOC struct {
 	Title     string
 	Copyright string
@@ -45,9 +67,12 @@ type TOC struct {
 }
 
 type HTMLWriter struct {
-	Config         *api.Config
-	TOC            TOC
-	CurrentSection *TOCItem
+	Config *api.Config
+	TOC    TOC
+
+	// currentTOCItem is used to remember the current item between
+	// calls to e.g. WriteResourceCategory() followed by WriteResource().
+	currentTOCItem *TOCItem
 }
 
 func NewHTMLWriter(config *api.Config, copyright, title string) DocWriter {
@@ -67,19 +92,19 @@ func (h *HTMLWriter) Extension() string {
 }
 
 func (h *HTMLWriter) WriteOverview() error {
-	fn := "_overview.html"
-	if err := writeStaticFile("Overview", fn, h.DefaultStaticContent("Overview")); err != nil {
+	filename := "_overview.html"
+	if err := writeStaticFile(filename, h.SectionHeading("API Overview")); err != nil {
 		return err
 	}
 
 	item := TOCItem{
 		Level: 1,
 		Title: "Overview",
-		Link:  "-strong-api-overview-strong-",
-		File:  fn,
+		Link:  "api-overview",
+		File:  filename,
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem = &item
 
 	return nil
 }
@@ -93,9 +118,10 @@ func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) error {
 	}
 	defer f.Close()
 
-	fmt.Fprint(f, h.DefaultStaticContent("API Groups"))
-	fmt.Fprint(f, "<P>The API Groups and their versions are summarized in the following table.</P>")
-	fmt.Fprint(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH></TR></THEAD>\n<TBODY>\n")
+	fmt.Fprint(f, "<DIV id=\"api-groups\">\n")
+	fmt.Fprint(f, h.SectionHeading("API Groups")+"\n")
+	fmt.Fprint(f, "<P>The API Groups and their versions are summarized in the following table.</P>\n")
+	fmt.Fprint(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Versions</TH></TR></THEAD>\n<TBODY>\n")
 
 	groups := api.ApiGroups{}
 	for group := range gvs {
@@ -114,22 +140,23 @@ func (h *HTMLWriter) WriteAPIGroupVersions(gvs api.GroupVersions) error {
 		fmt.Fprintf(f, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
 			group, strings.Join(versions, ", "))
 	}
-	fmt.Fprintf(f, "</TBODY>\n</TABLE>\n")
+	fmt.Fprint(f, "</TBODY>\n</TABLE>\n")
+	fmt.Fprint(f, "</DIV>\n")
 
 	item := TOCItem{
 		Level: 1,
 		Title: "API Groups",
-		Link:  "-strong-api-groups-strong-",
+		Link:  "api-groups",
 		File:  fn,
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem = &item
 
 	return nil
 }
 
 func (h *HTMLWriter) WriteResourceCategory(name, file string) error {
-	if err := writeStaticFile(name, "_"+file+".html", h.DefaultStaticContent(name)); err != nil {
+	if err := writeStaticFile("_"+file+".html", h.ResourceCategoryHeading(name)); err != nil {
 		return err
 	}
 
@@ -137,18 +164,27 @@ func (h *HTMLWriter) WriteResourceCategory(name, file string) error {
 	item := TOCItem{
 		Level: 1,
 		Title: strings.ToUpper(name),
-		Link:  "-strong-" + link + "-strong-",
+		Link:  link,
 		File:  "_" + file + ".html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem = &item
 
 	return nil
 }
 
+func (h *HTMLWriter) ResourceCategoryHeading(title string) string {
+	sectionID := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
+	return fmt.Sprintf(`<H1 class="toc-item resource-category" id="%s">%s</H1>`, sectionID, title)
+}
+
+func (h *HTMLWriter) SectionHeading(title string) string {
+	return fmt.Sprintf(`<H1 class="toc-item section">%s</H1>`, title)
+}
+
 func (h *HTMLWriter) DefaultStaticContent(title string) string {
 	titleID := strings.ToLower(strings.ReplaceAll(title, " ", "-"))
-	return fmt.Sprintf("<H1 id=\"-strong-%s-strong-\"><STRONG>%s</STRONG></H1>\n", titleID, title)
+	return fmt.Sprintf("<H1 class=\"strong\" id=\"%s\">%s</H1>\n", titleID, title)
 }
 
 func (h *HTMLWriter) writeOtherVersions(w io.Writer, d *api.Definition) {
@@ -193,18 +229,18 @@ func (h *HTMLWriter) writeFields(w io.Writer, d *api.Definition) {
 }
 
 func (h *HTMLWriter) WriteDefinitionsOverview() error {
-	if err := writeStaticFile("Definitions", "_definitions.html", h.DefaultStaticContent("Definitions")); err != nil {
+	if err := writeStaticFile("_definitions.html", h.SectionHeading("Definitions")); err != nil {
 		return err
 	}
 
 	item := TOCItem{
 		Level: 1,
 		Title: "DEFINITIONS",
-		Link:  "-strong-definitions-strong-",
+		Link:  "definitions",
 		File:  "_definitions.html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem = &item
 
 	return nil
 }
@@ -220,7 +256,13 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 
 	nvg := fmt.Sprintf("%s %s %s", d.Name, d.Version, d.GroupDisplayName())
 	linkID := getLink(nvg)
-	fmt.Fprintf(f, "<H2 id=\"%s\">%s</H2>\n", linkID, nvg)
+
+	fmt.Fprintf(f, "<DIV class=\"definition-container\" id=\"%s\">\n", linkID)
+	defer fmt.Fprint(f, "</DIV>\n")
+
+	fmt.Fprintf(f, "<H2 class=\"definition\">%s</H2>\n", nvg)
+
+	// GVK
 	fmt.Fprintf(f, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
 	fmt.Fprintf(f, "<TR><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD><TD><CODE>%s</CODE></TD></TR>\n",
 		d.GroupDisplayName(), d.Version, d.Name)
@@ -231,21 +273,24 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 	h.writeAppearsIn(f, d)
 	h.writeFields(f, d)
 
-	item := TOCItem{
-		Level: 2,
-		Title: nvg,
-		Link:  linkID,
-		File:  fn,
-	}
-	h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &item)
+	// Definitions should not all show up individually in the TOC, as they are less interesting as jumping-in points to the docs.
+	// item := TOCItem{
+	// 	Level: 2,
+	// 	Title: nvg,
+	// 	Link:  linkID,
+	// 	File:  fn,
+	// }
+	// h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &item)
 
 	return nil
 }
 
-func (h *HTMLWriter) writeSample(w io.Writer, d *api.Definition) {
+func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 	if d.Sample.Sample == "" {
 		return
 	}
+
+	fmt.Fprintf(w, "<DIV class=\"samples-container\">\n")
 
 	note := d.Sample.Note
 	for _, s := range d.GetSamples() {
@@ -253,7 +298,7 @@ func (h *HTMLWriter) writeSample(w io.Writer, d *api.Definition) {
 		linkID := sType + "-" + d.LinkID()
 		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-toggle=\"collapse\"\n")
 		fmt.Fprintf(w, "  data-target=\"#%s\" aria-controls=\"%s\"\n", linkID, linkID)
-		fmt.Fprintf(w, "  aria-expanded=\"false\">%s</BUTTON>\n", sType)
+		fmt.Fprintf(w, "  aria-expanded=\"false\">show %s</BUTTON>\n", sType)
 	}
 
 	for _, s := range d.GetSamples() {
@@ -268,6 +313,8 @@ func (h *HTMLWriter) writeSample(w io.Writer, d *api.Definition) {
 		// TODO: Add language highlight
 		fmt.Fprintf(w, "%s\n</CODE></PRE></DIV></DIV></DIV>\n", html.EscapeString(s.Text))
 	}
+
+	fmt.Fprint(w, "</DIV>\n")
 }
 
 func (h *HTMLWriter) writeOperationSample(w io.Writer, req bool, op string, examples []api.ExampleText) {
@@ -380,9 +427,13 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 
 	dvg := fmt.Sprintf("%s %s %s", r.Name, r.Definition.Version, r.Definition.GroupDisplayName())
 	linkID := getLink(dvg)
-	fmt.Fprintf(w, "<H1 id=\"%s\">%s</H1>\n", linkID, dvg)
 
-	h.writeSample(w, r.Definition)
+	fmt.Fprintf(w, "<DIV class=\"resource-container\" id=\"%s\">\n", linkID)
+	defer fmt.Fprint(w, "</DIV>\n")
+
+	fmt.Fprintf(w, "<H1 class=\"toc-item resource\">%s</H1>\n", dvg)
+
+	h.writeSamples(w, r.Definition)
 
 	// GVK
 	fmt.Fprintf(w, "<TABLE class=\"col-md-8\">\n<THEAD><TR><TH>Group</TH><TH>Version</TH><TH>Kind</TH></TR></THEAD>\n<TBODY>\n")
@@ -403,21 +454,22 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 
 	// Inline
 	if r.Definition.Inline.Len() > 0 {
+		fmt.Fprintf(w, "<DIV class=\"inline-definitions-container\">\n")
 		for _, d := range r.Definition.Inline {
-			fmt.Fprintf(w, "<H3 id=\"%s\">%s %s %s</H3>\n", d.LinkID(), d.Name, d.Version, d.Group)
+			fmt.Fprintf(w, "<H3 class=\"inline-definition\" id=\"%s\">%s %s %s</H3>\n", d.LinkID(), d.Name, d.Version, d.Group)
 			h.writeAppearsIn(w, d)
 			h.writeFields(w, d)
 		}
+		fmt.Fprint(w, "</DIV>\n")
 	}
 
-	item := TOCItem{
-		Level: 1,
+	resourceItem := TOCItem{
+		Level: 2,
 		Title: dvg,
 		Link:  linkID,
 		File:  fn,
 	}
-	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &resourceItem)
 
 	// Operations
 	if len(r.Definition.OperationCategories) == 0 {
@@ -428,25 +480,29 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 		if len(c.Operations) == 0 {
 			continue
 		}
+
 		catID := strings.ReplaceAll(strings.ToLower(c.Name), " ", "-") + "-" + r.Definition.LinkID()
-		catID = "-strong-" + catID + "-strong-"
-		fmt.Fprintf(w, "<H2 id=\"%s\"><STRONG>%s</STRONG></H2>\n", catID, c.Name)
-		OCItem := TOCItem{
-			Level: 2,
+		fmt.Fprintf(w, "<DIV class=\"operation-category-container\" id=\"%s\">\n", catID)
+		fmt.Fprintf(w, "<H2 class=\"toc-item operation-category\">%s</H2>\n", c.Name)
+
+		ocItem := TOCItem{
+			Level: 3,
 			Title: c.Name,
 			Link:  catID,
 		}
-		h.CurrentSection.SubSections = append(h.CurrentSection.SubSections, &OCItem)
+		resourceItem.SubSections = append(resourceItem.SubSections, &ocItem)
 
 		for _, o := range c.Operations {
 			opID := strings.ReplaceAll(strings.ToLower(o.Type.Name), " ", "-") + "-" + r.Definition.LinkID()
-			fmt.Fprintf(w, "<H2 id=\"%s\">%s</H2>\n", opID, o.Type.Name)
+			fmt.Fprintf(w, "<DIV class=\"operation-container\" id=\"%s\">\n", opID)
+			fmt.Fprintf(w, "<H2 class=\"toc-item operation\">%s</H2>\n", o.Type.Name)
+
 			OPItem := TOCItem{
-				Level: 2,
+				Level: 4,
 				Title: o.Type.Name,
 				Link:  opID,
 			}
-			OCItem.SubSections = append(OCItem.SubSections, &OPItem)
+			ocItem.SubSections = append(ocItem.SubSections, &OPItem)
 
 			// Example requests
 			requests := o.GetExampleRequests()
@@ -465,162 +521,48 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 
 			h.writeRequestParams(w, o)
 			h.writeResponseParams(w, o)
+
+			fmt.Fprint(w, "</DIV>\n")
 		}
+
+		fmt.Fprint(w, "</DIV>\n")
 	}
 
 	return nil
 }
 
 func (h *HTMLWriter) WriteOldVersionsOverview() error {
-	if err := writeStaticFile("Old Versions", "_oldversions.html", h.DefaultStaticContent("Old Versions")); err != nil {
+	if err := writeStaticFile("_oldversions.html", h.SectionHeading("Old API Versions")); err != nil {
 		return err
 	}
 
 	item := TOCItem{
 		Level: 1,
 		Title: "OLD API VERSIONS",
-		Link:  "-strong-old-api-versions-strong-",
+		Link:  "old-api-versions",
 		File:  "_oldversions.html",
 	}
 	h.TOC.Sections = append(h.TOC.Sections, &item)
-	h.CurrentSection = &item
+	h.currentTOCItem = &item
 
 	return nil
 }
 
 func (h *HTMLWriter) generateNavContent() string {
 	nav := ""
+	nav += "\n\n<UL id=\"navigation\">\n"
+
 	for _, sec := range h.TOC.Sections {
-		// class for level-1 navigation item
-		nav += "<UL>\n"
-		if strings.Contains(sec.Link, "strong") {
-			nav += fmt.Sprintf(" <LI class=\"nav-level-1 strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n", sec.Link, sec.Title)
-		} else {
-			nav += fmt.Sprintf(" <LI class=\"nav-level-1\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-				sec.Link, sec.Title)
-		}
-
-		// close H1 items which have no subsections or strong navs
-		if len(sec.SubSections) == 0 || (sec.Level == 1 && strings.Contains(sec.Link, "strong")) {
-			nav += "</UL>\n"
-		}
-
-		// short circuit to next if no sub-sections
-		if len(sec.SubSections) == 0 {
-			continue
-		}
-
-		// wrapper1
-		nav += fmt.Sprintf(" <UL id=\"%s-nav\" style=\"display: none;\">\n", sec.Link)
-		for _, sub := range sec.SubSections {
-			nav += "  <UL>\n"
-			if strings.Contains(sub.Link, "strong") {
-				nav += fmt.Sprintf("   <LI class=\"nav-level-%d strong-nav\"><A href=\"#%s\" class=\"nav-item\"><STRONG>%s</STRONG></A></LI>\n",
-					sub.Level, sub.Link, sub.Title)
-			} else {
-				nav += fmt.Sprintf("   <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-					sub.Level, sub.Link, sub.Title)
-			}
-			// close this H1/H2 if possible
-			if len(sub.SubSections) == 0 {
-				nav += " </UL>\n"
-				continue
-			}
-
-			// 3rd level
-			// another wrapper
-			nav += fmt.Sprintf("   <UL id=\"%s-nav\" style=\"display: none;\">\n", sub.Link)
-			for _, subsub := range sub.SubSections {
-				nav += fmt.Sprintf("    <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n", subsub.Level, subsub.Link, subsub.Title)
-				if len(subsub.SubSections) == 0 {
-					continue
-				}
-
-				fmt.Printf("*** found third level!\n")
-				nav += fmt.Sprintf("   <UL id=\"%s-nav\" style=\"display: none;\">\n", subsub.Link)
-				for _, subsubsub := range subsub.SubSections {
-					nav += fmt.Sprintf("    <LI class=\"nav-level-%d\"><A href=\"#%s\" class=\"nav-item\">%s</A></LI>\n",
-						subsubsub.Level, subsubsub.Link, subsubsub.Title)
-				}
-				nav += "   </UL>\n"
-			}
-			// end wrapper2
-			nav += "   </UL>\n"
-			nav += "  </UL>\n"
-		}
-		// end wrapper1
-		nav += " </UL>\n"
-		// end top UL
-		nav += "</UL>\n"
+		nav += sec.ToHTML()
+		nav += "\n"
 	}
+
+	nav += "</UL>\n"
 
 	return nav
 }
 
-type javascriptNavdata struct {
-	TOC     []javascriptTOCItem
-	FlatTOC []string
-}
-
-type javascriptTOCItem struct {
-	Section     string              `json:"section"`
-	Subsections []javascriptTOCItem `json:"subsections"`
-}
-
-func convertTOCItem(navdata *javascriptNavdata, item *TOCItem) javascriptTOCItem {
-	navdata.FlatTOC = append(navdata.FlatTOC, item.Link)
-
-	jsItem := javascriptTOCItem{
-		Section:     item.Link,
-		Subsections: []javascriptTOCItem{},
-	}
-
-	for _, subitem := range item.SubSections {
-		jsItem.Subsections = append(jsItem.Subsections, convertTOCItem(navdata, subitem))
-	}
-
-	return jsItem
-}
-
-func (h *HTMLWriter) generateNavJS() error {
-	if err := os.MkdirAll(api.BuildDir, os.ModePerm); err != nil {
-		return err
-	}
-
-	navjs, err := os.Create(filepath.Join(api.BuildDir, "navData.js"))
-	if err != nil {
-		return err
-	}
-	defer navjs.Close()
-
-	navdata := javascriptNavdata{
-		TOC:     []javascriptTOCItem{},
-		FlatTOC: []string{},
-	}
-
-	for _, item := range h.TOC.Sections {
-		// this recursively collects the FlatTOC along the way
-		navdata.TOC = append(navdata.TOC, convertTOCItem(&navdata, item))
-	}
-
-	fmt.Fprintf(navjs, `(function() { navData = {"toc": `)
-
-	if err := json.NewEncoder(navjs).Encode(navdata.TOC); err != nil {
-		return fmt.Errorf("failed to encode TOC: %w", err)
-	}
-
-	fmt.Fprintf(navjs, `, "flatToc": `)
-
-	if err := json.NewEncoder(navjs).Encode(navdata.FlatTOC); err != nil {
-		return fmt.Errorf("failed to encode flat TOC: %w", err)
-	}
-
-	fmt.Fprintf(navjs, `}; }());`)
-
-	return nil
-}
-
-func (h *HTMLWriter) generateHTML(navContent string) error {
+func (h *HTMLWriter) generateIndex(navContent string) error {
 	html, err := os.Create(filepath.Join(api.BuildDir, "index.html"))
 	if err != nil {
 		return err
@@ -635,7 +577,7 @@ func (h *HTMLWriter) generateHTML(navContent string) error {
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
-	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\">\n")
+	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/fontawesome-4.7.0.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/style_apiref.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "</HEAD>\n<BODY>\n")
@@ -693,12 +635,10 @@ func (h *HTMLWriter) generateHTML(navContent string) error {
 
 	/*
 		Make sure the following scripts exist in kubernetes/website repo:
-		kubernetes/website/static/js/jquery-3.2.1.min.js
-		kubernetes/website/static/js/jquery.scrollTo.min.js
-		kubernetes/website/static/js/bootstrap-4.3.1.min.js
-		kubernetes/website/static/js/scroll.js
-
-		navData.js is dynamically generated - see generateNavJS()
+		kubernetes/website/static/js/jquery-3.6.0.min.js
+		kubernetes/website/static/js/jquery.scrollTo-2.1.3.min.js
+		kubernetes/website/static/js/bootstrap-4.6.1.min.js
+		kubernetes/website/static/js/scroll-apiref.js
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
 	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"col-xs-8 offset-xs-4 col-sm-9 offset-sm-3 col-md-10 offset-md-2 body-content\">\n")
@@ -707,7 +647,6 @@ func (h *HTMLWriter) generateHTML(navContent string) error {
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.6.0.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery.scrollTo-2.1.3.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.6.1.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"js/navData.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/scroll-apiref.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
 
@@ -719,13 +658,9 @@ func (h *HTMLWriter) Finalize() error {
 		return err
 	}
 
-	if err := h.generateNavJS(); err != nil {
-		return err
-	}
-
 	navContent := h.generateNavContent()
 
-	if err := h.generateHTML(navContent); err != nil {
+	if err := h.generateIndex(navContent); err != nil {
 		return err
 	}
 
