@@ -90,7 +90,7 @@ const (
 	versionTypeGA
 )
 
-var kubeVersionRegex = regexp.MustCompile("^v([\\d]+)(?:(alpha|beta)([\\d]+))?$")
+var kubeVersionRegex = regexp.MustCompile(`^v([\d]+)(?:(alpha|beta)([\d]+))?$`)
 
 func (a ApiVersion) String() string {
 	return string(a)
@@ -280,7 +280,7 @@ func (a Fields) Less(i, j int) bool { return a[i].Name < a[j].Name }
 
 func (f Field) Link() string {
 	if f.Definition != nil {
-		return strings.Replace(f.Type, f.Definition.Name, f.Definition.MdLink(), -1)
+		return strings.ReplaceAll(f.Type, f.Definition.Name, f.Definition.MdLink())
 	} else {
 		return f.Type
 	}
@@ -288,7 +288,7 @@ func (f Field) Link() string {
 
 func (f Field) FullLink() string {
 	if f.Definition != nil {
-		return strings.Replace(f.Type, f.Definition.Name, f.Definition.HrefLink(), -1)
+		return strings.ReplaceAll(f.Type, f.Definition.Name, f.Definition.HrefLink())
 	} else {
 		return f.Type
 	}

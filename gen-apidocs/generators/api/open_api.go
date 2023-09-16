@@ -17,7 +17,6 @@ limitations under the License.
 package api
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -34,9 +33,12 @@ const (
 )
 
 // Loads all of the open-api documents
-func LoadOpenApiSpec() []*loads.Document {
+func LoadOpenApiSpec() ([]*loads.Document, error) {
 	docs := []*loads.Document{}
 	err := filepath.Walk(VersionedConfigDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		ext := filepath.Ext(path)
 		if ext != ".json" {
 			return nil
@@ -50,13 +52,13 @@ func LoadOpenApiSpec() []*loads.Document {
 		return nil
 	})
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		os.Exit(1)
+		return nil, err
 	}
-	return docs
+
+	return docs, nil
 }
 
-func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) {
+func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) error {
 	var versionList ApiVersions
 
 	for _, spec := range specs {
@@ -82,7 +84,7 @@ func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) {
 			if group == "" {
 				continue
 			} else if group == "error" {
-				panic(errors.New(fmt.Sprintf("Could not locate group for %s", name)))
+				return fmt.Errorf("could not locate group for %s", name)
 			}
 
 			full_group, found := config.GroupFullNames[group]
@@ -128,6 +130,8 @@ func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) {
 			}
 		}
 	}
+
+	return nil
 }
 
 func ParseSpecInfo(specs []*loads.Document, cfg *Config) {
