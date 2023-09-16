@@ -13,7 +13,7 @@ import (
 	"unicode"
 
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark-highlighting"
+	highlighting "github.com/yuin/goldmark-highlighting"
 	"k8s.io/gengo/types"
 	"k8s.io/klog/v2"
 )
@@ -47,9 +47,9 @@ func (p *apiPackage) GroupName() string {
 
 // Anchor generates a valid anchor ID for an API package based on its name.
 func (p *apiPackage) Anchor() string {
-	s := strings.Replace(p.DisplayName(), " ", "", -1)
-	s = strings.Replace(s, "/", "-", -1)
-	return strings.Replace(s, ".", "-", -1)
+	s := strings.ReplaceAll(p.DisplayName(), " ", "")
+	s = strings.ReplaceAll(s, "/", "-")
+	return strings.ReplaceAll(s, ".", "-")
 }
 
 // VisibleTypes enumerates all visible types contained in a package.
@@ -220,12 +220,12 @@ func (t *apiType) Anchor() string {
 	var s string
 	group := t.APIGroup()
 	if group[0] == '/' {
-		s = fmt.Sprintf("%s", t.Name.Name)
+		s = t.Name.Name
 	} else {
 		s = fmt.Sprintf("%s.%s", group, t.Name.Name)
 	}
-	s = strings.Replace(s, "/", "-", -1)
-	return strings.Replace(s, ".", "-", -1)
+	s = strings.ReplaceAll(s, "/", "-")
+	return strings.ReplaceAll(s, ".", "-")
 }
 
 // Link returns an anchor to the type if it can be generated. returns
@@ -413,7 +413,7 @@ func renderComments(comments []string) template.HTML {
 	doc := strings.Join(list, "\n")
 
 	// replace '*' by '&lowast;', we do this before parsing the comment as markdown
-	// doc = strings.Replace(doc, "*", "\\*", -1)
+	// doc = strings.ReplaceAll(doc, "*", "\\*")
 	if !config.MarkdownDisabled {
 		// This is for blackfriday
 		// res = string(blackfriday.Run([]byte(doc)))
@@ -430,7 +430,7 @@ func renderComments(comments []string) template.HTML {
 			res = buf.String()
 		}
 	} else {
-		res = strings.Replace(doc, "\n\n", string(template.HTML("<br/><br/>")), -1)
+		res = strings.ReplaceAll(doc, "\n\n", "<br/><br/>")
 	}
 	return template.HTML(res)
 }
