@@ -591,8 +591,10 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	pos := strings.LastIndex(h.Config.SpecVersion, ".")
 	release := fmt.Sprintf("release-%s", h.Config.SpecVersion[1:pos])
 	spec_link := "https://github.com/kubernetes/kubernetes/blob/" + release + "/api/openapi-spec/swagger.json"
-	buf += fmt.Sprintf("    <DIV>API Version: <a href=\"%s\">%s</a></DIV>\n", spec_link, h.Config.SpecVersion)
-	buf += "  </DIV>\n</DIV>"
+	buf += "  <DIV>"
+	buf += fmt.Sprintf("API Version: <a href=\"%s\">%s</a>\n", spec_link, h.Config.SpecVersion)
+	buf += "<A href=\"#\" class=\"btn btn-info btn-sm switch-theme\">Switch <I class=\"fa fa-sun-o\"></I>/<I class=\"fa fa-moon-o\"></I></A>\n"
+	buf += "  </DIV>\n</DIV>\n</DIV>"
 	const OK = "\033[32mOK\033[0m"
 	const NOT_FOUND = "\033[31mNot found\033[0m"
 	for _, sec := range h.TOC.Sections {
