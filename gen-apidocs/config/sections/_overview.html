@@ -45,7 +45,7 @@ To update the status, one must invoke the specific status update operation.<BR /
 
 Note: Replacing a resource object may not result immediately in changes being propagated to downstream objects. For instance
 replacing a <CODE>ConfigMap</CODE> or <CODE>Secret</CODE> resource will not result in all <EM>Pod</EM>s seeing the changes unless the <EM>Pod</EM>s are
-restarted out of band.</P></LI>
+restarted out of band.</LI>
 
 <LI><STRONG>Patch</STRONG>:
 Patch will apply a change to a specific field. How the change is merged is defined per field. Lists may either be
@@ -68,7 +68,7 @@ the field's current value, or merge the contents into the current value.</EM></L
 <LI><STRONG>Watch</STRONG>: Watch will stream results for an object(s) as it is updated. Similar to a callback, watch is used to respond to resource changes.</LI>
 </UL>
 
-<H4 id="resource-operations-read">Delete</H4>
+<H4 id="resource-operations-delete">Delete</H4>
 
 <P>Delete will delete a resource. Depending on the specific resource, child objects may or may not be garbage collected by the server. See
 notes on specific resource objects for details.</P>
