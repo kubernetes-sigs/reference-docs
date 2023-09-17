@@ -60,9 +60,7 @@ func NewConfig() (*Config, error) {
 	IncludesDir = filepath.Join(BuildDir, "includes")
 	SectionsDir = filepath.Join(ConfigDir, "sections")
 
-	var versionChar = "v"
-
-	var k8sRelease = fmt.Sprintf("%s%s", versionChar, strings.ReplaceAll(*KubernetesRelease, ".", "_"))
+	var k8sRelease = fmt.Sprintf("v%s", strings.ReplaceAll(*KubernetesRelease, ".", "_"))
 	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
 
 	config, err := LoadConfigFromYAML()
@@ -78,7 +76,7 @@ func NewConfig() (*Config, error) {
 	ParseSpecInfo(specs, config)
 
 	// Set the spec version
-	config.SpecVersion = fmt.Sprintf("%s%s.%s", versionChar, *KubernetesRelease, "0")
+	config.SpecVersion = fmt.Sprintf("v%s.%s", *KubernetesRelease, "0")
 
 	// Initialize all of the operations
 	defs, err := NewDefinitions(config, specs)

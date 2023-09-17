@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package generators
 
 import (
@@ -81,6 +82,7 @@ func GenerateFiles() error {
 		if err := writer.WriteResourceCategory(c.Name, c.Include); err != nil {
 			return err
 		}
+
 		for _, r := range c.Resources {
 			if r.Definition == nil {
 				fmt.Printf("Warning: Missing definition for item in TOC %s\n", r.Name)
@@ -168,20 +170,20 @@ func getLink(s string) string {
 	return strings.ToLower(strings.ReplaceAll(tmp, " ", "-"))
 }
 
-func writeStaticFile(title, location, defaultContent string) error {
-	fn := filepath.Join(api.SectionsDir, location)
-	to := filepath.Join(api.IncludesDir, location)
-	_, err := os.Stat(fn)
-	if err == nil {
-		// copy the file if it exists
-		return os.Link(fn, to)
+func writeStaticFile(filename, defaultContent string) error {
+	src := filepath.Join(api.SectionsDir, filename)
+	dst := filepath.Join(api.IncludesDir, filename)
+
+	// copy the file if it exists
+	if _, err := os.Stat(src); err == nil {
+		content, err := os.ReadFile(src)
+		if err != nil {
+			return err
+		}
+		defaultContent = string(content)
 	}
 
-	if !os.IsNotExist(err) {
-		return fmt.Errorf("failed to stat file %s: %w", fn, err)
-	}
+	fmt.Printf("Creating file %s\n", dst)
 
-	fmt.Printf("Creating file %s\n", to)
-
-	return os.WriteFile(to, []byte(defaultContent), 0644)
+	return os.WriteFile(dst, []byte(defaultContent), 0644)
 }
