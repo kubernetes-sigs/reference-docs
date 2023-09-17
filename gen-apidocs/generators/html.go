@@ -549,8 +549,7 @@ func (h *HTMLWriter) WriteOldVersionsOverview() error {
 }
 
 func (h *HTMLWriter) generateNavContent() string {
-	nav := ""
-	nav += "\n\n<UL id=\"navigation\">\n"
+	nav := "<UL id=\"navigation\">\n"
 
 	for _, sec := range h.TOC.Sections {
 		nav += sec.ToHTML()
