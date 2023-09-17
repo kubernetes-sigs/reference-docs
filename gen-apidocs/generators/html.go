@@ -574,7 +574,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	   kubernetes/website/static/css/fontawesome-4.7.0.min.css
 	   kubernetes/website/static/css/style_apiref.css
 	*/
-	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML>\n<HEAD>\n<META charset=\"UTF-8\">\n")
+	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML lang=\"en\">\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\" type=\"text/css\">\n")
