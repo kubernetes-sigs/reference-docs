@@ -273,14 +273,16 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 	h.writeAppearsIn(f, d)
 	h.writeFields(f, d)
 
-	// Definitions should not all show up individually in the TOC, as they are less interesting as jumping-in points to the docs.
-	// item := TOCItem{
-	// 	Level: 2,
-	// 	Title: nvg,
-	// 	Link:  linkID,
-	// 	File:  fn,
-	// }
-	// h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &item)
+	// Definitions are added to the TOC to enable the generator to later collect
+	// all the individual definition files, but definitions will not show up
+	// in the nav treet because it would take up too much screen estate.
+	item := TOCItem{
+		Level: 2,
+		Title: nvg,
+		Link:  linkID,
+		File:  fn,
+	}
+	h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &item)
 
 	return nil
 }
