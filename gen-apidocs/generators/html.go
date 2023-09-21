@@ -38,8 +38,13 @@ type TOCItem struct {
 }
 
 func (ti *TOCItem) ToHTML() string {
+	childClass := ""
+	if len(ti.SubSections) > 0 {
+		childClass = " has-children"
+	}
+
 	nav := ""
-	nav += fmt.Sprintf("<LI class=\"nav-level-%d\" data-level=\"%d\">\n", ti.Level, ti.Level)
+	nav += fmt.Sprintf("<LI class=\"nav-level level-%d%s\" data-level=\"%d\">\n", ti.Level, childClass, ti.Level)
 	nav += fmt.Sprintf("  <A href=\"#%s\" class=\"nav-item\">%s</A>", ti.Link, ti.Title)
 
 	if len(ti.SubSections) > 0 {
@@ -163,7 +168,7 @@ func (h *HTMLWriter) WriteResourceCategory(name, file string) error {
 	link := strings.ReplaceAll(strings.ToLower(name), " ", "-")
 	item := TOCItem{
 		Level: 1,
-		Title: strings.ToUpper(name),
+		Title: name,
 		Link:  link,
 		File:  "_" + file + ".html",
 	}
@@ -256,6 +261,7 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 
 	nvg := fmt.Sprintf("%s %s %s", d.Name, d.Version, d.GroupDisplayName())
 	linkID := getLink(nvg)
+	nvg = h.gvkMarkup(d.GroupDisplayName(), d.Version, d.Name)
 
 	fmt.Fprintf(f, "<DIV class=\"definition-container\" id=\"%s\">\n", linkID)
 	defer fmt.Fprint(f, "</DIV>\n")
@@ -293,6 +299,7 @@ func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 	}
 
 	fmt.Fprintf(w, "<DIV class=\"samples-container\">\n")
+	fmt.Fprintf(w, "<P>\n")
 
 	note := d.Sample.Note
 	for _, s := range d.GetSamples() {
@@ -303,6 +310,8 @@ func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 		fmt.Fprintf(w, "  aria-expanded=\"false\">show %s</BUTTON>\n", sType)
 	}
 
+	fmt.Fprintf(w, "</P>\n")
+
 	for _, s := range d.GetSamples() {
 		sType := strings.Split(s.Tab, ":")[1]
 		linkID := sType + "-" + d.LinkID()
@@ -311,9 +320,9 @@ func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 		fmt.Fprintf(w, "<DIV class=\"collapse\" id=\"%s\">\n", linkID)
 		fmt.Fprintf(w, "  <DIV class=\"panel panel-default\">\n<DIV class=\"panel-heading\">%s</DIV>\n", note)
 		fmt.Fprintf(w, "  <DIV class=\"panel-body\">\n<PRE class=\"%s\">", sType)
-		fmt.Fprintf(w, "<CODE class=\"lang-%s\">\n", lang)
+		fmt.Fprintf(w, "<CODE class=\"lang-%s\">", lang)
 		// TODO: Add language highlight
-		fmt.Fprintf(w, "%s\n</CODE></PRE></DIV></DIV></DIV>\n", html.EscapeString(s.Text))
+		fmt.Fprintf(w, "%s</CODE></PRE></DIV></DIV></DIV>\n", strings.TrimSpace(html.EscapeString(s.Text)))
 	}
 
 	fmt.Fprint(w, "</DIV>\n")
@@ -360,9 +369,9 @@ func (h *HTMLWriter) writeOperationSample(w io.Writer, req bool, op string, exam
 		fmt.Fprintf(w, "<DIV class=\"collapse\" id=\"%s\">\n", sampleID)
 		fmt.Fprintf(w, "  <DIV class=\"panel panel-default\">\n<DIV class=\"panel-heading\">%s</DIV>\n", msg)
 		fmt.Fprintf(w, "  <DIV class=\"panel-body\">\n<PRE class=\"%s\">", eType)
-		fmt.Fprintf(w, "<CODE class=\"lang-%s\">\n", lang)
+		fmt.Fprintf(w, "<CODE class=\"lang-%s\">", lang)
 		// TODO: Add language highlight
-		fmt.Fprintf(w, "%s\n</CODE></PRE></DIV></DIV></DIV>\n", e.Text)
+		fmt.Fprintf(w, "%s</CODE></PRE></DIV></DIV></DIV>\n", strings.TrimSpace(e.Text))
 	}
 }
 
@@ -429,6 +438,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 
 	dvg := fmt.Sprintf("%s %s %s", r.Name, r.Definition.Version, r.Definition.GroupDisplayName())
 	linkID := getLink(dvg)
+	dvg = h.gvkMarkup(r.Definition.GroupDisplayName(), r.Definition.Version, r.Name)
 
 	fmt.Fprintf(w, "<DIV class=\"resource-container\" id=\"%s\">\n", linkID)
 	defer fmt.Fprint(w, "</DIV>\n")
@@ -519,7 +529,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 
 			fmt.Fprintf(w, "<P>%s</P>\n", o.Description())
 			fmt.Fprintf(w, "<H3>HTTP Request</H3>\n")
-			fmt.Fprintf(w, "<CODE>%s</CODE>\n", o.GetDisplayHttp())
+			fmt.Fprintf(w, "<p><CODE>%s</CODE></P>\n", o.GetDisplayHttp())
 
 			h.writeRequestParams(w, o)
 			h.writeResponseParams(w, o)
@@ -581,7 +591,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/fontawesome-4.7.0.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/style_apiref.css\" type=\"text/css\">\n")
-	fmt.Fprintf(html, "</HEAD>\n<BODY>\n")
+	fmt.Fprintf(html, "</HEAD>\n<BODY class=\"theme-auto\">\n")
 	fmt.Fprintf(html, "<DIV id=\"wrapper\" class=\"container-fluid\">\n")
 	fmt.Fprintf(html, "<DIV class=\"row\">\n")
 	fmt.Fprintf(html, "<DIV id=\"sidebar-wrapper\" class=\"col-xs-4 col-sm-3 col-md-2 side-nav side-bar-nav\">\n")
@@ -641,7 +651,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 		kubernetes/website/static/js/jquery-3.6.0.min.js
 		kubernetes/website/static/js/jquery.scrollTo-2.1.3.min.js
 		kubernetes/website/static/js/bootstrap-4.6.1.min.js
-		kubernetes/website/static/js/scroll-apiref.js
+		kubernetes/website/static/js/apiref.js
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
 	fmt.Fprintf(html, "<DIV id=\"page-content-wrapper\" class=\"col-xs-8 offset-xs-4 col-sm-9 offset-sm-3 col-md-10 offset-md-2 body-content\">\n")
@@ -650,7 +660,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.6.0.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery.scrollTo-2.1.3.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.6.1.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"/js/scroll-apiref.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/apiref.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
 
 	return nil
@@ -668,4 +678,8 @@ func (h *HTMLWriter) Finalize() error {
 	}
 
 	return nil
+}
+
+func (h *HTMLWriter) gvkMarkup(group string, version api.ApiVersion, kind string) string {
+	return fmt.Sprintf(`<span class="gvk"><span class="k">%s</span> <span class="v">%s</span> <span class="g">%s</span></span>`, kind, version, group)
 }
