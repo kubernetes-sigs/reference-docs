@@ -96,6 +96,10 @@ type apiDefinition struct {
 	// Includes is list of packages that are designed for shared type
 	// definitions.
 	Includes []string `json:"includes"`
+
+	// MainPackage is an override for API definitions that involves more
+	// than one package.
+	MainPackage string `json:"mainPackage"`
 }
 
 // Global vars
@@ -134,7 +138,7 @@ func init() {
 }
 
 // processAPIPath processes a path for package enumeration and processing.
-func processAPIPath(path string, includes []string, title string) ([]*apiPackage, error) {
+func processAPIPath(path string, includes []string, title string, mainPkg string) ([]*apiPackage, error) {
 	klog.V(0).Infof("Parsing go packages in %s", path)
 	gopkgs, err := parseAPIPackages(path)
 	if err != nil {
@@ -152,7 +156,7 @@ func processAPIPath(path string, includes []string, title string) ([]*apiPackage
 		gopkgs = append(gopkgs, extra...)
 	}
 
-	pkgs, err := combineAPIPackages(gopkgs, title)
+	pkgs, err := combineAPIPackages(gopkgs, title, mainPkg)
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +217,7 @@ func parseAPIPackages(dir string) ([]*types.Package, error) {
 
 // combineAPIPackages groups the Go packages by the <apiGroup+apiVersion> they
 // offer, and combines the types in them.
-func combineAPIPackages(pkgs []*types.Package, title string) ([]*apiPackage, error) {
+func combineAPIPackages(pkgs []*types.Package, title string, mainPkg string) ([]*apiPackage, error) {
 	pkgMap := make(map[string]*apiPackage)
 	re := `^v\d+((alpha|beta)\d+)?$`
 
@@ -234,21 +238,32 @@ func combineAPIPackages(pkgs []*types.Package, title string) ([]*apiPackage, err
 		id := fmt.Sprintf("%s/%s", group, version)
 		v, ok := pkgMap[id]
 		if !ok {
+			isMain := true
+			if len(mainPkg) > 0 && group != mainPkg {
+				isMain = false
+			}
 			pkgMap[id] = &apiPackage{
 				apiGroup:   group,
 				apiVersion: version,
 				Types:      typeList,
 				GoPackages: []*types.Package{gopkg},
 				Title:      title,
+				IsMain:     isMain,
 			}
 		} else {
 			v.Types = append(v.Types, typeList...)
 			v.GoPackages = append(v.GoPackages, gopkg)
 		}
 	}
+	// Sort this map
+	packageIds := make([]string, 0, len(pkgMap))
 	out := make([]*apiPackage, 0, len(pkgMap))
-	for _, v := range pkgMap {
-		out = append(out, v)
+	for k := range pkgMap {
+		packageIds = append(packageIds, k)
+	}
+	sort.Strings(packageIds)
+	for _, key := range packageIds {
+		out = append(out, pkgMap[key])
 	}
 	return out, nil
 }
@@ -344,7 +359,7 @@ func main() {
 		if len(pkgInclude) > 0 && !containsString(pkgInclude, item.Name) {
 			continue
 		}
-		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title)
+		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title, item.MainPackage)
 		if err != nil {
 			klog.ErrorS(err, "cannot process API path")
 			continue
