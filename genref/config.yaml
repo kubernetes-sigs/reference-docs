@@ -114,6 +114,7 @@ apis:
   - name: kube-controller-manager-config
     title: kube-controller-manager Configuration (v1alpha1)
     package: k8s.io/kube-controller-manager
+    mainPackage: kubecontrollermanager.config.k8s.io
     path: config/v1alpha1
     includes:
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
@@ -226,6 +227,7 @@ apis:
   - name: cloud-provider-config
     title: Cloud Provider Configuration (v1alpha1)
     package: k8s.io/cloud-provider
+    mainPackage: cloudcontrollermanager.config.k8s.io
     path: config/v1alpha1
     includes:
       - k8s.io/controller-manager/config/v1alpha1

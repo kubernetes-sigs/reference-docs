@@ -1,6 +1,5 @@
 {{ define "packages" -}}
 
-{{ $grpname := "" -}}
 {{- range $idx, $val := .packages -}}
 {{/* Special handling for kubeconfig */}}
 {{- if eq .Title "kubeconfig (v1)" -}}
@@ -11,7 +10,7 @@ package: v1
 auto_generated: true
 ---
 {{- else -}}
-  {{- if and (ne .GroupName "") (eq $grpname "") -}}
+  {{- if and .IsMain (ne .GroupName "") -}}
 ---
 title: {{ .Title }}
 content_type: tool-reference
@@ -19,7 +18,6 @@ package: {{ .DisplayName }}
 auto_generated: true
 ---
 {{ .GetComment -}}
-{{ $grpname = .GroupName }}
   {{- end -}}
 {{- end -}}
 {{- end }}
@@ -27,28 +25,26 @@ auto_generated: true
 ## Resource Types 
 
 {{ range .packages -}}
-  {{/*- if ne .GroupName "" -*/}}
-    {{- range .VisibleTypes -}}
-      {{- if .IsExported }}
+  {{- range .VisibleTypes -}}
+    {{- if .IsExported }}
 - [{{ .DisplayName }}]({{ .Link }})
-      {{- end -}}
     {{- end -}}
-  {{/* end -*/}}
+  {{- end -}}
 {{- end -}}
 
 {{ range .packages }}
   {{ if ne .GroupName "" -}}
-     
     {{/* For package with a group name, list all type definitions in it. */}}
-    {{ range .VisibleTypes }}
+    {{- range .VisibleTypes }}
       {{- if or .Referenced .IsExported -}}
 {{ template "type" . }}
       {{- end -}}
     {{ end }}
   {{ else }}
     {{/* For package w/o group name, list only types referenced. */}}
+    {{ $pkgTitle := .Title }}
     {{- range .VisibleTypes -}}
-      {{- if .Referenced -}}
+      {{- if or .Referenced (eq $pkgTitle "kubeconfig (v1)") -}}
 {{ template "type" . }}
       {{- end -}}
     {{- end }}

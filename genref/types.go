@@ -33,6 +33,9 @@ type apiPackage struct {
 
 	// Title is set from config
 	Title string
+
+	// IsMain is set if the package is the main one
+	IsMain bool
 }
 
 // DisplayName returns the full name of the API package
