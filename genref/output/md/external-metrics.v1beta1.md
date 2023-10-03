@@ -13,7 +13,6 @@ auto_generated: true
 - [ExternalMetricValue](#external-metrics-k8s-io-v1beta1-ExternalMetricValue)
 - [ExternalMetricValueList](#external-metrics-k8s-io-v1beta1-ExternalMetricValueList)
   
-    
 
 ## `ExternalMetricValue`     {#external-metrics-k8s-io-v1beta1-ExternalMetricValue}
     

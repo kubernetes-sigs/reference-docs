@@ -12,7 +12,6 @@ auto_generated: true
 
 - [Configuration](#apiserver-config-k8s-io-v1-Configuration)
   
-    
 
 ## `Configuration`     {#apiserver-config-k8s-io-v1-Configuration}
     

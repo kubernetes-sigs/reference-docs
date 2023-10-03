@@ -14,7 +14,6 @@ auto_generated: true
 - [MetricValue](#custom-metrics-k8s-io-v1beta2-MetricValue)
 - [MetricValueList](#custom-metrics-k8s-io-v1beta2-MetricValueList)
   
-    
 
 ## `MetricListOptions`     {#custom-metrics-k8s-io-v1beta2-MetricListOptions}
     
