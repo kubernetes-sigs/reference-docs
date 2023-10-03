@@ -15,7 +15,6 @@ auto_generated: true
 - [PodMetrics](#metrics-k8s-io-v1beta1-PodMetrics)
 - [PodMetricsList](#metrics-k8s-io-v1beta1-PodMetricsList)
   
-    
 
 ## `NodeMetrics`     {#metrics-k8s-io-v1beta1-NodeMetrics}
     
