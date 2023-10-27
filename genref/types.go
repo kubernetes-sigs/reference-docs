@@ -300,6 +300,16 @@ func (t *apiType) Link() string {
 	return ""
 }
 
+func stripPrefix(s string) string {
+	// strip prefix if desired
+	for _, prefix := range config.StripPrefix {
+		if strings.HasPrefix(s, prefix) {
+			s = strings.Replace(s, prefix, "", 1)
+		}
+	}
+	return s
+}
+
 // DisplayName deterimines how a type is displayed in the docs.
 func (t *apiType) DisplayName() string {
 	s := t.typeId()
@@ -318,18 +328,14 @@ func (t *apiType) DisplayName() string {
 		types.Slice,
 		types.Builtin:
 		// noop
-	case types.Map: // return original name
-		return t.Name.Name
+	case types.Map:
+		elm := apiType{*t.Elem}
+		return strings.Join([]string{"map[", stripPrefix(t.Key.Name.Name), "]", elm.DisplayName()}, "")
 	default:
 		klog.Warningf("Type '%s' has kind='%v' which is unhandled", t.Name, t.Kind)
 	}
 
-	// strip prefix if desired
-	for _, prefix := range config.StripPrefix {
-		if strings.HasPrefix(s, prefix) {
-			s = strings.Replace(s, prefix, "", 1)
-		}
-	}
+	s = stripPrefix(s)
 
 	if t.Kind == types.Slice {
 		s = "[]" + s
