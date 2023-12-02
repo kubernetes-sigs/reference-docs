@@ -11,6 +11,7 @@
 WEBROOT=${K8S_WEBROOT}
 K8SROOT=${K8S_ROOT}
 K8SRELEASE=${K8S_RELEASE}
+INSIDE_CONTAINER=${CONTAINER}
 
 ifeq ($(K8SRELEASE),)
   $(error Please define K8S_RELEASE, e.g. 'export K8S_RELEASE=1.21.0')
@@ -44,8 +45,14 @@ cleancli:
 
 cli: cleancli
 	cd gen-kubectldocs && go mod download && go run main.go --kubernetes-version v$(K8SRELEASEDIR)
-	mkdir -p $(CLISRC)
-	docker run -v $(shell pwd)/gen-kubectldocs/generators/includes:/source -v $(shell pwd)/gen-kubectldocs/generators/build:/build -v $(shell pwd)/gen-kubectldocs/generators/:/manifest brianpursley/brodocs:latest
+	mkdir -p $(CLISRC) && \
+	if [ "$(INSIDE_CONTAINER)" = "True" ]; then\
+		cd /app/brodocs/brodocs && ./runcontainerdocs.sh;\
+	else\
+		docker run -v "$(shell pwd)/gen-kubectldocs/generators/includes:/source" -v "$(shell pwd)/gen-kubectldocs/generators/build:/build" -v "$(shell pwd)/gen-kubectldocs/generators/:/manifest" brianpursley/brodocs:latest;\
+	fi
+
+
 
 copycli: cli
 	cp gen-kubectldocs/generators/build/index.html $(WEBROOT)/static/docs/reference/generated/kubectl/kubectl-commands.html
