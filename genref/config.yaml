@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.29/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -81,23 +81,20 @@ apis:
     title: Kubelet CredentialProvider (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/credentialprovider/v1alpha1
+    # This is not needed since there is v1
+    skip: true
 
   - name: kubelet-credentialprovider
     title: Kubelet CredentialProvider (v1beta1)
     package: k8s.io/kubelet
     path: pkg/apis/credentialprovider/v1beta1
+    # This is not needed since there is v1
+    skip: true
 
   - name: kubelet-credentialprovider
     title: Kubelet CredentialProvider (v1)
     package: k8s.io/kubelet
     path: pkg/apis/credentialprovider/v1
-
-  - name: kube-scheduler-config
-    title: kube-scheduler Configuration (v1beta3)
-    package: k8s.io/kube-scheduler
-    path: config/v1beta3
-    includes:
-      - k8s.io/component-base/config/v1alpha1
 
   - name: kube-scheduler-config
     title: kube-scheduler Configuration (v1)
@@ -132,11 +129,13 @@ apis:
   - name: metrics
     title: Kubernetes Metrics (v1beta1)
     package: k8s.io/metrics
+    # other version: v1beta1
     path: pkg/apis/metrics/v1beta1
 
   - name: custom-metrics
     title: Kubernetes Custom Metrics (v1beta2)
     package: k8s.io/metrics
+    # other versions: v1beta1
     path: pkg/apis/custom_metrics/v1beta2
 
   - name: external-metrics
@@ -190,32 +189,23 @@ apis:
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
 
-    # This seems deprecated.
-  - name: apiserver-admission
-    title: kube-apiserver Admission (v1beta1)
-    package: k8s.io/api
-    path: admission/v1beta1
-    skip: true
-
   - name: apiserver-admission
     title: kube-apiserver Admission (v1)
     package: k8s.io/api
+    # other version: v1beta1
     path: admission/v1
 
   - name: apiserver-resourcequota
     title: kube-apiserver ResourceQuota Configuration (v1)
     package: k8s.io/apiserver
+    # other versions: v1alpha1 v1beta1
     path: pkg/admission/plugin/resourcequota/apis/resourcequota/v1
 
   - name: apiserver-webhookadmission
     title: WebhookAdmission Configuration (v1)
     package: k8s.io/apiserver
+    # other versions: v1alpha1
     path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1
-
-  - name: apiserver-eventratelimit
-    title: Event Rate Limit Configuration (v1alpha1)
-    package: github.com/tengqm/kubeconfig
-    path: config/admission/eventratelimit/apis/v1alpha1
 
   - name: apiserver-podtolerationrestriction
     title: Pod Toleration Restriction (v1alpha1)
@@ -249,7 +239,12 @@ apis:
     package: k8s.io/api
     path: imagepolicy/v1alpha1
 
-  # This is for testing
+  # These are for testing
+  - name: apiserver-eventratelimit
+    title: Event Rate Limit Configuration (v1alpha1)
+    package: github.com/tengqm/kubeconfig
+    path: config/admission/eventratelimit/apis/v1alpha1
+
   - name: kubeadm-config
     title: kubeadm Configuration (v1beta3)
     package: github.com/tengqm/kubeconfig
