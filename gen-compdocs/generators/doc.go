@@ -287,7 +287,7 @@ func flagUsages(f *pflag.FlagSet) string {
 
 	lines := make([]string, 0)
 
-	lines = append(lines, "   <table style=\"width: 100%%; table-layout: fixed;\">\n<colgroup>\n"+
+	lines = append(lines, "   <table style=\"width: 100%; table-layout: fixed;\">\n<colgroup>\n"+
 		"<col span=\"1\" style=\"width: 10px;\" />\n"+
 		"<col span=\"1\" />\n"+
 		"</colgroup>\n"+
@@ -349,7 +349,7 @@ func flagUsages(f *pflag.FlagSet) string {
 				line += fmt.Sprintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default: %s", defaultValue)
 			}
 		}
-		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%%; word-wrap: break-word;\">"
+		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%; word-wrap: break-word;\">"
 
 		// process markdown in usage, force wrap for "\n"
 		line += processUsage(usage) + "</td>\n</tr>\n"
