@@ -69,9 +69,6 @@ resource_categories:
     - name: EndpointSlice
       version: v1
       group: discovery
-    - name: ClusterCIDR
-      version: v1alpha1
-      group: networking
     - name: Ingress
       version: v1
       group: networking
@@ -112,11 +109,14 @@ resource_categories:
     - name: VolumeAttachment
       version: v1
       group: storage
+    - name: VolumeAttributesClass
+      version: v1alpha1
+      group: storage
   - name: "Metadata APIs"
     include: "meta"
     resources:
     - name: ClusterTrustBundle
-      version: v1alpha2
+      version: v1alpha1
       group: certificates
     - name: ControllerRevision
       version: v1
@@ -188,7 +188,7 @@ resource_categories:
       version: v1
       group: core
     - name: FlowSchema
-      version: v1beta3
+      version: v1
       group: flowcontrol
     - name: IPAddress
       version: v1alpha1
@@ -210,7 +210,7 @@ resource_categories:
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
     - name: PriorityLevelConfiguration
-      version: v1beta3
+      version: v1
       group: flowcontrol
     - name: ResourceQuota
       version: v1
@@ -236,6 +236,9 @@ resource_categories:
     - name: ServiceAccount
       version: v1
       group: core
+    - name: ServiceCIDR
+      version: v1alpha1
+      group: networking
     - name: StorageVersion
       version: v1alpha1
       group: apiserverinternal
