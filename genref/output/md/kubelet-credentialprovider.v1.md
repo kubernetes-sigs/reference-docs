@@ -79,7 +79,7 @@ CredentialProviderConfig. If set to 0, the kubelet will not cache the provided A
 </td>
 </tr>
 <tr><td><code>auth</code><br/>
-<a href="#credentialprovider-kubelet-k8s-io-v1-AuthConfig"><code>map[string]k8s.io/kubelet/pkg/apis/credentialprovider/v1.AuthConfig</code></a>
+<a href="#credentialprovider-kubelet-k8s-io-v1-AuthConfig"><code>map[string]AuthConfig</code></a>
 </td>
 <td>
    <p>auth is a map containing authentication information passed into the kubelet.
