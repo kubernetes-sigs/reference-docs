@@ -769,7 +769,7 @@ This flag enables or disables reconcile.  Is false by default, and thus enabled.
 </td>
 <td>
    <p>ReconcilerSyncLoopPeriod is the amount of time the reconciler sync states loop
-wait between successive executions. Is set to 5 sec by default.</p>
+wait between successive executions. Is set to 60 sec by default.</p>
 </td>
 </tr>
 </tbody>
