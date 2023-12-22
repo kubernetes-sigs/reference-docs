@@ -581,14 +581,14 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	defer html.Close()
 
 	/* Make sure the following stylesheets exist in kubernetes/website repo:
-	   kubernetes/website/static/css/bootstrap-4.3.1.min.css
+	   kubernetes/website/static/css/bootstrap-5.3.2.min.css
 	   kubernetes/website/static/css/fontawesome-4.7.0.min.css
 	   kubernetes/website/static/css/style_apiref.css
 	*/
 	fmt.Fprintf(html, "<!DOCTYPE html>\n<HTML lang=\"en\">\n<HEAD>\n<META charset=\"UTF-8\">\n")
 	fmt.Fprintf(html, "<TITLE>%s</TITLE>\n", h.TOC.Title)
 	fmt.Fprintf(html, "<LINK rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/vnd.microsoft.icon\">\n")
-	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-4.3.1.min.css\" type=\"text/css\">\n")
+	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/bootstrap-5.3.2.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/fontawesome-4.7.0.min.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "<LINK rel=\"stylesheet\" href=\"/css/style_apiref.css\" type=\"text/css\">\n")
 	fmt.Fprintf(html, "</HEAD>\n<BODY class=\"theme-auto\">\n")
@@ -650,7 +650,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 		Make sure the following scripts exist in kubernetes/website repo:
 		kubernetes/website/static/js/jquery-3.6.0.min.js
 		kubernetes/website/static/js/jquery.scrollTo-2.1.3.min.js
-		kubernetes/website/static/js/bootstrap-4.6.1.min.js
+		kubernetes/website/static/js/bootstrap-5.3.2.min.js
 		kubernetes/website/static/js/apiref.js
 	*/
 	fmt.Fprintf(html, "%s</DIV>\n", navContent)
@@ -659,7 +659,7 @@ func (h *HTMLWriter) generateIndex(navContent string) error {
 	fmt.Fprintf(html, "\n</DIV>\n</DIV>\n</DIV>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery-3.6.0.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/jquery.scrollTo-2.1.3.min.js\"></SCRIPT>\n")
-	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-4.6.1.min.js\"></SCRIPT>\n")
+	fmt.Fprintf(html, "<SCRIPT src=\"/js/bootstrap-5.3.2.min.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "<SCRIPT src=\"/js/apiref.js\"></SCRIPT>\n")
 	fmt.Fprintf(html, "</BODY>\n</HTML>\n")
 
