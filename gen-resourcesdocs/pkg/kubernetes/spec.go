@@ -55,17 +55,14 @@ func (o GVToKeyMap) Add(key string, resource *Resource) {
 // NewSpec creates a new Spec from a K8s spec file
 func NewSpec(filename string) (*Spec, error) {
 	spec := &Spec{}
-	err := spec.getSwagger(filename)
-	if err != nil {
-		return nil, err
-	}
-	err = spec.getResources()
-	if err != nil {
-		return nil, err
-	}
 
-	err = spec.getActions()
-	if err != nil {
+	if err := spec.getSwagger(filename); err != nil {
+		return nil, err
+	}
+	if err := spec.getResources(); err != nil {
+		return nil, err
+	}
+	if err := spec.getActions(); err != nil {
 		return nil, err
 	}
 

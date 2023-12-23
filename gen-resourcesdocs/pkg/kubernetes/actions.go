@@ -145,7 +145,6 @@ type Actions map[string]ActionInfoList
 
 // Add an action to the collection of actions
 func (o Actions) Add(specParameters map[string]spec.Parameter, key string, operation *spec.Operation, httpMethod string, pathParameters []spec.Parameter) {
-
 	desc := operation.Description
 	if strings.Contains(strings.ToLower(desc), "deprecated") {
 		return
@@ -157,7 +156,6 @@ func (o Actions) Add(specParameters map[string]spec.Parameter, key string, opera
 		return
 	}
 	if action != nil {
-
 		gvk, found, err := getGVKExtension(operation.Extensions)
 		if err != nil {
 			//fmt.Fprintf(os.Stderr, "Error getting GVK extension for %s|%s: %s\n", key, httpMethod, err)

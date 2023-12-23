@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"sort"
 
@@ -67,13 +66,12 @@ func LoadTOC(filename string) (*TOC, error) {
 		return nil, err
 	}
 
-	content, err := ioutil.ReadAll(f)
+	content, err := io.ReadAll(f)
 	if err != nil {
 		return nil, err
 	}
 
-	err = yaml.Unmarshal(content, &result)
-	if err != nil {
+	if err = yaml.Unmarshal(content, &result); err != nil {
 		return nil, err
 	}
 
@@ -87,8 +85,7 @@ func (o *TOC) PopulateAssociates(thespec *kubernetes.Spec) error {
 
 	for _, part := range o.Parts {
 		for _, chapter := range part.Chapters {
-			err := chapter.populate(part, o, thespec)
-			if err != nil {
+			if err := chapter.populate(part, o, thespec); err != nil {
 				return err
 			}
 		}

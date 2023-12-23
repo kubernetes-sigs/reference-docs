@@ -19,6 +19,9 @@ func prepareTOC(cmd *cobra.Command) (*config.TOC, error) {
 
 	configDir := cmd.Flag(configDirOption).Value.String()
 	toc, err := config.LoadTOC(path.Join(configDir, "toc.yaml"))
+	if err != nil {
+		return nil, err
+	}
 	err = toc.PopulateAssociates(spec)
 	if err != nil {
 		return nil, err

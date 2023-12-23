@@ -25,8 +25,8 @@ func RootCmd() *cobra.Command {
 		Long:          `Tool to build documentation from OpenAPI specification of the Kubernetes API`,
 		SilenceErrors: true,
 		SilenceUsage:  true,
-		PreRun: func(cmd *cobra.Command, args []string) {
-			viper.BindPFlags(cmd.Flags())
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return nil

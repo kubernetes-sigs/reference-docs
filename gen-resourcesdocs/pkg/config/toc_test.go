@@ -32,8 +32,7 @@ func TestPopulateAssociatesv119(t *testing.T) {
 		t.Errorf("Error loding toc file")
 	}
 
-	err = toc.PopulateAssociates(spec)
-	if err != nil {
+	if err = toc.PopulateAssociates(spec); err != nil {
 		t.Errorf("%s", err)
 	}
 
