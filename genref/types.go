@@ -403,7 +403,10 @@ func sortTypes(typs []*apiType) []*apiType {
 		} else if !t1.IsExported() && t2.IsExported() {
 			return false
 		}
-		return t1.Name.Name < t2.Name.Name
+		if t1.Name.Name != t2.Name.Name {
+			return t1.Name.Name < t2.Name.Name
+		}
+		return t1.Name.String() < t2.Name.String()
 	})
 	return typs
 }
