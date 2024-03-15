@@ -305,8 +305,8 @@ func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 	for _, s := range d.GetSamples() {
 		sType := strings.Split(s.Tab, ":")[1]
 		linkID := sType + "-" + d.LinkID()
-		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-toggle=\"collapse\"\n")
-		fmt.Fprintf(w, "  data-target=\"#%s\" aria-controls=\"%s\"\n", linkID, linkID)
+		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-bs-toggle=\"collapse\"\n")
+		fmt.Fprintf(w, "  data-bs-target=\"#%s\" aria-controls=\"%s\"\n", linkID, linkID)
 		fmt.Fprintf(w, "  aria-expanded=\"false\">show %s</BUTTON>\n", sType)
 	}
 
@@ -345,8 +345,8 @@ func (h *HTMLWriter) writeOperationSample(w io.Writer, req bool, op string, exam
 			sampleID = "res-" + eType + "-" + op
 			btnText = eType + " response"
 		}
-		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-toggle=\"collapse\"\n")
-		fmt.Fprintf(w, "  data-target=\"#%s\" aria-controls=\"%s\"\n", sampleID, sampleID)
+		fmt.Fprintf(w, "<BUTTON class=\"btn btn-info\" type=\"button\" data-bs-toggle=\"collapse\"\n")
+		fmt.Fprintf(w, "  data-bs-target=\"#%s\" aria-controls=\"%s\"\n", sampleID, sampleID)
 		fmt.Fprintf(w, "  aria-expanded=\"false\">%s example</BUTTON>\n", btnText)
 	}
 
