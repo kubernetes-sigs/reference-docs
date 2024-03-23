@@ -31,7 +31,7 @@ func main() {
 		path = os.Args[1]
 		module = os.Args[2]
 	} else {
-		log.Fatalf("usage: %s [output-dir] [module]", os.Args[0])
+		log.Fatalf("usage: %s <output-dir> <module>", os.Args[0])
 	}
 
 	if err := comps.GenerateFiles(path, module); err != nil {
