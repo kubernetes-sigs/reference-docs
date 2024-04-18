@@ -54,21 +54,41 @@ guide. You can file document formatting bugs against the
 func GenMarkdownTree(cmd *cobra.Command, dir string, withTitle bool) error {
 	identity := func(s string) string { return s }
 	emptyStr := func(s string) string { return "" }
-	return GenMarkdownTreeCustom(cmd, dir, emptyStr, identity, withTitle)
+	return GenMarkdownTreeCustom(cmd, dir, "", emptyStr, identity, withTitle)
 }
 
-func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHandler func(string) string, withTitle bool) error {
+func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, subdir string, filePrepender, linkHandler func(string) string, withTitle bool) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		if err := GenMarkdownTreeCustom(c, dir, filePrepender, linkHandler, withTitle); err != nil {
+		// CommandPath example: 'kubectl top pod'
+		parts := strings.Split(c.CommandPath(), " ")
+		subdir := ""
+		if len(parts) > 1 {
+			subdir = parts[0] + "_" + parts[1]
+			fullPath := filepath.Join(dir, subdir)
+			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+				os.Mkdir(fullPath, 0770)
+			}
+		}
+		if err := GenMarkdownTreeCustom(c, dir, subdir, filePrepender, linkHandler, withTitle); err != nil {
 			return err
 		}
 	}
 
-	basename := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
-	filename := filepath.Join(dir, basename)
+	fullname := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
+	indexFile := false
+	if len(subdir) > 0 {
+		parts := strings.Split(cmd.CommandPath(), " ")
+		if len(parts) == 2 {
+			indexFile = true
+			fullname = "_index.md"
+		}
+		fullname = filepath.Join(subdir, fullname)
+	}
+	filename := filepath.Join(dir, fullname)
+
 	f, err := os.Create(filename)
 	if err != nil {
 		return err
@@ -78,13 +98,13 @@ func GenMarkdownTreeCustom(cmd *cobra.Command, dir string, filePrepender, linkHa
 	if _, err := io.WriteString(f, filePrepender(filename)); err != nil {
 		return err
 	}
-	if err := GenMarkdownCustom(cmd, f, linkHandler, withTitle); err != nil {
+	if err := GenReference(cmd, f, linkHandler, withTitle, indexFile); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string) string, withTitle bool) error {
+func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) string, withTitle bool, indexFile bool) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 	name := cmd.CommandPath()
@@ -100,7 +120,15 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 	// Note: Files generated for kubeadm tool are snippets of Markdown without a title.
 	// These snippets are included in the corresponding kubeadm pages.
 	if withTitle {
-		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\nauto_generated: true\n---\n\n", name); err != nil {
+		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\nauto_generated: true\n", name); err != nil {
+			return err
+		}
+		if indexFile {
+			if _, err := fmt.Fprintf(w, "no_list: true\n"); err != nil {
+				return err
+			}
+		}
+		if _, err := fmt.Fprintf(w, "---\n\n"); err != nil {
 			return err
 		}
 
@@ -190,7 +218,10 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 		if cmd.HasParent() {
 			parent := cmd.Parent()
 			pname := parent.CommandPath()
-			link := pname + "/"
+			link := "../" + pname + "/"
+			if !indexFile {
+				link = "../"
+			}
 			link = strings.ReplaceAll(link, " ", "_")
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", pname, linkHandler(link), parent.Short); err != nil {
 				return err
@@ -210,8 +241,12 @@ func GenMarkdownCustom(cmd *cobra.Command, w io.Writer, linkHandler func(string)
 				continue
 			}
 			cname := name + " " + child.Name()
-			link := cname + "/"
-			link = strings.ReplaceAll(link, " ", "_")
+			link := strings.ReplaceAll(cname, " ", "_") + "/"
+			if !indexFile {
+				link = "../" + link
+			}
+
+			// link = strings.ReplaceAll(link, " ", "_")
 			if _, err := fmt.Fprintf(w, "* [%s](%s)\t - %s\n", cname, linkHandler(link), child.Short); err != nil {
 				return err
 			}
