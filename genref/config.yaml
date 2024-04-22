@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.29/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -34,8 +34,8 @@ markdownDisabled: false
 stripPrefix:
   - k8s.io/api/
   - k8s.io/apimachinery/pkg/apis/
-  - github.com/tengqm/kubeconfig/config/kubeadm/v1beta2.
   - github.com/tengqm/kubeconfig/config/kubeadm/v1beta3.
+  - github.com/tengqm/kubeconfig/config/kubeadm/v1beta4.
   - github.com/tengqm/kubeconfig/config/bootstraptoken/v1.
 
 apis:
@@ -129,7 +129,7 @@ apis:
   - name: metrics
     title: Kubernetes Metrics (v1beta1)
     package: k8s.io/metrics
-    # other version: v1beta1
+    # other version: v1alpha1
     path: pkg/apis/metrics/v1beta1
 
   - name: custom-metrics
@@ -182,6 +182,8 @@ apis:
     title: kube-apiserver Encryption Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/config/v1
+    # this is gone in 1.30
+    skip: true
 
     # Note: This is named apiserver-audit because it is part of the apiserver module
   - name: apiserver-audit

@@ -772,6 +772,15 @@ This flag enables or disables reconcile.  Is false by default, and thus enabled.
 wait between successive executions. Is set to 60 sec by default.</p>
 </td>
 </tr>
+<tr><td><code>disableForceDetachOnTimeout</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   <p>DisableForceDetachOnTimeout disables force detach when the maximum unmount
+time is exceeded. Is false by default, and thus force detach on unmount is
+enabled.</p>
+</td>
+</tr>
 </tbody>
 </table>
 
