@@ -69,4 +69,5 @@ func PrintInfo(config *api.Config) {
 			}
 		}
 	}
+
 }

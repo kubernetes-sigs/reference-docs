@@ -250,6 +250,23 @@ func (h *HTMLWriter) WriteDefinitionsOverview() error {
 	return nil
 }
 
+func (h *HTMLWriter) WriteOrphanedOperationsOverview() error {
+	if err := writeStaticFile("_operations.html", h.SectionHeading("Operations")); err != nil {
+		return err
+	}
+
+	item := TOCItem{
+		Level: 1,
+		Title: "OPERATIONS",
+		Link:  "operations",
+		File:  "_operations.html",
+	}
+	h.TOC.Sections = append(h.TOC.Sections, &item)
+	h.currentTOCItem = &item
+
+	return nil
+}
+
 func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 	fn := "_" + definitionFileName(d) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
@@ -292,6 +309,44 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 
 	return nil
 }
+
+func (h *HTMLWriter) WriteOperation(o *api.Operation) error {
+    fn := "_" + operationFileName(o) + ".html"
+	path := filepath.Join(api.IncludesDir, fn)
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	nvg := fmt.Sprintf("%s", o.ID)
+	linkID := getLink(nvg)
+
+    oGroup, oVersion, oKind, _ := o.GetGroupVersionKindSub()
+    oApiVersion := api.ApiVersion(oVersion)
+
+    if len(oGroup) > 0 {
+        nvg = h.gvkMarkup(oGroup, oApiVersion, oKind)
+    }
+
+	fmt.Fprintf(f, "<DIV class=\"operation-container\" id=\"%s\">\n", linkID)
+	defer fmt.Fprint(f, "</DIV>\n")
+
+	fmt.Fprintf(f, "<H2 class=\"toc-item operation\">%s</H2>\n", nvg)
+
+	item := TOCItem{
+		Level: 2,
+		Title: nvg,
+		Link:  linkID,
+		File:  fn,
+	}
+	h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &item)
+
+    h.WriteOperationBody(f, o, o.ID)
+
+	return nil
+}
+
 
 func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 	if d.Sample.Sample == "" {
@@ -426,6 +481,28 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 	fmt.Fprintf(w, "</TBODY>\n</TABLE>\n")
 }
 
+func (h *HTMLWriter) WriteOperationBody(w io.Writer, o *api.Operation, opID string) {
+    if o.Definition != nil {
+        // Example requests
+        requests := o.GetExampleRequests()
+        if len(requests) > 0 {
+            h.writeOperationSample(w, true, opID, requests)
+        }
+        // Example responses
+        responses := o.GetExampleResponses()
+        if len(responses) > 0 {
+            h.writeOperationSample(w, false, opID, responses)
+        }
+    }
+
+    fmt.Fprintf(w, "<P>%s</P>\n", o.Description())
+    fmt.Fprintf(w, "<H3>HTTP Request</H3>\n")
+    fmt.Fprintf(w, "<p><CODE>%s</CODE></P>\n", o.GetDisplayHttp())
+
+    h.writeRequestParams(w, o)
+    h.writeResponseParams(w, o)
+}
+
 func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 	fn := "_" + conceptFileName(r.Definition) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
@@ -488,23 +565,23 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 		return nil
 	}
 
-	for _, c := range r.Definition.OperationCategories {
-		if len(c.Operations) == 0 {
+	for _, oc := range r.Definition.OperationCategories {
+		if len(oc.Operations) == 0 {
 			continue
 		}
 
-		catID := strings.ReplaceAll(strings.ToLower(c.Name), " ", "-") + "-" + r.Definition.LinkID()
+		catID := strings.ReplaceAll(strings.ToLower(oc.Name), " ", "-") + "-" + r.Definition.LinkID()
 		fmt.Fprintf(w, "<DIV class=\"operation-category-container\" id=\"%s\">\n", catID)
-		fmt.Fprintf(w, "<H2 class=\"toc-item operation-category\">%s</H2>\n", c.Name)
+		fmt.Fprintf(w, "<H2 class=\"toc-item operation-category\">%s</H2>\n", oc.Name)
 
 		ocItem := TOCItem{
 			Level: 3,
-			Title: c.Name,
+			Title: oc.Name,
 			Link:  catID,
 		}
 		resourceItem.SubSections = append(resourceItem.SubSections, &ocItem)
 
-		for _, o := range c.Operations {
+		for _, o := range oc.Operations {
 			opID := strings.ReplaceAll(strings.ToLower(o.Type.Name), " ", "-") + "-" + r.Definition.LinkID()
 			fmt.Fprintf(w, "<DIV class=\"operation-container\" id=\"%s\">\n", opID)
 			fmt.Fprintf(w, "<H2 class=\"toc-item operation\">%s</H2>\n", o.Type.Name)
@@ -516,23 +593,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 			}
 			ocItem.SubSections = append(ocItem.SubSections, &OPItem)
 
-			// Example requests
-			requests := o.GetExampleRequests()
-			if len(requests) > 0 {
-				h.writeOperationSample(w, true, opID, requests)
-			}
-			// Example responses
-			responses := o.GetExampleResponses()
-			if len(responses) > 0 {
-				h.writeOperationSample(w, false, opID, responses)
-			}
-
-			fmt.Fprintf(w, "<P>%s</P>\n", o.Description())
-			fmt.Fprintf(w, "<H3>HTTP Request</H3>\n")
-			fmt.Fprintf(w, "<p><CODE>%s</CODE></P>\n", o.GetDisplayHttp())
-
-			h.writeRequestParams(w, o)
-			h.writeResponseParams(w, o)
+            h.WriteOperationBody(w, o, opID);
 
 			fmt.Fprint(w, "</DIV>\n")
 		}
