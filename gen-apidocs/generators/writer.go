@@ -39,7 +39,9 @@ type DocWriter interface {
 	WriteResourceCategory(name, file string) error
 	WriteResource(r *api.Resource) error
 	WriteDefinitionsOverview() error
+	WriteOrphanedOperationsOverview() error
 	WriteDefinition(d *api.Definition) error
+    WriteOperation(o *api.Operation) error
 	WriteOldVersionsOverview() error
 	Finalize() error
 }
@@ -93,6 +95,30 @@ func GenerateFiles() error {
 			}
 		}
 	}
+
+    // Write orphaned operation endpoints
+    orphanedIDs :=  make([]string, 0)
+    for id, o := range config.Operations {
+        if o.Definition == nil {
+            orphanedIDs = append(orphanedIDs, id)
+        }
+    }
+
+    if len(orphanedIDs) > 0 {
+        if err := writer.WriteOrphanedOperationsOverview(); err != nil {
+            return err
+        }
+
+        sort.Strings(orphanedIDs)
+
+        for _, opKey := range orphanedIDs {
+            if err := writer.WriteOperation(config.Operations[opKey]);
+                    err != nil {
+                return err
+            }
+        }
+    }
+
 
 	if err := writer.WriteDefinitionsOverview(); err != nil {
 		return err
@@ -158,6 +184,11 @@ func ensureDirectories() error {
 func definitionFileName(d *api.Definition) string {
 	name := "generated_" + strings.ToLower(strings.ReplaceAll(d.Name, ".", "_"))
 	return fmt.Sprintf("%s_%s_%s_definition", name, d.Version, d.Group)
+}
+
+func operationFileName(o *api.Operation) string {
+	name := "generated_" + strings.ToLower(strings.ReplaceAll(o.ID, ".", "_"))
+	return fmt.Sprintf("%s_operation", name)
 }
 
 func conceptFileName(d *api.Definition) string {
