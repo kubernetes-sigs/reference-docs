@@ -99,7 +99,7 @@ func GenerateFiles() error {
     // Write orphaned operation endpoints
     orphanedIDs :=  make([]string, 0)
     for id, o := range config.Operations {
-        if o.Definition == nil {
+        if o.Definition == nil && !config.OpExcluded(o.ID) {
             orphanedIDs = append(orphanedIDs, id)
         }
     }
