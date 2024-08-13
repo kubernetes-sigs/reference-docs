@@ -110,7 +110,7 @@ resource_categories:
       version: v1
       group: storage
     - name: VolumeAttributesClass
-      version: v1alpha1
+      version: v1beta1
       group: storage
   - name: "Metadata APIs"
     include: "meta"
@@ -124,6 +124,9 @@ resource_categories:
     - name: CustomResourceDefinition
       version: v1
       group: apiextensions
+    - name: DeviceClass
+      version: v1alpha3
+      group: resource
     - name: Event
       version: v1
       group: events
@@ -140,7 +143,7 @@ resource_categories:
       version: v1
       group: admissionregistration
     - name: PodSchedulingContext
-      version: v1alpha2
+      version: v1alpha3
       group: resource
     - name: PodTemplate
       version: v1
@@ -152,21 +155,15 @@ resource_categories:
       version: v1
       group: scheduling
     - name: ResourceClaim
-      version: v1alpha2
-      group: resource
-    - name: ResourceClaimParameters
-      version: v1alpha2
+      version: v1alpha3
       group: resource
     - name: ResourceSlice
-      version: v1alpha2
+      version: v1alpha3
       group: resource
     - name: ResourceClaimTemplate
-      version: v1alpha2
+      version: v1alpha3
       group: resource
     - name: ResourceClass
-      version: v1alpha2
-      group: resource
-    - name: ResourceClassParameters
       version: v1alpha2
       group: resource
     - name: ValidatingAdmissionPolicy
@@ -200,10 +197,13 @@ resource_categories:
       version: v1
       group: flowcontrol
     - name: IPAddress
-      version: v1alpha1
+      version: v1beta1
       group: networking
     - name: Lease
       version: v1
+      group: coordination
+    - name: LeaseCandidate
+      version: v1alpha1
       group: coordination
     - name: LocalSubjectAccessReview
       version: v1
@@ -246,7 +246,7 @@ resource_categories:
       version: v1
       group: core
     - name: ServiceCIDR
-      version: v1alpha1
+      version: v1beta1
       group: networking
     - name: StorageVersion
       version: v1alpha1
