@@ -84,7 +84,7 @@ func GenerateFiles(path, module string) error {
 		}
 
 		// cleanup generated code for usage as include in the website
-		return generators.MarkdownPostProcessing(kubeadm, outDir, generators.CleanupForInclude)
+		return generators.MarkdownPostProcessing(kubeadm, outDir, "", generators.CleanupForInclude)
 
 	case "kubectl":
 		kubectl := kubectlcmd.NewDefaultKubectlCommand()

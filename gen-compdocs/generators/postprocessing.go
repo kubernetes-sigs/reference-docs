@@ -17,6 +17,7 @@ limitations under the License.
 package generators
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -25,22 +26,42 @@ import (
 )
 
 // MarkdownPostProcessing goes though the generated files
-func MarkdownPostProcessing(cmd *cobra.Command, dir string, processor func(string) string) error {
+func MarkdownPostProcessing(cmd *cobra.Command, dir string, subdir string, processor func(string) string) error {
 	for _, c := range cmd.Commands() {
 		// if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() { // Qiming
 		if !c.IsAvailableCommand() { // Qiming
 			continue
 		}
-		if err := MarkdownPostProcessing(c, dir, processor); err != nil {
+
+		parts := strings.Split(c.CommandPath(), " ")
+		subdir := ""
+		if len(parts) > 1 {
+			subdir = parts[0] + "_" + parts[1]
+		}
+
+		if err := MarkdownPostProcessing(c, dir, subdir, processor); err != nil {
 			return err
 		}
 	}
 
-	basename := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
-	filename := filepath.Join(dir, basename)
+	// basename := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
+	// filename := filepath.Join(dir, basename)
+
+	fullname := strings.ReplaceAll(cmd.CommandPath(), " ", "_") + ".md"
+	// indexFile := false
+	if len(subdir) > 0 {
+		parts := strings.Split(cmd.CommandPath(), " ")
+		if len(parts) == 2 {
+			// indexFile = true
+			fullname = "_index.md"
+		}
+		fullname = filepath.Join(subdir, fullname)
+	}
+	filename := filepath.Join(dir, fullname)
 
 	markdownBytes, err := os.ReadFile(filename)
 	if err != nil {
+		fmt.Printf("filename: %s - %s", filename, err)
 		return err
 	}
 
