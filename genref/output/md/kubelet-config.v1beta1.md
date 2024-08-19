@@ -1549,7 +1549,7 @@ Default: 0.9</p>
 </td>
 </tr>
 <tr><td><code>registerWithTaints</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#taint-v1-core"><code>[]core/v1.Taint</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#taint-v1-core"><code>[]core/v1.Taint</code></a>
 </td>
 <td>
    <p>registerWithTaints are an array of taints to add to a node object when
@@ -1608,6 +1608,17 @@ Examples:'unix:///path/to/runtime.sock', 'npipe:////./pipe/runtime'.
 If not specified, the value in containerRuntimeEndpoint is used.</p>
 </td>
 </tr>
+<tr><td><code>failCgroupV1</code><br/>
+<code>bool</code>
+</td>
+<td>
+   <p>FailCgroupV1 prevents the kubelet from starting on hosts
+that use cgroup v1. By default, this is set to 'false', meaning
+the kubelet is allowed to start on cgroup v1 hosts unless this
+option is explicitly enabled.
+Default: false</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -1629,7 +1640,7 @@ It exists in the kubeletconfig API group because it is classified as a versioned
     
   
 <tr><td><code>source</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
 </td>
 <td>
    <p>source is the source that we are serializing.</p>
@@ -1990,7 +2001,7 @@ and groups corresponding to the Organization in the client certificate.</p>
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>limits</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
