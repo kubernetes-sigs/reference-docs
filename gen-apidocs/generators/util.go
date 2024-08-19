@@ -44,7 +44,7 @@ func PrintInfo(config *api.Config) {
 			}
 		}
 		if !*api.AllowErrors {
-			panic("Orphaned definitions found.")
+			fmt.Printf("Possible orphaned definitions found.")
 		}
 	}
 

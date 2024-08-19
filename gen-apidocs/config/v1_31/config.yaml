@@ -25,6 +25,7 @@ api_groups:
   - "Scheduling"
   - "Settings"
   - "Storage"
+  - "StorageMigration"
 resource_categories:
   - name: "Workloads APIs"
     include: "workloads"
@@ -90,6 +91,9 @@ resource_categories:
     - name: CSINode
       version: v1
       group: storage
+    - name: CSIStorageCapacity
+      version: v1
+      group: storage
     - name: Secret
       version: v1
       group: core
@@ -100,9 +104,9 @@ resource_categories:
     - name: StorageClass
       version: v1
       group: storage
-    - name: CSIStorageCapacity
-      version: v1
-      group: storage
+    - name: StorageVersionMigration
+      version: v1alpha1
+      group: storagemigration
     - name: Volume
       version: v1
       group: core
@@ -139,9 +143,6 @@ resource_categories:
     - name: MutatingWebhookConfiguration
       version: v1
       group: admissionregistration
-    - name: ValidatingWebhookConfiguration
-      version: v1
-      group: admissionregistration
     - name: PodSchedulingContext
       version: v1alpha3
       group: resource
@@ -157,19 +158,19 @@ resource_categories:
     - name: ResourceClaim
       version: v1alpha3
       group: resource
-    - name: ResourceSlice
-      version: v1alpha3
-      group: resource
     - name: ResourceClaimTemplate
       version: v1alpha3
       group: resource
-    - name: ResourceClass
-      version: v1alpha2
+    - name: ResourceSlice
+      version: v1alpha3
       group: resource
     - name: ValidatingAdmissionPolicy
       version: v1
       group: admissionregistration
     - name: ValidatingAdmissionPolicyBinding
+      version: v1
+      group: admissionregistration
+    - name: ValidatingWebhookConfiguration
       version: v1
       group: admissionregistration
   - name: "Cluster APIs"

@@ -144,13 +144,13 @@ func (s *Definitions) getInlineDefinitionNames(parent string) []string {
 
 func (s *Definitions) getReferences(d *Definition) []*Definition {
 	refs := []*Definition{}
-	// Find all of the resources referenced by this definition
+	// Find all of the definitions referenced by this definition
 	for _, p := range d.schema.Properties {
 		if !IsComplex(p) {
 			// Skip primitive types and collections of primitive types
 			continue
 		}
-		// Look up the definition for the referenced resource
+		// Look up the definition for the referenced definitions
 		if schema, ok := s.GetForSchema(p); ok {
 			refs = append(refs, schema)
 		} else {
@@ -158,6 +158,26 @@ func (s *Definitions) getReferences(d *Definition) []*Definition {
 			fmt.Printf("Could not locate referenced property of %s: %s (%s/%s).\n", d.Name, g, k, v)
 		}
 	}
+
+	/*
+		The following logic is an attempt to probe nested additionalProperties, but it is not working
+		yet because the additionalProperties can be deeply nested rather than being a top-layer property.
+
+		if d.schema.AdditionalProperties != nil {
+			as := d.schema.AdditionalProperties.Schema
+			if as != nil && IsComplex(*as) {
+				// Look up the definition for the referenced definitions
+				if schema, ok := s.GetForSchema(*as); ok {
+					fmt.Printf("*** schema: %s\n", schema)
+					refs = append(refs, schema)
+				} else {
+					g, v, k := GetDefinitionVersionKind(*as)
+					fmt.Printf("Could not locate referenced property of %s: %s (%s/%s).\n", d.Name, g, k, v)
+				}
+			}
+		}
+	*/
+
 	return refs
 }
 
