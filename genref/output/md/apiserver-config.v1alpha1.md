@@ -123,6 +123,13 @@ JWT authenticator will attempt to cryptographically validate the token.</p>
 }</p>
 </td>
 </tr>
+<tr><td><code>anonymous</code> <B>[Required]</B><br/>
+<a href="#apiserver-k8s-io-v1alpha1-AnonymousAuthConfig"><code>AnonymousAuthConfig</code></a>
+</td>
+<td>
+   <p>If present --anonymous-auth must not be set</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -240,6 +247,66 @@ configuration</p>
 <td>
    <p>Configuration is an embedded configuration object to be used as the plugin's
 configuration. If present, it will be used instead of the path to the configuration file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `AnonymousAuthCondition`     {#apiserver-k8s-io-v1alpha1-AnonymousAuthCondition}
+    
+
+**Appears in:**
+
+- [AnonymousAuthConfig](#apiserver-k8s-io-v1alpha1-AnonymousAuthConfig)
+
+
+<p>AnonymousAuthCondition describes the condition under which anonymous auth
+should be enabled.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>path</code> <B>[Required]</B><br/>
+<code>string</code>
+</td>
+<td>
+   <p>Path for which anonymous auth is enabled.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `AnonymousAuthConfig`     {#apiserver-k8s-io-v1alpha1-AnonymousAuthConfig}
+    
+
+**Appears in:**
+
+- [AuthenticationConfiguration](#apiserver-k8s-io-v1alpha1-AuthenticationConfiguration)
+
+
+<p>AnonymousAuthConfig provides the configuration for the anonymous authenticator.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>enabled</code> <B>[Required]</B><br/>
+<code>bool</code>
+</td>
+<td>
+   <span class="text-muted">No description provided.</span></td>
+</tr>
+<tr><td><code>conditions</code> <B>[Required]</B><br/>
+<a href="#apiserver-k8s-io-v1alpha1-AnonymousAuthCondition"><code>[]AnonymousAuthCondition</code></a>
+</td>
+<td>
+   <p>If set, anonymous auth is only allowed if the request meets one of the
+conditions.</p>
 </td>
 </tr>
 </tbody>
