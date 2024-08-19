@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -64,6 +64,7 @@ apis:
       - k8s.io/component-base/logs/api/v1
       - k8s.io/component-base/tracing/api/v1
 
+  # v1 provides CrendentialProvider, CredentialProviderConfig
   - name: kubelet-config
     title: Kubelet Configuration (v1)
     package: k8s.io/kubelet
@@ -162,7 +163,9 @@ apis:
     includes:
       - k8s.io/component-base/tracing/api/v1
 
-  # v1beta1 is preserved because it has different types exposed.
+  # v1beta1 is preserved because it provides EgressSelectorConfiguration,
+  # TracingConfiguration, AuthenticationConfiguration,
+  # AuthorizationConfiguration
   - name: apiserver-config
     title: kube-apiserver Configuration (v1beta1)
     package: k8s.io/apiserver
@@ -170,20 +173,11 @@ apis:
     includes:
       - k8s.io/component-base/tracing/api/v1
 
+  # v1 provides AdimissionConfiguration
   - name: apiserver-config
     title: kube-apiserver Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1
-
-  # Note: This is named as apiserver-encryption because the so called config
-  # pkg only contains encryption config. Need to differentiate it from the
-  # apiserver-config above.
-  - name: apiserver-encryption
-    title: kube-apiserver Encryption Configuration (v1)
-    package: k8s.io/apiserver
-    path: pkg/apis/config/v1
-    # this is gone in 1.30
-    skip: true
 
     # Note: This is named apiserver-audit because it is part of the apiserver module
   - name: apiserver-audit
