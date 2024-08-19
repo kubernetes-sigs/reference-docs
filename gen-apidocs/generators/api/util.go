@@ -28,41 +28,45 @@ func GetDefinitionVersionKind(s spec.Schema) (string, string, string) {
 	// Get the reference for complex types
 	if IsDefinition(s) {
 		s := s.SchemaProps.Ref.GetPointer().String()
-		s = strings.ReplaceAll(s, "/definitions/", "")
-		name := strings.Split(s, ".")
-
-		var group, version, kind string
-		if name[len(name)-3] == "api" {
-			// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
-			group = "core"
-			version = name[len(name)-2]
-			kind = name[len(name)-1]
-		} else if name[len(name)-4] == "api" {
-			// e.g. "io.k8s.api.core.v1.Pod"
-			group = name[len(name)-3]
-			version = name[len(name)-2]
-			kind = name[len(name)-1]
-		} else if name[len(name)-4] == "apis" {
-			// e.g. "io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-			group = name[len(name)-3]
-			version = name[len(name)-2]
-			kind = name[len(name)-1]
-		} else if name[len(name)-3] == "util" || name[len(name)-3] == "pkg" {
-			// This is for:
-			// - io.k8s.apimachinery.pkg.util.intstr.IntOrString
-			// - io.k8s.apimachinery.pkg.version.Info
-			// - io.k8s.apimachinery.pkg.runtime.RawExtension
-			return "", "", ""
-		} else {
-			panic(fmt.Sprintf("Could not locate group for %s", name))
-		}
-		return group, version, kind
+		return GetDefinitionVersionKindFromString(s)
 	}
 	// Recurse if type is array
 	if IsArray(s) {
 		return GetDefinitionVersionKind(*s.Items.Schema)
 	}
 	return "", "", ""
+}
+
+func GetDefinitionVersionKindFromString(s string) (string, string, string) {
+	s = strings.ReplaceAll(s, "/definitions/", "")
+	name := strings.Split(s, ".")
+
+	var group, version, kind string
+	if name[len(name)-3] == "api" {
+		// e.g. "io.k8s.apimachinery.pkg.api.resource.Quantity"
+		group = "core"
+		version = name[len(name)-2]
+		kind = name[len(name)-1]
+	} else if name[len(name)-4] == "api" {
+		// e.g. "io.k8s.api.core.v1.Pod"
+		group = name[len(name)-3]
+		version = name[len(name)-2]
+		kind = name[len(name)-1]
+	} else if name[len(name)-4] == "apis" {
+		// e.g. "io.k8s.apimachinery.pkg.apis.meta.v1.Status"
+		group = name[len(name)-3]
+		version = name[len(name)-2]
+		kind = name[len(name)-1]
+	} else if name[len(name)-3] == "util" || name[len(name)-3] == "pkg" {
+		// This is for:
+		// - io.k8s.apimachinery.pkg.util.intstr.IntOrString
+		// - io.k8s.apimachinery.pkg.version.Info
+		// - io.k8s.apimachinery.pkg.runtime.RawExtension
+		return "", "", ""
+	} else {
+		panic(fmt.Sprintf("Could not locate group for %s", name))
+	}
+	return group, version, kind
 }
 
 // GetTypeName returns the display name of a Schema.  This is the api kind for definitions and the type for
