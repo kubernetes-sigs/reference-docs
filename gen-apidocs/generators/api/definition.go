@@ -146,6 +146,16 @@ func (s *Definitions) getReferences(d *Definition) []*Definition {
 	refs := []*Definition{}
 	// Find all of the definitions referenced by this definition
 	for _, p := range d.schema.Properties {
+		if p.AdditionalProperties != nil && p.AdditionalProperties.Schema != nil {
+			additionalProperty := p.AdditionalProperties.Schema.Ref
+			if len(additionalProperty.String()) > 0 {
+				group, version, kind := GetDefinitionVersionKindFromString(additionalProperty.String())
+				definition, ok := s.GetByVersionKind(group, version, kind)
+				if ok {
+					refs = append(refs, definition)
+				}
+			}
+		}
 		if !IsComplex(p) {
 			// Skip primitive types and collections of primitive types
 			continue
