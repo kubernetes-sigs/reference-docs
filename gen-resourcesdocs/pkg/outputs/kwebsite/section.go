@@ -1,16 +1,16 @@
 package kwebsite
 
 import (
-	"bytes"
+	//"bytes"
 	"fmt"
 	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs/pkg/kubernetes"
-	"github.com/yuin/goldmark"
-	highlighting "github.com/yuin/goldmark-highlighting"
-	renderer_html "github.com/yuin/goldmark/renderer/html"
+	// "github.com/yuin/goldmark"
+	// highlighting "github.com/yuin/goldmark-highlighting"
+	// renderer_html "github.com/yuin/goldmark/renderer/html"
 )
 
 // Section of a Hugo output
@@ -34,21 +34,23 @@ func (o Section) AddContent(s string) error {
 	processed = re.ReplaceAllString(processed, "  ")
 
 	// Create a goldmark Markdown parser with extensions
-	md := goldmark.New(
-		goldmark.WithExtensions(highlighting.Highlighting),
-		goldmark.WithRendererOptions(
-			renderer_html.WithHardWraps(),
-			renderer_html.WithXHTML(),
-			renderer_html.WithUnsafe(),
-		),
-	)
+	/*
+		md := goldmark.New(
+			goldmark.WithExtensions(highlighting.Highlighting),
+			goldmark.WithRendererOptions(
+				renderer_html.WithHardWraps(),
+				renderer_html.WithXHTML(),
+				renderer_html.WithUnsafe(),
+			),
+		)
 
-	var buf bytes.Buffer
-	if err := md.Convert([]byte(processed), &buf); err != nil {
-		return err
-	}
+		var buf bytes.Buffer
+		if err := md.Convert([]byte(processed), &buf); err != nil {
+			return err
+		}
 
-	processed = buf.String()
+		processed = buf.String()
+	*/
 
 	o.chapter.data.Sections[i-1].Description = processed
 	return nil
