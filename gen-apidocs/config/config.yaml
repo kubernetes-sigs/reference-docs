@@ -177,6 +177,9 @@ resource_categories:
     - name: Namespace
       version: v1
       group: core
+    - name: NetworkPolicy
+      version: v1
+      group: networking
     - name: Node
       version: v1
       group: core
@@ -220,9 +223,6 @@ resource_categories:
     - name: TokenReview
       version: v1
       group: authentication
-    - name: NetworkPolicy
-      version: v1
-      group: networking
 operation_categories:
   - name: "Proxy Operations"
     operation_types:
