@@ -3,7 +3,7 @@ module github.com/kubernetes-sigs/reference-docs/genref
 go 1.22.0
 
 require (
-	github.com/tengqm/kubeconfig v0.0.0-20240819082452-df3693d84f6f
+	github.com/tengqm/kubeconfig v0.0.0-20240930134458-a0641b81f037
 	github.com/yuin/goldmark v1.7.4
 	github.com/yuin/goldmark-highlighting v0.0.0-20210516132338-9216f9c5aa01
 	k8s.io/api v0.31.0
