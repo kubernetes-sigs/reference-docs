@@ -309,6 +309,10 @@ operation_categories:
       match: proxy${group}${version}PUT(Namespaced)?${resource}
     - name: Replace Proxy Path
       match: proxy${group}${version}PUT(Namespaced)?${resource}WithPath
+    - name: Patch Proxy
+      match: connect${group}${version}Patch(Namespaced)?${resource}Proxy
+    - name: Patch Proxy Path
+      match: connect${group}${version}Patch(Namespaced)?${resource}ProxyWithPath
   - name: "Misc Operations"
     default: true
     operation_types:
@@ -330,21 +334,20 @@ operation_categories:
       match: connect${group}${version}Get(Namespaced)?${resource}Attach
     - name: Create Connect Attach
       match: connect${group}${version}Post(Namespaced)?${resource}Attach
+    - name: Replace Namespace Finalize
+      match: replace${group}${version}(Namespaced)?${resource}Finalize
+    - name: Read Approval
+      match: read${group}${version}(Namespaced)?${resource}Approval
+    - name: Patch Approval
+      match: patch${group}${version}(Namespaced)?${resource}Approval
+    - name: Replace Approval
+      match: replace${group}${version}(Namespaced)?${resource}Approval
 
 # List of *partial* operation IDs for matching. All matched operations are
 # excluded from the reference doc.
 excluded_operations:
-  - connectCoreV1Patch
-  - createCoreV1NamespacedPodBinding
-  - getCodeVersion
-  - logFileHandler
-  - logFileListHandler
-  - replaceCoreV1NamespaceFinalize
-  - V1beta1CertificateSigningRequestApproval
-  - V1CertificateSigningRequestApproval
-  - V1beta1NamespacedReplicationControllerDummyScale
-  - getServiceAccountIssuerOpenIDConfiguration
-  - getServiceAccountIssuerOpenIDKeyset
+    - logFileHandler
+    - logFileListHandler
 
 # Map from group name to its full name
 group_full_names:
