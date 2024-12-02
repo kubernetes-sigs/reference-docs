@@ -110,6 +110,8 @@ github.com/tengqm/kubeconfig v0.0.0-20240930134458-a0641b81f037 h1:GJCOkFd31d9AZ
 github.com/tengqm/kubeconfig v0.0.0-20240930134458-a0641b81f037/go.mod h1:8hfEiqPY5JOPZgrmhZjZ6OcsBc9+WlrA88hLxH7KiVw=
 github.com/tengqm/kubeconfig v0.0.0-20241130055517-0387042f15dd h1:rxUaKQ4IXpDkuqsGviKsCJZlubXYI9aI32AwCOgUeTY=
 github.com/tengqm/kubeconfig v0.0.0-20241130055517-0387042f15dd/go.mod h1:8hfEiqPY5JOPZgrmhZjZ6OcsBc9+WlrA88hLxH7KiVw=
+github.com/tengqm/kubeconfig v0.0.0-20241202132320-61c37a6e866e h1:NFRpaOOPz93YXRmsfI36d+XtIcTE7trHntjtJ6pKCbs=
+github.com/tengqm/kubeconfig v0.0.0-20241202132320-61c37a6e866e/go.mod h1:8hfEiqPY5JOPZgrmhZjZ6OcsBc9+WlrA88hLxH7KiVw=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
