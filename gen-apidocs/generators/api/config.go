@@ -263,8 +263,8 @@ func (c *Config) initOperations(specs []*loads.Document) error {
 			if !c.OpExcluded(op.ID) {
 				fmt.Printf("\033[31mNo Definition found for %s [%s].\033[0m\n", op.ID, op.Path)
 			} else {
-                fmt.Printf("Op excluded: %s\n", op.ID)
-            }
+				fmt.Printf("Op excluded: %s\n", op.ID)
+			}
 		}
 	})
 
@@ -407,6 +407,24 @@ func LoadConfigFromYAML() (*Config, error) {
 		},
 	}
 
+	resizeCategory := OperationCategory{
+		Name: "Resize Operations",
+		OperationTypes: []OperationType{
+			{
+				Name:  "Read Resize",
+				Match: "read${group}${version}(Namespaced)?${resource}Resize",
+			},
+			{
+				Name:  "Patch Resize",
+				Match: "patch${group}${version}(Namespaced)?${resource}Resize",
+			},
+			{
+				Name:  "Replace Resize",
+				Match: "replace${group}${version}(Namespaced)?${resource}Resize",
+			},
+		},
+	}
+
 	ephemaralCategory := OperationCategory{
 		Name: "EphemeralContainers Operations",
 		OperationTypes: []OperationType{
@@ -425,7 +443,16 @@ func LoadConfigFromYAML() (*Config, error) {
 		},
 	}
 
-	config.OperationCategories = append([]OperationCategory{writeCategory, readCategory, statusCategory, ephemaralCategory}, config.OperationCategories...)
+	config.OperationCategories = append(
+		[]OperationCategory{
+			writeCategory,
+			readCategory,
+			statusCategory,
+			resizeCategory,
+			ephemaralCategory,
+		},
+		config.OperationCategories...,
+	)
 
 	return config, nil
 }
