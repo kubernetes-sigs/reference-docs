@@ -1,6 +1,6 @@
 module github.com/kubernetes-sigs/reference-docs/gen-apidocs
 
-go 1.20
+go 1.23.0
 
 require (
 	github.com/go-openapi/loads v0.22.0
