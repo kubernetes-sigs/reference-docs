@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -74,8 +74,6 @@ apis:
     title: Kubelet Stats (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/stats/v1alpha1
-    # XXX: Skip this because not referenced anywhere and it has no group name
-    # XXX: include this, it is useful in node-metrics
     # skip: true
 
   - name: kubelet-credentialprovider
@@ -116,7 +114,7 @@ apis:
     path: config/v1alpha1
     includes:
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
-      - k8s.io/cloud-provider/controllers/node/config/v1alpha1
+        # - k8s.io/cloud-provider/controllers/node/config/v1alpha1
       - k8s.io/cloud-provider/config/v1alpha1
       - k8s.io/controller-manager/config/v1alpha1
 
@@ -126,6 +124,7 @@ apis:
     path: config/v1alpha1
     includes:
       - k8s.io/component-base/config/v1alpha1
+      - k8s.io/component-base/logs/api/v1
 
   - name: metrics
     title: Kubernetes Metrics (v1beta1)
@@ -184,12 +183,16 @@ apis:
     title: kube-apiserver Audit Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/audit/v1
+    # includes:
+    #  - k8s.io/api/authentication/v1
 
   - name: apiserver-admission
     title: kube-apiserver Admission (v1)
     package: k8s.io/api
     # other version: v1beta1
     path: admission/v1
+    # includes:
+    #  - k8s.io/api/authentication/v1
 
   - name: apiserver-resourcequota
     title: kube-apiserver ResourceQuota Configuration (v1)
