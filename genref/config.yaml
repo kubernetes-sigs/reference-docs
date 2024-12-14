@@ -114,8 +114,9 @@ apis:
     path: config/v1alpha1
     includes:
       - k8s.io/cloud-provider/controllers/service/config/v1alpha1
-        # - k8s.io/cloud-provider/controllers/node/config/v1alpha1
+      - k8s.io/cloud-provider/controllers/node/config/v1alpha1
       - k8s.io/cloud-provider/config/v1alpha1
+      - k8s.io/component-base/config/v1alpha1
       - k8s.io/controller-manager/config/v1alpha1
 
   - name: kube-proxy-config
