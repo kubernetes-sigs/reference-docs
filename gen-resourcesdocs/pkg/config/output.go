@@ -122,7 +122,7 @@ func (o *TOC) OutputProperties(defname string, definition spec.Schema, outputSec
 
 		if fieldCategories != nil {
 			if err := checkAllFieldsPresent(fieldCategories, definition.Properties); err != nil {
-				return fmt.Errorf("error on fields configuration: %s", err)
+				return fmt.Errorf("error on fields configuration (%s): %s", defname, err)
 			}
 		}
 	}
