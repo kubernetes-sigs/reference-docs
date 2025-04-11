@@ -36,6 +36,9 @@ type apiPackage struct {
 
 	// IsMain is set if the package is the main one
 	IsMain bool
+
+	// Resources is the customized resource type names
+	Resources []string
 }
 
 // DisplayName returns the full name of the API package
@@ -190,11 +193,18 @@ func (t *apiType) IsExported() bool {
 	if strings.Contains(comments, "+genclient") {
 		return true
 	}
-
 	if strings.Contains(comments, "+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object") {
 		return true
 	}
 
+	t1 := t.deref()
+
+	p := typePkgMap[t1.String()]
+	for _, res := range p.Resources {
+		if res == t.Name.Name {
+			return true
+		}
+	}
 	return false
 }
 

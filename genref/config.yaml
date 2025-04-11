@@ -74,6 +74,8 @@ apis:
     title: Kubelet Stats (v1alpha1)
     package: k8s.io/kubelet
     path: pkg/apis/stats/v1alpha1
+    resources:
+      - Summary
     # skip: true
 
   - name: kubelet-credentialprovider

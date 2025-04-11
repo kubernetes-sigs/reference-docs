@@ -100,6 +100,9 @@ type apiDefinition struct {
 	// MainPackage is an override for API definitions that involves more
 	// than one package.
 	MainPackage string `json:"mainPackage"`
+
+	// Resource types manually specified
+	Resources []string `json:"resources"`
 }
 
 // Global vars
@@ -138,7 +141,7 @@ func init() {
 }
 
 // processAPIPath processes a path for package enumeration and processing.
-func processAPIPath(path string, includes []string, title string, mainPkg string) ([]*apiPackage, error) {
+func processAPIPath(path string, includes []string, title string, mainPkg string, resources []string) ([]*apiPackage, error) {
 	klog.V(0).Infof("Parsing go packages in %s", path)
 	gopkgs, err := parseAPIPackages(path)
 	if err != nil {
@@ -156,7 +159,7 @@ func processAPIPath(path string, includes []string, title string, mainPkg string
 		gopkgs = append(gopkgs, extra...)
 	}
 
-	pkgs, err := combineAPIPackages(gopkgs, title, mainPkg)
+	pkgs, err := combineAPIPackages(gopkgs, title, mainPkg, resources)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +220,7 @@ func parseAPIPackages(dir string) ([]*types.Package, error) {
 
 // combineAPIPackages groups the Go packages by the <apiGroup+apiVersion> they
 // offer, and combines the types in them.
-func combineAPIPackages(pkgs []*types.Package, title string, mainPkg string) ([]*apiPackage, error) {
+func combineAPIPackages(pkgs []*types.Package, title string, mainPkg string, resources []string) ([]*apiPackage, error) {
 	pkgMap := make(map[string]*apiPackage)
 	re := `^v\d+((alpha|beta)\d+)?$`
 
@@ -242,6 +245,7 @@ func combineAPIPackages(pkgs []*types.Package, title string, mainPkg string) ([]
 			if len(mainPkg) > 0 && group != mainPkg {
 				isMain = false
 			}
+
 			pkgMap[id] = &apiPackage{
 				apiGroup:   group,
 				apiVersion: version,
@@ -249,6 +253,7 @@ func combineAPIPackages(pkgs []*types.Package, title string, mainPkg string) ([]
 				GoPackages: []*types.Package{gopkg},
 				Title:      title,
 				IsMain:     isMain,
+				Resources:  resources,
 			}
 		} else {
 			v.Types = append(v.Types, typeList...)
@@ -359,7 +364,7 @@ func main() {
 		if len(pkgInclude) > 0 && !containsString(pkgInclude, item.Name) {
 			continue
 		}
-		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title, item.MainPackage)
+		pkgs, err := processAPIPath(apiDir, item.Includes, item.Title, item.MainPackage, item.Resources)
 		if err != nil {
 			klog.ErrorS(err, "cannot process API path")
 			continue
