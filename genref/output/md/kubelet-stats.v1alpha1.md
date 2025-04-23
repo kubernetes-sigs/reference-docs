@@ -3,6 +3,7 @@
 ## Resource Types 
 
 
+- [Summary](#Summary)
   
     
     
@@ -457,6 +458,7 @@ hugepages).</p>
 
 **Appears in:**
 
+- [Summary](#Summary)
 
 
 <p>NodeStats holds node-level unprocessed sample stats.</p>
@@ -615,6 +617,7 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 
 **Appears in:**
 
+- [Summary](#Summary)
 
 
 <p>PodStats holds pod-level unprocessed sample stats.</p>
