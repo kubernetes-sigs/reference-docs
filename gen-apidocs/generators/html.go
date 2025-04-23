@@ -311,7 +311,7 @@ func (h *HTMLWriter) WriteDefinition(d *api.Definition) error {
 }
 
 func (h *HTMLWriter) WriteOperation(o *api.Operation) error {
-    fn := "_" + operationFileName(o) + ".html"
+	fn := "_" + operationFileName(o) + ".html"
 	path := filepath.Join(api.IncludesDir, fn)
 	f, err := os.Create(path)
 	if err != nil {
@@ -322,12 +322,12 @@ func (h *HTMLWriter) WriteOperation(o *api.Operation) error {
 	nvg := fmt.Sprintf("%s", o.ID)
 	linkID := getLink(nvg)
 
-    oGroup, oVersion, oKind, _ := o.GetGroupVersionKindSub()
-    oApiVersion := api.ApiVersion(oVersion)
+	oGroup, oVersion, oKind, _ := o.GetGroupVersionKindSub()
+	oApiVersion := api.ApiVersion(oVersion)
 
-    if len(oGroup) > 0 {
-        nvg = h.gvkMarkup(oGroup, oApiVersion, oKind)
-    }
+	if len(oGroup) > 0 {
+		nvg = h.gvkMarkup(oGroup, oApiVersion, oKind)
+	}
 
 	fmt.Fprintf(f, "<DIV class=\"operation-container\" id=\"%s\">\n", linkID)
 	defer fmt.Fprint(f, "</DIV>\n")
@@ -342,11 +342,10 @@ func (h *HTMLWriter) WriteOperation(o *api.Operation) error {
 	}
 	h.currentTOCItem.SubSections = append(h.currentTOCItem.SubSections, &item)
 
-    h.WriteOperationBody(f, o, o.ID)
+	h.WriteOperationBody(f, o, o.ID)
 
 	return nil
 }
-
 
 func (h *HTMLWriter) writeSamples(w io.Writer, d *api.Definition) {
 	if d.Sample.Sample == "" {
@@ -482,25 +481,25 @@ func (h *HTMLWriter) writeResponseParams(w io.Writer, o *api.Operation) {
 }
 
 func (h *HTMLWriter) WriteOperationBody(w io.Writer, o *api.Operation, opID string) {
-    if o.Definition != nil {
-        // Example requests
-        requests := o.GetExampleRequests()
-        if len(requests) > 0 {
-            h.writeOperationSample(w, true, opID, requests)
-        }
-        // Example responses
-        responses := o.GetExampleResponses()
-        if len(responses) > 0 {
-            h.writeOperationSample(w, false, opID, responses)
-        }
-    }
+	if o.Definition != nil {
+		// Example requests
+		requests := o.GetExampleRequests()
+		if len(requests) > 0 {
+			h.writeOperationSample(w, true, opID, requests)
+		}
+		// Example responses
+		responses := o.GetExampleResponses()
+		if len(responses) > 0 {
+			h.writeOperationSample(w, false, opID, responses)
+		}
+	}
 
-    fmt.Fprintf(w, "<P>%s</P>\n", o.Description())
-    fmt.Fprintf(w, "<H3>HTTP Request</H3>\n")
-    fmt.Fprintf(w, "<p><CODE>%s</CODE></P>\n", o.GetDisplayHttp())
+	fmt.Fprintf(w, "<P>%s</P>\n", o.Description())
+	fmt.Fprintf(w, "<H3>HTTP Request</H3>\n")
+	fmt.Fprintf(w, "<p><CODE>%s</CODE></P>\n", o.GetDisplayHttp())
 
-    h.writeRequestParams(w, o)
-    h.writeResponseParams(w, o)
+	h.writeRequestParams(w, o)
+	h.writeResponseParams(w, o)
 }
 
 func (h *HTMLWriter) WriteResource(r *api.Resource) error {
@@ -593,7 +592,7 @@ func (h *HTMLWriter) WriteResource(r *api.Resource) error {
 			}
 			ocItem.SubSections = append(ocItem.SubSections, &OPItem)
 
-            h.WriteOperationBody(w, o, opID);
+			h.WriteOperationBody(w, o, opID)
 
 			fmt.Fprint(w, "</DIV>\n")
 		}
