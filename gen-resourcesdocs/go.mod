@@ -1,6 +1,6 @@
 module github.com/kubernetes-sigs/reference-docs/gen-resourcesdocs
 
-go 1.23.0
+go 1.24.0
 
 require (
 	github.com/go-openapi/jsonreference v0.21.0
