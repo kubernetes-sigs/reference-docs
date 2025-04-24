@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
