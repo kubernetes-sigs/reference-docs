@@ -93,7 +93,7 @@ the accelerator was actively processing.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -112,6 +112,13 @@ The &quot;core&quot; unit can be interpreted as CPU core-nanoseconds per second.
 </td>
 <td>
    <p>Cumulative CPU usage (sum of all cores) since object creation.</p>
+</td>
+</tr>
+<tr><td><code>psi</code><br/>
+<a href="#PSIStats"><code>PSIStats</code></a>
+</td>
+<td>
+   <p>CPU PSI stats.</p>
 </td>
 </tr>
 </tbody>
@@ -143,7 +150,7 @@ The &quot;core&quot; unit can be interpreted as CPU core-nanoseconds per second.
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for this container was (re)started.</p>
@@ -161,6 +168,13 @@ The &quot;core&quot; unit can be interpreted as CPU core-nanoseconds per second.
 </td>
 <td>
    <p>Stats pertaining to memory (RAM) resources.</p>
+</td>
+</tr>
+<tr><td><code>io</code><br/>
+<a href="#IOStats"><code>IOStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to IO resources.</p>
 </td>
 </tr>
 <tr><td><code>accelerators</code> <B>[Required]</B><br/>
@@ -228,7 +242,7 @@ Logs.UsedBytes is the number of bytes used for the container logs.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -278,6 +292,43 @@ e.g. For ContainerStats.Rootfs this is the bytes used by the container rootfs on
    <p>InodesUsed represents the inodes used by the filesystem
 This may not equal Inodes - InodesFree because this filesystem may share inodes with other &quot;filesystems&quot;
 e.g. For ContainerStats.Rootfs, this is the inodes used only by that container, and does not count inodes used by other containers.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `IOStats`     {#IOStats}
+    
+
+**Appears in:**
+
+- [ContainerStats](#ContainerStats)
+
+- [NodeStats](#NodeStats)
+
+- [PodStats](#PodStats)
+
+
+<p>IOStats contains data about IO usage.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>time</code> <B>[Required]</B><br/>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+</td>
+<td>
+   <p>The time at which these stats were updated.</p>
+</td>
+</tr>
+<tr><td><code>psi</code><br/>
+<a href="#PSIStats"><code>PSIStats</code></a>
+</td>
+<td>
+   <p>IO PSI stats.</p>
 </td>
 </tr>
 </tbody>
@@ -358,7 +409,7 @@ e.g. For ContainerStats.Rootfs, this is the inodes used only by that container, 
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -409,6 +460,13 @@ hugepages).</p>
    <p>Cumulative number of major page faults.</p>
 </td>
 </tr>
+<tr><td><code>psi</code><br/>
+<a href="#PSIStats"><code>PSIStats</code></a>
+</td>
+<td>
+   <p>Memory PSI stats.</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -431,7 +489,7 @@ hugepages).</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -485,7 +543,7 @@ The system containers are named according to the SystemContainer* constants.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the node-scoped (i.e. aggregate) stats was (re)started.</p>
@@ -503,6 +561,13 @@ The system containers are named according to the SystemContainer* constants.</p>
 </td>
 <td>
    <p>Stats pertaining to memory (RAM) resources.</p>
+</td>
+</tr>
+<tr><td><code>io</code><br/>
+<a href="#IOStats"><code>IOStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to IO resources.</p>
 </td>
 </tr>
 <tr><td><code>network</code><br/>
@@ -539,6 +604,91 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 </td>
 <td>
    <p>Stats pertaining to swap resources. This is reported to non-windows systems only.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `PSIData`     {#PSIData}
+    
+
+**Appears in:**
+
+- [PSIStats](#PSIStats)
+
+
+<p>PSI data for an individual resource.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>total</code> <B>[Required]</B><br/>
+<code>uint64</code>
+</td>
+<td>
+   <p>Total time duration for tasks in the cgroup have waited due to congestion.
+Unit: nanoseconds.</p>
+</td>
+</tr>
+<tr><td><code>avg10</code> <B>[Required]</B><br/>
+<code>float64</code>
+</td>
+<td>
+   <p>The average (in %) tasks have waited due to congestion over a 10 second window.</p>
+</td>
+</tr>
+<tr><td><code>avg60</code> <B>[Required]</B><br/>
+<code>float64</code>
+</td>
+<td>
+   <p>The average (in %) tasks have waited due to congestion over a 60 second window.</p>
+</td>
+</tr>
+<tr><td><code>avg300</code> <B>[Required]</B><br/>
+<code>float64</code>
+</td>
+<td>
+   <p>The average (in %) tasks have waited due to congestion over a 300 second window.</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## `PSIStats`     {#PSIStats}
+    
+
+**Appears in:**
+
+- [CPUStats](#CPUStats)
+
+- [IOStats](#IOStats)
+
+- [MemoryStats](#MemoryStats)
+
+
+<p>PSI statistics for an individual resource.</p>
+
+
+<table class="table">
+<thead><tr><th width="30%">Field</th><th>Description</th></tr></thead>
+<tbody>
+    
+  
+<tr><td><code>full</code> <B>[Required]</B><br/>
+<a href="#PSIData"><code>PSIData</code></a>
+</td>
+<td>
+   <p>PSI data for all tasks in the cgroup.</p>
+</td>
+</tr>
+<tr><td><code>some</code> <B>[Required]</B><br/>
+<a href="#PSIData"><code>PSIData</code></a>
+</td>
+<td>
+   <p>PSI data for some tasks in the cgroup.</p>
 </td>
 </tr>
 </tbody>
@@ -636,7 +786,7 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the pod-scoped (e.g. network) stats was (re)started.</p>
@@ -661,6 +811,13 @@ NodeFs.Used is the total bytes used on the filesystem.</p>
 </td>
 <td>
    <p>Stats pertaining to memory (RAM) resources consumed by pod cgroup (which includes all containers' resource usage and pod overhead).</p>
+</td>
+</tr>
+<tr><td><code>io</code><br/>
+<a href="#IOStats"><code>IOStats</code></a>
+</td>
+<td>
+   <p>Stats pertaining to IO resources consumed by pod cgroup (which includes all containers' resource usage and pod overhead).</p>
 </td>
 </tr>
 <tr><td><code>network</code><br/>
@@ -745,7 +902,7 @@ VolumeStats.UsedBytes is the number of bytes used by the Volume</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
@@ -827,7 +984,7 @@ Usage here refers to the total number of bytes occupied by the writeable layer o
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -874,7 +1031,7 @@ If swap limit is undefined, this value is omitted.</p>
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
