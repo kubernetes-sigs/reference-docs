@@ -39,6 +39,11 @@ stripPrefix:
   - github.com/tengqm/kubeconfig/config/bootstraptoken/v1.
 
 apis:
+  - name: kuberc
+    title: kuberc (v1alpha1)
+    package: k8s.io/kubectl
+    path: pkg/config/v1alpha1
+
   - name: kubeconfig
     title: kubeconfig (v1)
     package: k8s.io/client-go
