@@ -24,7 +24,7 @@ existing docs, which can be the GoDocs if no better option exists.
 3. Generate reference doc for some API types.
 
    ```shell
-   ./genref -include kubelet-config -output output/html 
+   ./genref -include kubelet-config -output output/html
    ```
 
 4. Visit `output/html/kubelet-config.v1beta1.html` to view the results.
@@ -37,7 +37,7 @@ You can use the `-c` flag to specify a different configuration file for
 generating the config API references. For example,
 
 ```shell
-./genref -c myconfig.yaml
+./genref -c myconfig.yaml -f markdown -o output/md
 ```
 
 ### Specify the package
@@ -79,7 +79,7 @@ The tool was reworked for:
 - allow for parsing across packages which have emerged in many projects;
 - use go.mod to manage package version for parsing;
 - output styling changes to better align with Kubernetes API reference docs.
- 
+
 ## TODOs
 
 - [ ] Allow user to specify the top level structs.
