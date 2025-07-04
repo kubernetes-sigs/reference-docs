@@ -155,9 +155,13 @@ func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) stri
 		// Print the "generated" warning
 		fmt.Fprintf(w, "%s\n\n", generated_warning)
 
-		if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
-			return err
-		}
+		trimmedShort := strings.TrimSpace(strings.TrimSuffix(short, "."))
+        trimmedLong := strings.TrimSpace(strings.TrimSuffix(long, "."))
+		if !strings.HasPrefix(trimmedLong, trimmedShort) {
+	        if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
+		        return err
+	        }
+        }
 
 		if _, err := fmt.Fprintf(w, "### Synopsis\n\n"); err != nil {
 			return err
