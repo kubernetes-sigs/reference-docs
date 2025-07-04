@@ -109,3 +109,5 @@ copy-configapi: config-api
 	cp $(CONFIGSRC)/kube-scheduler-config.v1beta1.md $(CONFGDST)
 	cp $(CONFIGSRC)/kube-scheduler-policy-config.v1.md $(CONFGDST)
 	cp $(CONFIGSRC)/kubelet-config.v1beta1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kuberc.v1alpha1.md $(CONFGDST)
+	cp $(CONFIGSRC)/kuberc.v1beta1.md $(CONFGDST)

@@ -3,6 +3,8 @@ package main
 // synthetic dependencies to prevent `go mod tidy`
 // from "accidentally" removing them
 import (
+	_ "github.com/tengqm/kubeconfig/config"
+
 	_ "k8s.io/api"
 	_ "k8s.io/apimachinery"
 	_ "k8s.io/apiserver"
@@ -14,6 +16,7 @@ import (
 	_ "k8s.io/kube-controller-manager"
 	_ "k8s.io/kube-proxy"
 	_ "k8s.io/kube-scheduler"
+	_ "k8s.io/kubectl"
 	_ "k8s.io/kubelet"
 	_ "k8s.io/metrics"
 )

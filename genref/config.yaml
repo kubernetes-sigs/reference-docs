@@ -23,7 +23,7 @@ externalPackages:
   - match: ^io.Writer$
     target: https://pkg.go.dev/io#Writer
   - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
+    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
 
 hideTypePatterns:
   - "ParseError$"
@@ -43,6 +43,11 @@ apis:
     title: kuberc (v1alpha1)
     package: k8s.io/kubectl
     path: pkg/config/v1alpha1
+
+  - name: kuberc
+    title: kuberc (v1beta1)
+    package: k8s.io/kubectl
+    path: pkg/config/v1beta1
 
   - name: kubeconfig
     title: kubeconfig (v1)
