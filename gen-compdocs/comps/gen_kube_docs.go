@@ -17,6 +17,7 @@ limitations under the License.
 package comps
 
 import (
+	"context"
 	goflag "flag"
 	"fmt"
 	"os"
@@ -31,6 +32,7 @@ import (
 	schapp "k8s.io/kubernetes/cmd/kube-scheduler/app"
 	kubeadmapp "k8s.io/kubernetes/cmd/kubeadm/app/cmd"
 	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
+	kubeletoptions "k8s.io/kubernetes/cmd/kubelet/app/options"
 )
 
 func GenerateFiles(path, module string) error {
@@ -56,7 +58,12 @@ func GenerateFiles(path, module string) error {
 		return generators.GenMarkdownTree(scheduler, outDir, true)
 
 	case "kubelet":
-		kubelet := kubeletapp.NewKubeletCommand()
+		kubelet := kubeletapp.NewKubeletCommand(context.TODO())
+		kubeletFlags := kubeletoptions.NewKubeletFlags()
+		kubeletFlags.AddFlags(kubelet.Flags())
+		config, _ := kubeletoptions.NewKubeletConfiguration()
+		kubeletoptions.AddKubeletConfigFlags(kubelet.Flags(), config)
+		kubeletoptions.AddGlobalFlags(kubelet.Flags())
 		return generators.GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
