@@ -17,6 +17,7 @@ limitations under the License.
 package comps
 
 import (
+	"context"
 	goflag "flag"
 	"fmt"
 	"os"
@@ -56,7 +57,7 @@ func GenerateFiles(path, module string) error {
 		return generators.GenMarkdownTree(scheduler, outDir, true)
 
 	case "kubelet":
-		kubelet := kubeletapp.NewKubeletCommand()
+		kubelet := kubeletapp.NewKubeletCommand(context.TODO())
 		return generators.GenMarkdownTree(kubelet, outDir, true)
 
 	case "kubeadm":
