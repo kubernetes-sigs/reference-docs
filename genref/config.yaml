@@ -54,7 +54,9 @@ apis:
     package: k8s.io/client-go
     path: tools/clientcmd/api/v1
 
-  # v1alpha1 is included for CredentialProvider, CredentialProviderConfig
+  # v1alpha1 is included for CredentialProvider, CredentialProviderConfig,
+  # ExecEnvVar, ImagePullIntent, ImagePulledRecord, ImagePullCredentials,
+  # ImagePullSecret, ImagePullServiceAccount.
   # types which are only in v1alpha1
   - name: kubelet-config
     title: Kubelet Configuration (v1alpha1)
@@ -86,14 +88,6 @@ apis:
     path: pkg/apis/stats/v1alpha1
     resources:
       - Summary
-    # skip: true
-
-  - name: kubelet-credentialprovider
-    title: Kubelet CredentialProvider (v1alpha1)
-    package: k8s.io/kubelet
-    path: pkg/apis/credentialprovider/v1alpha1
-    # This is not needed since there is v1
-    skip: true
 
   - name: kubelet-credentialprovider
     title: Kubelet CredentialProvider (v1beta1)
@@ -190,6 +184,8 @@ apis:
     title: kube-apiserver Configuration (v1)
     package: k8s.io/apiserver
     path: pkg/apis/apiserver/v1
+    includes:
+      - k8s.io/component-base/tracing/api/v1
 
     # Note: This is named apiserver-audit because it is part of the apiserver module
   - name: apiserver-audit
