@@ -3,6 +3,7 @@ module github.com/kubernetes-sigs/reference-docs/genref
 go 1.24.0
 
 require (
+	github.com/tengqm/kubeconfig v0.0.0-20250904083036-31088d4c6c02
 	github.com/yuin/goldmark v1.7.8
 	github.com/yuin/goldmark-highlighting v0.0.0-20210516132338-9216f9c5aa01
 	k8s.io/api v0.34.0
@@ -47,7 +48,6 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/tengqm/kubeconfig v0.0.0-20250904083036-31088d4c6c02 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect

@@ -216,6 +216,20 @@ credential plugin.</p>
    <p>serviceAccountTokenAudience is the intended audience for the projected service account token.</p>
 </td>
 </tr>
+<tr><td><code>cacheType</code> <B>[Required]</B><br/>
+<a href="#kubelet-config-k8s-io-v1-ServiceAccountTokenCacheType"><code>ServiceAccountTokenCacheType</code></a>
+</td>
+<td>
+   <p>cacheType indicates the type of cache key use for caching the credentials returned by the plugin
+when the service account token is used.
+The most conservative option is to set this to &quot;Token&quot;, which means the kubelet will cache returned credentials
+on a per-token basis. This should be set if the returned credential's lifetime is limited to the service account
+token's lifetime.
+If the plugin's credential retrieval logic depends only on the service account and not on pod-specific claims,
+then the plugin can set this to &quot;ServiceAccount&quot;. In this case, the kubelet will cache returned credentials
+on a per-serviceaccount basis. Use this when the returned credential is valid for all pods using the same service account.</p>
+</td>
+</tr>
 <tr><td><code>requireServiceAccount</code> <B>[Required]</B><br/>
 <code>bool</code>
 </td>
@@ -239,7 +253,9 @@ are not present in the service account, kubelet will not invoke the plugin and w
 This field is optional and may be empty. Plugins may use this field to extract
 additional information required to fetch credentials or allow workloads to opt in to
 using service account tokens for image pull.
-If non-empty, requireServiceAccount must be set to true.</p>
+If non-empty, requireServiceAccount must be set to true.
+Keys in this list must be unique.
+This list needs to be mutually exclusive with optionalServiceAccountAnnotationKeys.</p>
 </td>
 </tr>
 <tr><td><code>optionalServiceAccountAnnotationKeys</code><br/>
@@ -252,9 +268,25 @@ The keys defined in this list will be extracted from the corresponding service a
 to the plugin as part of the CredentialProviderRequest. The plugin is responsible for validating
 the existence of annotations and their values.
 This field is optional and may be empty. Plugins may use this field to extract
-additional information required to fetch credentials.</p>
+additional information required to fetch credentials.
+Keys in this list must be unique.</p>
 </td>
 </tr>
 </tbody>
 </table>
+
+## `ServiceAccountTokenCacheType`     {#kubelet-config-k8s-io-v1-ServiceAccountTokenCacheType}
+    
+(Alias of `string`)
+
+**Appears in:**
+
+- [ServiceAccountTokenAttributes](#kubelet-config-k8s-io-v1-ServiceAccountTokenAttributes)
+
+
+<p>ServiceAccountTokenCacheType is the type of cache key used for caching credentials returned by the plugin
+when the service account token is used.</p>
+
+
+
   

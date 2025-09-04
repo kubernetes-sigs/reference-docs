@@ -93,7 +93,7 @@ the accelerator was actively processing.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -150,7 +150,7 @@ The &quot;core&quot; unit can be interpreted as CPU core-nanoseconds per second.
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for this container was (re)started.</p>
@@ -242,7 +242,7 @@ Logs.UsedBytes is the number of bytes used for the container logs.</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -318,7 +318,7 @@ e.g. For ContainerStats.Rootfs, this is the inodes used only by that container, 
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -409,7 +409,7 @@ e.g. For ContainerStats.Rootfs, this is the inodes used only by that container, 
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -489,7 +489,7 @@ hugepages).</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -543,7 +543,7 @@ The system containers are named according to the SystemContainer* constants.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the node-scoped (i.e. aggregate) stats was (re)started.</p>
@@ -786,7 +786,7 @@ Unit: nanoseconds.</p>
 </td>
 </tr>
 <tr><td><code>startTime</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which data collection for the pod-scoped (e.g. network) stats was (re)started.</p>
@@ -902,7 +902,7 @@ VolumeStats.UsedBytes is the number of bytes used by the Volume</p>
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
@@ -984,7 +984,7 @@ Usage here refers to the total number of bytes occupied by the writeable layer o
     
   
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>
@@ -1031,7 +1031,7 @@ If swap limit is undefined, this value is omitted.</p>
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>time</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#time-v1-meta"><code>meta/v1.Time</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#time-v1-meta"><code>meta/v1.Time</code></a>
 </td>
 <td>
    <p>The time at which these stats were updated.</p>

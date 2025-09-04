@@ -733,6 +733,7 @@ Default: nil</p>
 <td>
    <p>streamingConnectionIdleTimeout is the maximum time a streaming connection
 can be idle before the connection is automatically closed.
+Deprecated: no longer has any effect.
 Default: &quot;4h&quot;</p>
 </td>
 </tr>
@@ -1624,7 +1625,7 @@ Default: 0.9</p>
 </td>
 </tr>
 <tr><td><code>registerWithTaints</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#taint-v1-core"><code>[]core/v1.Taint</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#taint-v1-core"><code>[]core/v1.Taint</code></a>
 </td>
 <td>
    <p>registerWithTaints are an array of taints to add to a node object when
@@ -1722,7 +1723,7 @@ It exists in the kubeletconfig API group because it is classified as a versioned
     
   
 <tr><td><code>source</code><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#nodeconfigsource-v1-core"><code>core/v1.NodeConfigSource</code></a>
 </td>
 <td>
    <p>source is the source that we are serializing.</p>
@@ -2125,7 +2126,7 @@ and groups corresponding to the Organization in the client certificate.</p>
    <span class="text-muted">No description provided.</span></td>
 </tr>
 <tr><td><code>limits</code> <B>[Required]</B><br/>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#resourcelist-v1-core"><code>core/v1.ResourceList</code></a>
 </td>
 <td>
    <span class="text-muted">No description provided.</span></td>
