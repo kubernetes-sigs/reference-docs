@@ -17,6 +17,7 @@ limitations under the License.
 package generators
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"io"
@@ -633,6 +634,21 @@ func (h *HTMLWriter) generateNavContent() string {
 	return nav
 }
 
+func (h *HTMLWriter) generateNavDataJS() error {
+	navDataPath := filepath.Join(api.BuildDir, "navData.js")
+	f, err := os.Create(navDataPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	navData, err := json.MarshalIndent(h.TOC.Sections, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(f, "window.navData = %s;\n", string(navData))
+	return err
+}
+
 func (h *HTMLWriter) generateIndex(navContent string) error {
 	html, err := os.Create(filepath.Join(api.BuildDir, "index.html"))
 	if err != nil {
@@ -734,6 +750,10 @@ func (h *HTMLWriter) Finalize() error {
 	navContent := h.generateNavContent()
 
 	if err := h.generateIndex(navContent); err != nil {
+		return err
+	}
+
+	if err := h.generateNavDataJS(); err != nil {
 		return err
 	}
 
