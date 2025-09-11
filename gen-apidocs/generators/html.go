@@ -320,7 +320,7 @@ func (h *HTMLWriter) WriteOperation(o *api.Operation) error {
 	}
 	defer f.Close()
 
-	nvg := fmt.Sprintf("%s", o.ID)
+	nvg := o.ID
 	linkID := getLink(nvg)
 
 	oGroup, oVersion, oKind, _ := o.GetGroupVersionKindSub()
