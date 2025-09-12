@@ -25,7 +25,6 @@ import (
 	"time"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
-	"k8s.io/klog/v2"
 )
 
 type Doc struct {
@@ -91,8 +90,8 @@ func GenerateFiles() error {
 
 		for _, r := range c.Resources {
 			if r.Definition == nil {
-				// Use klog for structured logging instead of fmt.Printf
-				klog.Warningf("Missing definition for item in TOC %s", r.Name)
+
+				fmt.Printf("Warning: Missing definition for item in TOC %s\n", r.Name)
 				continue
 			}
 			if err := writer.WriteResource(r); err != nil {
@@ -226,8 +225,7 @@ func writeStaticFile(filename, defaultContent string) error {
 		return fmt.Errorf("failed to read source file %s: %w", src, readErr)
 	}
 
-	// structured logging using klog instead of fmt.Printf for consistency
-	klog.Info("Creating file ", dst)
+	fmt.Printf("Creating file %s\n", dst)
 
 	if err := os.WriteFile(dst, []byte(defaultContent), 0644); err != nil {
 		return fmt.Errorf("failed to write static file '%s': %w", dst, err)
