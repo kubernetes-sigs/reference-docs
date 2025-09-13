@@ -41,22 +41,24 @@ type DocWriter interface {
 	WriteDefinitionsOverview() error
 	WriteOrphanedOperationsOverview() error
 	WriteDefinition(d *api.Definition) error
-    WriteOperation(o *api.Operation) error
+	WriteOperation(o *api.Operation) error
 	WriteOldVersionsOverview() error
 	Finalize() error
 }
 
 func GenerateFiles() error {
-	// Load the yaml config
+	// load the yaml config
 	config, err := api.NewConfig()
 	if err != nil {
+
 		return fmt.Errorf("failed to load config: %w", err)
 	}
 
 	PrintInfo(config)
 
 	if err := ensureDirectories(); err != nil {
-		return err
+
+		return fmt.Errorf("failed to ensure directories: %w", err)
 	}
 
 	copyright_tmpl := "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016-%s The Kubernetes Authors.</a>"
@@ -71,63 +73,67 @@ func GenerateFiles() error {
 
 	writer := NewHTMLWriter(config, copyright, title)
 	if err := writer.WriteOverview(); err != nil {
-		return err
+
+		return fmt.Errorf("failed to write overview: %w", err)
 	}
 
-	// Write API groups
+	// write API groups
 	if err := writer.WriteAPIGroupVersions(config.Definitions.GroupVersions); err != nil {
-		return err
+		return fmt.Errorf("failed to write API group versions: %w", err)
 	}
 
-	// Write resource definitions
+	// write resource definitions
 	for _, c := range config.ResourceCategories {
 		if err := writer.WriteResourceCategory(c.Name, c.Include); err != nil {
-			return err
+			return fmt.Errorf("failed to write resource category '%s': %w", c.Name, err)
 		}
 
 		for _, r := range c.Resources {
 			if r.Definition == nil {
+
 				fmt.Printf("Warning: Missing definition for item in TOC %s\n", r.Name)
 				continue
 			}
 			if err := writer.WriteResource(r); err != nil {
-				return err
+
+				return fmt.Errorf("failed to write resource '%s': %w", r.Name, err)
 			}
 		}
 	}
 
-    // Write orphaned operation endpoints
-    orphanedIDs :=  make([]string, 0)
-    for id, o := range config.Operations {
-        if o.Definition == nil && !config.OpExcluded(o.ID) {
-            orphanedIDs = append(orphanedIDs, id)
-        }
-    }
-
-    if len(orphanedIDs) > 0 {
-        if err := writer.WriteOrphanedOperationsOverview(); err != nil {
-            return err
-        }
-
-        sort.Strings(orphanedIDs)
-
-        for _, opKey := range orphanedIDs {
-            if err := writer.WriteOperation(config.Operations[opKey]);
-                    err != nil {
-                return err
-            }
-        }
-    }
-
-
-	if err := writer.WriteDefinitionsOverview(); err != nil {
-		return err
+	// write orphaned operation endpoints
+	orphanedIDs := make([]string, 0)
+	for id, o := range config.Operations {
+		if o.Definition == nil && !config.OpExcluded(o.ID) {
+			orphanedIDs = append(orphanedIDs, id)
+		}
 	}
 
-	// Add other definition imports
+	if len(orphanedIDs) > 0 {
+		if err := writer.WriteOrphanedOperationsOverview(); err != nil {
+
+			return fmt.Errorf("failed to write orphaned operations overview: %w", err)
+		}
+
+		sort.Strings(orphanedIDs)
+
+		for _, opKey := range orphanedIDs {
+			if err := writer.WriteOperation(config.Operations[opKey]); err != nil {
+
+				return fmt.Errorf("failed to write orphaned operation '%s': %w", opKey, err)
+			}
+		}
+	}
+
+	if err := writer.WriteDefinitionsOverview(); err != nil {
+
+		return fmt.Errorf("failed to write definitions overview: %w", err)
+	}
+
+	// add other definition imports
 	definitions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
-		// Don't add definitions for top level resources in the toc or inlined resources
+		// don't add definitions for top level resources in the toc or inlined resources
 		if d.InToc || d.IsInlined || d.IsOldVersion {
 			continue
 		}
@@ -136,35 +142,39 @@ func GenerateFiles() error {
 	sort.Sort(definitions)
 	for _, d := range definitions {
 		if err := writer.WriteDefinition(d); err != nil {
-			return err
+
+			return fmt.Errorf("failed to write definition '%s': %w", d.Name, err)
 		}
 	}
 
 	if err := writer.WriteOldVersionsOverview(); err != nil {
-		return err
+
+		return fmt.Errorf("failed to write old versions overview: %w", err)
 	}
 
 	oldversions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
-		// Don't add definitions for top level resources in the toc or inlined resources
+		// don't add definitions for top level resources in the toc or inlined resources
 		if d.IsOldVersion {
 			oldversions = append(oldversions, d)
 		}
 	}
 	sort.Sort(oldversions)
 	for _, d := range oldversions {
-		// Skip Inlined definitions
+		// skip Inlined definitions
 		if d.IsInlined {
 			continue
 		}
 		r := &api.Resource{Definition: d, Name: d.Name}
 		if err := writer.WriteResource(r); err != nil {
-			return err
+
+			return fmt.Errorf("failed to write old version resource '%s': %w", d.Name, err)
 		}
 	}
 
 	if err := writer.Finalize(); err != nil {
-		return err
+		// add context to finalize errors
+		return fmt.Errorf("failed to finalize writer: %w", err)
 	}
 
 	return nil
@@ -172,12 +182,13 @@ func GenerateFiles() error {
 
 func ensureDirectories() error {
 	if err := os.MkdirAll(api.BuildDir, os.FileMode(0700)); err != nil {
-		return err
+
+		return fmt.Errorf("failed to create build dir '%s': %w", api.BuildDir, err)
 	}
 	if err := os.MkdirAll(api.IncludesDir, os.FileMode(0700)); err != nil {
-		return err
-	}
 
+		return fmt.Errorf("failed to create includes dir '%s': %w", api.IncludesDir, err)
+	}
 	return nil
 }
 
@@ -205,16 +216,19 @@ func writeStaticFile(filename, defaultContent string) error {
 	src := filepath.Join(api.SectionsDir, filename)
 	dst := filepath.Join(api.IncludesDir, filename)
 
-	// copy the file if it exists
-	if _, err := os.Stat(src); err == nil {
-		content, err := os.ReadFile(src)
-		if err != nil {
-			return err
-		}
+	// only try to read the source file, handle error if it doesn't exist (removes double syscall)
+	content, readErr := os.ReadFile(src)
+	if readErr == nil {
+		// if file exists and is readable, use its content
 		defaultContent = string(content)
+	} else if !os.IsNotExist(readErr) {
+		return fmt.Errorf("failed to read source file %s: %w", src, readErr)
 	}
 
 	fmt.Printf("Creating file %s\n", dst)
 
-	return os.WriteFile(dst, []byte(defaultContent), 0644)
+	if err := os.WriteFile(dst, []byte(defaultContent), 0644); err != nil {
+		return fmt.Errorf("failed to write static file '%s': %w", dst, err)
+	}
+	return nil
 }
