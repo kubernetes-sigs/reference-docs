@@ -18,56 +18,77 @@ package generators
 
 import (
 	"fmt"
-	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
+
 	"strings"
+
+	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
 
 func PrintInfo(config *api.Config) {
 	definitions := config.Definitions
 
-	hasOrphaned := false
-	for name, d := range definitions.All {
-		if !d.FoundInField && !d.FoundInOperation {
-			if !strings.Contains(name, "meta.v1.APIVersions") && !strings.Contains(name, "meta.v1.Patch") {
-				hasOrphaned = true
-			}
-		}
+	// collect orphaned and missing TOC results in slices instead of multiple flags/loops
+	var orphaned []string
+	var missingToc []struct {
+		Name       string
+		Operations []string
 	}
-	if hasOrphaned {
-		fmt.Printf("----------------------------------\n")
-		fmt.Printf("Orphaned Definitions:\n")
-		for name, d := range definitions.All {
-			if !d.FoundInField && !d.FoundInOperation {
-				if !strings.Contains(name, "meta.v1.APIVersions") && !strings.Contains(name, "meta.v1.Patch") {
-					fmt.Printf("[%s]\n", name)
+
+	// ignored names kept in a slice for clarity and easier maintenance
+	ignored := []string{"meta.v1.APIVersions", "meta.v1.Patch"}
+
+	// single loop over definitions.All for efficiency
+	for name, d := range definitions.All {
+		// orphaned check inlined
+		ignore := false
+		if !d.FoundInField && !d.FoundInOperation {
+			for _, ig := range ignored {
+				if strings.Contains(name, ig) {
+					ignore = true
+					break
 				}
 			}
+			if !ignore {
+				orphaned = append(orphaned, name)
+			}
+		}
+
+		// missing TOC check inlined
+		if !d.InToc && len(d.OperationCategories) > 0 && !d.IsOldVersion && !d.IsInlined {
+			var ops []string
+			for _, oc := range d.OperationCategories {
+				for _, o := range oc.Operations {
+					ops = append(ops, o.ID)
+				}
+			}
+			missingToc = append(missingToc, struct {
+				Name       string
+				Operations []string
+			}{Name: name, Operations: ops})
+		}
+	}
+
+	// print orphaned results
+	if len(orphaned) > 0 {
+		fmt.Println("----------------------------------")
+		fmt.Println("Orphaned Definitions:")
+		for _, name := range orphaned {
+			fmt.Printf("[%s]\n", name)
 		}
 		if !*api.AllowErrors {
-			fmt.Printf("Possible orphaned definitions found.")
+			fmt.Println("Possible orphaned definitions found.")
 		}
 	}
 
-	missingFromToc := false
-	for _, d := range definitions.All {
-		if !d.InToc && len(d.OperationCategories) > 0 && !d.IsOldVersion && !d.IsInlined {
-			missingFromToc = true
-		}
-	}
-
-	if missingFromToc {
-		fmt.Printf("----------------------------------\n")
-		fmt.Printf("Definitions with Operations Missing from Toc (Excluding old version):\n")
-		for name, d := range definitions.All {
-			if !d.InToc && len(d.OperationCategories) > 0 && !d.IsOldVersion && !d.IsInlined {
-				fmt.Printf("[%s]\n", name)
-				for _, oc := range d.OperationCategories {
-					for _, o := range oc.Operations {
-						fmt.Printf("\t [%s]\n", o.ID)
-					}
-				}
+	// print missing TOC results
+	if len(missingToc) > 0 {
+		fmt.Println("----------------------------------")
+		fmt.Println("Definitions with Operations Missing from Toc (Excluding old version):")
+		for _, item := range missingToc {
+			fmt.Printf("[%s]\n", item.Name)
+			for _, op := range item.Operations {
+				fmt.Printf("\t [%s]\n", op)
 			}
 		}
 	}
-
 }
