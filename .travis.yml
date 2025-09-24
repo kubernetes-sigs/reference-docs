@@ -10,6 +10,8 @@ install:
 - mkdir -p ${BUILD_PATH}/src/k8s.io
 - wget https://github.com/kubernetes/kubernetes/archive/v${K8S_RELEASE}.tar.gz -O ${BUILD_PATH}/src/k8s.io/kubernetes-src.tar.gz
 - pushd ${BUILD_PATH}/src/k8s.io && tar xzf kubernetes-src.tar.gz && mv kubernetes-${K8S_RELEASE} kubernetes && popd
+- # Export K8S_ROOT for API docs generation (updateapispec target)
+- export K8S_ROOT=${BUILD_PATH}/src/k8s.io/kubernetes
 - pushd ${BUILD_PATH}/src/k8s.io/kubernetes && make generated_files && popd
 
 script:

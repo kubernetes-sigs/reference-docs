@@ -4,12 +4,36 @@
 # to match your environment and release version
 #
 # K8S_WEBROOT=~/src/github.com/kubernetes/website
-# K8S_ROOT=~/k8s/src/k8s.io/kubernetes
+# K8S_ROOT=~/k8s/src/k8s.io/kubernetes (or let Makefile auto-detect)
 # K8S_RELEASE=1.17.0, 1.17.5, 1.17.0-rc.2
-#
+# Auto-detection: If K8S_ROOT is not set, the Makefile will search for Kubernetes source
+# in common locations: ../kubernetes, ../../kubernetes, ../../../k8s.io/kubernetes, etc.
+
 
 WEBROOT=${K8S_WEBROOT}
-K8SROOT=${K8S_ROOT}
+# Auto-detect Kubernetes source path if K8S_ROOT is not set
+ifndef K8S_ROOT
+  K8SROOT := $(shell \
+    if [ -d "../kubernetes" ] && [ -f "../kubernetes/go.mod" ]; then \
+      echo "$$(cd ../kubernetes && pwd)"; \
+    elif [ -d "../../kubernetes" ] && [ -f "../../kubernetes/go.mod" ]; then \
+      echo "$$(cd ../../kubernetes && pwd)"; \
+    elif [ -d "../../../k8s.io/kubernetes" ] && [ -f "../../../k8s.io/kubernetes/go.mod" ]; then \
+      echo "$$(cd ../../../k8s.io/kubernetes && pwd)"; \
+    elif [ -d "../../../../k8s.io/kubernetes" ] && [ -f "../../../../k8s.io/kubernetes/go.mod" ]; then \
+      echo "$$(cd ../../../../k8s.io/kubernetes && pwd)"; \
+    else \
+      echo ""; \
+    fi)
+  
+  ifeq ($(K8SROOT),)
+    $(error Could not auto-detect Kubernetes source. Please set K8S_ROOT environment variable or ensure kubernetes source is in a common location (../kubernetes, ../../kubernetes, ../../../k8s.io/kubernetes, or ../../../../k8s.io/kubernetes))
+  endif
+  
+  $(info Auto-detected Kubernetes source at: $(K8SROOT))
+else
+  K8SROOT=${K8S_ROOT}
+endif
 K8SRELEASE=${K8S_RELEASE}
 
 ifeq ($(K8SRELEASE),)
