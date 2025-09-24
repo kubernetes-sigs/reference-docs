@@ -156,12 +156,12 @@ func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) stri
 		fmt.Fprintf(w, "%s\n\n", generated_warning)
 
 		trimmedShort := strings.TrimSpace(strings.TrimSuffix(short, "."))
-        trimmedLong := strings.TrimSpace(strings.TrimSuffix(long, "."))
+		trimmedLong := strings.TrimSpace(strings.TrimSuffix(long, "."))
 		if !strings.HasPrefix(trimmedLong, trimmedShort) {
-	        if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
-		        return err
-	        }
-        }
+			if _, err := fmt.Fprintf(w, "%s\n\n", short); err != nil {
+				return err
+			}
+		}
 
 		if _, err := fmt.Fprintf(w, "### Synopsis\n\n"); err != nil {
 			return err
@@ -332,7 +332,8 @@ func flagUsages(f *pflag.FlagSet) string {
 		"</colgroup>\n"+
 		"<tbody>\n")
 	f.VisitAll(func(flag *pflag.Flag) {
-		if len(flag.Deprecated) > 0 || flag.Hidden {
+		// if len(flag.Deprecated) > 0 || flag.Hidden {
+		if flag.Hidden {
 			return
 		}
 
@@ -391,6 +392,9 @@ func flagUsages(f *pflag.FlagSet) string {
 		line += "</td>\n</tr>\n<tr>\n<td></td><td style=\"line-height: 130%; word-wrap: break-word;\">"
 
 		// process markdown in usage, force wrap for "\n"
+		if len(flag.Deprecated) > 0 {
+			usage = usage + "\n[**DEPRECATED**] " + flag.Deprecated
+		}
 		line += processUsage(usage) + "</td>\n</tr>\n"
 
 		lines = append(lines, line)
