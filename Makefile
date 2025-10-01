@@ -4,12 +4,33 @@
 # to match your environment and release version
 #
 # K8S_WEBROOT=~/src/github.com/kubernetes/website
-# K8S_ROOT=~/k8s/src/k8s.io/kubernetes
+# K8S_ROOT=~/path/to/your/kubernetes/clone (REQUIRED)
 # K8S_RELEASE=1.17.0, 1.17.5, 1.17.0-rc.2
 #
+# PREFERRED directory structure (follows Go workspace conventions):
+#   <work dir>/k8s.io/kubernetes     <- Set K8S_ROOT to this path
+#   <work dir>/k8s.io/website
+#   <work dir>/k8s.io/reference-docs
+#
+# Examples:
+#   export K8S_ROOT=~/go/src/k8s.io/kubernetes
+#   export K8S_ROOT=~/workspace/k8s.io/kubernetes
+#   export K8S_ROOT=~/dev/kubernetes  # any valid path works
+
 
 WEBROOT=${K8S_WEBROOT}
+
+# Validate K8S_ROOT is set and points to valid Kubernetes source
+ifeq ($(K8S_ROOT),)
+  $(error K8S_ROOT environment variable is not set. Please set it to your Kubernetes clone path. Example: export K8S_ROOT=~/k8s.io/kubernetes)
+endif
+
 K8SROOT=${K8S_ROOT}
+
+# Verify K8S_ROOT points to a valid Kubernetes repository
+ifeq ($(wildcard $(K8SROOT)/go.mod),)
+  $(error K8S_ROOT ($(K8SROOT)) does not appear to contain a valid Kubernetes repository. Please ensure it points to a Kubernetes source directory with go.mod file)
+endif
 K8SRELEASE=${K8S_RELEASE}
 
 ifeq ($(K8SRELEASE),)
