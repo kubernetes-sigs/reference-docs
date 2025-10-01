@@ -22,7 +22,7 @@ WEBROOT=${K8S_WEBROOT}
 
 # Validate K8S_ROOT is set and points to valid Kubernetes source
 ifeq ($(K8S_ROOT),)
-  $(error K8S_ROOT environment variable is not set. Please set it to your Kubernetes clone path. Example: export K8S_ROOT=~/k8s.io/kubernetes)
+  $(error K8S_ROOT environment variable is not set. Please set it to your Kubernetes clone path. Example: export K8S_ROOT=$GOPATH/src/k8s.io/kubernetes)
 endif
 
 K8SROOT=${K8S_ROOT}
@@ -35,6 +35,14 @@ K8SRELEASE=${K8S_RELEASE}
 
 ifeq ($(K8SRELEASE),)
   $(error Please define K8S_RELEASE, e.g. 'export K8S_RELEASE=1.21.0')
+endif
+
+ifeq ($(K8SROOT),)
+  $(error Please define K8S_ROOT, e.g. 'export K8S_ROOT=$GOPATH/src/k8s.io/kubernetes')
+endif
+
+ifeq ($(WEBROOT),)
+  $(error Please define K8S_WEBROOT, e.g. 'export K8S_WEBROOT=$GOPATH/src/k8s.io/website')
 endif
 
 K8SRELEASE_PREFIX=$(shell echo "$(K8SRELEASE)" | cut -c 1-4)
@@ -86,7 +94,6 @@ cleancomp:
 	rm -rf $(shell pwd)/gen-compdocs/build
 
 comp: cleancomp
-	mkdir -p gen-compdocs/build
 	make -C gen-compdocs
 
 # Build API docs
@@ -113,8 +120,7 @@ copyapi: api
 
 # Build resource reference
 genresources:
-	make -C gen-resourcesdocs kwebsite 
-
+	make -C gen-resourcesdocs kwebsite
 
 # Build config API reference
 CONFIGSRC=genref/output/md
@@ -122,13 +128,5 @@ CONFIGDST=$(WEBROOT)/content/en/docs/reference/config-api/
 configapi:
 	make -C genref
 
-copy-configapi: config-api
-	cp $(CONFIGSRC)/apiserver-audit.v1.md $(CONFGDST)
-	cp $(CONFIGSRC)/apiserver-webhookadmission.v1.md $(CONFGDST)
-	cp $(CONFIGSRC)/client-authentication.v1beta1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kube-proxy-config.v1alpha1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kube-scheduler-config.v1beta1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kube-scheduler-policy-config.v1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kubelet-config.v1beta1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kuberc.v1alpha1.md $(CONFGDST)
-	cp $(CONFIGSRC)/kuberc.v1beta1.md $(CONFGDST)
+copyconfigapi: configapi
+	cp $(CONFIGSRC)/*.md $(CONFIGDST)/

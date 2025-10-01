@@ -114,7 +114,7 @@ resource_categories:
       version: v1
       group: storage
     - name: VolumeAttributesClass
-      version: v1beta1
+      version: v1
       group: storage
   - name: "Metadata APIs"
     include: "meta"
@@ -129,7 +129,7 @@ resource_categories:
       version: v1
       group: apiextensions
     - name: DeviceClass
-      version: v1beta2
+      version: v1
       group: resource
     - name: DeviceTaintRule
       version: v1alpha3
@@ -156,13 +156,13 @@ resource_categories:
       version: v1
       group: scheduling
     - name: ResourceClaim
-      version: v1beta2
+      version: v1
       group: resource
     - name: ResourceClaimTemplate
-      version: v1beta2
+      version: v1
       group: resource
     - name: ResourceSlice
-      version: v1beta2
+      version: v1
       group: resource
     - name: ValidatingAdmissionPolicy
       version: v1
@@ -219,6 +219,10 @@ resource_categories:
       version: v1
       group: core
       description_note: "These are assigned to <a href=\"#pod-v1-core\">Pods</a> using <a href=\"#persistentvolumeclaim-v1-core\">PersistentVolumeClaims</a>."
+    - name: PodCertificateRequest
+      version: v1alpha1
+      group: certificates
+
     - name: PriorityLevelConfiguration
       version: v1
       group: flowcontrol
@@ -268,10 +272,10 @@ resource_categories:
       version: v1
       group: networking
     - name: MutatingAdmissionPolicy
-      version: v1alpha1
+      version: v1beta1
       group: admissionregistration
     - name: MutatingAdmissionPolicyBinding
-      version: v1alpha1
+      version: v1beta1
       group: admissionregistration
 
 operation_categories:
