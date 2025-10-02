@@ -38,6 +38,41 @@ var WorkDir = flag.String("work-dir", "", "Working directory for the generator."
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
 
+// Constants for configuration
+const (
+	DefaultPatchVersion = "0"
+	ConfigFileName      = "config.yaml"
+	// Directory names
+	BuildDirName    = "build"
+	ConfigDirName   = "config"
+	IncludesDirName = "includes"
+	SectionsDirName = "sections"
+	// Parameter locations
+	PATH  = "path"
+	QUERY = "query"
+	BODY  = "body"
+	// Error messages
+	TokenRequestResource = "TokenRequest"
+	AuthenticationGroup  = "authentication"
+	CoreV1Version        = "v1"
+)
+
+// titleCase converts a string to title case as a replacement for deprecated strings.Title
+func titleCase(s string) string {
+	if s == "" {
+		return s
+	}
+	words := strings.Fields(s)
+	for i, word := range words {
+		if word != "" {
+			runes := []rune(word)
+			runes[0] = unicode.ToUpper(runes[0])
+			words[i] = string(runes)
+		}
+	}
+	return strings.Join(words, " ")
+}
+
 // Directory for output files
 var BuildDir string
 
@@ -55,18 +90,33 @@ var VersionedConfigDir string
 
 func NewConfig() (*Config, error) {
 	// Initialize global directories
-	BuildDir = filepath.Join(*WorkDir, "build")
-	ConfigDir = filepath.Join(*WorkDir, "config")
-	IncludesDir = filepath.Join(BuildDir, "includes")
-	SectionsDir = filepath.Join(ConfigDir, "sections")
-
-	var k8sRelease = fmt.Sprintf("v%s", strings.ReplaceAll(*KubernetesRelease, ".", "_"))
+	BuildDir = filepath.Join(*WorkDir, BuildDirName)
+	ConfigDir = filepath.Join(*WorkDir, ConfigDirName)
+	IncludesDir = filepath.Join(BuildDir, IncludesDirName)
+	SectionsDir = filepath.Join(ConfigDir, SectionsDirName)
+	
+	k8sRelease := fmt.Sprintf("v%s", strings.ReplaceAll(*KubernetesRelease, ".", "_"))
 	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
 
+	config, err := loadAndInitializeConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	if err := processDefinitionsAndOperations(config); err != nil {
+		return nil, err
+	}
+
+	return config, nil
+}
+
+// loadAndInitializeConfig loads configuration and specs, then initializes basic config
+func loadAndInitializeConfig() (*Config, error) {
 	config, err := LoadConfigFromYAML()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config yaml: %w", err)
 	}
+
 	specs, err := LoadOpenApiSpec()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load openapi spec: %w", err)
@@ -76,7 +126,7 @@ func NewConfig() (*Config, error) {
 	ParseSpecInfo(specs, config)
 
 	// Set the spec version
-	config.SpecVersion = fmt.Sprintf("v%s.%s", *KubernetesRelease, "0")
+	config.SpecVersion = fmt.Sprintf("v%s.%s", *KubernetesRelease, DefaultPatchVersion)
 
 	// Initialize all of the operations
 	defs, err := NewDefinitions(config, specs)
@@ -85,20 +135,30 @@ func NewConfig() (*Config, error) {
 	}
 	config.Definitions = *defs
 
+	return config, nil
+}
+
+// processDefinitionsAndOperations handles the main processing logic
+func processDefinitionsAndOperations(config *Config) error {
+	specs, err := LoadOpenApiSpec()
+	if err != nil {
+		return fmt.Errorf("failed to load openapi spec: %w", err)
+	}
+
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
 		if err := config.genConfigFromTags(specs); err != nil {
-			return nil, fmt.Errorf("failed to generate config from tags: %w", err)
+			return fmt.Errorf("failed to generate config from tags: %w", err)
 		}
 	} else {
 		// Initialization for ToC resources only
 		if err := config.visitResourcesInToc(); err != nil {
-			return nil, fmt.Errorf("failed to visit resources in TOC: %w", err)
+			return fmt.Errorf("failed to visit resources in TOC: %w", err)
 		}
 	}
 
 	if err := config.initOperations(specs); err != nil {
-		return nil, fmt.Errorf("failed to init operations: %w", err)
+		return fmt.Errorf("failed to init operations: %w", err)
 	}
 
 	// replace unicode escape sequences with HTML entities.
@@ -108,25 +168,30 @@ func NewConfig() (*Config, error) {
 
 	// Prune anything that shouldn't be in the ToC
 	if *UseTags {
-		categories := []ResourceCategory{}
-		for _, c := range config.ResourceCategories {
-			resources := Resources{}
-			for _, r := range c.Resources {
-				if d, f := config.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); f {
-					if d.InToc {
-						resources = append(resources, r)
-					}
-				}
-			}
-			c.Resources = resources
-			if len(resources) > 0 {
-				categories = append(categories, c)
-			}
-		}
-		config.ResourceCategories = categories
+		config.pruneResourceCategories()
 	}
 
-	return config, nil
+	return nil
+}
+
+// pruneResourceCategories removes resources that shouldn't be in the ToC
+func (c *Config) pruneResourceCategories() {
+	categories := []ResourceCategory{}
+	for _, cat := range c.ResourceCategories {
+		resources := Resources{}
+		for _, r := range cat.Resources {
+			if d, f := c.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); f {
+				if d.InToc {
+					resources = append(resources, r)
+				}
+			}
+		}
+		cat.Resources = resources
+		if len(resources) > 0 {
+			categories = append(categories, cat)
+		}
+	}
+	c.ResourceCategories = categories
 }
 
 func (c *Config) genConfigFromTags(specs []*loads.Document) error {
@@ -160,7 +225,7 @@ func (c *Config) genConfigFromTags(specs []*loads.Document) error {
 	sort.Sort(groupsList)
 
 	for _, g := range groupsList {
-		groupName := strings.Title(string(g))
+		groupName := titleCase(string(g))
 		c.ApiGroups = append(c.ApiGroups, ApiGroup(groupName))
 		rc := ResourceCategory{
 			Include: string(g),
@@ -219,7 +284,7 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) error {
 		for key, subMap := range ops {
 			def := defs[key]
 			if def == nil {
-				return fmt.Errorf("Unable to locate resource %s in resource map\n%v\n", key, defs)
+				return fmt.Errorf("unable to locate resource %s in resource map: %v", key, defs)
 			}
 			subs := []string{}
 			for s := range subMap {
@@ -228,10 +293,10 @@ func (config *Config) initOperationsFromTags(specs []*loads.Document) error {
 			sort.Strings(subs)
 			for _, s := range subs {
 				cat := &OperationCategory{}
-				cat.Name = strings.Title(s) + " Operations"
+				cat.Name = titleCase(s) + " Operations"
 				for _, op := range subMap[s] {
 					ot := OperationType{}
-					ot.Name = op.GetMethod() + " " + strings.Title(s)
+					ot.Name = op.GetMethod() + " " + titleCase(s)
 					op.Type = ot
 					cat.Operations = append(cat.Operations, op)
 				}
@@ -261,9 +326,9 @@ func (c *Config) initOperations(specs []*loads.Document) error {
 	VisitOperations(specs, func(target Operation) {
 		if op, ok := c.Operations[target.ID]; !ok || op.Definition == nil {
 			if !c.OpExcluded(op.ID) {
-				fmt.Printf("\033[31mNo Definition found for %s [%s].\033[0m\n", op.ID, op.Path)
+				log.Printf("No definition found for operation %s [%s]", op.ID, op.Path)
 			} else {
-				fmt.Printf("Op excluded: %s\n", op.ID)
+				log.Printf("Operation excluded: %s", op.ID)
 			}
 		}
 	})
@@ -319,7 +384,7 @@ func (c *Config) CleanUp() {
 func LoadConfigFromYAML() (*Config, error) {
 	config := &Config{}
 
-	f := filepath.Join(VersionedConfigDir, "config.yaml")
+	f := filepath.Join(VersionedConfigDir, ConfigFileName)
 	contents, err := os.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
@@ -425,7 +490,7 @@ func LoadConfigFromYAML() (*Config, error) {
 		},
 	}
 
-	ephemaralCategory := OperationCategory{
+	ephemeralCategory := OperationCategory{
 		Name: "EphemeralContainers Operations",
 		OperationTypes: []OperationType{
 			{
@@ -449,19 +514,13 @@ func LoadConfigFromYAML() (*Config, error) {
 			readCategory,
 			statusCategory,
 			resizeCategory,
-			ephemaralCategory,
+			ephemeralCategory,
 		},
 		config.OperationCategories...,
 	)
 
 	return config, nil
 }
-
-const (
-	PATH  = "path"
-	QUERY = "query"
-	BODY  = "body"
-)
 
 func (c *Config) initOperationParameters(specs []*loads.Document) error {
 	s := c.Definitions
@@ -553,7 +612,7 @@ func (c *Config) getOperationGroupName(group string) string {
 			return v
 		}
 	}
-	return strings.Title(group)
+	return titleCase(group)
 }
 
 func (c *Config) getOperationId(match string, group string, version ApiVersion, kind string) string {
@@ -572,7 +631,7 @@ func (c *Config) setOperation(match, namespace string, ot *OperationType, oc *Op
 		// Each operation should have exactly 1 definition
 		if o.Definition != nil {
 			return fmt.Errorf(
-				"Found multiple matching definitions [%s/%s/%s, %s/%s/%s] for operation key: %s",
+				"found multiple matching definitions [%s/%s/%s, %s/%s/%s] for operation key: %s",
 				d.Group, d.Version, d.Name, o.Definition.Group, o.Definition.Version, o.Definition.Name, key)
 		}
 		o.Type = *ot
@@ -599,7 +658,7 @@ func (c *Config) mapOperationsToDefinitions() error {
 		}
 
 		// XXX: The TokenRequest definition has operation defined as "createCoreV1NamespacedServiceAccountToken"!
-		if d.Name == "TokenRequest" && d.Group.String() == "authentication" && d.Version == "v1" {
+		if d.Name == TokenRequestResource && d.Group.String() == AuthenticationGroup && d.Version == CoreV1Version {
 			operationId := "createCoreV1NamespacedServiceAccountToken"
 			if o, ok := c.Operations[operationId]; ok {
 				ot := OperationType{
@@ -686,13 +745,13 @@ func (c *Config) visitResourcesInToc() error {
 				}
 				r.Definition = d
 			} else {
-				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
+				log.Printf("Could not find definition for resource in TOC: %s %s %s", r.Group, r.Version, r.Name)
 				missing = true
 			}
 		}
 	}
 	if missing {
-		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
+		log.Printf("All known definitions: %v", c.Definitions.All)
 	}
 
 	return nil

@@ -148,8 +148,8 @@ func compareVersionStrings(v1, v2 string) int {
 	return v1minor - v2minor
 }
 
-func (this ApiVersion) LessThan(that ApiVersion) bool {
-	res := compareVersionStrings(string(this), string(that))
+func (ver ApiVersion) LessThan(that ApiVersion) bool {
+	res := compareVersionStrings(string(ver), string(that))
 	return res > 0
 }
 
