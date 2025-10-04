@@ -85,7 +85,7 @@ func GetTypeName(s spec.Schema) string {
 	if len(s.Type) > 0 {
 		return s.Type[0]
 	}
-	panic(fmt.Errorf("No type found for object %v", s))
+	panic(fmt.Errorf("no type found for object %v", s))
 }
 
 // IsArray returns true if the type is an array type.
