@@ -94,7 +94,7 @@ func NewConfig() (*Config, error) {
 	ConfigDir = filepath.Join(*WorkDir, ConfigDirName)
 	IncludesDir = filepath.Join(BuildDir, IncludesDirName)
 	SectionsDir = filepath.Join(ConfigDir, SectionsDirName)
-	
+
 	k8sRelease := fmt.Sprintf("v%s", strings.ReplaceAll(*KubernetesRelease, ".", "_"))
 	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
 
@@ -126,7 +126,7 @@ func loadAndInitializeConfig() (*Config, error) {
 	ParseSpecInfo(specs, config)
 
 	// Set the spec version
-	config.SpecVersion = fmt.Sprintf("v%s.%s", *KubernetesRelease, DefaultPatchVersion)
+	config.SpecVersion = fmt.Sprintf("v%s.%s", *KubernetesRelease, "0")
 
 	// Initialize all of the operations
 	defs, err := NewDefinitions(config, specs)
