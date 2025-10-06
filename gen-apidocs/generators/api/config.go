@@ -38,25 +38,6 @@ var WorkDir = flag.String("work-dir", "", "Working directory for the generator."
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
 
-// Constants for configuration
-const (
-	DefaultPatchVersion = "0"
-	ConfigFileName      = "config.yaml"
-	// Directory names
-	BuildDirName    = "build"
-	ConfigDirName   = "config"
-	IncludesDirName = "includes"
-	SectionsDirName = "sections"
-	// Parameter locations
-	PATH  = "path"
-	QUERY = "query"
-	BODY  = "body"
-	// Error messages
-	TokenRequestResource = "TokenRequest"
-	AuthenticationGroup  = "authentication"
-	CoreV1Version        = "v1"
-)
-
 // titleCase converts a string to title case as a replacement for deprecated strings.Title
 func titleCase(s string) string {
 	if s == "" {
@@ -90,10 +71,10 @@ var VersionedConfigDir string
 
 func NewConfig() (*Config, error) {
 	// Initialize global directories
-	BuildDir = filepath.Join(*WorkDir, BuildDirName)
-	ConfigDir = filepath.Join(*WorkDir, ConfigDirName)
-	IncludesDir = filepath.Join(BuildDir, IncludesDirName)
-	SectionsDir = filepath.Join(ConfigDir, SectionsDirName)
+	BuildDir = filepath.Join(*WorkDir, "build")
+	ConfigDir = filepath.Join(*WorkDir, "config")
+	IncludesDir = filepath.Join(BuildDir, "includes")
+	SectionsDir = filepath.Join(ConfigDir, "sections")
 
 	k8sRelease := fmt.Sprintf("v%s", strings.ReplaceAll(*KubernetesRelease, ".", "_"))
 	VersionedConfigDir = filepath.Join(ConfigDir, k8sRelease)
@@ -384,7 +365,7 @@ func (c *Config) CleanUp() {
 func LoadConfigFromYAML() (*Config, error) {
 	config := &Config{}
 
-	f := filepath.Join(VersionedConfigDir, ConfigFileName)
+	f := filepath.Join(VersionedConfigDir, "config.yaml")
 	contents, err := os.ReadFile(f)
 	if err != nil {
 		if !*UseTags {
@@ -544,11 +525,11 @@ func (c *Config) initOperationParameters(specs []*loads.Document) error {
 			}
 
 			switch location {
-			case PATH:
+			case "path":
 				op.PathParams = append(op.PathParams, s.parameterToField(param))
-			case QUERY:
+			case "query":
 				op.QueryParams = append(op.QueryParams, s.parameterToField(param))
-			case BODY:
+			case "body":
 				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
 				return fmt.Errorf("unknown location %q", location)
@@ -570,11 +551,11 @@ func (c *Config) initOperationParameters(specs []*loads.Document) error {
 			}
 
 			switch location {
-			case PATH:
+			case "path":
 				op.PathParams = append(op.PathParams, s.parameterToField(param))
-			case QUERY:
+			case "query":
 				op.QueryParams = append(op.QueryParams, s.parameterToField(param))
-			case BODY:
+			case "body":
 				op.BodyParams = append(op.BodyParams, s.parameterToField(param))
 			default:
 				return fmt.Errorf("unknown location %q", location)
@@ -658,7 +639,7 @@ func (c *Config) mapOperationsToDefinitions() error {
 		}
 
 		// XXX: The TokenRequest definition has operation defined as "createCoreV1NamespacedServiceAccountToken"!
-		if d.Name == TokenRequestResource && d.Group.String() == AuthenticationGroup && d.Version == CoreV1Version {
+		if d.Name == "TokenRequest" && d.Group.String() == "authentication" && d.Version == "v1" {
 			operationId := "createCoreV1NamespacedServiceAccountToken"
 			if o, ok := c.Operations[operationId]; ok {
 				ot := OperationType{
@@ -745,13 +726,13 @@ func (c *Config) visitResourcesInToc() error {
 				}
 				r.Definition = d
 			} else {
-				log.Printf("Could not find definition for resource in TOC: %s %s %s", r.Group, r.Version, r.Name)
+				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
 				missing = true
 			}
 		}
 	}
 	if missing {
-		log.Printf("All known definitions: %v", c.Definitions.All)
+		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
 	}
 
 	return nil
