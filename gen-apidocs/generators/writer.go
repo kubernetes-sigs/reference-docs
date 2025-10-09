@@ -61,6 +61,36 @@ func GenerateFiles() error {
 		return fmt.Errorf("failed to ensure directories: %w", err)
 	}
 
+	copyright, title := getCopyrightAndTitle()
+
+	writer := NewHTMLWriter(config, copyright, title)
+
+	if err := writeOverview(writer); err != nil {
+		return err
+	}
+	if err := writeAPIGroupVersions(writer, config); err != nil {
+		return err
+	}
+	if err := writeResourceCategories(writer, config); err != nil {
+		return err
+	}
+	if err := writeOrphanedOperations(writer, config); err != nil {
+		return err
+	}
+	if err := writeDefinitions(writer, config); err != nil {
+		return err
+	}
+	if err := writeOldVersions(writer, config); err != nil {
+		return err
+	}
+
+	if err := writer.Finalize(); err != nil {
+		return fmt.Errorf("failed to finalize writer: %w", err)
+	}
+	return nil
+}
+
+func getCopyrightAndTitle() (string, string) {
 	copyright_tmpl := "<a href=\"https://github.com/kubernetes/kubernetes\">Copyright 2016-%s The Kubernetes Authors.</a>"
 	now := time.Now().Format("2006")
 	copyright := fmt.Sprintf(copyright_tmpl, now)
@@ -70,53 +100,76 @@ func GenerateFiles() error {
 	} else {
 		title = "Kubernetes API Reference Docs"
 	}
+	return copyright, title
+}
 
-	writer := NewHTMLWriter(config, copyright, title)
+// Extracted to separate function for better error handling and testability
+func writeOverview(writer DocWriter) error {
 	if err := writer.WriteOverview(); err != nil {
-
+		// Wrap error with context to make debugging easier
 		return fmt.Errorf("failed to write overview: %w", err)
 	}
+	return nil
+}
 
-	// write API groups
+func writeAPIGroupVersions(writer DocWriter, config *api.Config) error {
 	if err := writer.WriteAPIGroupVersions(config.Definitions.GroupVersions); err != nil {
+
 		return fmt.Errorf("failed to write API group versions: %w", err)
 	}
+	return nil
+}
 
-	// write resource definitions
+// writeResourceCategories processes and writes all resource categories and their resources
+func writeResourceCategories(writer DocWriter, config *api.Config) error {
+	// Iterate through each configured resource category
 	for _, c := range config.ResourceCategories {
+		// Write the category overview page
 		if err := writer.WriteResourceCategory(c.Name, c.Include); err != nil {
+			// Include category name in error for easier debugging
 			return fmt.Errorf("failed to write resource category '%s': %w", c.Name, err)
 		}
 
+		// Process each resource within the category
 		for _, r := range c.Resources {
+			// Skip resources without definitions and warn about missing data
 			if r.Definition == nil {
 
 				fmt.Printf("Warning: Missing definition for item in TOC %s\n", r.Name)
 				continue
 			}
+			// Write individual resource documentation
 			if err := writer.WriteResource(r); err != nil {
-
+				// Include resource name in error for easier debugging
 				return fmt.Errorf("failed to write resource '%s': %w", r.Name, err)
 			}
 		}
 	}
+	return nil
+}
 
-	// write orphaned operation endpoints
+func writeOrphanedOperations(writer DocWriter, config *api.Config) error {
+	// Collect all operation IDs that are orphaned (no definition and not excluded)
 	orphanedIDs := make([]string, 0)
 	for id, o := range config.Operations {
+		// An operation is orphaned if it has no definition and isn't explicitly excluded
 		if o.Definition == nil && !config.OpExcluded(o.ID) {
 			orphanedIDs = append(orphanedIDs, id)
 		}
 	}
 
+	// Only write orphaned operations section if there are any orphaned operations
 	if len(orphanedIDs) > 0 {
+		// Write overview page for orphaned operations
 		if err := writer.WriteOrphanedOperationsOverview(); err != nil {
 
 			return fmt.Errorf("failed to write orphaned operations overview: %w", err)
 		}
 
+		// Sort IDs for consistent output ordering
 		sort.Strings(orphanedIDs)
 
+		// Write documentation for each orphaned operation
 		for _, opKey := range orphanedIDs {
 			if err := writer.WriteOperation(config.Operations[opKey]); err != nil {
 
@@ -124,47 +177,64 @@ func GenerateFiles() error {
 			}
 		}
 	}
+	return nil
+}
 
+func writeDefinitions(writer DocWriter, config *api.Config) error {
 	if err := writer.WriteDefinitionsOverview(); err != nil {
 
 		return fmt.Errorf("failed to write definitions overview: %w", err)
 	}
 
-	// add other definition imports
+	// Collect definitions that should be documented separately
 	definitions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
-		// don't add definitions for top level resources in the toc or inlined resources
+
 		if d.InToc || d.IsInlined || d.IsOldVersion {
 			continue
 		}
 		definitions = append(definitions, d)
 	}
+
+	// Sort definitions alphabetically for consistent ordering
 	sort.Sort(definitions)
+
 	for _, d := range definitions {
 		if err := writer.WriteDefinition(d); err != nil {
 
 			return fmt.Errorf("failed to write definition '%s': %w", d.Name, err)
 		}
 	}
+	return nil
+}
 
+// writeOldVersions handles documentation for deprecated/old API versions
+func writeOldVersions(writer DocWriter, config *api.Config) error {
 	if err := writer.WriteOldVersionsOverview(); err != nil {
 
 		return fmt.Errorf("failed to write old versions overview: %w", err)
 	}
 
+	// Collect all definitions marked as old versions
 	oldversions := api.SortDefinitionsByName{}
 	for _, d := range config.Definitions.All {
-		// don't add definitions for top level resources in the toc or inlined resources
+		// Only include definitions specifically marked as old versions
 		if d.IsOldVersion {
 			oldversions = append(oldversions, d)
 		}
 	}
+
+	// Sort old versions alphabetically for consistent ordering
 	sort.Sort(oldversions)
+
+	// Write documentation for each old version
 	for _, d := range oldversions {
-		// skip Inlined definitions
+		// Skip inlined definitions as they're handled differently
 		if d.IsInlined {
 			continue
 		}
+
+		// Create a resource wrapper for the old version definition
 		r := &api.Resource{Definition: d, Name: d.Name}
 		if err := writer.WriteResource(r); err != nil {
 
