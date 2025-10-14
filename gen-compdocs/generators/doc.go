@@ -393,7 +393,7 @@ func flagUsages(f *pflag.FlagSet) string {
 
 		// process markdown in usage, force wrap for "\n"
 		if len(flag.Deprecated) > 0 {
-			usage = usage + "\n[**DEPRECATED**] " + flag.Deprecated
+			usage = usage + " (DEPRECATED: " + flag.Deprecated + ")"
 		}
 		line += processUsage(usage) + "</td>\n</tr>\n"
 
