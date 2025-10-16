@@ -65,11 +65,13 @@ func GenerateFiles() error {
 
 	writer := NewHTMLWriter(config, copyright, title)
 
-	if err := writeOverview(writer); err != nil {
-		return err
+	// Write the main overview page directly to avoid an unnecessary thin wrapper
+	if err := writer.WriteOverview(); err != nil {
+		return fmt.Errorf("failed to write overview: %w", err)
 	}
-	if err := writeAPIGroupVersions(writer, config); err != nil {
-		return err
+	// Write API group version pages directly; this was previously a trivial wrapper
+	if err := writer.WriteAPIGroupVersions(config.Definitions.GroupVersions); err != nil {
+		return fmt.Errorf("failed to write API group versions: %w", err)
 	}
 	if err := writeResourceCategories(writer, config); err != nil {
 		return err
@@ -103,22 +105,9 @@ func getCopyrightAndTitle() (string, string) {
 	return copyright, title
 }
 
-// Extracted to separate function for better error handling and testability
-func writeOverview(writer DocWriter) error {
-	if err := writer.WriteOverview(); err != nil {
-		// Wrap error with context to make debugging easier
-		return fmt.Errorf("failed to write overview: %w", err)
-	}
-	return nil
-}
-
-func writeAPIGroupVersions(writer DocWriter, config *api.Config) error {
-	if err := writer.WriteAPIGroupVersions(config.Definitions.GroupVersions); err != nil {
-
-		return fmt.Errorf("failed to write API group versions: %w", err)
-	}
-	return nil
-}
+// (Previously, small wrapper helpers for overview and API group versions were
+// extracted. They were inlined into GenerateFiles to reduce unnecessary
+// indirection while keeping the rest of the refactor.)
 
 // writeResourceCategories processes and writes all resource categories and their resources
 func writeResourceCategories(writer DocWriter, config *api.Config) error {
