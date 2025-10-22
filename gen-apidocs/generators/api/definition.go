@@ -54,7 +54,7 @@ func NewDefinitions(config *Config, specs []*loads.Document) (*Definitions, erro
 	}
 
 	if err := LoadDefinitions(config, specs, s); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to load definitions from OpenAPI specs: %w", err)
 	}
 
 	s.initialize()
@@ -170,22 +170,10 @@ func (s *Definitions) getReferences(d *Definition) []*Definition {
 	}
 
 	/*
-		The following logic is an attempt to probe nested additionalProperties, but it is not working
-		yet because the additionalProperties can be deeply nested rather than being a top-layer property.
 
-		if d.schema.AdditionalProperties != nil {
-			as := d.schema.AdditionalProperties.Schema
-			if as != nil && IsComplex(*as) {
-				// Look up the definition for the referenced definitions
-				if schema, ok := s.GetForSchema(*as); ok {
-					fmt.Printf("*** schema: %s\n", schema)
-					refs = append(refs, schema)
-				} else {
-					g, v, k := GetDefinitionVersionKind(*as)
-					fmt.Printf("Could not locate referenced property of %s: %s (%s/%s).\n", d.Name, g, k, v)
-				}
-			}
-		}
+				// TODO: Support nested additionalProperties
+		        // Currently only handles top-level additionalProperties. Nested structures require
+				// more complex handling and are not yet supported.
 	*/
 
 	return refs
@@ -312,11 +300,11 @@ func (d *Definition) initExample(config *Config) error {
 
 	content, err := os.ReadFile(file)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read example file %s for definition %s: %w", file, d.Name, err)
 	}
 
 	if err = yaml.Unmarshal(content, &d.Sample); err != nil {
-		return err
+		return fmt.Errorf("failed to unmarshal YAML content from file %s for definition %s: %w", file, d.Name, err)
 	}
 
 	return nil
