@@ -34,7 +34,22 @@ var BuildOps = flag.Bool("build-operations", true, "If true build operations in 
 
 // GetOperationId returns the ID of the operation for the given definition
 func (ot OperationType) GetOperationId(d string) string {
-	return strings.ReplaceAll(ot.Match, "${resource}", d)
+	// Handle edge cases gracefully without breaking the build
+	if ot.Match == "" {
+		return d // fallback to just the resource name
+	}
+	if d == "" {
+		return ot.Match // return template as-is
+	}
+
+	result := strings.ReplaceAll(ot.Match, "${resource}", d)
+
+	// Ensure don't return empty strings
+	if result == "" {
+		return fmt.Sprintf("operation_%s", d)
+	}
+
+	return result
 }
 
 func (o *Operation) GetExampleRequests() []ExampleText {
@@ -139,10 +154,12 @@ func (o *Operation) GetMethod() string {
 }
 
 // /apis/<group>/<version>/namespaces/{namespace}/<resources>/{name}/<subresource>
-var matchNamespaced = regexp.MustCompile(
-	`^/apis/([A-Za-z0-9\.]+)/([A-Za-z0-9]+)/namespaces/\{namespace\}/([A-Za-z0-9\.]+)/\{name\}/([A-Za-z0-9\.]+)$`)
-var matchUnnamespaced = regexp.MustCompile(
-	`^/apis/([A-Za-z0-9\.]+)/([A-Za-z0-9]+)/([A-Za-z0-9\.]+)/\{name\}/([A-Za-z0-9\.]+)$`)
+var (
+	matchNamespaced = regexp.MustCompile(
+		`^/apis/([A-Za-z0-9\.]+)/([A-Za-z0-9]+)/namespaces/\{namespace\}/([A-Za-z0-9\.]+)/\{name\}/([A-Za-z0-9\.]+)$`)
+	matchUnnamespaced = regexp.MustCompile(
+		`^/apis/([A-Za-z0-9\.]+)/([A-Za-z0-9]+)/([A-Za-z0-9\.]+)/\{name\}/([A-Za-z0-9\.]+)$`)
+)
 
 func (o *Operation) GetGroupVersionKindSub() (string, string, string, string) {
 	if matchNamespaced.MatchString(o.Path) {
