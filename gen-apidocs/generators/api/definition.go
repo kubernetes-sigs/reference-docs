@@ -169,27 +169,104 @@ func (s *Definitions) getReferences(d *Definition) []*Definition {
 		}
 	}
 
-	/*
-
-		    The following logic is an attempt to probe nested additionalProperties, but it is not working
-			yet because the additionalProperties can be deeply nested rather than being a top-layer property.
-
-			if d.schema.AdditionalProperties != nil {
-				as := d.schema.AdditionalProperties.Schema
-				if as != nil && IsComplex(*as) {
-					// Look up the definition for the referenced definitions
-					if schema, ok := s.GetForSchema(*as); ok {
-						fmt.Printf("*** schema: %s\n", schema)
-						refs = append(refs, schema)
-					} else {
-						g, v, k := GetDefinitionVersionKind(*as)
-						fmt.Printf("Could not locate referenced property of %s: %s (%s/%s).\n", d.Name, g, k, v)
-					}
-				}
-			}
-	*/
+	// Additionally probe the entire schema (including nested additionalProperties, items, allOf/oneOf/anyOf)
+	// for referenced definitions using a recursive walker. This covers deeply nested cases not found
+	// by the top-level property inspection above.
+	nested := s.findReferencedDefinitions(&d.schema, nil)
+	// Merge nested results into refs, avoiding duplicates
+	present := map[string]bool{}
+	for _, r := range refs {
+		if r != nil {
+			present[r.Key()] = true
+		}
+	}
+	for _, r := range nested {
+		if r == nil {
+			continue
+		}
+		if !present[r.Key()] {
+			refs = append(refs, r)
+			present[r.Key()] = true
+		}
+	}
 
 	return refs
+}
+
+// findReferencedDefinitions walks a schema recursively and returns all Definitions referenced from it.
+// It deduplicates results and prevents infinite loops using a visited set keyed by schema.Ref.String()
+// or address for inline schemas.
+func (s *Definitions) findReferencedDefinitions(schema *spec.Schema, visited map[string]bool) []*Definition {
+	if schema == nil {
+		return nil
+	}
+	if visited == nil {
+		visited = map[string]bool{}
+	}
+	// produce a stable key for visited detection
+	key := schema.Ref.String()
+	if key == "" {
+		key = fmt.Sprintf("addr:%p", schema)
+	}
+	if visited[key] {
+		return nil
+	}
+	visited[key] = true
+
+	results := []*Definition{}
+
+	// If this schema itself maps to a Definition (usually via $ref), record it and stop descending.
+	if def, ok := s.GetForSchema(*schema); ok {
+		results = append(results, def)
+		return results
+	}
+
+	// Recurse into AdditionalProperties (map value type)
+	if schema.AdditionalProperties != nil && schema.AdditionalProperties.Schema != nil {
+		results = append(results, s.findReferencedDefinitions(schema.AdditionalProperties.Schema, visited)...)
+	}
+
+	// Recurse into items (arrays)
+	if schema.Items != nil {
+		if schema.Items.Schema != nil {
+			results = append(results, s.findReferencedDefinitions(schema.Items.Schema, visited)...)
+		}
+		for i := range schema.Items.Schemas {
+			results = append(results, s.findReferencedDefinitions(&schema.Items.Schemas[i], visited)...)
+		}
+	}
+
+	// Recurse into properties
+	for _, prop := range schema.Properties {
+		// prop is a spec.Schema (value) so take its address
+		results = append(results, s.findReferencedDefinitions(&prop, visited)...)
+	}
+
+	// Recurse into composition keywords
+	for i := range schema.AllOf {
+		results = append(results, s.findReferencedDefinitions(&schema.AllOf[i], visited)...)
+	}
+	for i := range schema.OneOf {
+		results = append(results, s.findReferencedDefinitions(&schema.OneOf[i], visited)...)
+	}
+	for i := range schema.AnyOf {
+		results = append(results, s.findReferencedDefinitions(&schema.AnyOf[i], visited)...)
+	}
+
+	// Deduplicate by Definition.Key()
+	unique := map[string]*Definition{}
+	for _, d := range results {
+		if d == nil {
+			continue
+		}
+		unique[d.Key()] = d
+	}
+	out := make([]*Definition, 0, len(unique))
+	for _, d := range unique {
+		out = append(out, d)
+	}
+
+	return out
 }
 
 func (s *Definitions) parameterToField(param spec.Parameter) *Field {
