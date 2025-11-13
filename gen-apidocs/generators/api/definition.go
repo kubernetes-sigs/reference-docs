@@ -217,8 +217,7 @@ func (s *Definitions) findReferencedDefinitions(schema *spec.Schema, visited map
 
 	// If this schema itself maps to a Definition (usually via $ref), record it and stop descending.
 	if def, ok := s.GetForSchema(*schema); ok {
-		results = append(results, def)
-		return results
+		return []*Definition{def}
 	}
 
 	// Recurse into AdditionalProperties (map value type)
