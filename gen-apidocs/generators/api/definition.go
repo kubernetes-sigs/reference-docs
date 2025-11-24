@@ -252,17 +252,19 @@ func (s *Definitions) findReferencedDefinitions(schema *spec.Schema, visited map
 		results = append(results, s.findReferencedDefinitions(&schema.AnyOf[i], visited)...)
 	}
 
-	// Deduplicate by Definition.Key()
-	unique := map[string]*Definition{}
+	// Deduplicate and filter out nil definitions
+	seen := make(map[string]struct{}, len(results))
+	out := make([]*Definition, 0, len(results))
+
 	for _, d := range results {
 		if d == nil {
 			continue
 		}
-		unique[d.Key()] = d
-	}
-	out := make([]*Definition, 0, len(unique))
-	for _, d := range unique {
-		out = append(out, d)
+		key := d.Key()
+		if _, exists := seen[key]; !exists {
+			seen[key] = struct{}{}
+			out = append(out, d)
+		}
 	}
 
 	return out
