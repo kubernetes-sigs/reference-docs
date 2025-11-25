@@ -253,7 +253,7 @@ func (s *Definitions) findReferencedDefinitions(schema *spec.Schema, visited map
 	}
 
 	// Deduplicate and filter out nil definitions
-	seen := make(map[string]struct{}, len(results))
+	seen := make(map[string]bool, len(results))
 	out := make([]*Definition, 0, len(results))
 
 	for _, d := range results {
