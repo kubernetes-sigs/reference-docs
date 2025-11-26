@@ -262,7 +262,7 @@ func (s *Definitions) findReferencedDefinitions(schema *spec.Schema, visited map
 		}
 		key := d.Key()
 		if _, exists := seen[key]; !exists {
-			seen[key] = struct{}{}
+			seen[key] = true
 			out = append(out, d)
 		}
 	}
