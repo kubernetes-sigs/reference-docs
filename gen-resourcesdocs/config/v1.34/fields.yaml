@@ -411,6 +411,7 @@
     - activeDeadlineSeconds
     - ttlSecondsAfterFinished
     - suspend
+    - podReplacementPolicy
   - name: Selector
     fields:
     - selector
@@ -424,7 +425,6 @@
     - backoffLimitPerIndex
     - managedBy
     - maxFailedIndexes
-    - podReplacementPolicy
 
 - definition: io.k8s.api.batch.v1.JobStatus
   field_categories:
