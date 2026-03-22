@@ -120,7 +120,7 @@ func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) stri
 	// Note: Files generated for kubeadm tool are snippets of Markdown without a title.
 	// These snippets are included in the corresponding kubeadm pages.
 	if withTitle {
-		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\nauto_generated: true\n", name); err != nil {
+		if _, err := fmt.Fprintf(w, "---\ntitle: %s\ncontent_type: tool-reference\nweight: 30\nauto_generated: true\ndescription: >-\n  %s\n", name, short); err != nil {
 			return err
 		}
 		if indexFile {
