@@ -199,6 +199,13 @@ func WriteCommandFiles(manifest *Manifest, toc ToC, params KubectlSpec) error {
 		return fmt.Errorf("failed to copy includes %w", err)
 	}
 
+	// Write deprecation notice as the first include
+	deprecationFile := filepath.Join(*GenKubectlDir, "includes", "_generated_deprecation_notice.md")
+	if err := os.WriteFile(deprecationFile, []byte(DeprecationNoticeTemplate), 0644); err != nil {
+		return fmt.Errorf("failed to write deprecation notice: %w", err)
+	}
+	manifest.Docs = append(manifest.Docs, Doc{"_generated_deprecation_notice.md"})
+
 	for _, c := range toc.Categories {
 		if len(c.Include) > 0 {
 			// Use the static category include
