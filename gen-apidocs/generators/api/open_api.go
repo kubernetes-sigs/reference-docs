@@ -151,9 +151,7 @@ func DetectGroupsFromSpec(specs []*loads.Document) (map[string]string, []string)
 
 			// Default fallback from guessed short group name.
 			fullGroup := group
-			if group == "core" {
-				fullGroup = "core"
-			}
+			
 			resolvedFromExtension := false
 
 			if gvkRaw, ok := def.Extensions[typeKey]; ok {
