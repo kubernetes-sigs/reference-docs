@@ -37,6 +37,7 @@ var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on error
 var WorkDir = flag.String("work-dir", "", "Working directory for the generator.")
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
+var AutoDetect = flag.Bool("auto-detect", false, "If true, auto-detect API groups and versions from swagger.json.")
 
 // titleCase converts a string to title case as a replacement for deprecated strings.Title
 func titleCase(s string) string {
@@ -52,6 +53,10 @@ func titleCase(s string) string {
 		}
 	}
 	return strings.Join(words, " ")
+}
+
+func normalizeGroupLabel(s string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(s), " ", ""))
 }
 
 // Directory for output files
@@ -101,6 +106,35 @@ func loadAndInitializeConfig() (*Config, error) {
 	specs, err := LoadOpenApiSpec()
 	if err != nil {
 		return nil, fmt.Errorf("failed to load openapi spec: %w", err)
+	}
+
+	if AutoDetect != nil && *AutoDetect {
+		// Auto-detect API groups and versions from the swagger.json
+		groupFullNames, apiGroups := DetectGroupsFromSpec(specs)
+
+		if config.GroupFullNames == nil {
+			config.GroupFullNames = groupFullNames
+		} else {
+			for short, full := range groupFullNames {
+				if _, exists := config.GroupFullNames[short]; !exists {
+					config.GroupFullNames[short] = full
+				}
+			}
+		}
+
+		existingGroups := make(map[string]bool)
+		for _, g := range config.ApiGroups {
+			existingGroups[normalizeGroupLabel(string(g))] = true
+		}
+
+		for _, g := range apiGroups {
+			normalized := normalizeGroupLabel(g)
+			if !existingGroups[normalized] {
+				config.ApiGroups = append(config.ApiGroups, ApiGroup(g))
+				existingGroups[normalized] = true
+			}
+		}
+
 	}
 
 	// Parse spec version
@@ -717,8 +751,23 @@ func (c *Config) escapeDescriptions() {
 // For each resource in the ToC, look up its definition and visit it.
 func (c *Config) visitResourcesInToc() error {
 	missing := false
-	for _, cat := range c.ResourceCategories {
+	for i, cat := range c.ResourceCategories {
+		filtered := Resources{}
 		for _, r := range cat.Resources {
+			// Auto-detect group and version if not provided
+			if AutoDetect != nil && *AutoDetect {
+				newest := c.Definitions.FindNewestVersion(r.Group, r.Name)
+				if newest == "" {
+					fmt.Printf("Resource %s/%s not found in swagger, removing from ToC\n", r.Group, r.Name)
+					missing = true
+					continue
+				}
+
+				if newest != r.Version {
+					fmt.Printf("Auto-upgrading %s/%s from %s to %s\n", r.Group, r.Name, r.Version, newest)
+					r.Version = newest
+				}
+			}
 			if d, ok := c.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); ok {
 				d.InToc = true // Mark as in Toc
 				if err := d.initExample(c); err != nil {
@@ -729,10 +778,14 @@ func (c *Config) visitResourcesInToc() error {
 				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
 				missing = true
 			}
+
+			filtered = append(filtered, r)
 		}
+		c.ResourceCategories[i].Resources = filtered
 	}
+
 	if missing {
-		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
+		fmt.Printf("\033[36mKnown definitions count: %d\033[0m\n", len(c.Definitions.All))
 	}
 
 	return nil

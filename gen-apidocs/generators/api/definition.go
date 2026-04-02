@@ -324,6 +324,18 @@ func (s *Definitions) InitializeFields(d *Definition) {
 	}
 }
 
+// FindNewestVersion returns the newest known version for the given group/kind.
+// Returns an empty string if no matching definition is found.
+func (s *Definitions) FindNewestVersion(group, kind string) string {
+	defs := s.ByKind[kind]
+	for _, d := range defs {
+		if string(d.Group) == group {
+			return string(d.Version)
+		}
+	}
+	return ""
+}
+
 func (d *Definition) GroupDisplayName() string {
 	if len(d.GroupFullName) > 0 {
 		return d.GroupFullName
