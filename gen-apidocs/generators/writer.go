@@ -63,7 +63,17 @@ func GenerateFiles() error {
 
 	copyright, title := getCopyrightAndTitle()
 
-	writer := NewHTMLWriter(config, copyright, title)
+	var writer DocWriter
+	switch *api.Backend {
+	case "html":
+		fmt.Println("Using HTML backend for documentation generation.")
+		writer = NewHTMLWriter(config, copyright, title)
+	case "markdown":
+		fmt.Println("Using Markdown backend for documentation generation.")
+		writer = NewMarkdownWriter(config, copyright, title)
+	default:
+		return fmt.Errorf("unsupported backend '%s': must be 'html' or 'markdown'", *api.Backend)
+	}
 
 	// Write the main overview page directly to avoid an unnecessary thin wrapper
 	if err := writer.WriteOverview(); err != nil {
