@@ -16,6 +16,12 @@ limitations under the License.
 
 package generators
 
+var DeprecationNoticeTemplate = `> **⚠️ This page is deprecated** and will be removed in a future release.
+>
+> Use the new [kubectl reference](/docs/reference/kubectl/generated/).
+> For a single-page view, see the [printable version](/docs/reference/kubectl/generated/_print/).
+`
+
 var CategoryTemplate = `
 # <strong>{{.Name}}</strong>
 `

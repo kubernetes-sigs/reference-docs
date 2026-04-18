@@ -324,6 +324,42 @@ func (s *Definitions) InitializeFields(d *Definition) {
 	}
 }
 
+// FindNewestVersion returns the newest known version for the given group/kind.
+// Returns an empty string if no matching definition is found.
+func (s *Definitions) FindNewestVersion(group, kind string) string {
+	defs := s.ByKind[kind]
+	newest := ""
+	for _, d := range defs {
+		if string(d.Group) != group {
+			continue
+		}
+		if newest == "" || compareVersionStrings(string(d.Version), newest) > 0 {
+			newest = string(d.Version)
+		}
+	}
+	return newest
+}
+
+// IsTopLevelResource returns true if this definition represents a top-level
+// API resource (one that has its own List endpoint), as opposed to a
+// subresource (Scale, Eviction) or utility type (Status, WatchEvent).
+func (d *Definition) IsTopLevelResource() bool {
+	for _, c := range d.OperationCategories {
+		if c == nil || c.Name != "Read Operations" {
+			continue
+		}
+		for _, op := range c.Operations {
+			if op == nil {
+				continue
+			}
+			if op.Type.Name == "List" || op.Type.Name == "List All Namespaces" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (d *Definition) GroupDisplayName() string {
 	if len(d.GroupFullName) > 0 {
 		return d.GroupFullName

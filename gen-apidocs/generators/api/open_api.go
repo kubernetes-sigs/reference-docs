@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/go-openapi/loads"
@@ -132,6 +133,53 @@ func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) er
 	}
 
 	return nil
+}
+
+func DetectGroupsFromSpec(specs []*loads.Document) (map[string]string, []string) {
+	groupFullNames := map[string]string{}
+	seenGroups := map[string]bool{}
+	apiGroups := []string{}
+
+	for _, spec := range specs {
+		for name, def := range spec.Spec().Definitions {
+			group, _, _ := GuessGVK(name)
+			if group == "" {
+				continue
+			}
+
+			seenGroups[group] = true
+
+			// Default fallback from guessed short group name.
+			fullGroup := group
+			
+			resolvedFromExtension := false
+
+			if gvkRaw, ok := def.Extensions[typeKey]; ok {
+				if gvkList, ok := gvkRaw.([]interface{}); ok && len(gvkList) > 0 {
+					if entry, ok := gvkList[0].(map[string]interface{}); ok {
+						if g, ok := entry["group"].(string); ok {
+							if g == "" {
+								g = "core"
+							}
+							fullGroup = g
+							resolvedFromExtension = true
+						}
+					}
+				}
+			}
+
+			// Keep an existing extension-derived full name if later definitions only have fallback data.
+			if current, exists := groupFullNames[group]; !exists || resolvedFromExtension || current == group {
+				groupFullNames[group] = fullGroup
+			}
+		}
+	}
+
+	for group := range seenGroups {
+		apiGroups = append(apiGroups, titleCase(group))
+	}
+	sort.Strings(apiGroups)
+	return groupFullNames, apiGroups
 }
 
 func ParseSpecInfo(specs []*loads.Document, cfg *Config) {

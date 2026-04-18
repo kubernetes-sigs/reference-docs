@@ -38,6 +38,7 @@ var WorkDir = flag.String("work-dir", "", "Working directory for the generator."
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
 var Backend = flag.String("backend", "html", "Output format for the generator. Supported values: 'html' or 'markdown'.")
+var AutoDetect = flag.Bool("auto-detect", false, "If true, auto-detect API groups and versions from swagger.json.")
 
 // titleCase converts a string to title case as a replacement for deprecated strings.Title
 func titleCase(s string) string {
@@ -53,6 +54,10 @@ func titleCase(s string) string {
 		}
 	}
 	return strings.Join(words, " ")
+}
+
+func normalizeGroupLabel(s string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(s), " ", ""))
 }
 
 // Directory for output files
@@ -104,6 +109,35 @@ func loadAndInitializeConfig() (*Config, error) {
 		return nil, fmt.Errorf("failed to load openapi spec: %w", err)
 	}
 
+	if AutoDetect != nil && *AutoDetect {
+		// Auto-detect API groups and versions from the swagger.json
+		groupFullNames, apiGroups := DetectGroupsFromSpec(specs)
+
+		if config.GroupFullNames == nil {
+			config.GroupFullNames = groupFullNames
+		} else {
+			for short, full := range groupFullNames {
+				if _, exists := config.GroupFullNames[short]; !exists {
+					config.GroupFullNames[short] = full
+				}
+			}
+		}
+
+		existingGroups := make(map[string]bool)
+		for _, g := range config.ApiGroups {
+			existingGroups[normalizeGroupLabel(string(g))] = true
+		}
+
+		for _, g := range apiGroups {
+			normalized := normalizeGroupLabel(g)
+			if !existingGroups[normalized] {
+				config.ApiGroups = append(config.ApiGroups, ApiGroup(g))
+				existingGroups[normalized] = true
+			}
+		}
+
+	}
+
 	// Parse spec version
 	ParseSpecInfo(specs, config)
 
@@ -127,6 +161,10 @@ func processDefinitionsAndOperations(config *Config) error {
 		return fmt.Errorf("failed to load openapi spec: %w", err)
 	}
 
+	if AutoDetect != nil && *AutoDetect && BuildOps != nil && !*BuildOps {
+		return fmt.Errorf("--auto-detect requires --build-operations=true")
+	}
+
 	if *UseTags {
 		// Initialize the config and ToC from the tags on definitions
 		if err := config.genConfigFromTags(specs); err != nil {
@@ -143,6 +181,12 @@ func processDefinitionsAndOperations(config *Config) error {
 		return fmt.Errorf("failed to init operations: %w", err)
 	}
 
+	if AutoDetect != nil && *AutoDetect {
+		originalCategories := config.ResourceCategories
+		config.buildGroupBasedCategories()
+		config.mergeAnnotations(originalCategories)
+	}
+
 	// replace unicode escape sequences with HTML entities.
 	config.escapeDescriptions()
 
@@ -154,6 +198,131 @@ func processDefinitionsAndOperations(config *Config) error {
 	}
 
 	return nil
+}
+
+func (c *Config) mergeAnnotations(originalCategories []ResourceCategory) {
+	// Build a lookup: "group/version/name" -> annotation fields
+	annotations := map[string]*Resource{}
+	for _, cat := range originalCategories {
+		for _, r := range cat.Resources {
+			if r.DescriptionWarning != "" || r.DescriptionNote != "" || r.ConceptGuide != "" {
+				key := r.Group + "/" + r.Version + "/" + r.Name
+				annotations[key] = r
+			}
+		}
+	}
+
+	// Apply to new categories
+	placed := map[string]bool{}
+	for i, cat := range c.ResourceCategories {
+		for j, r := range cat.Resources {
+			key := r.Group + "/" + r.Version + "/" + r.Name
+			if orig, ok := annotations[key]; ok {
+				c.ResourceCategories[i].Resources[j].DescriptionWarning = orig.DescriptionWarning
+				c.ResourceCategories[i].Resources[j].DescriptionNote = orig.DescriptionNote
+				c.ResourceCategories[i].Resources[j].ConceptGuide = orig.ConceptGuide
+				placed[key] = true
+			}
+		}
+	}
+
+	// Add annotated resources that weren't placed
+	for key, r := range annotations {
+		if placed[key] {
+			continue
+		}
+		// Find or create the group category
+		found := false
+		for i, cat := range c.ResourceCategories {
+			if cat.Include == r.Group {
+				c.ResourceCategories[i].Resources = append(c.ResourceCategories[i].Resources, r)
+				// Re-sort to maintain stable order
+				res := c.ResourceCategories[i].Resources
+				sort.Slice(res, func(a, b int) bool {
+					return res[a].Name < res[b].Name
+				})
+				found = true
+				break
+			}
+		}
+		if !found {
+			c.ResourceCategories = append(c.ResourceCategories, ResourceCategory{
+				Name:      titleCase(r.Group),
+				Include:   r.Group,
+				Resources: Resources{r},
+			})
+		}
+		// Mark in ToC
+		if d, ok := c.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); ok {
+			d.InToc = true
+		}
+		fmt.Printf("Preserving annotated resource: %s\n", key)
+	}
+}
+
+// NOTE: buildGroupBasedCategories requires --build-operations=true (the default)
+// because IsTopLevelResource() checks OperationCategories, which are cleared
+// when build-operations is false.
+func (c *Config) buildGroupBasedCategories() {
+	// build the apis from the observed groups
+	groupsMap := map[ApiGroup]DefinitionList{}
+	for _, d := range c.Definitions.All {
+		// Old version (v1alpha1 when v1beta1 exists)
+		if d.IsOldVersion {
+			continue
+		}
+		// Sub-type inlined into parent (Spec, Status, List, etc.)
+		if d.IsInlined {
+			continue
+		}
+		// List types (PodList, DeploymentList)
+		if strings.HasSuffix(d.Name, "List") {
+			continue
+		}
+		// No API operations — field type, not a real resource
+		if !d.FoundInOperation {
+			continue
+		}
+
+		if !d.IsTopLevelResource() {
+			continue
+		}
+
+		g := d.Group
+		groupsMap[g] = append(groupsMap[g], d)
+	}
+	// Sort groups alphabetically
+	groupsList := ApiGroups{}
+	for g := range groupsMap {
+		groupsList = append(groupsList, g)
+	}
+	sort.Sort(groupsList)
+
+	// Build one category per group
+	categories := []ResourceCategory{}
+	for _, g := range groupsList {
+		groupName := titleCase(string(g))
+		rc := ResourceCategory{
+			Include: string(g),
+			Name:    groupName,
+		}
+		defList := groupsMap[g]
+		sort.Sort(defList)
+		for _, d := range defList {
+			r := &Resource{
+				Name:       d.Name,
+				Group:      string(d.Group),
+				Version:    string(d.Version),
+				Definition: d,
+			}
+			d.InToc = true
+			rc.Resources = append(rc.Resources, r)
+		}
+		categories = append(categories, rc)
+	}
+
+	// Replace curated categories with group-based
+	c.ResourceCategories = categories
 }
 
 // pruneResourceCategories removes resources that shouldn't be in the ToC
@@ -718,8 +887,23 @@ func (c *Config) escapeDescriptions() {
 // For each resource in the ToC, look up its definition and visit it.
 func (c *Config) visitResourcesInToc() error {
 	missing := false
-	for _, cat := range c.ResourceCategories {
+	for i, cat := range c.ResourceCategories {
+		filtered := Resources{}
 		for _, r := range cat.Resources {
+			// Auto-detect group and version if not provided
+			if AutoDetect != nil && *AutoDetect {
+				newest := c.Definitions.FindNewestVersion(r.Group, r.Name)
+				if newest == "" {
+					fmt.Printf("Resource %s/%s not found in swagger, removing from ToC\n", r.Group, r.Name)
+					missing = true
+					continue
+				}
+
+				if newest != r.Version {
+					fmt.Printf("Auto-upgrading %s/%s from %s to %s\n", r.Group, r.Name, r.Version, newest)
+					r.Version = newest
+				}
+			}
 			if d, ok := c.Definitions.GetByVersionKind(r.Group, r.Version, r.Name); ok {
 				d.InToc = true // Mark as in Toc
 				if err := d.initExample(c); err != nil {
@@ -730,10 +914,14 @@ func (c *Config) visitResourcesInToc() error {
 				fmt.Printf("\033[31mCould not find definition for resource in TOC: %s %s %s.\033[0m\n", r.Group, r.Version, r.Name)
 				missing = true
 			}
+
+			filtered = append(filtered, r)
 		}
+		c.ResourceCategories[i].Resources = filtered
 	}
+
 	if missing {
-		fmt.Printf("\033[36mAll known definitions: %v\033[0m\n", c.Definitions.All)
+		fmt.Printf("\033[36mKnown definitions count: %d\033[0m\n", len(c.Definitions.All))
 	}
 
 	return nil
