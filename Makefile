@@ -56,7 +56,7 @@ CLISRCFONT=$(CLISRC)/node_modules/font-awesome
 CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 all:
-	@echo "Supported targets:\n\tcli api comp copycli copyapi createversiondirs genresources updateapispec configapi"
+	@echo "Supported targets:\n\tcli api apimd comp copycli copyapi createversiondirs genresources updateapispec configapi"
 
 # create directories for new release
 createversiondirs:
@@ -107,6 +107,11 @@ updateapispec: createversiondirs
 
 api: cleanapi
 	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=. --auto-detect
+
+# Build API docs as markdown (Hugo-compatible output in gen-apidocs/build/markdown/).
+# Output is intended to replace gen-resourcesdocs once parity is reached.
+apimd: cleanapi
+	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=. --auto-detect --backend=markdown
 
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build

@@ -17,21 +17,53 @@ limitations under the License.
 package generators
 
 import (
+	_ "embed"
 	"fmt"
-	"log"
+	"io"
 	"os"
 	"path/filepath"
+	"regexp"
+	"sort"
+	"strconv"
+	"strings"
+	"text/template"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
 
+// MarkdownWriter emits Hugo-compatible markdown under:
+//
+//	_index.md                              — top-level part listing
+//	<category-slug>/_index.md              — per-category index
+//	<category-slug>/<resource>-<ver>.md    — per-resource page
+//	definitions/<name>-<ver>-<group>.md    — standalone definitions
+//	operations/<op-id>.md                  — orphaned operations
 type MarkdownWriter struct {
 	Config          *api.Config
-	OutputDir       string // build/markdown
-	currentCategory string
+	OutputDir       string
+	currentCategory mdCategory
 	resourceWeight  int
 	categoryWeight  int
-	linkMap         map[string]linkInfo
+
+	// linkMap is populated during render for the PR 2 cross-reference pass.
+	linkMap map[string]linkInfo
+
+	toc []*mdTOCItem
+
+	// finalized guards against Finalize being called twice by GenerateFiles.
+	finalized bool
+}
+
+type mdCategory struct {
+	name string
+	slug string
+}
+
+type mdTOCItem struct {
+	title    string
+	path     string
+	weight   int
+	children []*mdTOCItem
 }
 
 type linkInfo struct {
@@ -40,22 +72,74 @@ type linkInfo struct {
 	Anchor   string
 }
 
+const hugoIndex = "_index.md"
+
 var _ DocWriter = (*MarkdownWriter)(nil)
+
+// anchorRegex must stay in sync with the Sprig regex in
+// gen-resourcesdocs/templates/chapter.tmpl; external k/website links rely
+// on the exact anchor format.
+var anchorRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+
+//go:embed templates/resource.tmpl
+var resourceTemplateSrc string
+
+// Template funcs: q = YAML-safe quote (frontmatter strings);
+// md = markdown `<` escape (body text). Descriptions are passed raw
+// so the template picks the right escape per site.
+var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
+	"q":  strconv.Quote,
+	"md": escape,
+}).Parse(resourceTemplateSrc))
+
+type resourcePage struct {
+	APIVersion  string
+	Kind        string
+	Import      string
+	Title       string
+	Weight      int
+	Anchor      string
+	Description string
+	Fields      []templateField
+	Operations  []templateOperation
+}
+
+type templateField struct {
+	Name        string
+	Type        string
+	Description string
+}
+
+type templateOperation struct {
+	Verb       string
+	Title      string
+	Method     string
+	Path       string
+	Parameters []templateParam
+	Responses  []templateResponse
+}
+
+type templateParam struct {
+	Title       string
+	Description string
+}
+
+type templateResponse struct {
+	Code        string
+	Type        string
+	Description string
+}
 
 func NewMarkdownWriter(config *api.Config, copyright, title string) DocWriter {
 	outputDir := filepath.Join(api.BuildDir, "markdown")
-
-	writer := MarkdownWriter{
+	if err := os.MkdirAll(outputDir, 0755); err != nil {
+		fmt.Fprintf(os.Stderr, "MarkdownWriter: failed to create output dir %s: %v\n", outputDir, err)
+	}
+	return &MarkdownWriter{
 		Config:    config,
 		OutputDir: outputDir,
 		linkMap:   make(map[string]linkInfo),
 	}
-
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		log.Printf("MarkdownWriter: failed to create output dir %s: %v", outputDir, err)
-	}
-
-	return &writer
 }
 
 func (m *MarkdownWriter) Extension() string {
@@ -67,51 +151,321 @@ func (m *MarkdownWriter) DefaultStaticContent(title string) string {
 }
 
 func (m *MarkdownWriter) WriteOverview() error {
-	fmt.Println("MarkdownWriter.WriteOverview")
-	return nil
-}
-
-func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
-	fmt.Printf("MarkdownWriter.WriteResource: %s\n", r.Name)
+	if err := m.writeSection("_overview.md", "API Overview"); err != nil {
+		return fmt.Errorf("markdown: overview: %w", err)
+	}
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  "Overview",
+		path:   "_overview.md",
+		weight: m.nextCategoryWeight(),
+	})
 	return nil
 }
 
 func (m *MarkdownWriter) WriteAPIGroupVersions(gvs api.GroupVersions) error {
-	fmt.Println("MarkdownWriter.WriteAPIGroupVersions")
+	path := filepath.Join(m.OutputDir, "_group_versions.md")
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: group versions: %w", err)
+	}
+	defer f.Close()
+
+	fmt.Fprintln(f, "# API Groups")
+	fmt.Fprintln(f)
+	fmt.Fprintln(f, "The API Groups and their versions are summarized in the following table.")
+	fmt.Fprintln(f)
+
+	groups := make(api.ApiGroups, 0, len(gvs))
+	for g := range gvs {
+		groups = append(groups, api.ApiGroup(g))
+	}
+	sort.Sort(groups)
+
+	writePipeTable(f, []string{"Group", "Versions"}, func(row func(cells ...string)) {
+		for _, g := range groups {
+			versions := gvs[g.String()]
+			sort.Sort(versions)
+			vs := make([]string, 0, len(versions))
+			for _, v := range versions {
+				vs = append(vs, v.String())
+			}
+			row("`"+g.String()+"`", "`"+strings.Join(vs, ", ")+"`")
+		}
+	})
+
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  "API Groups",
+		path:   "_group_versions.md",
+		weight: m.nextCategoryWeight(),
+	})
 	return nil
 }
 
 func (m *MarkdownWriter) WriteResourceCategory(name, file string) error {
-	fmt.Printf("MarkdownWriter.WriteResourceCategory: %s\n", name)
+	slug := kebabCase(name)
+	dir := filepath.Join(m.OutputDir, slug)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("markdown: category dir: %w", err)
+	}
+
+	weight := m.nextCategoryWeight()
+	indexPath := filepath.Join(dir, hugoIndex)
+	f, err := os.Create(indexPath)
+	if err != nil {
+		return fmt.Errorf("markdown: category index: %w", err)
+	}
+	defer f.Close()
+
+	fmt.Fprintln(f, "---")
+	fmt.Fprintln(f, `content_type: "api_reference"`)
+	fmt.Fprintf(f, "title: %q\n", name)
+	fmt.Fprintf(f, "weight: %d\n", weight)
+	fmt.Fprintln(f, "auto_generated: true")
+	fmt.Fprintln(f, "---")
+	fmt.Fprintln(f)
+
+	if body := readOptionalSection(file + ".md"); body != "" {
+		fmt.Fprintln(f, body)
+	} else {
+		fmt.Fprintf(f, "# %s\n", name)
+	}
+
+	m.currentCategory = mdCategory{name: name, slug: slug}
+	m.resourceWeight = 0
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  name,
+		path:   filepath.Join(slug, hugoIndex),
+		weight: weight,
+	})
 	return nil
 }
 
 func (m *MarkdownWriter) WriteDefinitionsOverview() error {
-	fmt.Println("MarkdownWriter.WriteDefinitionsOverview")
+	if err := m.writeSection("_definitions.md", "Definitions"); err != nil {
+		return fmt.Errorf("markdown: definitions overview: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, "definitions"), 0755); err != nil {
+		return fmt.Errorf("markdown: definitions dir: %w", err)
+	}
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  "Definitions",
+		path:   "_definitions.md",
+		weight: m.nextCategoryWeight(),
+	})
 	return nil
 }
 
 func (m *MarkdownWriter) WriteOrphanedOperationsOverview() error {
-	fmt.Println("MarkdownWriter.WriteOrphanedOperationsOverview")
-	return nil
-}
-
-func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
-	fmt.Printf("MarkdownWriter.WriteDefinition: %s\n", d.Name)
-	return nil
-}
-
-func (m *MarkdownWriter) WriteOperation(o *api.Operation) error {
-	fmt.Printf("MarkdownWriter.WriteOperation: %s\n", o.ID)
+	if err := m.writeSection("_operations.md", "Operations"); err != nil {
+		return fmt.Errorf("markdown: operations overview: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, "operations"), 0755); err != nil {
+		return fmt.Errorf("markdown: operations dir: %w", err)
+	}
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  "Operations",
+		path:   "_operations.md",
+		weight: m.nextCategoryWeight(),
+	})
 	return nil
 }
 
 func (m *MarkdownWriter) WriteOldVersionsOverview() error {
-	fmt.Println("MarkdownWriter.WriteOldVersionsOverview")
+	if err := m.writeSection("_oldversions.md", "Old API Versions"); err != nil {
+		return fmt.Errorf("markdown: old versions overview: %w", err)
+	}
+	m.toc = append(m.toc, &mdTOCItem{
+		title:  "Old API Versions",
+		path:   "_oldversions.md",
+		weight: m.nextCategoryWeight(),
+	})
+	return nil
+}
+
+func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
+	filename := fmt.Sprintf("%s-%s.md", strings.ToLower(r.Name), r.Definition.Version)
+	path := filepath.Join(m.OutputDir, m.currentCategory.slug, filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: resource %s: %w", r.Name, err)
+	}
+	defer f.Close()
+
+	if err := resourceTemplate.Execute(f, m.buildResourcePage(r)); err != nil {
+		return fmt.Errorf("markdown: resource %s body: %w", r.Name, err)
+	}
+
+	return nil
+}
+
+func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
+	page := resourcePage{
+		APIVersion:  groupVersionString(r.Definition.Group, r.Definition.Version),
+		Kind:        r.Definition.Name,
+		Title:       r.Definition.Name,
+		Weight:      m.nextResourceWeight(),
+		Anchor:      anchor(r.Definition.Name),
+		Description: r.Definition.DescriptionWithEntities,
+		// Import: derivable from the raw swagger key; requires preserving
+		// it on api.Definition first. Follow-up PR.
+	}
+
+	for _, fld := range r.Definition.Fields {
+		page.Fields = append(page.Fields, templateField{
+			Name:        fld.Name,
+			Type:        fld.Type,
+			Description: fld.Description,
+		})
+	}
+
+	for _, oc := range r.Definition.OperationCategories {
+		for _, o := range oc.Operations {
+			page.Operations = append(page.Operations, buildTemplateOperation(o))
+		}
+	}
+
+	return page
+}
+
+func buildTemplateOperation(o *api.Operation) templateOperation {
+	op := templateOperation{
+		Verb:   strings.ToLower(o.HttpMethod),
+		Title:  o.Type.Name,
+		Method: o.HttpMethod,
+		Path:   o.Path,
+	}
+
+	appendParams := func(params api.Fields, location string) {
+		for _, p := range params {
+			op.Parameters = append(op.Parameters, templateParam{
+				Title:       fmt.Sprintf("%s (in %s)", p.Name, location),
+				Description: p.Description,
+			})
+		}
+	}
+	appendParams(o.PathParams, "path")
+	appendParams(o.QueryParams, "query")
+	appendParams(o.BodyParams, "body")
+
+	responses := append(api.HttpResponses(nil), o.HttpResponses...)
+	sort.Slice(responses, func(i, j int) bool {
+		return responses[i].Code < responses[j].Code
+	})
+	for _, rsp := range responses {
+		op.Responses = append(op.Responses, templateResponse{
+			Code:        rsp.Code,
+			Type:        rsp.Field.Type,
+			Description: rsp.Field.Description,
+		})
+	}
+
+	return op
+}
+
+// WriteDefinition is a stub pending follow-up PR; definitions pages
+// use the same template shape as resources without samples or ops.
+func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
+	return nil
+}
+
+// WriteOperation is a stub pending follow-up PR; emits a page per
+// orphaned operation under operations/.
+func (m *MarkdownWriter) WriteOperation(o *api.Operation) error {
 	return nil
 }
 
 func (m *MarkdownWriter) Finalize() error {
-	fmt.Println("MarkdownWriter.Finalize")
+	if m.finalized {
+		return nil
+	}
+	m.finalized = true
+
+	path := filepath.Join(m.OutputDir, hugoIndex)
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: finalize: %w", err)
+	}
+	defer f.Close()
+
+	fmt.Fprintln(f, "---")
+	fmt.Fprintln(f, `content_type: "api_reference"`)
+	fmt.Fprintf(f, "description: %q\n", fmt.Sprintf("Kubernetes API reference, version %s.", m.Config.SpecVersion))
+	fmt.Fprintf(f, "title: %q\n", m.Config.SpecTitle)
+	fmt.Fprintln(f, "weight: 0")
+	fmt.Fprintln(f, "auto_generated: true")
+	fmt.Fprintln(f, "---")
+	fmt.Fprintln(f)
+
+	fmt.Fprintf(f, "# %s\n\n", m.Config.SpecTitle)
+	fmt.Fprintf(f, "_Version: %s_\n\n", m.Config.SpecVersion)
+
+	for _, item := range m.toc {
+		fmt.Fprintf(f, "- [%s](./%s)\n", item.title, item.path)
+	}
 	return nil
 }
+
+func anchor(s string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(s, "-"), "-")
+}
+
+// escape is the minimal markdown escape needed so OpenAPI description text
+// containing `<foo>` renders as literal rather than HTML.
+func escape(s string) string {
+	return strings.ReplaceAll(s, "<", `\<`)
+}
+
+func kebabCase(s string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(s), "-"), "-")
+}
+
+func groupVersionString(group api.ApiGroup, version api.ApiVersion) string {
+	if group == "" || group == "core" {
+		return version.String()
+	}
+	return fmt.Sprintf("%s/%s", group.String(), version.String())
+}
+
+func writePipeTable(w io.Writer, headers []string, rowFn func(row func(cells ...string))) {
+	fmt.Fprintln(w, "| "+strings.Join(headers, " | ")+" |")
+	sep := make([]string, len(headers))
+	for i := range sep {
+		sep[i] = "---"
+	}
+	fmt.Fprintln(w, "| "+strings.Join(sep, " | ")+" |")
+	rowFn(func(cells ...string) {
+		fmt.Fprintln(w, "| "+strings.Join(cells, " | ")+" |")
+	})
+}
+
+func (m *MarkdownWriter) writeSection(filename, title string) error {
+	content := readOptionalSection(filename)
+	if content == "" {
+		content = "# " + title + "\n"
+	}
+	dst := filepath.Join(m.OutputDir, filename)
+	return os.WriteFile(dst, []byte(content), 0644)
+}
+
+// readOptionalSection returns config/sections/<name> if present, "" otherwise.
+// Read errors are swallowed to match the HTML writer's best-effort behaviour.
+func readOptionalSection(name string) string {
+	src := filepath.Join(api.SectionsDir, name)
+	data, err := os.ReadFile(src)
+	if err != nil {
+		return ""
+	}
+	return string(data)
+}
+
+func (m *MarkdownWriter) nextCategoryWeight() int {
+	m.categoryWeight += 10
+	return m.categoryWeight
+}
+
+func (m *MarkdownWriter) nextResourceWeight() int {
+	m.resourceWeight += 10
+	return m.resourceWeight
+}
+
