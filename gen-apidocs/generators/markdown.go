@@ -74,6 +74,16 @@ type linkInfo struct {
 
 const hugoIndex = "_index.md"
 
+// Header page titles — kept as named constants so the TOC-ordering
+// switch and the page emitters never drift.
+const (
+	titleOverview    = "Overview"
+	titleAPIGroups   = "API Groups"
+	titleDefinitions = "Definitions"
+	titleOperations  = "Operations"
+	titleOldVersions = "Old API Versions"
+)
+
 var _ DocWriter = (*MarkdownWriter)(nil)
 
 // anchorRegex must stay in sync with the Sprig regex in
@@ -155,7 +165,7 @@ func (m *MarkdownWriter) WriteOverview() error {
 		return fmt.Errorf("markdown: overview: %w", err)
 	}
 	m.toc = append(m.toc, &mdTOCItem{
-		title:  "Overview",
+		title:  titleOverview,
 		path:   "_overview.md",
 		weight: m.nextCategoryWeight(),
 	})
@@ -194,7 +204,7 @@ func (m *MarkdownWriter) WriteAPIGroupVersions(gvs api.GroupVersions) error {
 	})
 
 	m.toc = append(m.toc, &mdTOCItem{
-		title:  "API Groups",
+		title:  titleAPIGroups,
 		path:   "_group_versions.md",
 		weight: m.nextCategoryWeight(),
 	})
@@ -241,14 +251,14 @@ func (m *MarkdownWriter) WriteResourceCategory(name, file string) error {
 }
 
 func (m *MarkdownWriter) WriteDefinitionsOverview() error {
-	if err := m.writeSection("_definitions.md", "Definitions"); err != nil {
+	if err := m.writeSection("_definitions.md", titleDefinitions); err != nil {
 		return fmt.Errorf("markdown: definitions overview: %w", err)
 	}
 	if err := os.MkdirAll(filepath.Join(m.OutputDir, "definitions"), 0755); err != nil {
 		return fmt.Errorf("markdown: definitions dir: %w", err)
 	}
 	m.toc = append(m.toc, &mdTOCItem{
-		title:  "Definitions",
+		title:  titleDefinitions,
 		path:   "_definitions.md",
 		weight: m.nextCategoryWeight(),
 	})
@@ -256,14 +266,14 @@ func (m *MarkdownWriter) WriteDefinitionsOverview() error {
 }
 
 func (m *MarkdownWriter) WriteOrphanedOperationsOverview() error {
-	if err := m.writeSection("_operations.md", "Operations"); err != nil {
+	if err := m.writeSection("_operations.md", titleOperations); err != nil {
 		return fmt.Errorf("markdown: operations overview: %w", err)
 	}
 	if err := os.MkdirAll(filepath.Join(m.OutputDir, "operations"), 0755); err != nil {
 		return fmt.Errorf("markdown: operations dir: %w", err)
 	}
 	m.toc = append(m.toc, &mdTOCItem{
-		title:  "Operations",
+		title:  titleOperations,
 		path:   "_operations.md",
 		weight: m.nextCategoryWeight(),
 	})
@@ -271,11 +281,11 @@ func (m *MarkdownWriter) WriteOrphanedOperationsOverview() error {
 }
 
 func (m *MarkdownWriter) WriteOldVersionsOverview() error {
-	if err := m.writeSection("_oldversions.md", "Old API Versions"); err != nil {
+	if err := m.writeSection("_oldversions.md", titleOldVersions); err != nil {
 		return fmt.Errorf("markdown: old versions overview: %w", err)
 	}
 	m.toc = append(m.toc, &mdTOCItem{
-		title:  "Old API Versions",
+		title:  titleOldVersions,
 		path:   "_oldversions.md",
 		weight: m.nextCategoryWeight(),
 	})
@@ -400,10 +410,43 @@ func (m *MarkdownWriter) Finalize() error {
 	fmt.Fprintf(f, "# %s\n\n", m.Config.SpecTitle)
 	fmt.Fprintf(f, "_Version: %s_\n\n", m.Config.SpecVersion)
 
+	// Categories are added to m.toc in the order GenerateFiles encounters
+	// them, which in --auto-detect mode depends on map iteration and is
+	// therefore non-deterministic. Sort here so top-level _index.md diffs
+	// stay quiet across runs. Header pages (Overview, API Groups, etc.)
+	// stay at their fixed positions via tocSortRank.
+	sort.SliceStable(m.toc, func(i, j int) bool {
+		ri, rj := tocSortRank(m.toc[i].title), tocSortRank(m.toc[j].title)
+		if ri != rj {
+			return ri < rj
+		}
+		return m.toc[i].title < m.toc[j].title
+	})
+
 	for _, item := range m.toc {
 		fmt.Fprintf(f, "- [%s](./%s)\n", item.title, item.path)
 	}
 	return nil
+}
+
+// tocSortRank pins well-known header pages at fixed positions ahead of
+// the variable-length list of resource categories. Unknown titles fall
+// into the categories bucket and sort alphabetically among themselves.
+func tocSortRank(title string) int {
+	switch title {
+	case titleOverview:
+		return 0
+	case titleAPIGroups:
+		return 1
+	case titleDefinitions:
+		return 3
+	case titleOperations:
+		return 4
+	case titleOldVersions:
+		return 5
+	default:
+		return 2
+	}
 }
 
 func anchor(s string) string {
