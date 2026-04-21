@@ -31,10 +31,17 @@ guide. You can file document formatting bugs against the
 
 <hr>
 
-{{range .Fields}}- {{.Name}} ({{.Type}})
-
-  {{.Description | md}}
-
+{{if .Fields}}<table>
+  <thead><tr><th>Field</th><th>Description</th></tr></thead>
+  <tbody>
+{{- range .Fields}}
+    <tr>
+      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{.Type}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}</td>
+      <td>{{.Description | md}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
 {{end}}
 {{- range .Operations}}
 ### `{{.Verb}}` {{.Title}}

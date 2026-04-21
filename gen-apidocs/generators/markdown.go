@@ -118,6 +118,8 @@ type templateField struct {
 	Name        string
 	Type        string
 	Description string
+	Required    bool
+	ConstValue  string // non-empty for fields with a fixed value (apiVersion, kind)
 }
 
 type templateOperation struct {
@@ -320,11 +322,18 @@ func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 		Description: r.Definition.DescriptionWithEntities,
 	}
 
+	required := map[string]bool{}
+	for _, name := range r.Definition.RequiredFields() {
+		required[name] = true
+	}
+
 	for _, fld := range r.Definition.Fields {
 		page.Fields = append(page.Fields, templateField{
 			Name:        fld.Name,
 			Type:        fld.Type,
 			Description: fld.Description,
+			Required:    required[fld.Name],
+			ConstValue:  constValueFor(fld.Name, page.APIVersion, page.Kind),
 		})
 	}
 
@@ -335,6 +344,20 @@ func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 	}
 
 	return page
+}
+
+// constValueFor returns the fixed value of a definition field when one exists.
+// Today only apiVersion and kind are constants on resource objects — the
+// swagger doesn't tag them explicitly, but Kubernetes manifests always carry
+// the same literal values for a given GVK, so we surface them as hints.
+func constValueFor(fieldName, apiVersion, kind string) string {
+	switch fieldName {
+	case "apiVersion":
+		return apiVersion
+	case "kind":
+		return kind
+	}
+	return ""
 }
 
 func buildTemplateOperation(o *api.Operation) templateOperation {

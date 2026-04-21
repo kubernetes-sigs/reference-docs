@@ -374,6 +374,13 @@ func (d *Definition) Key() string {
 	return fmt.Sprintf("%s.%s.%s", d.Group, d.Version, d.Kind)
 }
 
+// RequiredFields returns the names of required properties on this definition,
+// sourced from the underlying OpenAPI schema. Used by writers that need to
+// flag required fields on a per-name basis.
+func (d *Definition) RequiredFields() []string {
+	return d.schema.Required
+}
+
 // GoImportPath returns the Go import path this definition's type lives at,
 // derived from the swagger key. Returns "" when the key was not preserved
 // (e.g. old specs parsed before SwaggerKey existed).
