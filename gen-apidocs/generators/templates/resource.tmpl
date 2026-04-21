@@ -50,17 +50,46 @@ guide. You can file document formatting bugs against the
 
 {{.Method}} {{.Path}}
 
-{{if .Parameters}}#### Parameters
+{{if .PathParams}}#### Path Parameters
 
-{{range .Parameters}}- {{.Title}}
-
-  {{.Description | md}}
-
+{{template "paramTable" .PathParams}}
 {{end}}
+{{- if .QueryParams}}#### Query Parameters
+
+{{template "paramTable" .QueryParams}}
+{{end}}
+{{- if .BodyParams}}#### Body Parameters
+
+{{template "paramTable" .BodyParams}}
 {{end}}
 {{- if .Responses}}#### Response
 
-{{range .Responses}}- {{.Code}}{{if .Type}} ({{.Type}}){{end}}: {{.Description | md}}
+<table>
+  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
+  <tbody>
+{{- range .Responses}}
+    <tr>
+      <td>{{.Code}}</td>
+      <td>{{.Description | md}}</td>
+      <td>{{if .Type}}<em>{{.Type}}</em>{{else}}&mdash;{{end}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
 {{end}}
-{{end}}
+{{- end}}
+
+{{define "paramTable" -}}
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+{{- range .}}
+    <tr>
+      <td><code>{{.Name}}</code></td>
+      <td><em>{{.Type}}</em></td>
+      <td>{{.Description | md}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
 {{- end}}

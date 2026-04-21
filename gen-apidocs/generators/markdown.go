@@ -123,16 +123,19 @@ type templateField struct {
 }
 
 type templateOperation struct {
-	Verb       string
-	Title      string
-	Method     string
-	Path       string
-	Parameters []templateParam
-	Responses  []templateResponse
+	Verb        string
+	Title       string
+	Method      string
+	Path        string
+	PathParams  []templateParam
+	QueryParams []templateParam
+	BodyParams  []templateParam
+	Responses   []templateResponse
 }
 
 type templateParam struct {
-	Title       string
+	Name        string
+	Type        string
 	Description string
 }
 
@@ -228,13 +231,7 @@ func (m *MarkdownWriter) WriteResourceCategory(name, file string) error {
 	}
 	defer f.Close()
 
-	fmt.Fprintln(f, "---")
-	fmt.Fprintln(f, `content_type: "api_reference"`)
-	fmt.Fprintf(f, "title: %q\n", name)
-	fmt.Fprintf(f, "weight: %d\n", weight)
-	fmt.Fprintln(f, "auto_generated: true")
-	fmt.Fprintln(f, "---")
-	fmt.Fprintln(f)
+	writeSectionFrontmatter(f, name, "", weight)
 
 	if body := readOptionalSection(file + ".md"); body != "" {
 		fmt.Fprintln(f, body)
@@ -368,17 +365,20 @@ func buildTemplateOperation(o *api.Operation) templateOperation {
 		Path:   o.Path,
 	}
 
-	appendParams := func(params api.Fields, location string) {
+	convert := func(params api.Fields) []templateParam {
+		out := make([]templateParam, 0, len(params))
 		for _, p := range params {
-			op.Parameters = append(op.Parameters, templateParam{
-				Title:       fmt.Sprintf("%s (in %s)", p.Name, location),
+			out = append(out, templateParam{
+				Name:        p.Name,
+				Type:        p.Type,
 				Description: p.Description,
 			})
 		}
+		return out
 	}
-	appendParams(o.PathParams, "path")
-	appendParams(o.QueryParams, "query")
-	appendParams(o.BodyParams, "body")
+	op.PathParams = convert(o.PathParams)
+	op.QueryParams = convert(o.QueryParams)
+	op.BodyParams = convert(o.BodyParams)
 
 	responses := append(api.HttpResponses(nil), o.HttpResponses...)
 	sort.Slice(responses, func(i, j int) bool {
@@ -420,14 +420,10 @@ func (m *MarkdownWriter) Finalize() error {
 	}
 	defer f.Close()
 
-	fmt.Fprintln(f, "---")
-	fmt.Fprintln(f, `content_type: "api_reference"`)
-	fmt.Fprintf(f, "description: %q\n", fmt.Sprintf("Kubernetes API reference, version %s.", m.Config.SpecVersion))
-	fmt.Fprintf(f, "title: %q\n", m.Config.SpecTitle)
-	fmt.Fprintln(f, "weight: 0")
-	fmt.Fprintln(f, "auto_generated: true")
-	fmt.Fprintln(f, "---")
-	fmt.Fprintln(f)
+	writeSectionFrontmatter(f,
+		m.Config.SpecTitle,
+		fmt.Sprintf("Kubernetes API reference, version %s.", m.Config.SpecVersion),
+		0)
 
 	fmt.Fprintf(f, "# %s\n\n", m.Config.SpecTitle)
 	fmt.Fprintf(f, "_Version: %s_\n\n", m.Config.SpecVersion)
@@ -469,6 +465,23 @@ func tocSortRank(title string) int {
 	default:
 		return 2
 	}
+}
+
+// writeSectionFrontmatter emits the minimal frontmatter block used by
+// non-resource pages (category _index.md, top-level _index.md). Resource
+// pages have richer frontmatter and go through resource.tmpl instead.
+// Description is optional; empty omits the line.
+func writeSectionFrontmatter(w io.Writer, title, description string, weight int) {
+	fmt.Fprintln(w, "---")
+	fmt.Fprintln(w, `content_type: "api_reference"`)
+	if description != "" {
+		fmt.Fprintf(w, "description: %q\n", description)
+	}
+	fmt.Fprintf(w, "title: %q\n", title)
+	fmt.Fprintf(w, "weight: %d\n", weight)
+	fmt.Fprintln(w, "auto_generated: true")
+	fmt.Fprintln(w, "---")
+	fmt.Fprintln(w)
 }
 
 func anchor(s string) string {
