@@ -424,10 +424,31 @@ func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
 	return nil
 }
 
-// WriteOperation is a stub pending follow-up PR; emits a page per
-// orphaned operation under operations/.
+// WriteOperation emits a single orphaned operation as its own page
+// under operations/. Uses the shared "operation" define from the
+// resource template so the shape matches operations that render inline
+// on resource pages.
 func (m *MarkdownWriter) WriteOperation(o *api.Operation) error {
+	filename := operationSlug(o.ID) + ".md"
+	path := filepath.Join(m.OutputDir, "operations", filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: operation %s: %w", o.ID, err)
+	}
+	defer f.Close()
+
+	writeSectionFrontmatter(f, o.Type.Name, o.Description(), m.nextResourceWeight())
+	if err := resourceTemplate.ExecuteTemplate(f, "operation", buildTemplateOperation(o)); err != nil {
+		return fmt.Errorf("markdown: operation %s body: %w", o.ID, err)
+	}
 	return nil
+}
+
+// operationSlug sanitizes an operation ID into a filesystem-safe name:
+// lowercase, non-alphanumerics collapsed to '-'.
+func operationSlug(id string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
 }
 
 func (m *MarkdownWriter) Finalize() error {

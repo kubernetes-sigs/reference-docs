@@ -44,6 +44,10 @@ guide. You can file document formatting bugs against the
 </table>
 {{end}}
 {{- range .Operations}}
+{{template "operation" .}}
+{{- end}}
+
+{{define "operation" -}}
 ### `{{.Verb}}` {{.Title}}
 
 #### HTTP Request
