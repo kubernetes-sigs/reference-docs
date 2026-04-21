@@ -374,6 +374,23 @@ func (d *Definition) Key() string {
 	return fmt.Sprintf("%s.%s.%s", d.Group, d.Version, d.Kind)
 }
 
+// GoImportPath returns the Go import path this definition's type lives at,
+// derived from the swagger key. Returns "" when the key was not preserved
+// (e.g. old specs parsed before SwaggerKey existed).
+//
+// The swagger key is a domain-reversed, dotted identifier such as
+// "io.k8s.api.apps.v1.Deployment". The transform swaps the first two
+// segments into a slash-joined hostname ("io.k8s" -> "k8s.io") and
+// joins the middle segments as path components, dropping the trailing
+// kind. For the example above, the result is "k8s.io/api/apps/v1".
+func (d *Definition) GoImportPath() string {
+	parts := strings.Split(d.SwaggerKey, ".")
+	if len(parts) < 4 {
+		return ""
+	}
+	return parts[1] + "." + parts[0] + "/" + strings.Join(parts[2:len(parts)-1], "/")
+}
+
 func (d *Definition) LinkID() string {
 	groupName := strings.ReplaceAll(strings.ToLower(d.GroupFullName), ".", "-")
 	link := fmt.Sprintf("%s-%s-%s", d.Name, d.Version, groupName)

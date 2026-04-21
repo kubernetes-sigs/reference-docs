@@ -75,7 +75,7 @@ func TestKebabCase(t *testing.T) {
 
 func TestGroupVersionString(t *testing.T) {
 	cases := []struct {
-		group   api.ApiGroup
+		group   string
 		version api.ApiVersion
 		want    string
 	}{
@@ -83,6 +83,7 @@ func TestGroupVersionString(t *testing.T) {
 		{"core", "v1", "v1"},
 		{"apps", "v1", "apps/v1"},
 		{"batch", "v1beta1", "batch/v1beta1"},
+		{"apiextensions.k8s.io", "v1", "apiextensions.k8s.io/v1"},
 	}
 	for _, c := range cases {
 		if got := groupVersionString(c.group, c.version); got != c.want {

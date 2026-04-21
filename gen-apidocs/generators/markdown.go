@@ -311,14 +311,13 @@ func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
 
 func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 	page := resourcePage{
-		APIVersion:  groupVersionString(r.Definition.Group, r.Definition.Version),
+		APIVersion:  groupVersionString(r.Definition.GroupFullName, r.Definition.Version),
 		Kind:        r.Definition.Name,
+		Import:      r.Definition.GoImportPath(),
 		Title:       r.Definition.Name,
 		Weight:      m.nextResourceWeight(),
 		Anchor:      anchor(r.Definition.Name),
 		Description: r.Definition.DescriptionWithEntities,
-		// Import: derivable from the raw swagger key; requires preserving
-		// it on api.Definition first. Follow-up PR.
 	}
 
 	for _, fld := range r.Definition.Fields {
@@ -463,11 +462,11 @@ func kebabCase(s string) string {
 	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(s), "-"), "-")
 }
 
-func groupVersionString(group api.ApiGroup, version api.ApiVersion) string {
+func groupVersionString(group string, version api.ApiVersion) string {
 	if group == "" || group == "core" {
 		return version.String()
 	}
-	return fmt.Sprintf("%s/%s", group.String(), version.String())
+	return fmt.Sprintf("%s/%s", group, version.String())
 }
 
 func writePipeTable(w io.Writer, headers []string, rowFn func(row func(cells ...string))) {

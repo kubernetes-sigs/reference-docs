@@ -104,6 +104,7 @@ func LoadDefinitions(config *Config, specs []*loads.Document, s *Definitions) er
 				GroupFullName: full_group,
 				ShowGroup:     true,
 				Resource:      resource,
+				SwaggerKey:    name,
 			}
 
 			s.All[d.Key()] = d
