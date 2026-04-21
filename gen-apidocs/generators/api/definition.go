@@ -280,6 +280,10 @@ func (s *Definitions) parameterToField(param spec.Parameter) *Field {
 		if fieldType, ok := s.GetForSchema(*param.Schema); ok {
 			f.Definition = fieldType
 		}
+	} else {
+		// Path, query, and header parameters in swagger 2.0 carry their
+		// type directly on the parameter, not inside a Schema.
+		f.Type = param.Type
 	}
 	return f
 }
