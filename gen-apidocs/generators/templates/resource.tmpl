@@ -58,14 +58,17 @@ guide. You can file document formatting bugs against the
 
 {{template "paramTable" .PathParams}}
 {{end}}
+
 {{- if .QueryParams}}#### Query Parameters
 
 {{template "paramTable" .QueryParams}}
 {{end}}
+
 {{- if .BodyParams}}#### Body Parameters
 
 {{template "paramTable" .BodyParams}}
 {{end}}
+
 {{- if .Responses}}#### Response
 
 <table>
