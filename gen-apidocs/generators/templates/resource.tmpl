@@ -36,7 +36,7 @@ guide. You can file document formatting bugs against the
   <tbody>
 {{- range .Fields}}
     <tr>
-      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{.Type}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}</td>
+      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{.Type}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}{{if .PatchStrategy}}<br/><em>patch strategy: {{.PatchStrategy}}{{if .PatchMergeKey}} on key <code>{{.PatchMergeKey}}</code>{{end}}</em>{{end}}</td>
       <td>{{.Description | md}}</td>
     </tr>
 {{- end}}

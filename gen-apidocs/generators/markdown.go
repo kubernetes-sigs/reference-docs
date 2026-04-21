@@ -115,11 +115,13 @@ type resourcePage struct {
 }
 
 type templateField struct {
-	Name        string
-	Type        string
-	Description string
-	Required    bool
-	ConstValue  string // non-empty for fields with a fixed value (apiVersion, kind)
+	Name          string
+	Type          string
+	Description   string
+	Required      bool
+	ConstValue    string // non-empty for fields with a fixed value (apiVersion, kind)
+	PatchStrategy string // x-kubernetes-patch-strategy — e.g. "merge", "retainKeys"
+	PatchMergeKey string // x-kubernetes-patch-merge-key — e.g. "name"
 }
 
 type templateOperation struct {
@@ -339,11 +341,13 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition) resourcePage {
 
 	for _, fld := range d.Fields {
 		page.Fields = append(page.Fields, templateField{
-			Name:        fld.Name,
-			Type:        fld.Type,
-			Description: fld.Description,
-			Required:    required[fld.Name],
-			ConstValue:  constValueFor(fld.Name, page.APIVersion, page.Kind),
+			Name:          fld.Name,
+			Type:          fld.Type,
+			Description:   fld.Description,
+			Required:      required[fld.Name],
+			ConstValue:    constValueFor(fld.Name, page.APIVersion, page.Kind),
+			PatchStrategy: fld.PatchStrategy,
+			PatchMergeKey: fld.PatchMergeKey,
 		})
 	}
 
