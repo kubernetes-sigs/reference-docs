@@ -309,22 +309,35 @@ func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
 }
 
 func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
+	page := m.buildDefinitionPage(r.Definition)
+	for _, oc := range r.Definition.OperationCategories {
+		for _, o := range oc.Operations {
+			page.Operations = append(page.Operations, buildTemplateOperation(o))
+		}
+	}
+	return page
+}
+
+// buildDefinitionPage fills in the resource-page fields common to both
+// resource pages (which then add operations) and standalone definition
+// pages (which don't).
+func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition) resourcePage {
 	page := resourcePage{
-		APIVersion:  groupVersionString(r.Definition.GroupFullName, r.Definition.Version),
-		Kind:        r.Definition.Name,
-		Import:      r.Definition.GoImportPath(),
-		Title:       r.Definition.Name,
+		APIVersion:  groupVersionString(d.GroupFullName, d.Version),
+		Kind:        d.Name,
+		Import:      d.GoImportPath(),
+		Title:       d.Name,
 		Weight:      m.nextResourceWeight(),
-		Anchor:      anchor(r.Definition.Name),
-		Description: r.Definition.DescriptionWithEntities,
+		Anchor:      anchor(d.Name),
+		Description: d.DescriptionWithEntities,
 	}
 
 	required := map[string]bool{}
-	for _, name := range r.Definition.RequiredFields() {
+	for _, name := range d.RequiredFields() {
 		required[name] = true
 	}
 
-	for _, fld := range r.Definition.Fields {
+	for _, fld := range d.Fields {
 		page.Fields = append(page.Fields, templateField{
 			Name:        fld.Name,
 			Type:        fld.Type,
@@ -332,12 +345,6 @@ func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 			Required:    required[fld.Name],
 			ConstValue:  constValueFor(fld.Name, page.APIVersion, page.Kind),
 		})
-	}
-
-	for _, oc := range r.Definition.OperationCategories {
-		for _, o := range oc.Operations {
-			page.Operations = append(page.Operations, buildTemplateOperation(o))
-		}
 	}
 
 	return page
@@ -395,9 +402,25 @@ func buildTemplateOperation(o *api.Operation) templateOperation {
 	return op
 }
 
-// WriteDefinition is a stub pending follow-up PR; definitions pages
-// use the same template shape as resources without samples or ops.
+// WriteDefinition emits a standalone definition page under definitions/.
+// Uses the same template as resources but with no operations section.
 func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
+	filename := strings.ToLower(d.Name) + "-" + string(d.Version)
+	if d.Group != "" && d.Group != "core" {
+		filename += "-" + string(d.Group)
+	}
+	filename += ".md"
+	path := filepath.Join(m.OutputDir, "definitions", filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: definition %s: %w", d.Name, err)
+	}
+	defer f.Close()
+
+	if err := resourceTemplate.Execute(f, m.buildDefinitionPage(d)); err != nil {
+		return fmt.Errorf("markdown: definition %s body: %w", d.Name, err)
+	}
 	return nil
 }
 
