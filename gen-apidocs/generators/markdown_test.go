@@ -31,6 +31,8 @@ import (
 // rewrite any *.golden files from current output.
 var update = flag.Bool("update", false, "rewrite *.golden files from test output")
 
+const testCategorySlug = "workloads-apis"
+
 func TestAnchor(t *testing.T) {
 	cases := []struct {
 		in, want string
@@ -61,7 +63,7 @@ func TestEscape(t *testing.T) {
 
 func TestKebabCase(t *testing.T) {
 	cases := map[string]string{
-		"Workloads APIs":       "workloads-apis",
+		"Workloads APIs":       testCategorySlug,
 		"Service Discovery":    "service-discovery",
 		"Cluster - Admin":      "cluster-admin",
 		"  Leading trailing  ": "leading-trailing",
@@ -107,30 +109,111 @@ func TestWritePipeTable(t *testing.T) {
 	}
 }
 
-// TestWriteResource_Golden exercises WriteResource end-to-end once it's
-// implemented. It's skipped in PR 1 so CI stays green while the stub is
-// in place. Unskip when WriteResource lands.
-func TestWriteResource_Golden(t *testing.T) {
-	t.Skip("pending WriteResource implementation — remove Skip when the body lands")
+func TestOperationSlug(t *testing.T) {
+	cases := map[string]string{
+		"listCoreV1Pod":                             "listcorev1pod",
+		"readAppsV1NamespacedDeployment":            "readappsv1namespaceddeployment",
+		"watchCore.V1.Pod":                          "watchcore-v1-pod",
+		"Some/Weird ID":                             "some-weird-id",
+	}
+	for in, want := range cases {
+		if got := operationSlug(in); got != want {
+			t.Errorf("operationSlug(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
 
-	// Reference scaffold for the implementor:
-	//
-	// tmp := t.TempDir()
-	// api.BuildDir = tmp
-	// m := &MarkdownWriter{
-	//     Config:    minimalConfig(),
-	//     OutputDir: filepath.Join(tmp, "markdown"),
-	//     linkMap:   make(map[string]linkInfo),
-	// }
-	// os.MkdirAll(filepath.Join(m.OutputDir, "workloads-apis"), 0755)
-	// m.currentCategory = mdCategory{name: "Workloads APIs", slug: "workloads-apis"}
-	//
-	// r := fabricateDeploymentResource()
-	// if err := m.WriteResource(r); err != nil {
-	//     t.Fatal(err)
-	// }
-	// compareWithGolden(t, filepath.Join(m.OutputDir, "workloads-apis", "deployment-v1.md"),
-	//     "testdata/deployment-v1.golden.md")
+func TestWriteResourceGolden(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+
+	// The category dir mimicks what WriteResourceCategory would have created.
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, testCategorySlug), 0755); err != nil {
+		t.Fatal(err)
+	}
+	m.currentCategory = mdCategory{name: "Workloads APIs", slug: testCategorySlug}
+
+	r := fabricateDeploymentResource()
+	if err := m.WriteResource(r); err != nil {
+		t.Fatalf("WriteResource: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, testCategorySlug, "deployment-v1.md"),
+		"testdata/deployment-v1.golden.md")
+}
+
+func TestWriteOperationGolden(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, "operations"), 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	o := fabricateOperation()
+	if err := m.WriteOperation(o); err != nil {
+		t.Fatalf("WriteOperation: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, "operations", "listcorev1pod.md"),
+		"testdata/operation-list.golden.md")
+}
+
+// --- fixture helpers ---
+
+func newTestWriter(t *testing.T) (*MarkdownWriter, func()) {
+	t.Helper()
+	tmp := t.TempDir()
+	prevBuildDir := api.BuildDir
+	api.BuildDir = tmp
+	m := &MarkdownWriter{
+		Config:    &api.Config{SpecTitle: "Test", SpecVersion: "v1.0.0"},
+		OutputDir: filepath.Join(tmp, "markdown"),
+		linkMap:   make(map[string]linkInfo),
+	}
+	if err := os.MkdirAll(m.OutputDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	return m, func() { api.BuildDir = prevBuildDir }
+}
+
+func fabricateDeploymentResource() *api.Resource {
+	return &api.Resource{
+		Name: "Deployment",
+		Definition: &api.Definition{
+			Name:                    "Deployment",
+			Group:                   api.ApiGroup("apps"),
+			GroupFullName:           "apps",
+			Version:                 api.ApiVersion("v1"),
+			Kind:                    api.ApiKind("Deployment"),
+			DescriptionWithEntities: "Deployment enables declarative updates for Pods and ReplicaSets.",
+			SwaggerKey:              "io.k8s.api.apps.v1.Deployment",
+			Fields: api.Fields{
+				{Name: "apiVersion", Type: "string", Description: "APIVersion defines the versioned schema of this representation of an object."},
+				{Name: "kind", Type: "string", Description: "Kind is a string value representing the REST resource."},
+				{Name: "metadata", Type: "ObjectMeta", Description: "Standard object's metadata."},
+				{Name: "spec", Type: "DeploymentSpec", Description: "Specification of the desired behavior of the Deployment."},
+				{Name: "status", Type: "DeploymentStatus", Description: "Most recently observed status of the Deployment."},
+			},
+		},
+	}
+}
+
+func fabricateOperation() *api.Operation {
+	return &api.Operation{
+		ID:         "listCoreV1Pod",
+		Type:       api.OperationType{Name: "List Pods"},
+		Path:       "/api/v1/namespaces/{namespace}/pods",
+		HttpMethod: "GET",
+		PathParams: api.Fields{
+			{Name: "namespace", Type: "string", Description: "object name and auth scope, such as for teams and users"},
+		},
+		QueryParams: api.Fields{
+			{Name: "watch", Type: "boolean", Description: "Watch for changes to the described resources."},
+		},
+	}
 }
 
 // --- helpers ---

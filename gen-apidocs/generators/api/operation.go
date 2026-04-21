@@ -85,6 +85,9 @@ func (o *Operation) GetExampleResponses() []ExampleText {
 }
 
 func (o *Operation) Description() string {
+	if o.op == nil {
+		return ""
+	}
 	return o.op.Description
 }
 
