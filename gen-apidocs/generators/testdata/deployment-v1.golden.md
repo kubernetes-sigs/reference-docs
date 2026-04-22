@@ -23,6 +23,8 @@ guide. You can file document formatting bugs against the
 
 `apiVersion: apps/v1`
 
+`import "k8s.io/api/apps/v1"`
+
 ## Deployment {#Deployment}
 
 Deployment enables declarative updates for Pods and ReplicaSets.
@@ -54,6 +56,7 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     </tr>
   </tbody>
 </table>
+
 
 
 

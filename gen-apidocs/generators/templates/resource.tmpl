@@ -24,7 +24,9 @@ guide. You can file document formatting bugs against the
 -->
 
 `apiVersion: {{.APIVersion}}`
-
+{{if .Import}}
+`import "{{.Import}}"`
+{{end}}
 ## {{.Kind}} {#{{.Anchor}}}
 
 {{.Description | md}}
@@ -42,6 +44,12 @@ guide. You can file document formatting bugs against the
 {{- end}}
   </tbody>
 </table>
+{{end}}
+{{if .Operations}}
+## Operations {#Operations}
+
+<hr>
+
 {{end}}
 {{- range .Operations}}
 {{template "operation" .}}

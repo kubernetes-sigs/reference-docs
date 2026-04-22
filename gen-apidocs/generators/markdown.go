@@ -72,36 +72,7 @@ type linkInfo struct {
 	Anchor   string
 }
 
-const hugoIndex = "_index.md"
-
-// Header page titles — kept as named constants so the TOC-ordering
-// switch and the page emitters never drift.
-const (
-	titleOverview    = "Overview"
-	titleAPIGroups   = "API Groups"
-	titleDefinitions = "Definitions"
-	titleOperations  = "Operations"
-	titleOldVersions = "Old API Versions"
-)
-
-var _ DocWriter = (*MarkdownWriter)(nil)
-
-// anchorRegex must stay in sync with the Sprig regex in
-// gen-resourcesdocs/templates/chapter.tmpl; external k/website links rely
-// on the exact anchor format.
-var anchorRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
-
-//go:embed templates/resource.tmpl
-var resourceTemplateSrc string
-
-// Template funcs: q = YAML-safe quote (frontmatter strings);
-// md = markdown `<` escape (body text). Descriptions are passed raw
-// so the template picks the right escape per site.
-var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
-	"q":  strconv.Quote,
-	"md": escape,
-}).Parse(resourceTemplateSrc))
-
+// resourcePage is the view model resource.tmpl consumes.
 type resourcePage struct {
 	APIVersion  string
 	Kind        string
@@ -120,8 +91,8 @@ type templateField struct {
 	Description   string
 	Required      bool
 	ConstValue    string // non-empty for fields with a fixed value (apiVersion, kind)
-	PatchStrategy string // x-kubernetes-patch-strategy — e.g. "merge", "retainKeys"
-	PatchMergeKey string // x-kubernetes-patch-merge-key — e.g. "name"
+	PatchStrategy string // x-kubernetes-patch-strategy
+	PatchMergeKey string // x-kubernetes-patch-merge-key
 }
 
 type templateOperation struct {
@@ -147,6 +118,33 @@ type templateResponse struct {
 	Description string
 }
 
+const hugoIndex = "_index.md"
+
+// Title constants are referenced from both the page emitters and
+// tocSortRank; keeping them named prevents the two from drifting.
+const (
+	titleOverview    = "Overview"
+	titleAPIGroups   = "API Groups"
+	titleDefinitions = "Definitions"
+	titleOperations  = "Operations"
+	titleOldVersions = "Old API Versions"
+)
+
+var _ DocWriter = (*MarkdownWriter)(nil)
+
+//  external k/website links rely on the exact anchor format.
+var anchorRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+
+//go:embed templates/resource.tmpl
+var resourceTemplateSrc string
+
+// q quotes for YAML frontmatter; md escapes `<` for body text.
+// Descriptions are passed raw so the template picks the right escape per site.
+var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
+	"q":  strconv.Quote,
+	"md": escape,
+}).Parse(resourceTemplateSrc))
+
 func NewMarkdownWriter(config *api.Config, copyright, title string) DocWriter {
 	outputDir := filepath.Join(api.BuildDir, "markdown")
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
@@ -166,6 +164,8 @@ func (m *MarkdownWriter) Extension() string {
 func (m *MarkdownWriter) DefaultStaticContent(title string) string {
 	return "# " + title + "\n"
 }
+
+// Pipeline methods below follow the call order in writer.go's GenerateFiles().
 
 func (m *MarkdownWriter) WriteOverview() error {
 	if err := m.writeSection("_overview.md", "API Overview"); err != nil {
@@ -251,6 +251,23 @@ func (m *MarkdownWriter) WriteResourceCategory(name, file string) error {
 	return nil
 }
 
+func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
+	filename := fmt.Sprintf("%s-%s.md", strings.ToLower(r.Name), r.Definition.Version)
+	path := filepath.Join(m.OutputDir, m.currentCategory.slug, filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: resource %s: %w", r.Name, err)
+	}
+	defer f.Close()
+
+	if err := resourceTemplate.Execute(f, m.buildResourcePage(r)); err != nil {
+		return fmt.Errorf("markdown: resource %s body: %w", r.Name, err)
+	}
+
+	return nil
+}
+
 func (m *MarkdownWriter) WriteDefinitionsOverview() error {
 	if err := m.writeSection("_definitions.md", titleDefinitions); err != nil {
 		return fmt.Errorf("markdown: definitions overview: %w", err)
@@ -263,6 +280,26 @@ func (m *MarkdownWriter) WriteDefinitionsOverview() error {
 		path:   "_definitions.md",
 		weight: m.nextCategoryWeight(),
 	})
+	return nil
+}
+
+func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
+	filename := strings.ToLower(d.Name) + "-" + string(d.Version)
+	if d.Group != "" && d.Group != "core" {
+		filename += "-" + string(d.Group)
+	}
+	filename += ".md"
+	path := filepath.Join(m.OutputDir, "definitions", filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: definition %s: %w", d.Name, err)
+	}
+	defer f.Close()
+
+	if err := resourceTemplate.Execute(f, m.buildDefinitionPage(d)); err != nil {
+		return fmt.Errorf("markdown: definition %s body: %w", d.Name, err)
+	}
 	return nil
 }
 
@@ -281,6 +318,26 @@ func (m *MarkdownWriter) WriteOrphanedOperationsOverview() error {
 	return nil
 }
 
+// WriteOperation reuses the "operation" define from resource.tmpl so
+// standalone operation pages match operations rendered inline on
+// resource pages.
+func (m *MarkdownWriter) WriteOperation(o *api.Operation) error {
+	filename := operationSlug(o.ID) + ".md"
+	path := filepath.Join(m.OutputDir, "operations", filename)
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("markdown: operation %s: %w", o.ID, err)
+	}
+	defer f.Close()
+
+	writeSectionFrontmatter(f, o.Type.Name, o.Description(), m.nextResourceWeight())
+	if err := resourceTemplate.ExecuteTemplate(f, "operation", buildTemplateOperation(o)); err != nil {
+		return fmt.Errorf("markdown: operation %s body: %w", o.ID, err)
+	}
+	return nil
+}
+
 func (m *MarkdownWriter) WriteOldVersionsOverview() error {
 	if err := m.writeSection("_oldversions.md", titleOldVersions); err != nil {
 		return fmt.Errorf("markdown: old versions overview: %w", err)
@@ -293,23 +350,44 @@ func (m *MarkdownWriter) WriteOldVersionsOverview() error {
 	return nil
 }
 
-func (m *MarkdownWriter) WriteResource(r *api.Resource) error {
-	filename := fmt.Sprintf("%s-%s.md", strings.ToLower(r.Name), r.Definition.Version)
-	path := filepath.Join(m.OutputDir, m.currentCategory.slug, filename)
+func (m *MarkdownWriter) Finalize() error {
+	if m.finalized {
+		return nil
+	}
+	m.finalized = true
 
+	path := filepath.Join(m.OutputDir, hugoIndex)
 	f, err := os.Create(path)
 	if err != nil {
-		return fmt.Errorf("markdown: resource %s: %w", r.Name, err)
+		return fmt.Errorf("markdown: finalize: %w", err)
 	}
 	defer f.Close()
 
-	if err := resourceTemplate.Execute(f, m.buildResourcePage(r)); err != nil {
-		return fmt.Errorf("markdown: resource %s body: %w", r.Name, err)
-	}
+	writeSectionFrontmatter(f,
+		m.Config.SpecTitle,
+		fmt.Sprintf("Kubernetes API reference, version %s.", m.Config.SpecVersion),
+		0)
 
+	fmt.Fprintf(f, "# %s\n\n", m.Config.SpecTitle)
+	fmt.Fprintf(f, "_Version: %s_\n\n", m.Config.SpecVersion)
+
+	// Sort because --auto-detect populates categories via map iteration,
+	// which is non-deterministic. tocSortRank pins header pages.
+	sort.SliceStable(m.toc, func(i, j int) bool {
+		ri, rj := tocSortRank(m.toc[i].title), tocSortRank(m.toc[j].title)
+		if ri != rj {
+			return ri < rj
+		}
+		return m.toc[i].title < m.toc[j].title
+	})
+
+	for _, item := range m.toc {
+		fmt.Fprintf(f, "- [%s](./%s)\n", item.title, item.path)
+	}
 	return nil
 }
 
+// buildResourcePage = buildDefinitionPage + operations.
 func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 	page := m.buildDefinitionPage(r.Definition)
 	for _, oc := range r.Definition.OperationCategories {
@@ -320,9 +398,8 @@ func (m *MarkdownWriter) buildResourcePage(r *api.Resource) resourcePage {
 	return page
 }
 
-// buildDefinitionPage fills in the resource-page fields common to both
-// resource pages (which then add operations) and standalone definition
-// pages (which don't).
+// buildDefinitionPage is shared by resource pages (which then add
+// operations) and standalone definition pages (which don't).
 func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition) resourcePage {
 	page := resourcePage{
 		APIVersion:  groupVersionString(d.GroupFullName, d.Version),
@@ -352,20 +429,6 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition) resourcePage {
 	}
 
 	return page
-}
-
-// constValueFor returns the fixed value of a definition field when one exists.
-// Today only apiVersion and kind are constants on resource objects — the
-// swagger doesn't tag them explicitly, but Kubernetes manifests always carry
-// the same literal values for a given GVK, so we surface them as hints.
-func constValueFor(fieldName, apiVersion, kind string) string {
-	switch fieldName {
-	case "apiVersion":
-		return apiVersion
-	case "kind":
-		return kind
-	}
-	return ""
 }
 
 func buildTemplateOperation(o *api.Operation) templateOperation {
@@ -406,98 +469,57 @@ func buildTemplateOperation(o *api.Operation) templateOperation {
 	return op
 }
 
-// WriteDefinition emits a standalone definition page under definitions/.
-// Uses the same template as resources but with no operations section.
-func (m *MarkdownWriter) WriteDefinition(d *api.Definition) error {
-	filename := strings.ToLower(d.Name) + "-" + string(d.Version)
-	if d.Group != "" && d.Group != "core" {
-		filename += "-" + string(d.Group)
+// writeSection falls back to a `# Title` stub when
+// config/sections/<filename> is absent.
+func (m *MarkdownWriter) writeSection(filename, title string) error {
+	content := readOptionalSection(filename)
+	if content == "" {
+		content = "# " + title + "\n"
 	}
-	filename += ".md"
-	path := filepath.Join(m.OutputDir, "definitions", filename)
-
-	f, err := os.Create(path)
-	if err != nil {
-		return fmt.Errorf("markdown: definition %s: %w", d.Name, err)
-	}
-	defer f.Close()
-
-	if err := resourceTemplate.Execute(f, m.buildDefinitionPage(d)); err != nil {
-		return fmt.Errorf("markdown: definition %s body: %w", d.Name, err)
-	}
-	return nil
+	dst := filepath.Join(m.OutputDir, filename)
+	return os.WriteFile(dst, []byte(content), 0644)
 }
 
-// WriteOperation emits a single orphaned operation as its own page
-// under operations/. Uses the shared "operation" define from the
-// resource template so the shape matches operations that render inline
-// on resource pages.
-func (m *MarkdownWriter) WriteOperation(o *api.Operation) error {
-	filename := operationSlug(o.ID) + ".md"
-	path := filepath.Join(m.OutputDir, "operations", filename)
-
-	f, err := os.Create(path)
+// readOptionalSection swallows read errors on purpose; missing or
+// unreadable section files fall back to generated content.
+func readOptionalSection(name string) string {
+	src := filepath.Join(api.SectionsDir, name)
+	data, err := os.ReadFile(src)
 	if err != nil {
-		return fmt.Errorf("markdown: operation %s: %w", o.ID, err)
+		return ""
 	}
-	defer f.Close()
-
-	writeSectionFrontmatter(f, o.Type.Name, o.Description(), m.nextResourceWeight())
-	if err := resourceTemplate.ExecuteTemplate(f, "operation", buildTemplateOperation(o)); err != nil {
-		return fmt.Errorf("markdown: operation %s body: %w", o.ID, err)
-	}
-	return nil
+	return string(data)
 }
 
-// operationSlug sanitizes an operation ID into a filesystem-safe name:
-// lowercase, non-alphanumerics collapsed to '-'.
-func operationSlug(id string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
+// writeSectionFrontmatter emits the minimal frontmatter for non-resource
+// pages. Resource pages go through resource.tmpl instead.
+func writeSectionFrontmatter(w io.Writer, title, description string, weight int) {
+	fmt.Fprintln(w, "---")
+	fmt.Fprintln(w, `content_type: "api_reference"`)
+	if description != "" {
+		fmt.Fprintf(w, "description: %q\n", description)
+	}
+	fmt.Fprintf(w, "title: %q\n", title)
+	fmt.Fprintf(w, "weight: %d\n", weight)
+	fmt.Fprintln(w, "auto_generated: true")
+	fmt.Fprintln(w, "---")
+	fmt.Fprintln(w)
 }
 
-func (m *MarkdownWriter) Finalize() error {
-	if m.finalized {
-		return nil
+func writePipeTable(w io.Writer, headers []string, rowFn func(row func(cells ...string))) {
+	fmt.Fprintln(w, "| "+strings.Join(headers, " | ")+" |")
+	sep := make([]string, len(headers))
+	for i := range sep {
+		sep[i] = "---"
 	}
-	m.finalized = true
-
-	path := filepath.Join(m.OutputDir, hugoIndex)
-	f, err := os.Create(path)
-	if err != nil {
-		return fmt.Errorf("markdown: finalize: %w", err)
-	}
-	defer f.Close()
-
-	writeSectionFrontmatter(f,
-		m.Config.SpecTitle,
-		fmt.Sprintf("Kubernetes API reference, version %s.", m.Config.SpecVersion),
-		0)
-
-	fmt.Fprintf(f, "# %s\n\n", m.Config.SpecTitle)
-	fmt.Fprintf(f, "_Version: %s_\n\n", m.Config.SpecVersion)
-
-	// Categories are added to m.toc in the order GenerateFiles encounters
-	// them, which in --auto-detect mode depends on map iteration and is
-	// therefore non-deterministic. Sort here so top-level _index.md diffs
-	// stay quiet across runs. Header pages (Overview, API Groups, etc.)
-	// stay at their fixed positions via tocSortRank.
-	sort.SliceStable(m.toc, func(i, j int) bool {
-		ri, rj := tocSortRank(m.toc[i].title), tocSortRank(m.toc[j].title)
-		if ri != rj {
-			return ri < rj
-		}
-		return m.toc[i].title < m.toc[j].title
+	fmt.Fprintln(w, "| "+strings.Join(sep, " | ")+" |")
+	rowFn(func(cells ...string) {
+		fmt.Fprintln(w, "| "+strings.Join(cells, " | ")+" |")
 	})
-
-	for _, item := range m.toc {
-		fmt.Fprintf(f, "- [%s](./%s)\n", item.title, item.path)
-	}
-	return nil
 }
 
-// tocSortRank pins well-known header pages at fixed positions ahead of
-// the variable-length list of resource categories. Unknown titles fall
-// into the categories bucket and sort alphabetically among themselves.
+// tocSortRank pins header pages at fixed positions; categories share rank 2
+// and sort alphabetically among themselves.
 func tocSortRank(title string) int {
 	switch title {
 	case titleOverview:
@@ -515,29 +537,12 @@ func tocSortRank(title string) int {
 	}
 }
 
-// writeSectionFrontmatter emits the minimal frontmatter block used by
-// non-resource pages (category _index.md, top-level _index.md). Resource
-// pages have richer frontmatter and go through resource.tmpl instead.
-// Description is optional; empty omits the line.
-func writeSectionFrontmatter(w io.Writer, title, description string, weight int) {
-	fmt.Fprintln(w, "---")
-	fmt.Fprintln(w, `content_type: "api_reference"`)
-	if description != "" {
-		fmt.Fprintf(w, "description: %q\n", description)
-	}
-	fmt.Fprintf(w, "title: %q\n", title)
-	fmt.Fprintf(w, "weight: %d\n", weight)
-	fmt.Fprintln(w, "auto_generated: true")
-	fmt.Fprintln(w, "---")
-	fmt.Fprintln(w)
-}
-
 func anchor(s string) string {
 	return strings.Trim(anchorRegex.ReplaceAllString(s, "-"), "-")
 }
 
-// escape is the minimal markdown escape needed so OpenAPI description text
-// containing `<foo>` renders as literal rather than HTML.
+// escape covers the only markdown-breaking character in OpenAPI descriptions:
+// raw `<` that would otherwise be read as HTML.
 func escape(s string) string {
 	return strings.ReplaceAll(s, "<", `\<`)
 }
@@ -553,36 +558,21 @@ func groupVersionString(group string, version api.ApiVersion) string {
 	return fmt.Sprintf("%s/%s", group, version.String())
 }
 
-func writePipeTable(w io.Writer, headers []string, rowFn func(row func(cells ...string))) {
-	fmt.Fprintln(w, "| "+strings.Join(headers, " | ")+" |")
-	sep := make([]string, len(headers))
-	for i := range sep {
-		sep[i] = "---"
-	}
-	fmt.Fprintln(w, "| "+strings.Join(sep, " | ")+" |")
-	rowFn(func(cells ...string) {
-		fmt.Fprintln(w, "| "+strings.Join(cells, " | ")+" |")
-	})
+func operationSlug(id string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
 }
 
-func (m *MarkdownWriter) writeSection(filename, title string) error {
-	content := readOptionalSection(filename)
-	if content == "" {
-		content = "# " + title + "\n"
+// constValueFor hard-codes the two fields Kubernetes manifests always
+// carry with fixed values (apiVersion and kind). Swagger doesn't tag
+// them as const so we derive them from the GVK.
+func constValueFor(fieldName, apiVersion, kind string) string {
+	switch fieldName {
+	case "apiVersion":
+		return apiVersion
+	case "kind":
+		return kind
 	}
-	dst := filepath.Join(m.OutputDir, filename)
-	return os.WriteFile(dst, []byte(content), 0644)
-}
-
-// readOptionalSection returns config/sections/<name> if present, "" otherwise.
-// Read errors are swallowed to match the HTML writer's best-effort behaviour.
-func readOptionalSection(name string) string {
-	src := filepath.Join(api.SectionsDir, name)
-	data, err := os.ReadFile(src)
-	if err != nil {
-		return ""
-	}
-	return string(data)
+	return ""
 }
 
 func (m *MarkdownWriter) nextCategoryWeight() int {
@@ -594,4 +584,3 @@ func (m *MarkdownWriter) nextResourceWeight() int {
 	m.resourceWeight += 10
 	return m.resourceWeight
 }
-
