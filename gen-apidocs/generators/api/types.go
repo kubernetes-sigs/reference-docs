@@ -227,6 +227,12 @@ type Definition struct {
 
 	FullName string
 	Resource string
+
+	// SwaggerKey is the raw, domain-reversed key under which this
+	// definition appeared in the OpenAPI spec — e.g.
+	// "io.k8s.api.apps.v1.Deployment". Preserved so downstream writers
+	// can derive artefacts like Go import paths without re-parsing.
+	SwaggerKey string
 }
 
 type GroupVersions map[string]ApiVersions

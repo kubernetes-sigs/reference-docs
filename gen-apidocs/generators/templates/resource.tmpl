@@ -1,0 +1,110 @@
+---
+api_metadata:
+  apiVersion: {{.APIVersion | q}}
+{{- if .Import}}
+  import: {{.Import | q}}
+{{- end}}
+  kind: {{.Kind | q}}
+content_type: "api_reference"
+description: {{.Description | q}}
+title: {{.Title | q}}
+weight: {{.Weight}}
+auto_generated: true
+---
+
+<!--
+The file is auto-generated from the Go source code of the component using a generic
+[generator](https://github.com/kubernetes-sigs/reference-docs/). To learn how
+to generate the reference documentation, please read
+[Contributing to the reference documentation](/docs/contribute/generate-ref-docs/).
+To update the reference content, please follow the
+[Contributing upstream](/docs/contribute/generate-ref-docs/contribute-upstream/)
+guide. You can file document formatting bugs against the
+[reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
+-->
+
+`apiVersion: {{.APIVersion}}`
+{{if .Import}}
+`import "{{.Import}}"`
+{{end}}
+## {{.Kind}} {#{{.Anchor}}}
+
+{{.Description | md}}
+
+<hr>
+
+{{if .Fields}}<table>
+  <thead><tr><th>Field</th><th>Description</th></tr></thead>
+  <tbody>
+{{- range .Fields}}
+    <tr>
+      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{.Type}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}{{if .PatchStrategy}}<br/><em>patch strategy: {{.PatchStrategy}}{{if .PatchMergeKey}} on key <code>{{.PatchMergeKey}}</code>{{end}}</em>{{end}}</td>
+      <td>{{.Description | md}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
+{{end}}
+{{if .Operations}}
+## Operations {#Operations}
+
+<hr>
+
+{{end}}
+{{- range .Operations}}
+{{template "operation" .}}
+{{- end}}
+
+{{define "operation" -}}
+### `{{.Verb}}` {{.Title}}
+
+#### HTTP Request
+
+{{.Method}} {{.Path}}
+
+{{if .PathParams}}#### Path Parameters
+
+{{template "paramTable" .PathParams}}
+{{end}}
+
+{{- if .QueryParams}}#### Query Parameters
+
+{{template "paramTable" .QueryParams}}
+{{end}}
+
+{{- if .BodyParams}}#### Body Parameters
+
+{{template "paramTable" .BodyParams}}
+{{end}}
+
+{{- if .Responses}}#### Response
+
+<table>
+  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
+  <tbody>
+{{- range .Responses}}
+    <tr>
+      <td>{{.Code}}</td>
+      <td>{{.Description | md}}</td>
+      <td>{{if .Type}}<em>{{.Type}}</em>{{else}}&mdash;{{end}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
+{{end}}
+{{- end}}
+
+{{define "paramTable" -}}
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+{{- range .}}
+    <tr>
+      <td><code>{{.Name}}</code></td>
+      <td><em>{{.Type}}</em></td>
+      <td>{{.Description | md}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
+{{- end}}

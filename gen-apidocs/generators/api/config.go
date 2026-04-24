@@ -37,6 +37,7 @@ var AllowErrors = flag.Bool("allow-errors", false, "If true, don't fail on error
 var WorkDir = flag.String("work-dir", "", "Working directory for the generator.")
 var UseTags = flag.Bool("use-tags", false, "If true, use the openapi tags instead of the config yaml.")
 var KubernetesRelease = flag.String("kubernetes-release", "", "Kubernetes release version.")
+var Backend = flag.String("backend", "html", "Output format for the generator. Supported values: 'html' or 'markdown'.")
 var AutoDetect = flag.Bool("auto-detect", false, "If true, auto-detect API groups and versions from swagger.json.")
 
 // titleCase converts a string to title case as a replacement for deprecated strings.Title
