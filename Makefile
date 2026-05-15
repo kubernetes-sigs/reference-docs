@@ -55,7 +55,7 @@ CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 all:
 	@echo "Supported targets:"
 	@echo "  Build:    api apimd cli comp configapi"
-	@echo "  Copy:     copyapi copyapimd copycli copyconfigapi"
+	@echo "  Copy:     copyapi copyapimd copycli copycomp copyconfigapi"
 	@echo "  Setup:    createversiondirs updateapispec"
 	@echo "  Clean:    cleanapi cleanapimd cleancli cleancomp"
 	@echo "  Other:    genresources (deprecated)"
@@ -100,6 +100,35 @@ cleancomp:
 
 comp: cleancomp
 	make -C gen-compdocs
+
+# Copy component docs into k/website. The destinations
+# contain curated _index.md (and README.md for kubeadm) plus unrelated
+# subdirs (feature-gates*), so we don't rm -rf — we overlay on top.
+COMPSRC=gen-compdocs/build
+COMPCOREDST=$(WEBROOT)/content/en/docs/reference/command-line-tools-reference
+COMPKUBEADMDST=$(WEBROOT)/content/en/docs/reference/setup-tools/kubeadm/generated
+COMPKUBECTLDST=$(WEBROOT)/content/en/docs/reference/kubectl/generated
+
+# Copy core component docs (kube-apiserver, controller-manager, scheduler, proxy, kubelet)
+copycomp-core: require-webroot comp
+	cp $(COMPSRC)/kube-apiserver.md $(COMPCOREDST)/
+	cp $(COMPSRC)/kube-controller-manager.md $(COMPCOREDST)/
+	cp $(COMPSRC)/kube-scheduler.md $(COMPCOREDST)/
+	cp $(COMPSRC)/kube-proxy.md $(COMPCOREDST)/
+	cp $(COMPSRC)/kubelet.md $(COMPCOREDST)/
+
+# Copy kubeadm command docs (overlay; destination has hand-curated _index.md, README.md)
+copycomp-kubeadm: require-webroot comp
+	cp $(COMPSRC)/kubeadm.md $(COMPKUBEADMDST)/
+	for d in $(COMPSRC)/kubeadm_*; do cp -r "$$d" $(COMPKUBEADMDST)/; done
+
+# Copy kubectl command docs (overlay; destination has hand-curated _index.md)
+copycomp-kubectl: require-webroot comp
+	cp $(COMPSRC)/kubectl.md $(COMPKUBECTLDST)/
+	for d in $(COMPSRC)/kubectl_*; do cp -r "$$d" $(COMPKUBECTLDST)/; done
+
+# Run all three copycomp-* targets
+copycomp: copycomp-core copycomp-kubeadm copycomp-kubectl
 
 # Build API docs
 APISRC=gen-apidocs
