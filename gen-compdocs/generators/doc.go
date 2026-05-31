@@ -30,9 +30,16 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting"
+	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/text"
 )
 
 type byName []*cobra.Command
+type repl struct {
+	start int
+	stop  int
+	value []byte
+}
 
 func (s byName) Len() int           { return len(s) }
 func (s byName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
@@ -140,8 +147,7 @@ func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) stri
 		}
 
 		// Escape any '<', '>' characters found in the long description
-		long = strings.ReplaceAll(long, "<", "&lt;")
-		long = strings.ReplaceAll(long, ">", "&gt;")
+		long = escapeAngleBracket(long)
 		if _, err := fmt.Fprintf(w, "\n%s\n\n", long); err != nil {
 			return err
 		}
@@ -168,8 +174,7 @@ func GenReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) stri
 		}
 
 		// Escape any '<', '>' characters found in the long description
-		long = strings.ReplaceAll(long, "<", "&lt;")
-		long = strings.ReplaceAll(long, ">", "&gt;")
+		long = escapeAngleBracket(long)
 		if _, err := fmt.Fprintf(w, "\n%s\n\n", long); err != nil {
 			return err
 		}
@@ -505,4 +510,58 @@ func processUsage(usage string) string {
 	result = strings.TrimSuffix(result, "\n")
 	result = strings.ReplaceAll(result, "\n", "<br/>")
 	return result
+}
+
+// This function is to escape any '<', '>' characters found in the description of the command,
+// but leave those character which are not treated as html tags using AST.
+// e.g, single angle bracket, pair of angle bracket brackets in code blocks.
+func escapeAngleBracket(long string) string {
+
+	source := []byte(long)
+	doc := goldmark.DefaultParser().Parse(text.NewReader(source))
+
+	var reps []repl
+
+	// iterating node
+	_ = ast.Walk(doc, func(n ast.Node, entering bool) (ast.WalkStatus, error) {
+		if !entering {
+			return ast.WalkContinue, nil
+		}
+
+		// when pair of '<', '>' characters found in the text and it is treated as a RawHTML node,
+		// then escape the text in RawHTML nodes.
+		t, ok := n.(*ast.RawHTML)
+		if !ok {
+			return ast.WalkContinue, nil
+		}
+
+		segs := t.Segments
+
+		for i := 0; i < segs.Len(); i++ {
+			seg := segs.At(i)
+			changing := seg.Value(source)
+			changing = bytes.ReplaceAll(changing, []byte("<"), []byte("&lt;"))
+			changing = bytes.ReplaceAll(changing, []byte(">"), []byte("&gt;"))
+
+			reps = append(reps, repl{
+				start: seg.Start,
+				stop:  seg.Stop,
+				value: changing,
+			})
+		}
+
+		return ast.WalkContinue, nil
+	})
+
+	var out bytes.Buffer
+	pos := 0
+
+	for _, r := range reps {
+		out.Write(source[pos:r.start]) // string before the Text node
+		out.Write(r.value)             // string to replace the Text node
+		pos = r.stop
+	}
+
+	out.Write(source[pos:]) // string after the last Text node
+	return out.String()
 }
