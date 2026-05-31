@@ -528,28 +528,8 @@ func escapeAngleBracket(long string) string {
 			return ast.WalkContinue, nil
 		}
 
-		// when pair of '<', '>' characters found in the text and it is treated as a RawHTML node,
-		// then escape the text in RawHTML nodes.
-		t, ok := n.(*ast.RawHTML)
-		if !ok {
-			return ast.WalkContinue, nil
-		}
-
-		segs := t.Segments
-
-		for i := 0; i < segs.Len(); i++ {
-			seg := segs.At(i)
-			changing := seg.Value(source)
-			changing = bytes.ReplaceAll(changing, []byte("<"), []byte("&lt;"))
-			changing = bytes.ReplaceAll(changing, []byte(">"), []byte("&gt;"))
-
-			reps = append(reps, repl{
-				start: seg.Start,
-				stop:  seg.Stop,
-				value: changing,
-			})
-		}
-
+		reps = handleRawHTML(n, source, reps)
+		reps = handleHTMLBlock(n, source, reps)
 		return ast.WalkContinue, nil
 	})
 
@@ -564,4 +544,54 @@ func escapeAngleBracket(long string) string {
 
 	out.Write(source[pos:]) // string after the last Text node
 	return out.String()
+}
+
+// pair of '<', '>' characters found in the text that is treated as a RawHTML node.
+// Example:
+// this is <script>test<script>
+func handleRawHTML(n ast.Node, source []byte, reps []repl) []repl {
+	t, ok := n.(*ast.RawHTML)
+	if !ok {
+		return reps
+	}
+	result := escapedSegments(t.Segments, source)
+	return append(reps, result...)
+}
+
+// pair of '<', '>' characters found in the text that is treated as a HTMLBlock node.
+// Example:
+// <script>
+// alert(1)
+// </script>
+func handleHTMLBlock(n ast.Node, source []byte, reps []repl) []repl {
+	t, ok := n.(*ast.HTMLBlock)
+	if !ok {
+		return reps
+	}
+	result := escapedSegments(t.Lines(), source)
+	if !t.ClosureLine.IsEmpty() {
+		result = append(result, escapedSegment(t.ClosureLine, source))
+	}
+	return append(reps, result...)
+}
+
+func escapedSegments(segs *text.Segments, source []byte) []repl {
+	var result []repl
+	for i := 0; i < segs.Len(); i++ {
+		escaped := escapedSegment(segs.At(i), source)
+		result = append(result, escaped)
+	}
+	return result
+}
+
+func escapedSegment(seg text.Segment, source []byte) repl {
+	changing := seg.Value(source)
+	changing = bytes.ReplaceAll(changing, []byte("<"), []byte("&lt;"))
+	changing = bytes.ReplaceAll(changing, []byte(">"), []byte("&gt;"))
+
+	return repl{
+		start: seg.Start,
+		stop:  seg.Stop,
+		value: changing,
+	}
 }
