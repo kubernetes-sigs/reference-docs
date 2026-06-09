@@ -56,7 +56,7 @@ all:
 	@echo "Supported targets:"
 	@echo "  Build:    api apimd cli comp configapi"
 	@echo "  Copy:     copyapi copyapimd copycli copycomp copyconfigapi"
-	@echo "  Setup:    createversiondirs updateapispec"
+	@echo "  Setup:    createversiondirs updateapispec updateapispec-enums-from-source"
 	@echo "  Clean:    cleanapi cleanapimd cleancli cleancomp"
 	@echo "  Other:    genresources (deprecated)"
 
@@ -137,6 +137,13 @@ APIDST=$(WEBROOT)/static/docs/reference/generated/kubernetes-api/v$(K8SRELEASE_P
 updateapispec: require-k8sroot require-k8srelease createversiondirs
 	@echo "Updating swagger.json for release v$(K8SRELEASE)"
 	cd $(K8SROOT) && git show "v$(K8SRELEASE):api/openapi-spec/swagger.json" > $(CURDIR)/$(APISRC)/config/v$(K8SRELEASEDIR)/swagger.json
+
+# Opt-in: generate enum-enabled swagger.json from a temporary k/k checkout, so
+# contributors do not need a manually patched local k/k. Needs network access
+# and k/k's host OpenAPI prerequisites; KEEP_TMP=1 preserves the checkout.
+updateapispec-enums-from-source: require-k8srelease createversiondirs
+	@echo "Generating enum-enabled swagger.json from source for release v$(K8SRELEASE)"
+	./hack/gen-enum-swagger.sh
 
 api: require-k8srelease cleanapi
 	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=. --auto-detect

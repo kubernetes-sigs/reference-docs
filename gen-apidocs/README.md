@@ -24,6 +24,23 @@ For the canonical end-to-end release walkthrough, see [Generating Reference Docu
 
 The `swagger.json` checked into `kubernetes/kubernetes` at `api/openapi-spec/swagger.json` is missing many enum fields that the API reference needs. Regenerate the file with `OpenAPIEnums=true` before running the generator.
 
+### Option A: from a temporary source checkout (no local k/k needed)
+
+From the reference-docs repository root, with only `K8S_RELEASE` set:
+
+```shell
+make updateapispec-enums-from-source
+```
+
+This shallow-clones the release tag into a temporary directory, enables
+`OpenAPIEnums=true` in that copy only, runs k/k's `hack/update-openapi-spec.sh`,
+copies the result into `gen-apidocs/config/v<X_Y>/swagger.json`, verifies the
+enum metadata, and deletes the temporary checkout. It needs network access and
+k/k's host OpenAPI prerequisites, and leaves k/k's checked-in swagger unchanged.
+Set `KEEP_TMP=1` to preserve the checkout and generation log for debugging.
+
+### Option B: from a prepared `K8S_ROOT` checkout
+
 From your `K8S_ROOT` checkout, at the release tag:
 
 1. Edit `hack/update-openapi-spec.sh` and set `OpenAPIEnums=true`.
