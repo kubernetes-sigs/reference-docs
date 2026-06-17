@@ -71,8 +71,11 @@ func GenerateFiles() error {
 	case "markdown":
 		fmt.Println("Using Markdown backend for documentation generation.")
 		writer = NewMarkdownWriter(config, copyright, title)
+	case "hugo-md":
+		fmt.Println("Using Hugo-flavored Markdown backend for documentation generation.")
+		writer = NewHugoMDWriter(config, copyright, title)
 	default:
-		return fmt.Errorf("unsupported backend '%s': must be 'html' or 'markdown'", *api.Backend)
+		return fmt.Errorf("unsupported backend '%s': must be 'html', 'markdown', or 'hugo-md'", *api.Backend)
 	}
 
 	// Write the main overview page directly to avoid an unnecessary thin wrapper

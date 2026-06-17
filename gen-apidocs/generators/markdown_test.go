@@ -167,6 +167,25 @@ func TestWriteOperationGolden(t *testing.T) {
 		"testdata/operation-list.golden.md")
 }
 
+func TestWriteOperationGoldenHugoMode(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+	m.HugoMode = true
+
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, "operations"), 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	o := fabricateOperation()
+	if err := m.WriteOperation(o); err != nil {
+		t.Fatalf("WriteOperation: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, "operations", "listcorev1pod.md"),
+		"testdata/operation-list-hugo.golden.md")
+}
+
 func TestResolveType(t *testing.T) {
 	m := &MarkdownWriter{linkMap: map[string]linkInfo{}}
 	m.linkResources([]api.ResourceCategory{
@@ -455,6 +474,10 @@ func fabricateOperation() *api.Operation {
 		},
 		QueryParams: api.Fields{
 			{Name: "watch", Type: "boolean", Description: "Watch for changes to the described resources."},
+		},
+		HttpResponses: api.HttpResponses{
+			{Code: "200", Field: api.Field{Type: "PodList", Description: "OK"}},
+			{Code: "401", Field: api.Field{Description: "Unauthorized"}},
 		},
 	}
 }

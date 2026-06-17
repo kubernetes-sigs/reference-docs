@@ -82,6 +82,13 @@ guide. You can file document formatting bugs against the
 {{if .Responses}}
 #### Response
 
+{{if .HugoMode -}}
+| Status | Description | Response |
+|---|---|---|
+{{range .Responses}}| {{.Code}} | {{.Description | md}} | {{if .Type}}{{template "mdTypeWrap" .}}{{else}}—{{end}} |
+{{end -}}
+{class="api-reference-response-codes"}
+{{- else -}}
 <table>
   <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
   <tbody>
@@ -94,11 +101,16 @@ guide. You can file document formatting bugs against the
 {{- end}}
   </tbody>
 </table>
+{{- end}}
 {{end}}
 {{end}}
 
 {{define "typeWrap" -}}
 {{if .TypeHref}}<a href="{{hugoRef .TypeHref}}">{{.Type}}</a>{{else}}{{.Type}}{{end}}
+{{- end}}
+
+{{define "mdTypeWrap" -}}
+{{if .TypeHref}}[{{.Type}}]({{hugoRef .TypeHref}}){{else}}{{.Type}}{{end}}
 {{- end}}
 
 {{define "paramTable" -}}

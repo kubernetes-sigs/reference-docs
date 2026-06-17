@@ -43,19 +43,9 @@ GET /api/v1/namespaces/{namespace}/pods
 
 #### Response
 
-<table>
-  <thead><tr><th>Status</th><th>Description</th><th>Response</th></tr></thead>
-  <tbody>
-    <tr>
-      <td>200</td>
-      <td>OK</td>
-      <td><em>PodList</em></td>
-    </tr>
-    <tr>
-      <td>401</td>
-      <td>Unauthorized</td>
-      <td>&mdash;</td>
-    </tr>
-  </tbody>
-</table>
+| Status | Description | Response |
+|---|---|---|
+| 200 | OK | PodList |
+| 401 | Unauthorized | — |
+{class="api-reference-response-codes"}
 

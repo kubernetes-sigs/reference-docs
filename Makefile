@@ -54,10 +54,10 @@ CLIDSTFONT=$(CLIDST)/node_modules/font-awesome
 
 all:
 	@echo "Supported targets:"
-	@echo "  Build:    api apimd cli comp configapi"
+	@echo "  Build:    api apimd apimd-hugo cli comp configapi"
 	@echo "  Copy:     copyapi copyapimd copycli copycomp copyconfigapi"
 	@echo "  Setup:    createversiondirs updateapispec updateapispec-enums-from-source"
-	@echo "  Clean:    cleanapi cleanapimd cleancli cleancomp"
+	@echo "  Clean:    cleanapi cleanapimd cleanapimd-hugo cleancli cleancomp"
 	@echo "  Other:    genresources (deprecated)"
 
 # create directories for new release
@@ -153,6 +153,10 @@ api: require-k8srelease cleanapi
 apimd: require-k8srelease cleanapimd
 	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=. --auto-detect --backend=markdown
 
+# Build API docs as Hugo-flavored markdown (gen-apidocs/build/hugo-md/).
+apimd-hugo: require-k8srelease cleanapimd-hugo
+	cd $(APISRC) && go run main.go --kubernetes-release=$(K8SRELEASE_PREFIX) --work-dir=. --auto-detect --backend=hugo-md
+
 cleanapi:
 	rm -rf $(shell pwd)/gen-apidocs/build/html
 	rm -rf $(shell pwd)/gen-apidocs/build/includes
@@ -161,6 +165,9 @@ cleanapi:
 
 cleanapimd:
 	rm -rf $(shell pwd)/gen-apidocs/build/markdown
+
+cleanapimd-hugo:
+	rm -rf $(shell pwd)/gen-apidocs/build/hugo-md
 
 copyapi: require-webroot api
 	mkdir -p $(APIDST)

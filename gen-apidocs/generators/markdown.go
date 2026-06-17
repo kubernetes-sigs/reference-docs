@@ -45,6 +45,10 @@ type MarkdownWriter struct {
 	resourceWeight  int
 	categoryWeight  int
 
+	// HugoMode emits Hugo-flavored markdown (markdown tables with class
+	// attributes that Hugo render hooks can target). Set by NewHugoMDWriter.
+	HugoMode bool
+
 	// linkMap maps kind name → page path for cross-reference resolution.
 	linkMap map[string]linkInfo
 
@@ -116,6 +120,7 @@ type templateOperation struct {
 	QueryParams []templateParam
 	BodyParams  []templateParam
 	Responses   []templateResponse
+	HugoMode    bool
 }
 
 type templateParam struct {
@@ -192,6 +197,12 @@ func NewMarkdownWriter(config *api.Config, copyright, title string) DocWriter {
 	m.classifications = m.classifyDefinitions()
 	m.buildLinkMap(config)
 	return m
+}
+
+func NewHugoMDWriter(config *api.Config, copyright, title string) DocWriter {
+	w := NewMarkdownWriter(config, copyright, title).(*MarkdownWriter)
+	w.HugoMode = true
+	return w
 }
 
 func (m *MarkdownWriter) Extension() string {
@@ -561,10 +572,11 @@ func (m *MarkdownWriter) appendFields(section *fieldSection, d *api.Definition, 
 
 func (m *MarkdownWriter) buildTemplateOperation(o *api.Operation, currentCategory string) templateOperation {
 	op := templateOperation{
-		Verb:   strings.ToLower(o.HttpMethod),
-		Title:  o.Type.Name,
-		Method: o.HttpMethod,
-		Path:   o.Path,
+		Verb:     strings.ToLower(o.HttpMethod),
+		Title:    o.Type.Name,
+		Method:   o.HttpMethod,
+		Path:     o.Path,
+		HugoMode: m.HugoMode,
 	}
 
 	convert := func(params api.Fields) []templateParam {
