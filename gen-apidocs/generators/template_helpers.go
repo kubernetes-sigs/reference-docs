@@ -18,6 +18,7 @@ package generators
 
 import (
 	_ "embed"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -29,15 +30,19 @@ var resourceTemplateSrc string
 
 // Template helpers registered on resourceTemplate:
 //
-//	q       quotes for YAML frontmatter
-//	md      escapes `<` for body text
-//	mdCell  escapes pipes and newlines for safe use inside markdown table cells
-//	hugoRef wraps a relative path in a {{< ref >}} shortcode
+//	q             quotes for YAML frontmatter
+//	md            escapes `<` for body text
+//	mdCell        escapes pipes and newlines for safe use inside markdown table cells
+//	hugoRef       wraps a relative path in a {{< ref >}} shortcode
+//	hugoShortcode emits a Hugo shortcode with positional string args
+//	dict          builds a map for passing named args to named templates
 var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
-	"q":       strconv.Quote,
-	"md":      escape,
-	"mdCell":  mdCell,
-	"hugoRef": hugoRef,
+	"q":             strconv.Quote,
+	"md":            escape,
+	"mdCell":        mdCell,
+	"hugoRef":       hugoRef,
+	"hugoShortcode": hugoShortcode,
+	"dict":          dict,
 }).Parse(resourceTemplateSrc))
 
 var (
@@ -66,4 +71,34 @@ func mdCell(s string) string {
 // hugoRef wraps a path in a {{< ref >}} shortcode resolved by Hugo at build time.
 func hugoRef(path string) string {
 	return `{{< ref "` + path + `" >}}`
+}
+
+// hugoShortcode emits a Hugo shortcode invocation: `{{< name "arg1" "arg2" >}}`.
+// String args are quoted to preserve embedded whitespace.
+func hugoShortcode(name string, args ...string) string {
+	if len(args) == 0 {
+		return `{{< ` + name + ` >}}`
+	}
+	quoted := make([]string, len(args))
+	for i, a := range args {
+		quoted[i] = strconv.Quote(a)
+	}
+	return `{{< ` + name + ` ` + strings.Join(quoted, " ") + ` >}}`
+}
+
+// dict builds a map[string]any from alternating key/value pairs, used to pass
+// named arguments to {{template "name" ...}} calls.
+func dict(values ...any) (map[string]any, error) {
+	if len(values)%2 != 0 {
+		return nil, fmt.Errorf("dict: odd argument count %d", len(values))
+	}
+	m := make(map[string]any, len(values)/2)
+	for i := 0; i < len(values); i += 2 {
+		k, ok := values[i].(string)
+		if !ok {
+			return nil, fmt.Errorf("dict: non-string key at index %d (%T)", i, values[i])
+		}
+		m[k] = values[i+1]
+	}
+	return m, nil
 }

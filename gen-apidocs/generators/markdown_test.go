@@ -149,6 +149,26 @@ func TestWriteResourceGolden(t *testing.T) {
 		"testdata/deployment-v1.golden.md")
 }
 
+func TestWriteResourceGoldenHugoMode(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+	m.HugoMode = true
+
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, testCategorySlug), 0755); err != nil {
+		t.Fatal(err)
+	}
+	m.currentCategory = mdCategory{name: testCategoryName, slug: testCategorySlug}
+
+	r := fabricateDeploymentResource()
+	if err := m.WriteResource(r); err != nil {
+		t.Fatalf("WriteResource: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, testCategorySlug, "deployment-v1.md"),
+		"testdata/deployment-v1-hugo.golden.md")
+}
+
 func TestWriteOperationGolden(t *testing.T) {
 	m, cleanup := newTestWriter(t)
 	defer cleanup()

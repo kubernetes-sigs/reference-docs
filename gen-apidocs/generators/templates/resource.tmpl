@@ -1,10 +1,19 @@
 ---
 api_metadata:
+{{- if .HugoMode}}
+{{- if .APIGroup}}
+  apiGroup: {{.APIGroup | q}}
+{{- end}}
+{{- end}}
   apiVersion: {{.APIVersion | q}}
-{{- if .Import}}
+{{- if and .Import (not .HugoMode)}}
   import: {{.Import | q}}
 {{- end}}
   kind: {{.Kind | q}}
+{{- if and .HugoMode .Import}}
+code_import:
+  go: {{.Import | q}}
+{{- end}}
 content_type: "api_reference"
 description: {{.Description | q}}
 title: {{.Title | q}}
@@ -23,6 +32,71 @@ guide. You can file document formatting bugs against the
 [reference-docs](https://github.com/kubernetes-sigs/reference-docs/) project.
 -->
 
+{{if .HugoMode -}}
+{{/* ============================ HUGO-MD PATH ============================ */}}
+
+{{/* --- Resource section --- */}}
+
+## {{.Kind}} object API type {#resource}
+
+{{hugoShortcode "api-object-preamble" .Kind}}
+
+{{.ResourceSection.Description | md}}
+
+{{template "fieldsTable" .ResourceSection.Fields}}
+
+{{/* --- Field sections (.spec, .status, etc.) --- */}}
+
+{{range .FieldSections}}
+## `.{{.FieldPath}}` {#{{.Anchor}}}
+
+{{.Description | md}}
+
+{{template "fieldsTable" .Fields}}
+{{end}}
+
+{{/* --- Collection section (NodeList, etc.) --- */}}
+
+{{if .CollectionSection}}
+## {{.Kind}} collection API type {#collections}
+
+{{hugoShortcode "api-collection-preamble" .Kind}}
+
+### {{.CollectionSection.Title}} {#{{.CollectionSection.Anchor}}}
+
+{{.CollectionSection.Description | md}}
+
+{{template "fieldsTable" .CollectionSection.Fields}}
+{{end}}
+
+{{/* --- Operations --- */}}
+
+{{if .Operations}}
+## API operations on {{.Kind}} {#operations-resource}
+
+{{hugoShortcode "api-operations-preamble" .Kind}}
+{{end}}
+{{- range .Operations}}
+{{template "operation" .}}
+{{- end}}
+
+{{/* --- Nested types used by this API --- */}}
+
+{{if .TypeSections}}
+## Types used in this API
+
+{{hugoShortcode "api-type-preamble" .Kind}}
+{{range .TypeSections}}
+### {{.Title}} {#{{.Anchor}}}
+
+{{.Description | md}}
+
+{{template "fieldsTable" .Fields}}
+{{end}}
+{{end}}
+
+{{- else -}}
+{{/* ============================ DEFAULT PATH ============================= */}}
 `apiVersion: {{.APIVersion}}`
 {{if .Import}}
 `import "{{.Import}}"`
@@ -34,18 +108,7 @@ guide. You can file document formatting bugs against the
 
 <hr>
 
-{{if .Fields}}<table>
-  <thead><tr><th>Field</th><th>Description</th></tr></thead>
-  <tbody>
-{{- range .Fields}}
-    <tr>
-      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{template "typeWrap" .}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}{{if .PatchStrategy}}<br/><em>patch strategy: {{.PatchStrategy}}{{if .PatchMergeKey}} on key <code>{{.PatchMergeKey}}</code>{{end}}</em>{{end}}</td>
-      <td>{{.Description | md}}</td>
-    </tr>
-{{- end}}
-  </tbody>
-</table>
-{{end}}
+{{if .Fields}}{{template "fieldsTable" .Fields}}{{end}}
 {{end}}
 {{if .Operations}}
 ## Operations {#Operations}
@@ -55,6 +118,21 @@ guide. You can file document formatting bugs against the
 {{end}}
 {{- range .Operations}}
 {{template "operation" .}}
+{{- end}}
+{{- end}}
+
+{{define "fieldsTable" -}}
+<table>
+  <thead><tr><th>Field</th><th>Description</th></tr></thead>
+  <tbody>
+{{- range .}}
+    <tr>
+      <td><code>{{.Name}}</code>{{if .Required}}&nbsp;<strong>*</strong>{{end}}<br/><em>{{template "typeWrap" .}}</em>{{if .ConstValue}}<br/><em>const: <code>{{.ConstValue}}</code></em>{{end}}{{if .PatchStrategy}}<br/><em>patch strategy: {{.PatchStrategy}}{{if .PatchMergeKey}} on key <code>{{.PatchMergeKey}}</code>{{end}}</em>{{end}}</td>
+      <td>{{.Description | md}}</td>
+    </tr>
+{{- end}}
+  </tbody>
+</table>
 {{- end}}
 
 {{define "operation" -}}
@@ -68,11 +146,7 @@ guide. You can file document formatting bugs against the
 #### Path Parameters
 
 {{if .HugoMode -}}
-| Name | Type | Description |
-|---|---|---|
-{{range .PathParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
-{{end -}}
-{class="api-reference-path-parameters"}
+{{template "mdParamTable" dict "Params" .PathParams "Class" "api-reference-path-parameters"}}
 {{- else -}}
 {{template "paramTable" .PathParams}}
 {{- end}}
@@ -81,11 +155,7 @@ guide. You can file document formatting bugs against the
 #### Query Parameters
 
 {{if .HugoMode -}}
-| Name | Type | Description |
-|---|---|---|
-{{range .QueryParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
-{{end -}}
-{class="api-reference-query-parameters"}
+{{template "mdParamTable" dict "Params" .QueryParams "Class" "api-reference-query-parameters"}}
 {{- else -}}
 {{template "paramTable" .QueryParams}}
 {{- end}}
@@ -94,11 +164,7 @@ guide. You can file document formatting bugs against the
 #### Body Parameters
 
 {{if .HugoMode -}}
-| Name | Type | Description |
-|---|---|---|
-{{range .BodyParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
-{{end -}}
-{class="api-reference-request-body"}
+{{template "mdParamTable" dict "Params" .BodyParams "Class" "api-reference-request-body"}}
 {{- else -}}
 {{template "paramTable" .BodyParams}}
 {{- end}}
@@ -135,6 +201,16 @@ guide. You can file document formatting bugs against the
 
 {{define "mdTypeWrap" -}}
 {{if .TypeHref}}[{{.Type}}]({{hugoRef .TypeHref}}){{else}}{{.Type}}{{end}}
+{{- end}}
+
+{{/* mdParamTable: hugo-md variant of paramTable. Expects dict "Params" <slice> "Class" <css-class>. */}}
+
+{{define "mdParamTable" -}}
+| Name | Type | Description |
+|---|---|---|
+{{range .Params}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
+{{end -}}
+{class="{{.Class}}"}
 {{- end}}
 
 {{define "paramTable" -}}
