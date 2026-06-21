@@ -31,10 +31,12 @@ var resourceTemplateSrc string
 //
 //	q       quotes for YAML frontmatter
 //	md      escapes `<` for body text
+//	mdCell  escapes pipes and newlines for safe use inside markdown table cells
 //	hugoRef wraps a relative path in a {{< ref >}} shortcode
 var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
 	"q":       strconv.Quote,
 	"md":      escape,
+	"mdCell":  mdCell,
 	"hugoRef": hugoRef,
 }).Parse(resourceTemplateSrc))
 
@@ -49,6 +51,15 @@ func escape(s string) string {
 	s = strings.ReplaceAll(s, "<", `\<`)
 	s = enumHeaderRegex.ReplaceAllString(s, "<br/><br/>Possible enum values:")
 	s = enumBulletRegex.ReplaceAllString(s, "<br/> - `")
+	return s
+}
+
+// mdCell escapes a description for safe use inside a markdown table cell:
+// pipes break the row, and raw newlines split the cell across rows.
+func mdCell(s string) string {
+	s = escape(s)
+	s = strings.ReplaceAll(s, "|", `\|`)
+	s = strings.ReplaceAll(s, "\n", " ")
 	return s
 }
 

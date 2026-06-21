@@ -40,6 +40,19 @@ GET /api/v1/namespaces/{namespace}/pods
 </table>
 
 
+#### Body Parameters
+
+<table>
+  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>body</code></td>
+      <td><em>Pod</em></td>
+      <td>Pod to create.</td>
+    </tr>
+  </tbody>
+</table>
+
 
 #### Response
 

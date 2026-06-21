@@ -67,17 +67,41 @@ guide. You can file document formatting bugs against the
 {{if .PathParams}}
 #### Path Parameters
 
+{{if .HugoMode -}}
+| Name | Type | Description |
+|---|---|---|
+{{range .PathParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
+{{end -}}
+{class="api-reference-path-parameters"}
+{{- else -}}
 {{template "paramTable" .PathParams}}
+{{- end}}
 {{end}}
 {{if .QueryParams}}
 #### Query Parameters
 
+{{if .HugoMode -}}
+| Name | Type | Description |
+|---|---|---|
+{{range .QueryParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
+{{end -}}
+{class="api-reference-query-parameters"}
+{{- else -}}
 {{template "paramTable" .QueryParams}}
+{{- end}}
 {{end}}
 {{if .BodyParams}}
 #### Body Parameters
 
+{{if .HugoMode -}}
+| Name | Type | Description |
+|---|---|---|
+{{range .BodyParams}}| `{{.Name}}` | {{template "mdTypeWrap" .}} | {{.Description | mdCell}} |
+{{end -}}
+{class="api-reference-request-body"}
+{{- else -}}
 {{template "paramTable" .BodyParams}}
+{{- end}}
 {{end}}
 {{if .Responses}}
 #### Response
@@ -85,7 +109,7 @@ guide. You can file document formatting bugs against the
 {{if .HugoMode -}}
 | Status | Description | Response |
 |---|---|---|
-{{range .Responses}}| {{.Code}} | {{.Description | md}} | {{if .Type}}{{template "mdTypeWrap" .}}{{else}}—{{end}} |
+{{range .Responses}}| {{.Code}} | {{.Description | mdCell}} | {{if .Type}}{{template "mdTypeWrap" .}}{{else}}—{{end}} |
 {{end -}}
 {class="api-reference-response-codes"}
 {{- else -}}

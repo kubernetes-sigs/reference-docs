@@ -475,6 +475,9 @@ func fabricateOperation() *api.Operation {
 		QueryParams: api.Fields{
 			{Name: "watch", Type: "boolean", Description: "Watch for changes to the described resources."},
 		},
+		BodyParams: api.Fields{
+			{Name: "body", Type: "Pod", Description: "Pod to create."},
+		},
 		HttpResponses: api.HttpResponses{
 			{Code: "200", Field: api.Field{Type: "PodList", Description: "OK"}},
 			{Code: "401", Field: api.Field{Description: "Unauthorized"}},
