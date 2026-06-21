@@ -18,11 +18,63 @@ package generators
 
 import (
 	"fmt"
-
+	"regexp"
 	"strings"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
+
+var (
+	anchorRegex    = regexp.MustCompile(`[^a-zA-Z0-9]+`)
+	kebabBoundary1 = regexp.MustCompile(`([a-z0-9])([A-Z])`)
+	kebabBoundary2 = regexp.MustCompile(`([A-Z])([A-Z][a-z])`)
+)
+
+// anchor produces a stable in-page anchor from a kind or section name.
+func anchor(s string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(s, "-"), "-")
+}
+
+// kebabCase lowercases and slugifies any string into a kebab-case identifier
+// used for directory and file names.
+func kebabCase(s string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(s), "-"), "-")
+}
+
+// kebabName converts a CamelCase API kind (e.g. "PodTemplate") into its
+// kebab-cased file form (e.g. "pod-template"), preserving acronym boundaries.
+func kebabName(s string) string {
+	s = kebabBoundary2.ReplaceAllString(s, "$1-$2")
+	s = kebabBoundary1.ReplaceAllString(s, "$1-$2")
+	return strings.ToLower(s)
+}
+
+// groupVersionString formats the canonical "group/version" string used in
+// API references, collapsing the core group to a bare version.
+func groupVersionString(group string, version api.ApiVersion) string {
+	if group == "" || group == "core" {
+		return version.String()
+	}
+	return fmt.Sprintf("%s/%s", group, version.String())
+}
+
+// operationSlug derives a filename-safe slug from an operation ID.
+func operationSlug(id string) string {
+	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
+}
+
+// constValueFor hard-codes the two fields Kubernetes manifests always carry
+// with fixed values (apiVersion and kind). Swagger does not tag them as const
+// so we derive them from the GVK.
+func constValueFor(fieldName, apiVersion, kind string) string {
+	switch fieldName {
+	case "apiVersion":
+		return apiVersion
+	case "kind":
+		return kind
+	}
+	return ""
+}
 
 func PrintInfo(config *api.Config) {
 	definitions := config.Definitions

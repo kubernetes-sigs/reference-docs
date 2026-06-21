@@ -17,16 +17,12 @@ limitations under the License.
 package generators
 
 import (
-	_ "embed"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
-	"strconv"
 	"strings"
-	"text/template"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
@@ -159,29 +155,6 @@ var utilityStandalone = map[string]bool{
 }
 
 var _ DocWriter = (*MarkdownWriter)(nil)
-
-var anchorRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
-
-var (
-	enumHeaderRegex = regexp.MustCompile(`\s+Possible enum values:`)
-	enumBulletRegex = regexp.MustCompile(`\s+- ` + "`")
-)
-
-//go:embed templates/resource.tmpl
-var resourceTemplateSrc string
-
-// q quotes for YAML frontmatter; md escapes `<` for body text; hugoRef
-// wraps a relative path in a {{< ref >}} shortcode.
-var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
-	"q":       strconv.Quote,
-	"md":      escape,
-	"hugoRef": hugoRef,
-}).Parse(resourceTemplateSrc))
-
-// hugoRef wraps a path in a {{< ref >}} shortcode resolved by Hugo at build time.
-func hugoRef(path string) string {
-	return `{{< ref "` + path + `" >}}`
-}
 
 func NewMarkdownWriter(config *api.Config, copyright, title string) DocWriter {
 	outputDir := api.BuildDir
@@ -847,58 +820,6 @@ func tocSortRank(title string) int {
 	default:
 		return 2
 	}
-}
-
-func anchor(s string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(s, "-"), "-")
-}
-
-// escape covers the only markdown-breaking character in OpenAPI descriptions:
-// raw `<` that would otherwise be read as HTML.
-func escape(s string) string {
-	s = strings.ReplaceAll(s, "<", `\<`)
-	s = enumHeaderRegex.ReplaceAllString(s, "<br/><br/>Possible enum values:")
-	s = enumBulletRegex.ReplaceAllString(s, "<br/> - `")
-	return s
-}
-
-func kebabCase(s string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(s), "-"), "-")
-}
-
-var (
-	kebabBoundary1 = regexp.MustCompile(`([a-z0-9])([A-Z])`)
-	kebabBoundary2 = regexp.MustCompile(`([A-Z])([A-Z][a-z])`)
-)
-
-func kebabName(s string) string {
-	s = kebabBoundary2.ReplaceAllString(s, "$1-$2")
-	s = kebabBoundary1.ReplaceAllString(s, "$1-$2")
-	return strings.ToLower(s)
-}
-
-func groupVersionString(group string, version api.ApiVersion) string {
-	if group == "" || group == "core" {
-		return version.String()
-	}
-	return fmt.Sprintf("%s/%s", group, version.String())
-}
-
-func operationSlug(id string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
-}
-
-// constValueFor hard-codes the two fields Kubernetes manifests always
-// carry with fixed values (apiVersion and kind). Swagger doesn't tag
-// them as const so we derive them from the GVK.
-func constValueFor(fieldName, apiVersion, kind string) string {
-	switch fieldName {
-	case "apiVersion":
-		return apiVersion
-	case "kind":
-		return kind
-	}
-	return ""
 }
 
 func (m *MarkdownWriter) nextCategoryWeight() int {
