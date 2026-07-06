@@ -17,16 +17,12 @@ limitations under the License.
 package generators
 
 import (
-	_ "embed"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
-	"strconv"
 	"strings"
-	"text/template"
 
 	"github.com/kubernetes-sigs/reference-docs/gen-apidocs/generators/api"
 )
@@ -83,14 +79,25 @@ type linkInfo struct {
 // resourcePage is the view model resource.tmpl consumes.
 type resourcePage struct {
 	APIVersion  string
+	APIGroup    string
 	Kind        string
 	Import      string
 	Title       string
 	Weight      int
 	Anchor      string
 	Description string
-	Sections    []fieldSection
-	Operations  []templateOperation
+	HugoMode    bool
+
+	Sections []fieldSection
+
+	// The remaining slices regroup Sections by role for the hugo-md template
+	// path. They reference the same data, partitioned by section kind.
+	ResourceSection   fieldSection
+	FieldSections     []fieldSection // Kind="field": .spec, .status, etc.
+	CollectionSection *fieldSection  // Kind="collection": the List type (zero or one)
+	TypeSections      []fieldSection // Kind="type": other inlined nested types
+
+	Operations []templateOperation
 }
 
 type fieldSection struct {
@@ -98,6 +105,13 @@ type fieldSection struct {
 	Anchor      string
 	Description string
 	Fields      []templateField
+
+	Kind string
+
+	// FieldPath is set for Kind="field": the dot-notation field name on
+	// the parent resource (e.g. "spec", "status"). Used by hugo-md to
+	// emit `## `.spec` {#NodeSpec}` style headings.
+	FieldPath string
 }
 
 type templateField struct {
@@ -159,29 +173,6 @@ var utilityStandalone = map[string]bool{
 }
 
 var _ DocWriter = (*MarkdownWriter)(nil)
-
-var anchorRegex = regexp.MustCompile(`[^a-zA-Z0-9]+`)
-
-var (
-	enumHeaderRegex = regexp.MustCompile(`\s+Possible enum values:`)
-	enumBulletRegex = regexp.MustCompile(`\s+- ` + "`")
-)
-
-//go:embed templates/resource.tmpl
-var resourceTemplateSrc string
-
-// q quotes for YAML frontmatter; md escapes `<` for body text; hugoRef
-// wraps a relative path in a {{< ref >}} shortcode.
-var resourceTemplate = template.Must(template.New("resource").Funcs(template.FuncMap{
-	"q":       strconv.Quote,
-	"md":      escape,
-	"hugoRef": hugoRef,
-}).Parse(resourceTemplateSrc))
-
-// hugoRef wraps a path in a {{< ref >}} shortcode resolved by Hugo at build time.
-func hugoRef(path string) string {
-	return `{{< ref "` + path + `" >}}`
-}
 
 func NewMarkdownWriter(config *api.Config, copyright, title string) DocWriter {
 	outputDir := api.BuildDir
@@ -455,12 +446,14 @@ func (m *MarkdownWriter) buildResourcePage(r *api.Resource, currentCategory stri
 func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory string) resourcePage {
 	page := resourcePage{
 		APIVersion:  groupVersionString(d.GroupFullName, d.Version),
+		APIGroup:    string(d.Group),
 		Kind:        d.Name,
 		Import:      d.GoImportPath(),
 		Title:       d.Name,
 		Weight:      m.nextResourceWeight(),
 		Anchor:      anchor(d.Name),
 		Description: d.DescriptionWithEntities,
+		HugoMode:    m.HugoMode,
 	}
 
 	// Inline closure rooted at d gates which types may flatten inline;
@@ -478,24 +471,31 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 	}
 	collect(d)
 
-	// Section-worthy = directly referenced field type, or d's List type.
+	// sectionEntry tracks each section-worthy definition alongside the
+	// classification used by the hugo-md heading restructure.
+	type sectionEntry struct {
+		def       *api.Definition
+		kind      string // "field", "collection", or "type"
+		fieldPath string // populated when kind == "field"
+	}
+
 	sectionTypes := map[string]bool{}
-	sectionOrder := []*api.Definition{}
-	addSection := func(def *api.Definition) {
+	sectionOrder := []sectionEntry{}
+	addSection := func(def *api.Definition, kind, fieldPath string) {
 		if def == nil || sectionTypes[def.Key()] {
 			return
 		}
 		sectionTypes[def.Key()] = true
-		sectionOrder = append(sectionOrder, def)
+		sectionOrder = append(sectionOrder, sectionEntry{def: def, kind: kind, fieldPath: fieldPath})
 	}
 	for _, fld := range d.Fields {
 		if fld.Definition != nil && allowInline[fld.Definition.Key()] {
-			addSection(fld.Definition)
+			addSection(fld.Definition, "field", fld.Name)
 		}
 	}
 	for _, c := range d.Inline {
 		if c.Name == d.Name+"List" {
-			addSection(c)
+			addSection(c, "collection", "")
 		}
 	}
 
@@ -503,7 +503,7 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 		sorted := append([]*api.Definition(nil), siblings...)
 		sort.Slice(sorted, func(i, j int) bool { return sorted[i].Name < sorted[j].Name })
 		for _, c := range sorted {
-			addSection(c)
+			addSection(c, "type", "")
 		}
 	}
 
@@ -512,19 +512,34 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 		Title:       d.Name,
 		Anchor:      anchor(d.Name),
 		Description: d.DescriptionWithEntities,
+		Kind:        "resource",
 	}
 	m.appendFields(&root, d, "", currentCategory, allowInline, sectionTypes, visited)
 	page.Sections = append(page.Sections, root)
+	page.ResourceSection = root
 
-	for _, s := range sectionOrder {
+	for _, e := range sectionOrder {
+		s := e.def
 		section := fieldSection{
 			Title:       s.Name,
 			Anchor:      anchor(s.Name),
 			Description: s.DescriptionWithEntities,
+			Kind:        e.kind,
+			FieldPath:   e.fieldPath,
 		}
 		svisited := map[string]bool{d.Key(): true, s.Key(): true}
 		m.appendFields(&section, s, "", currentCategory, allowInline, sectionTypes, svisited)
 		page.Sections = append(page.Sections, section)
+
+		switch e.kind {
+		case "field":
+			page.FieldSections = append(page.FieldSections, section)
+		case "collection":
+			cs := section
+			page.CollectionSection = &cs
+		case "type":
+			page.TypeSections = append(page.TypeSections, section)
+		}
 	}
 	return page
 }
@@ -847,58 +862,6 @@ func tocSortRank(title string) int {
 	default:
 		return 2
 	}
-}
-
-func anchor(s string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(s, "-"), "-")
-}
-
-// escape covers the only markdown-breaking character in OpenAPI descriptions:
-// raw `<` that would otherwise be read as HTML.
-func escape(s string) string {
-	s = strings.ReplaceAll(s, "<", `\<`)
-	s = enumHeaderRegex.ReplaceAllString(s, "<br/><br/>Possible enum values:")
-	s = enumBulletRegex.ReplaceAllString(s, "<br/> - `")
-	return s
-}
-
-func kebabCase(s string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(s), "-"), "-")
-}
-
-var (
-	kebabBoundary1 = regexp.MustCompile(`([a-z0-9])([A-Z])`)
-	kebabBoundary2 = regexp.MustCompile(`([A-Z])([A-Z][a-z])`)
-)
-
-func kebabName(s string) string {
-	s = kebabBoundary2.ReplaceAllString(s, "$1-$2")
-	s = kebabBoundary1.ReplaceAllString(s, "$1-$2")
-	return strings.ToLower(s)
-}
-
-func groupVersionString(group string, version api.ApiVersion) string {
-	if group == "" || group == "core" {
-		return version.String()
-	}
-	return fmt.Sprintf("%s/%s", group, version.String())
-}
-
-func operationSlug(id string) string {
-	return strings.Trim(anchorRegex.ReplaceAllString(strings.ToLower(id), "-"), "-")
-}
-
-// constValueFor hard-codes the two fields Kubernetes manifests always
-// carry with fixed values (apiVersion and kind). Swagger doesn't tag
-// them as const so we derive them from the GVK.
-func constValueFor(fieldName, apiVersion, kind string) string {
-	switch fieldName {
-	case "apiVersion":
-		return apiVersion
-	case "kind":
-		return kind
-	}
-	return ""
 }
 
 func (m *MarkdownWriter) nextCategoryWeight() int {

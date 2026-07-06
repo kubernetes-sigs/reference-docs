@@ -1,8 +1,10 @@
 ---
 api_metadata:
+  apiGroup: "apps"
   apiVersion: "apps/v1"
-  import: "k8s.io/api/apps/v1"
   kind: "Deployment"
+code_import:
+  go: "k8s.io/api/apps/v1"
 content_type: "api_reference"
 description: "Deployment enables declarative updates for Pods and ReplicaSets."
 title: "Deployment"
@@ -22,16 +24,14 @@ guide. You can file document formatting bugs against the
 -->
 
 
-`apiVersion: apps/v1`
-
-`import "k8s.io/api/apps/v1"`
 
 
-## Deployment {#Deployment}
+
+## Deployment object API type {#resource}
+
+{{< api-object-preamble "Deployment" >}}
 
 Deployment enables declarative updates for Pods and ReplicaSets.
-
-<hr>
 
 <table>
   <thead><tr><th>Field</th><th>Description</th></tr></thead>
@@ -58,6 +58,20 @@ Deployment enables declarative updates for Pods and ReplicaSets.
     </tr>
   </tbody>
 </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

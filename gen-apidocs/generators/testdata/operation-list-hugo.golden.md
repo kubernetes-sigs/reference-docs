@@ -14,31 +14,26 @@ GET /api/v1/namespaces/{namespace}/pods
 
 #### Path Parameters
 
-<table>
-  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
-  <tbody>
-    <tr>
-      <td><code>namespace</code></td>
-      <td><em>string</em></td>
-      <td>object name and auth scope, such as for teams and users</td>
-    </tr>
-  </tbody>
-</table>
+| Name | Type | Description |
+|---|---|---|
+| `namespace` | string | object name and auth scope, such as for teams and users |
+{class="api-reference-path-parameters"}
 
 
 #### Query Parameters
 
-<table>
-  <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
-  <tbody>
-    <tr>
-      <td><code>watch</code></td>
-      <td><em>boolean</em></td>
-      <td>Watch for changes to the described resources.</td>
-    </tr>
-  </tbody>
-</table>
+| Name | Type | Description |
+|---|---|---|
+| `watch` | boolean | Watch for changes to the described resources. |
+{class="api-reference-query-parameters"}
 
+
+#### Body Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| `body` | Pod | Pod to create. |
+{class="api-reference-request-body"}
 
 
 #### Response

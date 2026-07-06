@@ -149,6 +149,26 @@ func TestWriteResourceGolden(t *testing.T) {
 		"testdata/deployment-v1.golden.md")
 }
 
+func TestWriteResourceGoldenHugoMode(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+	m.HugoMode = true
+
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, testCategorySlug), 0755); err != nil {
+		t.Fatal(err)
+	}
+	m.currentCategory = mdCategory{name: testCategoryName, slug: testCategorySlug}
+
+	r := fabricateDeploymentResource()
+	if err := m.WriteResource(r); err != nil {
+		t.Fatalf("WriteResource: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, testCategorySlug, "deployment-v1.md"),
+		"testdata/deployment-v1-hugo.golden.md")
+}
+
 func TestWriteOperationGolden(t *testing.T) {
 	m, cleanup := newTestWriter(t)
 	defer cleanup()
@@ -474,6 +494,9 @@ func fabricateOperation() *api.Operation {
 		},
 		QueryParams: api.Fields{
 			{Name: "watch", Type: "boolean", Description: "Watch for changes to the described resources."},
+		},
+		BodyParams: api.Fields{
+			{Name: "body", Type: "Pod", Description: "Pod to create."},
 		},
 		HttpResponses: api.HttpResponses{
 			{Code: "200", Field: api.Field{Type: "PodList", Description: "OK"}},
