@@ -460,7 +460,7 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 		Title:       d.Name,
 		Weight:      m.nextResourceWeight(),
 		Anchor:      anchor(d.Name),
-		Description: d.DescriptionWithEntities,
+		Description: d.SummaryWithEntities,
 	}
 
 	// Inline closure rooted at d gates which types may flatten inline;

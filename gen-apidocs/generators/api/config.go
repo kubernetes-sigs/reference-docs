@@ -870,6 +870,7 @@ func (c *Config) mapOperationsToDefinitions() error {
 func (c *Config) escapeDescriptions() {
 	for _, d := range c.Definitions.All {
 		d.DescriptionWithEntities = html.EscapeString(d.Description())
+		d.SummaryWithEntities = html.EscapeString(d.Summary())
 
 		for _, f := range d.Fields {
 			f.DescriptionWithEntities = html.EscapeString(f.Description)

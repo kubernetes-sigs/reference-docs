@@ -149,6 +149,31 @@ func TestWriteResourceGolden(t *testing.T) {
 		"testdata/deployment-v1.golden.md")
 }
 
+// TestWriteResourceGoldenMultilineDescription guards against
+// kubernetes/website#56418: a resource whose Go doc comment embeds a
+// multi-line example (like core/v1's EndpointSubset) must get a short,
+// single-line front-matter "description" (rendered as the page's ".lead"
+// intro on kubernetes.io), while the full example is preserved in the page
+// body.
+func TestWriteResourceGoldenMultilineDescription(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+
+	if err := os.MkdirAll(filepath.Join(m.OutputDir, testCategorySlug), 0755); err != nil {
+		t.Fatal(err)
+	}
+	m.currentCategory = mdCategory{name: testCategoryName, slug: testCategorySlug}
+
+	r := fabricateEndpointsResource()
+	if err := m.WriteResource(r); err != nil {
+		t.Fatalf("WriteResource: %v", err)
+	}
+
+	compareWithGolden(t,
+		filepath.Join(m.OutputDir, testCategorySlug, "endpoints-v1.md"),
+		"testdata/endpoints-v1.golden.md")
+}
+
 func TestWriteOperationGolden(t *testing.T) {
 	m, cleanup := newTestWriter(t)
 	defer cleanup()
@@ -451,6 +476,7 @@ func fabricateDeploymentResource() *api.Resource {
 			Version:                 api.ApiVersion("v1"),
 			Kind:                    api.ApiKind("Deployment"),
 			DescriptionWithEntities: "Deployment enables declarative updates for Pods and ReplicaSets.",
+			SummaryWithEntities:     "Deployment enables declarative updates for Pods and ReplicaSets.",
 			SwaggerKey:              "io.k8s.api.apps.v1.Deployment",
 			Fields: api.Fields{
 				{Name: "apiVersion", Type: "string", Description: "APIVersion defines the versioned schema of this representation of an object."},
@@ -458,6 +484,42 @@ func fabricateDeploymentResource() *api.Resource {
 				{Name: "metadata", Type: "ObjectMeta", Description: "Standard object's metadata."},
 				{Name: "spec", Type: "DeploymentSpec", Description: "Specification of the desired behavior of the Deployment."},
 				{Name: "status", Type: "DeploymentStatus", Description: "Most recently observed status of the Deployment."},
+			},
+		},
+	}
+}
+
+// endpointSubsetExampleDescription mirrors the real doc comment on core/v1's
+// EndpointSubset: a summary sentence followed by a blank line and an indented
+// struct-literal example — the shape that produced the garbled front-matter
+// ".lead" reported in kubernetes/website#56418.
+const endpointSubsetExampleDescription = "Endpoints is a collection of endpoints that implement the actual service. Example:\n" +
+	"\n" +
+	"\t Name: \"mysvc\",\n" +
+	"\t Subsets: [\n" +
+	"\t   {\n" +
+	"\t     Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n" +
+	"\t     Ports: [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n" +
+	"\t   },\n" +
+	"\t ]"
+
+func fabricateEndpointsResource() *api.Resource {
+	return &api.Resource{
+		Name: "Endpoints",
+		Definition: &api.Definition{
+			Name:                    "Endpoints",
+			Group:                   api.ApiGroup(""),
+			GroupFullName:           "",
+			Version:                 api.ApiVersion("v1"),
+			Kind:                    api.ApiKind("Endpoints"),
+			DescriptionWithEntities: endpointSubsetExampleDescription,
+			SummaryWithEntities:     "Endpoints is a collection of endpoints that implement the actual service. Example:",
+			SwaggerKey:              "io.k8s.api.core.v1.Endpoints",
+			Fields: api.Fields{
+				{Name: "apiVersion", Type: "string", Description: "APIVersion defines the versioned schema of this representation of an object."},
+				{Name: "kind", Type: "string", Description: "Kind is a string value representing the REST resource."},
+				{Name: "metadata", Type: "ObjectMeta", Description: "Standard object's metadata."},
+				{Name: "subsets", Type: "[]EndpointSubset", Description: "The set of all endpoints is the union of all subsets."},
 			},
 		},
 	}

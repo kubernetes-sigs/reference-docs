@@ -199,6 +199,7 @@ type Definition struct {
 	Version                 ApiVersion
 	Kind                    ApiKind
 	DescriptionWithEntities string
+	SummaryWithEntities     string
 	GroupFullName           string
 
 	// InToc is true if this definition should appear in the table of contents

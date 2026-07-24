@@ -423,6 +423,23 @@ func (d *Definition) Description() string {
 	return EscapeAsterisks(d.schema.Description)
 }
 
+// Summary returns a single-paragraph, front-matter-safe rendering of the
+// definition's description: only the text up to the first blank line, with
+// any remaining newlines collapsed to spaces. Mirrors the sanitization
+// already applied to field/parameter/response descriptions and prevents
+// embedded multi-line doc-comment examples (e.g. EndpointSubset's
+// struct-literal example) from being dumped verbatim into the page's
+// front-matter "description" field (rendered as the ".lead" intro on
+// kubernetes.io).
+func (d *Definition) Summary() string {
+	desc := d.schema.Description
+	if idx := strings.Index(desc, "\n\n"); idx != -1 {
+		desc = desc[:idx]
+	}
+	desc = strings.TrimSpace(strings.ReplaceAll(desc, "\n", " "))
+	return EscapeAsterisks(desc)
+}
+
 func (d *Definition) GetResourceName() string {
 	if len(d.Resource) > 0 {
 		return d.Resource
