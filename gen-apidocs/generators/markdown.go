@@ -452,7 +452,7 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 		Title:       d.Name,
 		Weight:      m.nextResourceWeight(),
 		Anchor:      anchor(d.Name),
-		Description: d.DescriptionWithEntities,
+		Description: d.Description(),
 		HugoMode:    m.HugoMode,
 	}
 
@@ -511,7 +511,7 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 	root := fieldSection{
 		Title:       d.Name,
 		Anchor:      anchor(d.Name),
-		Description: d.DescriptionWithEntities,
+		Description: d.Description(),
 		Kind:        "resource",
 	}
 	m.appendFields(&root, d, "", currentCategory, allowInline, sectionTypes, visited)
@@ -523,7 +523,7 @@ func (m *MarkdownWriter) buildDefinitionPage(d *api.Definition, currentCategory 
 		section := fieldSection{
 			Title:       s.Name,
 			Anchor:      anchor(s.Name),
-			Description: s.DescriptionWithEntities,
+			Description: s.Description(),
 			Kind:        e.kind,
 			FieldPath:   e.fieldPath,
 		}

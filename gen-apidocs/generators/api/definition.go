@@ -423,6 +423,10 @@ func (d *Definition) Description() string {
 	return EscapeAsterisks(d.schema.Description)
 }
 
+func (d *Definition) SetDescription(desc string) {
+	d.schema.Description = desc
+}
+
 func (d *Definition) GetResourceName() string {
 	if len(d.Resource) > 0 {
 		return d.Resource
