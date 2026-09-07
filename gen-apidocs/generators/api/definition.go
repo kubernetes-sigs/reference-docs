@@ -334,35 +334,30 @@ func (s *Definitions) FindNewestVersion(group, kind string) string {
 	return newest
 }
 
-// IsTopLevelResource returns true if this definition represents a top-level
-// API resource (one that has its own List endpoint), as opposed to a
-// subresource (Scale, Eviction) or utility type (Status, WatchEvent).
-// Some resources, such as TokenRequest and the SubjectAccessReview family,
-// only support Create; they are top-level resources too.
+// IsTopLevelResource reports whether this definition is a top-level API
+// resource, as opposed to a utility type (Status, WatchEvent) or a field type
+// that never appears on the wire by itself.
+//
+// A List endpoint is the usual marker, but create-only resources such as
+// TokenRequest and the SubjectAccessReview family qualify too.
 func (d *Definition) IsTopLevelResource() bool {
 	for _, c := range d.OperationCategories {
-		if c == nil || c.Name != "Read Operations" {
+		if c == nil {
 			continue
 		}
 		for _, op := range c.Operations {
 			if op == nil {
 				continue
 			}
-			if op.Type.Name == "List" || op.Type.Name == "List All Namespaces" {
-				return true
-			}
-		}
-	}
-	for _, c := range d.OperationCategories {
-		if c == nil || c.Name != "Write Operations" {
-			continue
-		}
-		for _, op := range c.Operations {
-			if op == nil {
-				continue
-			}
-			if op.Type.Name == "Create" {
-				return true
+			switch c.Name {
+			case "Read Operations":
+				if op.Type.Name == "List" || op.Type.Name == "List All Namespaces" {
+					return true
+				}
+			case "Write Operations":
+				if op.Type.Name == "Create" {
+					return true
+				}
 			}
 		}
 	}

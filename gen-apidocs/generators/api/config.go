@@ -816,7 +816,9 @@ func (c *Config) mapOperationsToDefinitions() error {
 			continue
 		}
 
-		// XXX: The TokenRequest definition has operation defined as "createCoreV1NamespacedServiceAccountToken"!
+		// TokenRequest is created through a ServiceAccount subresource, so its
+		// operation ID doesn't follow the ${group}${version}${resource} pattern
+		// the generic matcher below uses.
 		if d.Name == "TokenRequest" && d.Group.String() == "authentication" && d.Version == "v1" {
 			operationId := "createCoreV1NamespacedServiceAccountToken"
 			if o, ok := c.Operations[operationId]; ok {
@@ -830,7 +832,6 @@ func (c *Config) mapOperationsToDefinitions() error {
 				}
 
 				o.Definition = d
-				o.Definition.InToc = true
 				o.Type = ot
 				if err := o.initExample(c); err != nil {
 					return fmt.Errorf("failed to init example: %w", err)
