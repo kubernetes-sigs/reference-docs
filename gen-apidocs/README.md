@@ -22,7 +22,7 @@ For the canonical end-to-end release walkthrough, see [Generating Reference Docu
 
 ## Prepare the swagger input
 
-The `swagger.json` checked into `kubernetes/kubernetes` at `api/openapi-spec/swagger.json` is missing many enum fields that the API reference needs. Regenerate the file with `OpenAPIEnums=true` before running the generator.
+The `swagger.json` checked into `kubernetes/kubernetes` at `api/openapi-spec/swagger.json` is missing many enum fields that the API reference needs. Regenerate the file with enums kept before running the generator.
 
 ### Option A: from a temporary source checkout (no local k/k needed)
 
@@ -32,10 +32,10 @@ From the reference-docs repository root, with only `K8S_RELEASE` set:
 make updateapispec-enums-from-source
 ```
 
-This shallow-clones the release tag into a temporary directory, enables
-`OpenAPIEnums=true` in that copy only, runs k/k's `hack/update-openapi-spec.sh`,
-copies the result into `gen-apidocs/config/v<X_Y>/swagger.json`, verifies the
-enum metadata, and deletes the temporary checkout. It needs network access and
+This shallow-clones the release tag into a temporary directory, runs k/k's
+`hack/update-openapi-spec.sh` there with enums kept, copies the result into
+`gen-apidocs/config/v<X_Y>/swagger.json`, verifies the enum metadata, and
+deletes the temporary checkout. It needs network access and
 k/k's host OpenAPI prerequisites, and leaves k/k's checked-in swagger unchanged.
 Set `KEEP_TMP=1` to preserve the checkout and generation log for debugging.
 
@@ -43,8 +43,8 @@ Set `KEEP_TMP=1` to preserve the checkout and generation log for debugging.
 
 From your `K8S_ROOT` checkout, at the release tag:
 
-1. Edit `hack/update-openapi-spec.sh` and set `OpenAPIEnums=true`.
-2. Run `hack/update-openapi-spec.sh` to regenerate `api/openapi-spec/swagger.json`.
+1. If `hack/update-openapi-spec.sh` contains `OpenAPIEnums=false` (releases before v1.38), change it to `OpenAPIEnums=true`.
+2. Run `KUBE_OPENAPI_SPEC_KEEP_ENUMS=true hack/update-openapi-spec.sh` to regenerate `api/openapi-spec/swagger.json`.
 
 Then, from the reference-docs repository root:
 
