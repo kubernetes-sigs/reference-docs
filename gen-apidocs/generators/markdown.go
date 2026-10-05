@@ -650,7 +650,7 @@ func (m *MarkdownWriter) classifyDefinitions() map[string]defClassification {
 	out := make(map[string]defClassification, len(m.Config.Definitions.All))
 	m.inlinedByParent = map[string][]*api.Definition{}
 	for _, d := range m.Config.Definitions.All {
-		if d.IsOldVersion || d.IsInlined || d.InToc {
+		if d.IsOldVersion || d.InToc {
 			out[d.Key()] = defClassification{Mode: classifySkip}
 			continue
 		}
@@ -661,6 +661,10 @@ func (m *MarkdownWriter) classifyDefinitions() map[string]defClassification {
 		if home := m.closestTopLevelHome(d); home != nil {
 			out[d.Key()] = defClassification{Mode: classifyInline, InlineInto: home}
 			m.inlinedByParent[home.Key()] = append(m.inlinedByParent[home.Key()], d)
+			continue
+		}
+		if d.IsInlined {
+			out[d.Key()] = defClassification{Mode: classifySkip}
 			continue
 		}
 		out[d.Key()] = defClassification{Mode: classifyStandalone}

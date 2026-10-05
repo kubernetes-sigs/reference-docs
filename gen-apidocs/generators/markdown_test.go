@@ -117,10 +117,10 @@ func TestWritePipeTable(t *testing.T) {
 
 func TestOperationSlug(t *testing.T) {
 	cases := map[string]string{
-		"listCoreV1Pod":                             "listcorev1pod",
-		"readAppsV1NamespacedDeployment":            "readappsv1namespaceddeployment",
-		"watchCore.V1.Pod":                          "watchcore-v1-pod",
-		"Some/Weird ID":                             "some-weird-id",
+		"listCoreV1Pod":                  "listcorev1pod",
+		"readAppsV1NamespacedDeployment": "readappsv1namespaceddeployment",
+		"watchCore.V1.Pod":               "watchcore-v1-pod",
+		"Some/Weird ID":                  "some-weird-id",
 	}
 	for in, want := range cases {
 		if got := operationSlug(in); got != want {
@@ -298,7 +298,8 @@ func TestClassifyDefinitions(t *testing.T) {
 
 	// Reference graph (parent --refs--> child; AppearsIn is reverse).
 	//
-	//   Pod (InToc) --> PodSpec --> Container
+	//   Pod (InToc) --> PodStatus --> ContainerStatus (pattern-inlined)
+	//               --> PodSpec --> Container
 	//                          --> Volume --> AzureDiskVolumeSource
 	//                          <-- PodTemplateSpec (shared)
 	//   Deployment (InToc) --> DeploymentSpec --> PodTemplateSpec
@@ -308,6 +309,10 @@ func TestClassifyDefinitions(t *testing.T) {
 	deployment := mkDef("Deployment", true)
 	podTemplate := mkDef("PodTemplate", true)
 	podSpec := mkDef("PodSpec", false)
+	podStatus := mkDef("PodStatus", false)
+	podStatus.IsInlined = true
+	containerStatus := mkDef("ContainerStatus", false)
+	containerStatus.IsInlined = true
 	deploymentSpec := mkDef("DeploymentSpec", false)
 	podTemplateSpec := mkDef("PodTemplateSpec", false)
 	container := mkDef("Container", false)
@@ -317,6 +322,8 @@ func TestClassifyDefinitions(t *testing.T) {
 
 	// Populate AppearsIn (= "who references me?").
 	podSpec.AppearsIn = api.SortDefinitionsByName{pod, podTemplateSpec}
+	podStatus.AppearsIn = api.SortDefinitionsByName{pod}
+	containerStatus.AppearsIn = api.SortDefinitionsByName{podStatus}
 	deploymentSpec.AppearsIn = api.SortDefinitionsByName{deployment}
 	podTemplateSpec.AppearsIn = api.SortDefinitionsByName{podTemplate, deploymentSpec}
 	container.AppearsIn = api.SortDefinitionsByName{podSpec}
@@ -327,7 +334,8 @@ func TestClassifyDefinitions(t *testing.T) {
 	all := map[string]*api.Definition{}
 	for _, d := range []*api.Definition{
 		pod, deployment, podTemplate,
-		podSpec, deploymentSpec, podTemplateSpec,
+		podSpec, podStatus, containerStatus,
+		deploymentSpec, podTemplateSpec,
 		container, volume, azureDisk, objectMeta,
 	} {
 		all[d.Key()] = d
@@ -351,6 +359,9 @@ func TestClassifyDefinitions(t *testing.T) {
 		{"AzureDiskVolumeSource inlines into Pod", azureDisk, classifyInline, pod},
 		// Volume is shared via PodSpec only; same winner as Container.
 		{"Volume inlines into Pod", volume, classifyInline, pod},
+		// ContainerStatus is pattern-inlined by name, but its reference chain
+		// still has a unique top-level home and must not be skipped.
+		{"ContainerStatus inlines into Pod", containerStatus, classifyInline, pod},
 		// ObjectMeta is at distance 1 from three InToc resources → tie → standalone.
 		{"ObjectMeta is standalone", objectMeta, classifyStandalone, nil},
 		// Pod itself is InToc → not classified (own resource page).
@@ -425,8 +436,8 @@ func TestLinkDefinitionsSkipsInlined(t *testing.T) {
 	m := &MarkdownWriter{
 		linkMap: map[string]linkInfo{},
 		classifications: map[string]defClassification{
-			azureDisk.Key():   {Mode: classifyInline}, // InlineInto irrelevant for this test
-			objectMeta.Key():  {Mode: classifyStandalone},
+			azureDisk.Key():  {Mode: classifyInline}, // InlineInto irrelevant for this test
+			objectMeta.Key(): {Mode: classifyStandalone},
 		},
 	}
 
