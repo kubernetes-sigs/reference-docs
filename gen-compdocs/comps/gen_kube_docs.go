@@ -25,6 +25,7 @@ import (
 	"github.com/kubernetes-sigs/reference-docs/gen-compdocs/generators"
 	"github.com/spf13/pflag"
 	cliflag "k8s.io/component-base/cli/flag"
+	"k8s.io/klog/v2"
 	kubectlcmd "k8s.io/kubectl/pkg/cmd"
 	"k8s.io/kubernetes/cmd/genutils"
 	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
@@ -69,8 +70,18 @@ func GenerateFiles(path, module string) error {
 	case "kubeadm":
 		pflag.CommandLine = pflag.NewFlagSet(os.Args[0], pflag.ExitOnError)
 		pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
-		// Ignore irrelevant flags
-		// pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+		var allFlags goflag.FlagSet
+		klog.InitFlags(&allFlags)
+		// kubeadm only exposes the supported klog flags. Register them on the
+		// standard flag set before adding that set to pflag so the generated
+		// reference includes the verbosity flag.
+		allFlags.VisitAll(func(f *goflag.Flag) {
+			switch f.Name {
+			case "v", "vmodule":
+				goflag.CommandLine.Var(f.Value, f.Name, f.Usage)
+			}
+		})
+		pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 
 		pflag.Set("logtostderr", "true")
 		// We do not want these flags to show up in --help
