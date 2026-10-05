@@ -3,10 +3,10 @@
 # checkout, so release contributors do not need a maintainer-managed, manually
 # patched k/k clone.
 #
-# Steps: shallow-clone the release tag, patch only that temporary checkout to
-# enable OpenAPIEnums=true, run k/k's existing hack/update-openapi-spec.sh, copy
-# only api/openapi-spec/swagger.json into gen-apidocs, verify enum metadata, and
-# delete the temporary checkout (KEEP_TMP=1 preserves it for debugging).
+# Steps: shallow-clone the release tag, run k/k's hack/update-openapi-spec.sh
+# with enums kept, copy only api/openapi-spec/swagger.json into gen-apidocs,
+# verify enum metadata, and delete the temporary checkout (KEEP_TMP=1 preserves
+# it for debugging).
 #
 # Required env: K8S_RELEASE (e.g. 1.36.0)
 # Pass-through env (read directly by k/k): TMP_DIR, ETCD_PORT, API_PORT, API_LOGFILE
@@ -56,19 +56,25 @@ echo "Cloning kubernetes/kubernetes at ${TAG} (shallow) into ${KK}"
 git clone --depth 1 --branch "${TAG}" \
 	https://github.com/kubernetes/kubernetes.git "${KK}"
 
-# Patch only this temporary checkout. k/k hardcodes OpenAPIEnums=false on the
-# kube-apiserver --feature-gates line; flip it to true for enum-enabled output.
-echo "Enabling OpenAPIEnums=true in the temporary checkout"
-sed -i.bak 's/OpenAPIEnums=false/OpenAPIEnums=true/' "${KK}/hack/update-openapi-spec.sh"
-rm -f "${KK}/hack/update-openapi-spec.sh.bak"
-if ! grep -q 'OpenAPIEnums=true' "${KK}/hack/update-openapi-spec.sh"; then
-	echo "Failed to enable OpenAPIEnums in ${KK}/hack/update-openapi-spec.sh." >&2
+# k/k omits enums from its checked-in spec. Since v1.38 it keeps them when
+# KUBE_OPENAPI_SPEC_KEEP_ENUMS=true. Older releases ignore that variable and
+# hardcode OpenAPIEnums=false on the kube-apiserver --feature-gates line, so
+# flip it to true in this temporary checkout only.
+UPDATE_SCRIPT="${KK}/hack/update-openapi-spec.sh"
+if grep -q 'KUBE_OPENAPI_SPEC_KEEP_ENUMS' "${UPDATE_SCRIPT}"; then
+	echo "Keeping enums with KUBE_OPENAPI_SPEC_KEEP_ENUMS=true"
+elif grep -q 'OpenAPIEnums=false' "${UPDATE_SCRIPT}"; then
+	echo "Enabling OpenAPIEnums=true in the temporary checkout"
+	sed -i.bak 's/OpenAPIEnums=false/OpenAPIEnums=true/' "${UPDATE_SCRIPT}"
+	rm -f "${UPDATE_SCRIPT}.bak"
+else
+	echo "Cannot keep enums: ${UPDATE_SCRIPT} has neither KUBE_OPENAPI_SPEC_KEEP_ENUMS nor OpenAPIEnums=false." >&2
 	echo "The k/k script format may have changed for ${TAG}; patch it manually." >&2
 	exit 1
 fi
 
 echo "Running k/k hack/update-openapi-spec.sh (logging to ${GEN_LOG})"
-( cd "${KK}" && hack/update-openapi-spec.sh ) 2>&1 | tee "${GEN_LOG}"
+( cd "${KK}" && KUBE_OPENAPI_SPEC_KEEP_ENUMS=true hack/update-openapi-spec.sh ) 2>&1 | tee "${GEN_LOG}"
 
 mkdir -p "${OUT_DIR}"
 echo "Copying swagger.json into ${OUT_SWAGGER}"

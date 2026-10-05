@@ -1,6 +1,6 @@
 #!/bin/bash
-# Verify that a swagger.json was generated with OpenAPIEnums=true by counting
-# how many non-empty "enum" arrays it contains. Fails if the count is below a
+# Verify that a swagger.json was generated with enums kept by counting how many
+# non-empty "enum" arrays it contains. Fails if the count is below a
 # conservative minimum, so a contributor cannot proceed with enum-free swagger.
 #
 # Usage: verify-enum-swagger.sh <path-to-swagger.json> [min-enum-arrays]
@@ -33,7 +33,7 @@ ENUM_COUNT="$(jq '[.. | objects | select(has("enum")) | .enum | select(length > 
 
 if [ "${ENUM_COUNT}" -lt "${MIN_ENUMS}" ]; then
 	echo "Enum verification FAILED: ${SWAGGER} has ${ENUM_COUNT} non-empty enum arrays (expected at least ${MIN_ENUMS})." >&2
-	echo "The swagger was likely generated without OpenAPIEnums=true." >&2
+	echo "The swagger was likely generated without KUBE_OPENAPI_SPEC_KEEP_ENUMS=true (OpenAPIEnums=true before v1.38)." >&2
 	exit 1
 fi
 
