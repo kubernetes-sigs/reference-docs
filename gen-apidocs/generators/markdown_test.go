@@ -443,6 +443,45 @@ func TestLinkDefinitionsSkipsInlined(t *testing.T) {
 	}
 }
 
+func TestBuildDefinitionPageRawDescription(t *testing.T) {
+	m, cleanup := newTestWriter(t)
+	defer cleanup()
+
+	specDef := &api.Definition{
+		Name:                    "EndpointsSpec",
+		Group:                   api.ApiGroup("core"),
+		Version:                 api.ApiVersion("v1"),
+		Kind:                    api.ApiKind("EndpointsSpec"),
+		DescriptionWithEntities: "Spec: &#34;escaped&#34; &amp; entities",
+	}
+	specDef.SetDescription(`Spec: "raw" & unescaped`)
+
+	d := &api.Definition{
+		Name:          "Endpoints",
+		Group:         api.ApiGroup("core"),
+		GroupFullName: "core",
+		Version:       api.ApiVersion("v1"),
+		Kind:          api.ApiKind("Endpoints"),
+		Inline:        api.SortDefinitionsByName{specDef},
+		Fields: api.Fields{
+			{Name: "spec", Type: "EndpointsSpec", Definition: specDef},
+		},
+		DescriptionWithEntities: "Example: Name: &#34;mysvc&#34;",
+	}
+	d.SetDescription(`Example: Name: "mysvc"`)
+
+	page := m.buildDefinitionPage(d, "core")
+	if page.Description != `Example: Name: "mysvc"` {
+		t.Errorf("page.Description = %q, want unescaped description", page.Description)
+	}
+	if page.ResourceSection.Description != `Example: Name: "mysvc"` {
+		t.Errorf("ResourceSection.Description = %q, want unescaped description", page.ResourceSection.Description)
+	}
+	if len(page.FieldSections) != 1 || page.FieldSections[0].Description != `Spec: "raw" & unescaped` {
+		t.Errorf("FieldSections = %+v, want unescaped section description", page.FieldSections)
+	}
+}
+
 // --- fixture helpers ---
 
 func newTestWriter(t *testing.T) (*MarkdownWriter, func()) {
@@ -462,24 +501,25 @@ func newTestWriter(t *testing.T) (*MarkdownWriter, func()) {
 }
 
 func fabricateDeploymentResource() *api.Resource {
-	return &api.Resource{
-		Name: "Deployment",
-		Definition: &api.Definition{
-			Name:                    "Deployment",
-			Group:                   api.ApiGroup("apps"),
-			GroupFullName:           "apps",
-			Version:                 api.ApiVersion("v1"),
-			Kind:                    api.ApiKind("Deployment"),
-			DescriptionWithEntities: "Deployment enables declarative updates for Pods and ReplicaSets.",
-			SwaggerKey:              "io.k8s.api.apps.v1.Deployment",
-			Fields: api.Fields{
-				{Name: "apiVersion", Type: "string", Description: "APIVersion defines the versioned schema of this representation of an object."},
-				{Name: "kind", Type: "string", Description: "Kind is a string value representing the REST resource."},
-				{Name: "metadata", Type: "ObjectMeta", Description: "Standard object's metadata."},
-				{Name: "spec", Type: "DeploymentSpec", Description: "Specification of the desired behavior of the Deployment."},
-				{Name: "status", Type: "DeploymentStatus", Description: "Most recently observed status of the Deployment."},
-			},
+	d := &api.Definition{
+		Name:          "Deployment",
+		Group:         api.ApiGroup("apps"),
+		GroupFullName: "apps",
+		Version:       api.ApiVersion("v1"),
+		Kind:          api.ApiKind("Deployment"),
+		SwaggerKey:    "io.k8s.api.apps.v1.Deployment",
+		Fields: api.Fields{
+			{Name: "apiVersion", Type: "string", Description: "APIVersion defines the versioned schema of this representation of an object."},
+			{Name: "kind", Type: "string", Description: "Kind is a string value representing the REST resource."},
+			{Name: "metadata", Type: "ObjectMeta", Description: "Standard object's metadata."},
+			{Name: "spec", Type: "DeploymentSpec", Description: "Specification of the desired behavior of the Deployment."},
+			{Name: "status", Type: "DeploymentStatus", Description: "Most recently observed status of the Deployment."},
 		},
+	}
+	d.SetDescription("Deployment enables declarative updates for Pods and ReplicaSets.")
+	return &api.Resource{
+		Name:       "Deployment",
+		Definition: d,
 	}
 }
 
