@@ -837,9 +837,6 @@ func (c *Config) mapOperationsToDefinitions() error {
 					return fmt.Errorf("failed to init example: %w", err)
 				}
 				oc.Operations = append(oc.Operations, o)
-				// Attach the category to the definition so IsTopLevelResource
-				// and the resource pages see this Create operation.
-				d.OperationCategories = append(d.OperationCategories, &oc)
 			}
 			continue
 		}

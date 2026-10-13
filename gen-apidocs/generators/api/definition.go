@@ -339,7 +339,7 @@ func (s *Definitions) FindNewestVersion(group, kind string) string {
 // that never appears on the wire by itself.
 //
 // A List endpoint is the usual marker, but create-only resources such as
-// TokenRequest and the SubjectAccessReview family qualify too.
+// TokenReview and the SubjectAccessReview family qualify too.
 func (d *Definition) IsTopLevelResource() bool {
 	for _, c := range d.OperationCategories {
 		if c == nil {
