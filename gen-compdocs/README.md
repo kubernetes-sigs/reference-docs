@@ -22,7 +22,7 @@ For the canonical end-to-end walkthrough, see [Generating Reference Documentatio
 |---|---|
 | `K8S_RELEASE` | Kubernetes release version, for example `1.36.0`. |
 | `K8S_WEBROOT` | Path to a local `kubernetes/website` checkout. Required for the copy targets. |
-| `gen-compdocs/go.mod` | Pins the Kubernetes source versions that supply the command definitions. Update with `go get` and `go mod tidy` for a new release. |
+| `gen-compdocs/go.mod` | Pins the Kubernetes source versions that supply the command definitions. From the repository root, run `make update-mod K8S_RELEASE=<release>` to update the coordinated Kubernetes module pins in `gen-compdocs` and `genref`, then tidy both modules. |
 
 ## Build
 

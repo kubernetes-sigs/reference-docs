@@ -8,8 +8,9 @@ else
 	exit 1
 fi
 
-ROOTDIR=$(pwd)
-echo base dir ${ROOTDIR}
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+echo "base dir ${ROOTDIR}"
 
 # change <major>.<minor> to <major>_<minor>
 VERSION_DIR="$(echo "${K8S_RELEASE}" | cut -c 1-4 | sed "s/\./_/g")"
@@ -32,27 +33,27 @@ echo version dir ${VERSION_DIR}
 # Set up versioned directories for new release
 
 # kubectl-command static-includes, toc.yaml
-mkdir -p ./gen-kubectldocs/generators/${VERSION_DIR}
+mkdir -p "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}"
 
-if ! [ -f "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/toc.yaml" ]; then
-		cp -r ${ROOTDIR}/gen-kubectldocs/generators/${PREV_VERSION_DIR}/* ${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/
+if [ ! -f "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/toc.yaml" ]; then
+		cp -r "${ROOTDIR}/gen-kubectldocs/generators/${PREV_VERSION_DIR}/"* "${ROOTDIR}/gen-kubectldocs/generators/${VERSION_DIR}/"
 fi
 
 # api reference config.yaml
-mkdir -p ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}
+mkdir -p "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}"
 
 # config.yaml
 if ! [ -f "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml" ]; then
 	if [ -f "${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml" ]; then
-			cp ${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml
+			cp "${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml" "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml"
 			echo "Using config file: ${ROOTDIR}/gen-apidocs/config/${PREV_VERSION_DIR}/config.yaml"
 	else
-			cp ${ROOTDIR}/gen-apidocs/config/config.yaml ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml
+			cp "${ROOTDIR}/gen-apidocs/config/config.yaml" "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml"
 	fi
 fi
 
 # copy versioned files to the base config dir
 # revisit
-cp ${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml ${ROOTDIR}/gen-apidocs/config/config.yaml
+cp "${ROOTDIR}/gen-apidocs/config/${VERSION_DIR}/config.yaml" "${ROOTDIR}/gen-apidocs/config/config.yaml"
 
 # api reference swagger.json is copied by updateapispec make target
