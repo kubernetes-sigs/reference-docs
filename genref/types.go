@@ -100,9 +100,9 @@ func (m *apiMember) IsOptional() bool {
 
 // FieldName returns the member name when used in serialized format.
 func (m *apiMember) FieldName() string {
-	v := reflect.StructTag(m.Tags).Get("json")
-	v = strings.TrimSuffix(v, ",omitempty")
-	v = strings.TrimSuffix(v, ",inline")
+	// The name is the part of the json tag before any options such as
+	// omitempty, omitzero or inline.
+	v, _, _ := strings.Cut(reflect.StructTag(m.Tags).Get("json"), ",")
 	if v != "" {
 		return v
 	}
