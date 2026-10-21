@@ -45,7 +45,7 @@ TODO(jlowdermilk): remove this after eliminating downstream dependencies.</p>
 TODO(jlowdermilk): remove this after eliminating downstream dependencies.</p>
 </td>
 </tr>
-<tr><td><code>preferences,omitzero</code> <B>[Required]</B><br/>
+<tr><td><code>preferences</code> <B>[Required]</B><br/>
 <a href="#Preferences"><code>Preferences</code></a>
 </td>
 <td>
