@@ -10,16 +10,24 @@ if [[ -z "${K8S_RELEASE:-}" ]]; then
 	exit 1
 fi
 
-# Kubernetes staging modules use v0.<minor>.0 tags while the main module uses
-# v1.<minor>.0. This target updates stable Kubernetes releases only.
-if [[ ! "${K8S_RELEASE}" =~ ^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
-	echo "Invalid K8S_RELEASE '${K8S_RELEASE}'. Expected a stable release such as 1.37.0." >&2
+# Accept stable releases and release candidates. Keep the full patch and RC
+# suffix when translating the version to the staging module's v0.x.y tags.
+if [[ ! "${K8S_RELEASE}" =~ ^1\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-rc\.(0|[1-9][0-9]*))?$ ]]; then
+	echo "Invalid K8S_RELEASE '${K8S_RELEASE}'. Expected 1.MINOR.PATCH or 1.MINOR.PATCH-rc.N (for example, 1.37.0 or 1.37.0-rc.1); patch versions are supported." >&2
 	exit 1
 fi
 
-minor="${BASH_REMATCH[1]}"
-staging_version="v0.${minor}.0"
-kubernetes_version="v1.${minor}.0"
+if ! command -v go >/dev/null 2>&1; then
+	echo "go is required to update module files." >&2
+	exit 1
+fi
+if ! command -v jq >/dev/null 2>&1; then
+	echo "jq is required to discover Kubernetes staging modules from go.mod." >&2
+	exit 1
+fi
+
+staging_version="v0.${K8S_RELEASE#1.}"
+kubernetes_version="v${K8S_RELEASE}"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
@@ -33,7 +41,6 @@ for module in "${MODULES[@]}"; do
 done
 
 BACKUP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/update-go-mod.XXXXXX")"
-TEMP_MOD=""
 restore_on_failure=0
 
 cleanup() {
@@ -52,14 +59,6 @@ cleanup() {
 				fi
 			done
 		done
-	fi
-	if [[ -n "${TEMP_MOD}" ]]; then
-		if ! rm -f "${TEMP_MOD}"; then
-			echo "Failed to remove temporary file ${TEMP_MOD}." >&2
-			if (( status == 0 )); then
-				status=1
-			fi
-		fi
 	fi
 	if (( restore_failed )); then
 		echo "Recovery backups retained at ${BACKUP_DIR}." >&2
@@ -81,81 +80,136 @@ for module in "${MODULES[@]}"; do
 done
 restore_on_failure=1
 
-update_versions() {
-	local go_mod="$1"
-	local temp_mod
-	temp_mod="$(mktemp "$(dirname "${go_mod}")/.go.mod.XXXXXX")"
-	TEMP_MOD="${temp_mod}"
+module_dir() {
+	local module="$1"
+	(cd "${REPO_ROOT}/${module}" && pwd)
+}
 
-	if ! awk -v staging_version="${staging_version}" -v kubernetes_version="${kubernetes_version}" '
-		function replace_versions(line, version_pattern, replacement, position, version_length, following, output, comment_position, comment) {
-			comment_position = index(line, "//")
-			comment = ""
-			if (comment_position > 0) {
-				comment = substr(line, comment_position)
-				line = substr(line, 1, comment_position - 1)
-			}
-			output = ""
-			while ((position = match(line, version_pattern)) != 0) {
-				version_length = RLENGTH
-				following = substr(line, position + version_length, 1)
-				if (following == "" || following == " " || following == "\t") {
-					output = output substr(line, 1, position - 1) replacement
-					line = substr(line, position + version_length)
-				} else {
-					output = output substr(line, 1, position + version_length - 1)
-					line = substr(line, position + version_length)
-				}
-			}
-			return output line comment
-		}
-		{
-			line = $0
-			if (line ~ /^[[:space:]]*(require[[:space:]]+)?k8s\.io\/kubernetes[[:space:]]+v1\.[0-9][0-9]*\.[0-9][0-9]*([[:space:]]|$)/) {
-				candidate_count++
-				line = replace_versions(line, "v1\\.[0-9][0-9]*\\.[0-9][0-9]*", kubernetes_version)
-			} else if (line ~ /^[[:space:]]*(require[[:space:]]+)?k8s\.io\/[^[:space:]]+[[:space:]]+v0\.[0-9][0-9]*\.[0-9][0-9]*([[:space:]]|$)/) {
-				candidate_count++
-				line = replace_versions(line, "v0\\.[0-9][0-9]*\\.[0-9][0-9]*", staging_version)
-			} else {
-				arrow = index(line, "=>")
-				if (arrow > 0) {
-					left = substr(line, 1, arrow - 1)
-					right = substr(line, arrow + 2)
-					if (left ~ /^[[:space:]]*(replace[[:space:]]+)?k8s\.io\/[^[:space:]]+([[:space:]]+v0\.[0-9][0-9]*\.[0-9][0-9]*)?[[:space:]]*$/ &&
-					    right ~ /^[[:space:]]*k8s\.io\/[^[:space:]]+[[:space:]]+v0\.[0-9][0-9]*\.[0-9][0-9]*([[:space:]]|$)/) {
-						candidate_count++
-						line = replace_versions(line, "v0\\.[0-9][0-9]*\\.[0-9][0-9]*", staging_version)
-					}
-				}
-			}
-			print line
-		}
-		END {
-			if (candidate_count == 0) {
-				exit 2
-			}
-		}
-	' "${go_mod}" > "${temp_mod}"; then
-		echo "Could not update Kubernetes versions in ${go_mod}." >&2
-		return 1
+module_json() {
+	local directory="$1"
+	(cd "${directory}" && go mod edit -json)
+}
+
+module_edit() {
+	local directory="$1"
+	shift
+	(cd "${directory}" && go mod edit "$@")
+}
+
+module_version() {
+	local directory="$1"
+	local path="$2"
+	module_json "${directory}" | jq -er --arg path "${path}" '[.Require[]? | select(.Path == $path) | .Version] | .[0]'
+}
+
+contains_staging_module() {
+	local candidate="$1"
+	local staging_module
+	for staging_module in "${STAGING_MODULES[@]}"; do
+		if [[ "${staging_module}" == "${candidate}" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+is_independently_versioned_module() {
+	case "$1" in
+		k8s.io/gengo|k8s.io/gengo/v2|k8s.io/kube-openapi|k8s.io/utils|k8s.io/klog/v2|k8s.io/system-validators)
+			return 0
+			;;
+	esac
+	return 1
+}
+
+echo "Updating k8s.io/kubernetes to ${kubernetes_version} to discover the release staging set."
+COMP_DOCS_DIR="$(module_dir gen-compdocs)"
+module_edit "${COMP_DOCS_DIR}" "-require=k8s.io/kubernetes@${kubernetes_version}"
+KUBERNETES_DIR="$(cd "${COMP_DOCS_DIR}" && go list -m -f '{{.Dir}}' k8s.io/kubernetes)"
+if [[ -z "${KUBERNETES_DIR}" || ! -f "${KUBERNETES_DIR}/go.mod" ]]; then
+	echo "Could not find go.mod for k8s.io/kubernetes ${kubernetes_version} at '${KUBERNETES_DIR}'." >&2
+	exit 1
+fi
+
+STAGING_MODULES_FILE="${BACKUP_DIR}/staging-modules.txt"
+go mod edit -json "${KUBERNETES_DIR}/go.mod" |
+	jq -er '.Replace[]? | select(.New.Path | startswith("./staging/src/k8s.io/")) | select(.Old.Path | startswith("k8s.io/")) | .Old.Path' \
+	> "${STAGING_MODULES_FILE}"
+STAGING_MODULES=()
+while IFS= read -r staging_module; do
+	[[ -z "${staging_module}" ]] || STAGING_MODULES+=("${staging_module}")
+done < "${STAGING_MODULES_FILE}"
+if (( ${#STAGING_MODULES[@]} == 0 )); then
+	echo "No Kubernetes staging modules found in ${KUBERNETES_DIR}/go.mod." >&2
+	exit 1
+fi
+
+echo "Found ${#STAGING_MODULES[@]} staging modules in ${KUBERNETES_DIR}/go.mod."
+
+update_module() {
+	local module="$1"
+	local directory
+	local previous_api_version
+	local stale_modules_file
+	local stale_module
+	local old_replacements_file
+	local old_replacement
+
+	directory="$(module_dir "${module}")"
+	previous_api_version="$(module_version "${directory}" k8s.io/api)"
+
+	# Drop release-pinned modules that were in the previous staging set but no
+	# longer appear in this Kubernetes release. The main module's replace set is
+	# authoritative for gen-compdocs; genref follows the documented OLD-version
+	# selection rule. Explicitly preserve known independent repositories even if
+	# one happens to use the same version string as the staging release.
+	stale_modules_file="${BACKUP_DIR}/${module}.stale-requires.txt"
+	module_json "${directory}" |
+		jq -r --arg version "${previous_api_version}" \
+			'.Require[]? | select(.Path | startswith("k8s.io/")) | select(.Version == $version) | .Path' \
+		> "${stale_modules_file}"
+	while IFS= read -r stale_module; do
+		[[ -z "${stale_module}" ]] && continue
+		if ! contains_staging_module "${stale_module}" && ! is_independently_versioned_module "${stale_module}"; then
+			module_edit "${directory}" "-droprequire=${stale_module}"
+		fi
+	done < "${stale_modules_file}"
+
+	if [[ "${module}" == "gen-compdocs" ]]; then
+		old_replacements_file="${BACKUP_DIR}/${module}.stale-replaces.txt"
+		module_json "${directory}" |
+			jq -r '.Replace[]? | select(.Old.Path | startswith("k8s.io/")) | select(.Old.Path == .New.Path) | select(.New.Version | test("^v0\\.[0-9]+\\.[0-9]+(-rc\\.[0-9]+)?$")) | .Old.Path' \
+			> "${old_replacements_file}"
+		while IFS= read -r old_replacement; do
+			[[ -z "${old_replacement}" ]] && continue
+			if ! contains_staging_module "${old_replacement}" && ! is_independently_versioned_module "${old_replacement}"; then
+				module_edit "${directory}" "-dropreplace=${old_replacement}"
+				module_edit "${directory}" "-droprequire=${old_replacement}"
+			fi
+		done < "${old_replacements_file}"
 	fi
 
-	if ! cmp -s "${go_mod}" "${temp_mod}"; then
-		cat "${temp_mod}" > "${go_mod}"
+	local staging_module
+	for staging_module in "${STAGING_MODULES[@]}"; do
+		module_edit "${directory}" "-require=${staging_module}@${staging_version}"
+		if [[ "${module}" == "gen-compdocs" ]]; then
+			module_edit "${directory}" "-replace=${staging_module}=${staging_module}@${staging_version}"
+		fi
+	done
+
+	if [[ "${module}" == "gen-compdocs" ]]; then
+		module_edit "${directory}" "-require=k8s.io/kubernetes@${kubernetes_version}"
+	else
+		if module_json "${directory}" | jq -e '.Require[]? | select(.Path == "k8s.io/kubernetes")' >/dev/null; then
+			module_edit "${directory}" "-require=k8s.io/kubernetes@${kubernetes_version}"
+		fi
 	fi
-	rm -f "${temp_mod}"
-	TEMP_MOD=""
+
+	echo "Running go mod tidy in ${module}."
+	(cd "${directory}" && go mod tidy)
 }
 
 echo "Updating Kubernetes module pins for Kubernetes ${K8S_RELEASE} (${staging_version}, ${kubernetes_version})."
 for module in "${MODULES[@]}"; do
-	go_mod="${REPO_ROOT}/${module}/go.mod"
-	update_versions "${go_mod}"
-
-	echo "Running go mod tidy in ${module}."
-	(
-		cd "${REPO_ROOT}/${module}"
-		go mod tidy
-	)
+	update_module "${module}"
 done
