@@ -132,7 +132,7 @@ if [[ -z "${KUBERNETES_GOMOD}" || ! -f "${KUBERNETES_GOMOD}" ]]; then
 fi
 
 STAGING_MODULES_FILE="${BACKUP_DIR}/staging-modules.txt"
-go mod edit -json "${KUBERNETES_DIR}/go.mod" |
+go mod edit -json "${KUBERNETES_GOMOD}" |
 	jq -er '.Replace[]? | select(.New.Path | startswith("./staging/src/k8s.io/")) | select(.Old.Path | startswith("k8s.io/")) | .Old.Path' \
 	> "${STAGING_MODULES_FILE}"
 STAGING_MODULES=()
@@ -140,11 +140,11 @@ while IFS= read -r staging_module; do
 	[[ -z "${staging_module}" ]] || STAGING_MODULES+=("${staging_module}")
 done < "${STAGING_MODULES_FILE}"
 if (( ${#STAGING_MODULES[@]} == 0 )); then
-	echo "No Kubernetes staging modules found in ${KUBERNETES_DIR}/go.mod." >&2
+	echo "No Kubernetes staging modules found in ${KUBERNETES_GOMOD}." >&2
 	exit 1
 fi
 
-echo "Found ${#STAGING_MODULES[@]} staging modules in ${KUBERNETES_DIR}/go.mod."
+echo "Found ${#STAGING_MODULES[@]} staging modules in ${KUBERNETES_GOMOD}."
 
 update_module() {
 	local module="$1"
