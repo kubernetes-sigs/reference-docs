@@ -125,9 +125,9 @@ is_independently_versioned_module() {
 echo "Updating k8s.io/kubernetes to ${kubernetes_version} to discover the release staging set."
 COMP_DOCS_DIR="$(module_dir gen-compdocs)"
 module_edit "${COMP_DOCS_DIR}" "-require=k8s.io/kubernetes@${kubernetes_version}"
-KUBERNETES_DIR="$(cd "${COMP_DOCS_DIR}" && go list -m -f '{{.Dir}}' k8s.io/kubernetes)"
-if [[ -z "${KUBERNETES_DIR}" || ! -f "${KUBERNETES_DIR}/go.mod" ]]; then
-	echo "Could not find go.mod for k8s.io/kubernetes ${kubernetes_version} at '${KUBERNETES_DIR}'." >&2
+KUBERNETES_GOMOD="$(go mod download -json "k8s.io/kubernetes@${kubernetes_version}" | jq -r '.GoMod // empty')" || true
+if [[ -z "${KUBERNETES_GOMOD}" || ! -f "${KUBERNETES_GOMOD}" ]]; then
+	echo "Could not download go.mod for k8s.io/kubernetes ${kubernetes_version}. Does the tag exist?" >&2
 	exit 1
 fi
 
