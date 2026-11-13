@@ -56,15 +56,19 @@ all:
 	@echo "Supported targets:"
 	@echo "  Build:    api apimd apimd-hugo cli comp configapi"
 	@echo "  Copy:     copyapi copyapimd copycli copycomp copyconfigapi"
-	@echo "  Setup:    createversiondirs updateapispec updateapispec-enums-from-source"
+	@echo "  Setup:    createversiondirs update-mod updateapispec updateapispec-enums-from-source"
 	@echo "  Clean:    cleanapi cleanapimd cleanapimd-hugo cleancli cleancomp"
 	@echo "  Other:    genresources (deprecated)"
 
 # create directories for new release
 createversiondirs: require-k8srelease
-	@echo "Calling set_version_dirs.sh"
-	./set_version_dirs.sh
+	@echo "Calling hack/set_version_dirs.sh"
+	K8S_RELEASE="$(K8SRELEASE)" ./hack/set_version_dirs.sh
 	@echo "K8S Release dir: $(K8SRELEASEDIR)"
+
+.PHONY: update-mod
+update-mod: require-k8srelease
+	K8S_RELEASE="$(K8SRELEASE)" ./hack/update-go-mod.sh
 
 # Build kubectl docs
 cleancli:
