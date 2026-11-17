@@ -117,10 +117,10 @@ func TestWritePipeTable(t *testing.T) {
 
 func TestOperationSlug(t *testing.T) {
 	cases := map[string]string{
-		"listCoreV1Pod":                             "listcorev1pod",
-		"readAppsV1NamespacedDeployment":            "readappsv1namespaceddeployment",
-		"watchCore.V1.Pod":                          "watchcore-v1-pod",
-		"Some/Weird ID":                             "some-weird-id",
+		"listCoreV1Pod":                  "listcorev1pod",
+		"readAppsV1NamespacedDeployment": "readappsv1namespaceddeployment",
+		"watchCore.V1.Pod":               "watchcore-v1-pod",
+		"Some/Weird ID":                  "some-weird-id",
 	}
 	for in, want := range cases {
 		if got := operationSlug(in); got != want {
@@ -208,77 +208,91 @@ func TestWriteOperationGoldenHugoMode(t *testing.T) {
 
 func TestResolveType(t *testing.T) {
 	m := &MarkdownWriter{linkMap: map[string]linkInfo{}}
+
+	deployment := &api.Definition{
+		Name: "Deployment", Group: api.ApiGroup("apps"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("Deployment"),
+	}
+	deploymentSpec := &api.Definition{
+		Name: "DeploymentSpec", Group: api.ApiGroup("apps"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("DeploymentSpec"),
+	}
+	objectMeta := &api.Definition{
+		Name: "ObjectMeta", Group: api.ApiGroup("meta"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("ObjectMeta"),
+	}
+	rbacSubject := &api.Definition{
+		Name: "Subject", Group: api.ApiGroup("rbac"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("Subject"),
+	}
+	flowControlSubject := &api.Definition{
+		Name: "Subject", Group: api.ApiGroup("flowcontrol"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("Subject"),
+	}
+	unknown := &api.Definition{
+		Name: "UnknownThing", Group: api.ApiGroup("example"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("UnknownThing"),
+	}
+
 	m.linkResources([]api.ResourceCategory{
 		{
 			Name: testCategoryName,
 			Resources: api.Resources{
-				{Name: "Deployment", Definition: &api.Definition{Name: "Deployment", Version: api.ApiVersion("v1")}},
+				{Name: "Deployment", Definition: deployment},
 			},
 		},
 	})
 	m.linkDefinitions(map[string]*api.Definition{
-		"io.k8s.api.apps.v1.DeploymentSpec": {
-			Name: "DeploymentSpec", Group: api.ApiGroup("apps"), Version: api.ApiVersion("v1"),
-		},
-		"io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta": {
-			Name: "ObjectMeta", Group: api.ApiGroup("meta"), Version: api.ApiVersion("v1"),
-		},
+		deploymentSpec.Key(): deploymentSpec,
+		objectMeta.Key():     objectMeta,
 	})
+	m.recordLink(rbacSubject, "rbac", "subject-v1-rbac")
+	m.recordLink(flowControlSubject, "flowcontrol", "subject-v1-flowcontrol")
 
 	cases := []struct {
-		typeName, currentCategory, want string
+		definition      *api.Definition
+		currentCategory string
+		want            string
 	}{
-		// From the Deployment resource page, DeploymentSpec lives in definitions/
-		{"DeploymentSpec", testCategorySlug, "../definitions/deployment-spec-v1-apps#DeploymentSpec"},
-		// ObjectMeta same — different dir
-		{"ObjectMeta", testCategorySlug, "../definitions/object-meta-v1-meta#ObjectMeta"},
-		// Self-reference (inside the definitions dir)
-		{"ObjectMeta", "definitions", "object-meta-v1-meta#ObjectMeta"},
-		// Primitive / unknown → empty string
-		{"string", testCategorySlug, ""},
-		{"UnknownThing", testCategorySlug, ""},
-		// Resource path: Deployment lives under apps/
-		{"Deployment", "definitions", "../apps/deployment-v1#Deployment"},
+		{deploymentSpec, testCategorySlug, "../definitions/deployment-spec-v1-apps#DeploymentSpec"},
+		{objectMeta, testCategorySlug, "../definitions/object-meta-v1-meta#ObjectMeta"},
+		{objectMeta, "definitions", "object-meta-v1-meta#ObjectMeta"},
+		{nil, testCategorySlug, ""},
+		{unknown, testCategorySlug, ""},
+		{deployment, "definitions", "../apps/deployment-v1#Deployment"},
+		{rbacSubject, "definitions", "../rbac/subject-v1-rbac#Subject"},
+		{flowControlSubject, "definitions", "../flowcontrol/subject-v1-flowcontrol#Subject"},
 	}
+
 	for _, c := range cases {
-		if got := m.resolveType(c.typeName, c.currentCategory); got != c.want {
-			t.Errorf("resolveType(%q, %q) = %q, want %q", c.typeName, c.currentCategory, got, c.want)
+		if got := m.resolveType(c.definition, c.currentCategory); got != c.want {
+			t.Errorf("resolveType(%v, %q) = %q, want %q",
+				c.definition, c.currentCategory, got, c.want)
 		}
 	}
 }
 
 func TestRecordLinkPrecedence(t *testing.T) {
 	m := &MarkdownWriter{linkMap: map[string]linkInfo{}}
+	deployment := &api.Definition{
+		Name: "Deployment", Group: api.ApiGroup("apps"),
+		Version: api.ApiVersion("v1"), Kind: api.ApiKind("Deployment"),
+	}
 
-	// Pretend Deployment is first seen as a standalone definition...
-	m.recordLink("Deployment", "definitions", "deployment-v1-apps", api.ApiVersion("v1"))
-	if got := m.linkMap["Deployment"].Category; got != "definitions" {
+	// A resource page takes precedence over a standalone definition page.
+	m.recordLink(deployment, "definitions", "deployment-v1-apps")
+	if got := m.linkMap[deployment.Key()].Category; got != "definitions" {
 		t.Fatalf("initial category = %q, want definitions", got)
 	}
 
-	// ...then as a resource. Resource should win.
-	m.recordLink("Deployment", "apps", "deployment-v1", api.ApiVersion("v1"))
-	if got := m.linkMap["Deployment"].Category; got != "apps" {
+	m.recordLink(deployment, "apps", "deployment-v1")
+	if got := m.linkMap[deployment.Key()].Category; got != "apps" {
 		t.Errorf("after resource record, category = %q, want apps", got)
 	}
 
-	// A later standalone-definition record for the same name must not clobber.
-	m.recordLink("Deployment", "definitions", "deployment-v1-apps", api.ApiVersion("v1"))
-	if got := m.linkMap["Deployment"].Category; got != "apps" {
+	m.recordLink(deployment, "definitions", "deployment-v1-apps")
+	if got := m.linkMap[deployment.Key()].Category; got != "apps" {
 		t.Errorf("after late definitions record, category = %q, want apps", got)
-	}
-
-	// Version bump within same bucket wins.
-	m.recordLink("HPA", "autoscaling", "horizontalpodautoscaler-v1", api.ApiVersion("v1"))
-	m.recordLink("HPA", "autoscaling", "horizontalpodautoscaler-v2", api.ApiVersion("v2"))
-	if got := m.linkMap["HPA"].Version; string(got) != "v2" {
-		t.Errorf("HPA version = %q, want v2", got)
-	}
-
-	// Older version must not clobber newer.
-	m.recordLink("HPA", "autoscaling", "horizontalpodautoscaler-v1", api.ApiVersion("v1"))
-	if got := m.linkMap["HPA"].Version; string(got) != "v2" {
-		t.Errorf("after old version, HPA version = %q, want v2", got)
 	}
 }
 
@@ -401,7 +415,7 @@ func TestLinkMapAliasesInlinedChildren(t *testing.T) {
 	})
 
 	// Inlined child must alias to the parent's slug + filename.
-	got, ok := m.linkMap["Container"]
+	got, ok := m.linkMap[container.Key()]
 	if !ok {
 		t.Fatal("linkMap missing entry for inlined Container")
 	}
@@ -425,8 +439,8 @@ func TestLinkDefinitionsSkipsInlined(t *testing.T) {
 	m := &MarkdownWriter{
 		linkMap: map[string]linkInfo{},
 		classifications: map[string]defClassification{
-			azureDisk.Key():   {Mode: classifyInline}, // InlineInto irrelevant for this test
-			objectMeta.Key():  {Mode: classifyStandalone},
+			azureDisk.Key():  {Mode: classifyInline}, // InlineInto irrelevant for this test
+			objectMeta.Key(): {Mode: classifyStandalone},
 		},
 	}
 
@@ -435,10 +449,10 @@ func TestLinkDefinitionsSkipsInlined(t *testing.T) {
 		objectMeta.Key(): objectMeta,
 	})
 
-	if _, exists := m.linkMap["AzureDiskVolumeSource"]; exists {
+	if _, exists := m.linkMap[azureDisk.Key()]; exists {
 		t.Error("inlined AzureDiskVolumeSource got a definitions/ entry; should have been skipped")
 	}
-	if got, ok := m.linkMap["ObjectMeta"]; !ok || got.Category != "definitions" {
+	if got, ok := m.linkMap[objectMeta.Key()]; !ok || got.Category != "definitions" {
 		t.Errorf("ObjectMeta should keep its standalone definitions/ entry; got = %+v ok=%v", got, ok)
 	}
 }
