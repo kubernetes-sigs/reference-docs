@@ -557,7 +557,7 @@ func (m *MarkdownWriter) appendFields(section *fieldSection, d *api.Definition, 
 			fullName = prefix + "." + fld.Name
 		}
 
-		typeHref := m.resolveType(fld.Type, currentCategory)
+		typeHref := m.resolveType(fld.Definition, currentCategory)
 		if fld.Definition != nil && sectionTypes[fld.Definition.Key()] {
 			typeHref = "#" + anchor(fld.Definition.Name)
 		}
@@ -600,7 +600,7 @@ func (m *MarkdownWriter) buildTemplateOperation(o *api.Operation, currentCategor
 			out = append(out, templateParam{
 				Name:        p.Name,
 				Type:        p.Type,
-				TypeHref:    m.resolveType(p.Type, currentCategory),
+				TypeHref:    m.resolveType(p.Definition, currentCategory),
 				Description: p.Description,
 			})
 		}
@@ -618,7 +618,7 @@ func (m *MarkdownWriter) buildTemplateOperation(o *api.Operation, currentCategor
 		op.Responses = append(op.Responses, templateResponse{
 			Code:        rsp.Code,
 			Type:        rsp.Field.Type,
-			TypeHref:    m.resolveType(rsp.Field.Type, currentCategory),
+			TypeHref:    m.resolveType(rsp.Field.Definition, currentCategory),
 			Description: rsp.Field.Description,
 		})
 	}
@@ -722,14 +722,14 @@ func (m *MarkdownWriter) linkResources(categories []api.ResourceCategory) {
 				continue
 			}
 			filename := kebabName(r.Name) + "-" + string(r.Definition.Version)
-			m.recordLink(r.Definition.Name, slug, filename, r.Definition.Version)
+			m.recordLink(r.Definition, slug, filename)
 			// Types inlined into this page (pattern-matched and refcount-derived)
 			// share the parent's URL; the anchor on the parent is what selects them.
 			for _, child := range r.Definition.Inline {
-				m.recordLink(child.Name, slug, filename, child.Version)
+				m.recordLink(child, slug, filename)
 			}
 			for _, child := range m.inlinedByParent[r.Definition.Key()] {
-				m.recordLink(child.Name, slug, filename, child.Version)
+				m.recordLink(child, slug, filename)
 			}
 		}
 	}
@@ -747,41 +747,42 @@ func (m *MarkdownWriter) linkDefinitions(all map[string]*api.Definition) {
 		if d.Group != "" && d.Group != "core" {
 			filename += "-" + string(d.Group)
 		}
-		m.recordLink(d.Name, "definitions", filename, d.Version)
+		m.recordLink(d, "definitions", filename)
 	}
 }
 
-func (m *MarkdownWriter) recordLink(name, category, filename string, version api.ApiVersion) {
-	if existing, ok := m.linkMap[name]; ok {
+func (m *MarkdownWriter) recordLink(d *api.Definition, category, filename string) {
+	key := d.Key()
+
+	if existing, ok := m.linkMap[key]; ok {
 		if existing.Category != "definitions" && category == "definitions" {
 			return
 		}
 		// LessThan returns true when the receiver is the higher version.
-		if existing.Category == category && existing.Version.LessThan(version) {
+		if existing.Category == category && existing.Version.LessThan(d.Version) {
 			return
 		}
 	}
-	m.linkMap[name] = linkInfo{
+	m.linkMap[key] = linkInfo{
 		Category: category,
 		Filename: filename,
-		Anchor:   anchor(name),
-		Version:  version,
+		Anchor:   anchor(d.Name),
+		Version:  d.Version,
 	}
 }
 
-// resolveType returns a relative path#anchor for typeName, or "" if unknown.
-// currentCategory is the slug containing the calling page; "MutatingWebhook
-// array" is normalised to "MutatingWebhook" before lookup.
-func (m *MarkdownWriter) resolveType(typeName, currentCategory string) string {
-	info, ok := m.linkMap[typeName]
-	if !ok {
-		if bare, stripped := strings.CutSuffix(typeName, " array"); stripped {
-			info, ok = m.linkMap[bare]
-		}
+// resolveType returns a relative path#anchor for a definition, or "" if unknown.
+// currentCategory is the slug containing the calling page.
+func (m *MarkdownWriter) resolveType(d *api.Definition, currentCategory string) string {
+	if d == nil {
+		return ""
 	}
+
+	info, ok := m.linkMap[d.Key()]
 	if !ok {
 		return ""
 	}
+
 	var path string
 	if info.Category == currentCategory {
 		path = info.Filename
