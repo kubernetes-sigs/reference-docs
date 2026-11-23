@@ -101,9 +101,7 @@ func (m *apiMember) IsOptional() bool {
 // FieldName returns the member name when used in serialized format.
 func (m *apiMember) FieldName() string {
 	v := reflect.StructTag(m.Tags).Get("json")
-	v = strings.TrimSuffix(v, ",omitempty")
-	v = strings.TrimSuffix(v, ",inline")
-	if v != "" {
+	if v, _, _ = strings.Cut(v, ","); v != "" {
 		return v
 	}
 	return m.Name
@@ -116,7 +114,13 @@ func (m *apiMember) GetType() *apiType {
 
 // Test if a field is an inline one
 func (m *apiMember) IsInline() bool {
-	return strings.Contains(reflect.StructTag(m.Tags).Get("json"), ",inline")
+	v := reflect.StructTag(m.Tags).Get("json")
+	for _, opt := range strings.Split(v, ",")[1:] {
+		if opt == "inline" {
+			return true
+		}
+	}
+	return false
 }
 
 // Test if a member is supposed to be hidden.

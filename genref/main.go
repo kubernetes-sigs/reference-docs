@@ -112,30 +112,6 @@ var config generatorConfig
 var references map[string][]*apiType
 
 func init() {
-	klog.InitFlags(nil)
-
-	flag.Set("logtostderr", "true")
-	flag.Parse()
-
-	var path string
-	if *flFormat == "html" || *flFormat == "markdown" {
-		var err error
-		path, err = filepath.Abs(*flFormat)
-		if err != nil {
-			klog.Fatalf("template directory '%s' is not found: %w", path, err)
-		}
-	} else {
-		klog.Fatalf("unsupported format '%s' specified", *flFormat)
-	}
-
-	fi, err := os.Stat(path)
-	if err != nil {
-		klog.Fatalf("cannot read the %s directory: %w", path, err)
-	}
-	if !fi.IsDir() {
-		klog.Fatalf("%s path is not a directory", path)
-	}
-
 	typePkgMap = make(map[string]*apiPackage)
 	references = make(map[string][]*apiType)
 }
@@ -343,6 +319,30 @@ func writeFile(pkgs []*apiPackage, outputPath string) error {
 }
 
 func main() {
+	klog.InitFlags(nil)
+
+	flag.Set("logtostderr", "true")
+	flag.Parse()
+
+	var path string
+	if *flFormat == "html" || *flFormat == "markdown" {
+		var err error
+		path, err = filepath.Abs(*flFormat)
+		if err != nil {
+			klog.Fatalf("template directory '%s' is not found: %v", path, err)
+		}
+	} else {
+		klog.Fatalf("unsupported format '%s' specified", *flFormat)
+	}
+
+	fi, err := os.Stat(path)
+	if err != nil {
+		klog.Fatalf("cannot read the %s directory: %v", path, err)
+	}
+	if !fi.IsDir() {
+		klog.Fatalf("%s path is not a directory", path)
+	}
+
 	f, err := os.ReadFile(*flConfig)
 	if err != nil {
 		klog.Fatalf("Failed to open config file: %v", err)
